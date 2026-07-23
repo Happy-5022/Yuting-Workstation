@@ -42,11 +42,14 @@
   function loadVoices() { try { VOICES = (window.speechSynthesis && speechSynthesis.getVoices()) || []; } catch (e) { VOICES = []; } }
   if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
   // 按语言挑最合适的 voice：先精确匹配（en-US / vi-VN），再同语种（en-* / vi-*）
+  // 把 voice 的 lang 字段归一化：安卓常写成 vi_VN（下划线），统一成 vi-VN 才能匹配
+  function normLang(s) { return (s || '').toLowerCase().replace(/[_]/g, '-'); }
   function pickVoice(lang) {
     if (!VOICES.length) return null;
-    const want = (lang || '').toLowerCase(), base = want.split('-')[0];
-    let v = VOICES.find(x => (x.lang || '').toLowerCase() === want);
-    if (!v && base) v = VOICES.find(x => (x.lang || '').toLowerCase().indexOf(base + '-') === 0);
+    const want = normLang(lang), base = want.split('-')[0];
+    let v = VOICES.find(x => normLang(x.lang) === want);
+    if (!v && base) v = VOICES.find(x => normLang(x.lang).indexOf(base + '-') === 0);
+    if (!v && base) v = VOICES.find(x => normLang(x.lang) === base); // 兼容只有 'vi' 的情况
     return v || null;
   }
   // 朗读发音人偏好（按设备存，用户可在模块里手动挑最喜欢的嗓音）
@@ -58,18 +61,30 @@
     opts = opts || {};
     const synth = window.speechSynthesis;
     if (!synth || !text) return false;
-    try { synth.cancel(); } catch (e) {}
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang;
-    let v = null;
-    const pref = (opts.voiceName != null) ? opts.voiceName : getVoicePref(lang);
-    if (pref) v = VOICES.find(x => x.name === pref) || null;
-    if (!v) v = pickVoice(lang);
-    if (v) u.voice = v;
-    u.rate = (opts.rate != null ? opts.rate : 1);
-    u.pitch = (opts.pitch != null ? opts.pitch : 1);
-    if (opts.onend) u.onend = opts.onend;
-    synth.speak(u);
+    const doSpeak = () => {
+      try { synth.cancel(); } catch (e) {}
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang;
+      let v = null;
+      const pref = (opts.voiceName != null) ? opts.voiceName : getVoicePref(lang);
+      if (pref) v = VOICES.find(x => x.name === pref) || null;
+      if (!v) v = pickVoice(lang);
+      if (v) { u.voice = v; u.lang = v.lang; } // 用 voice 自身的 lang 字段，规避 vi-VN / vi_VN 激活差异
+      u.rate = (opts.rate != null ? opts.rate : 1);
+      u.pitch = (opts.pitch != null ? opts.pitch : 1);
+      if (opts.onend) u.onend = opts.onend;
+      synth.speak(u);
+    };
+    // 语音列表是异步加载的：若还没就绪，先按语言朗读（iOS 会自动选对应母语音），稍后再用精准嗓音重读一次
+    if (!VOICES.length) {
+      loadVoices();
+      if (!VOICES.length) {
+        doSpeak();
+        setTimeout(() => { if (!VOICES.length) loadVoices(); if (VOICES.length) doSpeak(); }, 320);
+        return true;
+      }
+    }
+    doSpeak();
     return true;
   }
 
@@ -80,8 +95,8 @@
     const build = () => {
       if (!mountEl.isConnected) return;
       if (!VOICES.length) { if (tries++ < 6) setTimeout(build, 400); return; }
-      const base = lang.toLowerCase().split('-')[0];
-      const list = VOICES.filter(v => (v.lang || '').toLowerCase().indexOf(base) === 0);
+      const base = normLang(lang).split('-')[0];
+      const list = VOICES.filter(v => { const l = normLang(v.lang); return l.indexOf(base + '-') === 0 || l === base; });
       mountEl.innerHTML = '';
       if (!list.length) return; // 该语言没有可用嗓音就不显示
       const sel = document.createElement('select'); sel.className = 'voice-sel';
@@ -102,6 +117,34 @@
   function warnVoiceOnce(lang, msg) {
     if (voiceWarned[lang] || voiceReady(lang)) return;
     voiceWarned[lang] = true; toast(msg);
+  }
+
+  // 越南语「在线真人发音」小工具：优先用翻译网站的真人音源，打不开则跳百度翻译
+  function renderNativeVi(mount) {
+    if (!mount) return;
+    mount.innerHTML = '<div class="vi-native-box">' +
+      '<div class="section-label">🌐 想听更标准的真人发音？</div>' +
+      '<div class="row" style="gap:6px"><input id="viNativeIn" class="inp" placeholder="输入或粘贴越南语，如 xin chào" style="flex:1">' +
+      '<button id="viNativePlay" class="btn sm">🔊 听真人</button></div>' +
+      '<div class="muted" style="font-size:12px;margin-top:6px">优先用在线真人发音（需联网）；若打不开会自动给你百度翻译链接去听。</div></div>';
+    const inp = mount.querySelector('#viNativeIn');
+    const play = mount.querySelector('#viNativePlay');
+    play.onclick = () => {
+      const t = (inp.value || '').trim();
+      if (!t) { toast('先在框里输入越南语'); return; }
+      const enc = encodeURIComponent(t);
+      const baidu = 'https://fanyi.baidu.com/#vi/zh/' + enc;
+      toast('正在播放真人发音…');
+      try {
+        const a = new Audio('https://translate.google.com/translate_tts?client=tw-ob&tl=vi&q=' + enc);
+        let opened = false, playing = false;
+        a.onplaying = () => { playing = true; };
+        const fb = () => { if (!opened && !playing) { opened = true; window.open(baidu, '_blank'); } };
+        a.onerror = fb;
+        const p = a.play(); if (p && p.catch) p.catch(fb);
+        setTimeout(fb, 4000);
+      } catch (e) { window.open(baidu, '_blank'); }
+    };
   }
 
   // 底部弹窗表单，返回填写的对象或 null（取消）
@@ -1371,7 +1414,7 @@
       '<p class="muted" style="margin:0 0 12px">别慌，越南语用的是和英文一样的字母，跟着下面三步走就行 👇</p>' +
       '<div id="vnStart"></div>' +
       '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div>' +
-      '<div id="viVoicePick" style="margin:10px 0"></div></div>' +
+      '<div id="viVoicePick" style="margin:10px 0"></div><div id="viNative"></div></div>' +
       /* 4 阶段自学路线 */
       '<div class="card"><div class="card-title">' + vnFlag() + ' 越南语 · 新手自学（4 阶段）</div>' +
       '<div class="vn-route-top row spread"><div class="muted">已掌握 <b>' + doneStages.length + '</b>/' + VN_STAGES.length + ' 阶段' +
@@ -1416,6 +1459,7 @@
     vietTipCheck();
     setTimeout(vietTipCheck, 800);
     renderVoicePicker('vi-VN', $('#viVoicePick'), '🗣 越南语发音人');
+    renderNativeVi($('#viNative'));
 
     // 阶段路线
     const sbox = $('#vnStages');
