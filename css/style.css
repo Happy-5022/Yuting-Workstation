@@ -467,6 +467,8 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .voice-pick-label { font-size: 13px; color: var(--muted); }
 .voice-sel { padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 13px; background: var(--surface); color: var(--text); max-width: 100%; }
 .voice-sel:focus { border-color: var(--primary); background: #fff; }
+.voice-reset { padding: 5px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 12px; background: var(--surface); color: var(--muted); cursor: pointer; }
+.voice-reset:active { background: var(--accent); }
 /* 越南语「在线真人发音」小工具 */
 .vi-native-box { border: 1px dashed var(--line); border-radius: var(--radius); padding: 10px 12px; margin: 4px 0 2px; background: #FAFBFC; }
 .vi-native-box .inp { padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 14px; background: var(--surface); color: var(--text); }

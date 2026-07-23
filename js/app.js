@@ -116,7 +116,9 @@
       sel.onchange = () => setVoicePref(lang, sel.value);
       const wrap = document.createElement('div'); wrap.className = 'voice-pick';
       const lab = document.createElement('span'); lab.className = 'voice-pick-label'; lab.textContent = label;
-      wrap.append(lab); wrap.append(sel);
+      const reset = document.createElement('button'); reset.className = 'voice-reset'; reset.textContent = '↺ 恢复默认';
+      reset.onclick = () => { setVoicePref(lang, ''); try { sel.value = ''; } catch (e) {} toast('已恢复系统默认发音'); };
+      wrap.append(lab); wrap.append(sel); wrap.append(reset);
       mountEl.append(wrap);
     };
     build();
