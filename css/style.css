@@ -476,3 +476,19 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .vi-status { font-size: 13px; line-height: 1.5; padding: 8px 10px; border-radius: var(--radius-s); margin: 8px 0; background: #F4F8F4; border: 1px solid #DCEAD9; color: #2f5d34; }
 .vn-level-head { font-size: 16px; font-weight: 700; color: var(--text); margin: 18px 2px 8px; padding-left: 10px; border-left: 4px solid var(--primary); line-height: 1.4; }
 .vn-audio-note { background: linear-gradient(180deg, #EAF2FB 0%, var(--surface) 80%); border-color: #B9D4F0; }
+/* 今日练习：阶段提示条（内容跟着 5 阶段进度走） */
+.vn-stage-tip { background: #FFF6E5; border: 1.5px solid #F2D9A6; border-radius: var(--radius-s); padding: 8px 12px; margin-bottom: 10px; font-size: 13.5px; line-height: 1.55; color: #7A5A1E; }
+/* 今日练习：字词句行（听发音 + 跟练） */
+.vn-day-row { display: flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 8px 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.vn-day-txt { flex: 1 1 120px; min-width: 0; font-size: 15px; line-height: 1.45; word-break: break-word; }
+.vn-day-txt .muted { font-size: 13px; }
+/* 当日闯关小游戏 */
+.vn-q-title { font-size: 15px; font-weight: 700; }
+.vn-q-zh { font-size: 20px; font-weight: 700; margin: 10px 0; }
+.vn-q-opt { display: block; width: 100%; text-align: left; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 10px 12px; margin-bottom: 8px; font-size: 15px; color: var(--text); cursor: pointer; transition: .15s; }
+.vn-q-opt:active { background: var(--surface-2); }
+.vn-q-opt.right { border-color: #4C9A57; background: #EFF7EF; color: #2f5d34; font-weight: 700; }
+.vn-q-opt.wrong { border-color: #C86A5A; background: #FBEFEC; color: #963a2c; }
+.vn-q-ok { color: #2f5d34; font-weight: 700; font-size: 14px; }
+.vn-q-no { color: #963a2c; font-size: 13.5px; line-height: 1.5; }
+.vn-game-end { text-align: center; padding: 14px 6px; font-size: 16px; }

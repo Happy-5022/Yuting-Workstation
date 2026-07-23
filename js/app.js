@@ -439,12 +439,13 @@
     { name: 'Ngã', cn: '跌声', sym: '~ 波浪号', word: 'mã', zh: '马 / 码', note: '重升调，带顿挫' },
     { name: 'Nặng', cn: '重声', sym: '. 下点', word: 'mạ', zh: '秧苗', note: '低促调，短而顿' },
   ];
-  // 4 阶段自学路线
+  // 5 阶段自学进阶路线（新手 → 实战）
   const VN_STAGES = [
-    { t: '字母与声调入门', d: '29 个字母字形、6 个声调听感、10 个高频词', goal: '能认读字母、分清 6 声调、背下 10 个高频词' },
-    { t: '基础语法与日常句子', d: 'S-V-O 句型、20 个场景对话', goal: '能造简单句、应付 20 个日常场景' },
-    { t: '词汇扩展与听力训练', d: '200+ 词汇、慢速对话 60% 听懂', goal: '词汇量破 200、慢速越南语能听个大概' },
-    { t: '自由对话 & 越南旅行实战', d: '点餐 / 问价 / 打车 / 入住', goal: '去越南能自己搞定吃喝住行' },
+    { t: '字母与发音', d: '29 个字母 + 6 个特殊字母，点着听、跟着读', goal: '看到字母能读出音' },
+    { t: '声调与拼读', d: '6 个声调听感 + 声母韵母拼成字', goal: '同一拼写换声调能听出区别，会拼简单的字' },
+    { t: '高频词汇', d: '必背词 + 每日单词滚动积累', goal: '闪卡自测 10 个词全对' },
+    { t: '句型与场景对话', d: '5 课基础课文 + 点餐/购物/问路/应急短句', goal: '常用场景能开口说整句' },
+    { t: '自由表达 & 旅行实战', d: '连句成段、慢速听力、每日闯关保持手感', goal: '去越南能自己搞定吃喝住行' },
   ];
   // 越南语特有字母（中文近似音）
   const VN_SPECIAL = [
@@ -533,6 +534,7 @@
   ];
   // 推荐资源（均用国内平台，避免 Google / YouTube 等境外站点打不开）
   const VN_RES = [
+    { t: '📘 教材：《越南语基础教程》等入门书', url: 'https://search.jd.com/Search?keyword=' + encodeURIComponent('越南语 入门 教材') },
     { t: '📺 B站：越南语零基础入门', url: 'https://search.bilibili.com/all?keyword=' + encodeURIComponent('越南语 零基础 入门 教程') },
     { t: '🎵 喜马拉雅：越南语听力慢速', url: 'https://www.ximalaya.com/search?q=' + encodeURIComponent('越南语 听力 慢速') },
     { t: '📕 小红书：教材 & 经验帖', url: 'https://www.xiaohongshu.com/search_result?keyword=' + encodeURIComponent('越南语 自学 教材 推荐') },
@@ -1441,7 +1443,7 @@
         onNoVoice: () => toast('未检测到越南语嗓音：请到 iPhone 设置 → 辅助功能 → 语音内容 → 嗓音，添加「越南语」后重试')
       });
     }
-    function speakViSeq(arr) {
+    function speakViSeq(arr, gap) {
       // 顺序朗读多句：用 onend 串联，兼容 iOS（首句在点击手势内，后续在朗读会话内不会被判为“非手势”而静音）
       if (!arr || !arr.length) return;
       if (!window.speechSynthesis) { toast('当前浏览器不支持语音朗读'); return; }
@@ -1451,18 +1453,35 @@
         if (i >= arr.length) return;
         const t = arr[i++];
         if (!t) { go(); return; }
-        speakLang(t, 'vi-VN', { rate: 0.95, noCancel: true, onend: () => setTimeout(go, 320) });
+        speakLang(t, 'vi-VN', { rate: 0.95, noCancel: true, onend: () => setTimeout(go, gap || 320) });
       };
       go();
+    }
+    function followVi(text) {
+      // 🎤 跟练：同一内容连读 3 遍，每遍之间停约 2 秒，留空给自己跟着读出声
+      if (!text) return;
+      toast('🎤 跟练：听一遍 → 停顿时跟着读 → 共 3 遍');
+      speakViSeq([text, text, text], 2000);
+    }
+    // 按日期从数组里稳定取 n 个：每天自动换一批，同一天内保持不变
+    const daySeed = parseInt(todayStr('n').slice(0, 8), 10) || 0;
+    function dayPick(arr, n, salt) {
+      const out = [], len = arr.length;
+      if (!len) return out;
+      const start = (daySeed * 31 + (salt || 0) * 7) % len;
+      for (let k = 0; k < Math.min(n, len); k++) out.push(arr[(start + k) % len]);
+      return out;
     }
 
     function vnLinks(kw) {
       const dy = 'https://www.douyin.com/search/' + encodeURIComponent(kw + ' 越南语');
       const bz = 'https://search.bilibili.com/all?keyword=' + encodeURIComponent(kw + ' 越南语 教程');
+      const xmly = 'https://www.ximalaya.com/search?q=' + encodeURIComponent(kw + ' 越南语');
       const xhs = 'https://www.xiaohongshu.com/search_result?keyword=' + encodeURIComponent(kw + ' 越南语 学习');
-      return '<button class="btn sm ghost vn-go" data-url="' + dy + '">抖音跟练</button>' +
-        '<button class="btn sm ghost vn-go" data-url="' + bz + '">B站跟练</button>' +
-        '<button class="btn sm ghost vn-go" data-url="' + xhs + '">小红书经验</button>';
+      return '<button class="btn sm ghost vn-go" data-url="' + bz + '">📺 B站视频跟练</button>' +
+        '<button class="btn sm ghost vn-go" data-url="' + dy + '">▶ 抖音视频跟练</button>' +
+        '<button class="btn sm ghost vn-go" data-url="' + xmly + '">🎧 喜马拉雅听练</button>' +
+        '<button class="btn sm ghost vn-go" data-url="' + xhs + '">📕 小红书经验</button>';
     }
 
     const meta = await DB.get('meta', 'vnStages');
@@ -1470,41 +1489,55 @@
     const cur = doneStages.length; // 当前正在学的阶段（0-based）
 
     view.innerHTML =
-      /* 发音说明（新） */
+      /* 发音说明 */
       '<div class="card vn-audio-note"><div class="card-title">🔊 关于发音</div>' +
-      '<p class="muted" style="margin:0">本模块越南语发音直接调用 <b>你 iPhone 自带的语音引擎</b>（不再用百度翻译）。点任意 🔊 喇叭即用本机嗓音朗读；若个别手机没装越南语嗓音，下方会提示去「设置」下载，下载后即可正常发音。</p></div>' +
+      '<p class="muted" style="margin:0">本模块越南语发音直接调用 <b>你 iPhone 自带的语音引擎</b>。点 🔊 听发音；点 🎤 跟练（同一内容慢读 3 遍，停顿时你跟着大声读）。若手机没装越南语嗓音，下方会提示去「设置」下载。</p></div>' +
       '<div class="card"><div class="card-title">🗣 越南语发音人</div><div id="viVoicePick"></div></div>' +
       /* 🌱 新手入门 */
-      '<div class="vn-level-head">🌱 新手入门 · 先把这几关练熟</div>' +
-      '<div class="card vn-start-card"><div class="card-title">🚀 零基础？先看这里</div>' +
+      '<div class="vn-level-head">🌱 新手入门 · 先看这里</div>' +
+      '<div class="card vn-start-card"><div class="card-title">🚀 零基础？三步上路</div>' +
       '<p class="muted" style="margin:0 0 12px">越南语用和英文一样的字母，跟着三步走 👇</p>' +
       '<div id="vnStart"></div>' +
       '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div></div>' +
-      '<div class="card"><div class="card-title">' + vnFlag() + ' 越南语 · 新手自学（4 阶段）</div>' +
+      '<div class="card"><div class="card-title">' + vnFlag() + ' 5 阶段进阶路线</div>' +
       '<div class="vn-route-top row spread"><div class="muted">已掌握 <b>' + doneStages.length + '</b>/' + VN_STAGES.length + ' 阶段' +
       (cur < VN_STAGES.length ? ' ｜ 当前：第 ' + (cur + 1) + ' 阶段' : ' ｜ 全部完成 🎉') + '</div>' +
       '<button id="vnReset" class="btn sm ghost">重置进度</button></div>' +
       '<div id="vnStages" style="margin-top:10px"></div></div>' +
+      /* 📅 今日练习（每天自动更新） */
+      '<div class="vn-level-head">📅 今日练习 · 跟着你的阶段自动更新</div>' +
+      '<div class="card"><div class="card-title">📌 今日字词句</div>' +
+      '<div id="dayStageTip" class="vn-stage-tip"></div>' +
+      '<p class="muted" style="margin:0 0 10px">内容跟着上面「5 阶段路线」的进度走：练到哪个阶段，每天就重点练那个阶段的内容（自动带少量旧内容复习），同一阶段内每天换一批。每一条先 🔊 听、再 🎤 跟练读 3 遍，读顺了就去下面闯关。</p>' +
+      '<div class="section-label" id="dayLettersLab">🔠 今日字母</div><div id="dayLetters"></div>' +
+      '<div class="section-label" id="dayWordsLab">🔡 今日单词</div><div id="dayWords"></div>' +
+      '<div class="section-label" id="daySentsLab">💬 今日句子</div><div id="daySents"></div>' +
+      '<div class="row wrap" style="margin-top:10px;gap:6px"><span class="muted" style="font-size:13px;width:100%">🎬 语音 / 视频跟练入口：</span>' + vnLinks('今日 单词 句子 跟读') + '</div></div>' +
+      '<div class="card"><div class="card-title">🎮 当日闯关小游戏</div><div id="vnGame"></div></div>' +
+      '<div class="card"><div class="card-title">📕 错题集</div>' +
+      '<p class="muted" style="margin:0 0 10px">闯关答错的自动收进来。反复 🔊 听、🎤 跟练，记牢后点「✓ 已掌握」移出。</p><div id="vnWrong"></div></div>' +
+      /* 🧱 基本功 */
+      '<div class="vn-level-head">🧱 基本功 · 有空就回来磨</div>' +
       '<div class="card"><div class="card-title">🔤 完整字母表（点字母听发音）</div>' +
       '<p class="muted" style="margin:0 0 10px">共 29 个字母。先眼熟，再点着一个个跟读，每天读一遍。</p>' +
       '<div class="section-label">🅰️ 元音（12 个）</div><div id="vowels" class="alpha-grid"></div>' +
       '<div class="section-label">🅱️ 辅音（17 个）</div><div id="consonants" class="alpha-grid"></div></div>' +
-      '<div class="card"><div class="card-title">📖 今日重点</div><p class="muted" style="margin:0 0 10px">顺序：特殊字母 → 弄懂声调 → 学会拼读 → 背单词，每步都配跟练视频。</p>' +
+      '<div class="card"><div class="card-title">📖 发音基本功</div><p class="muted" style="margin:0 0 10px">顺序：特殊字母 → 弄懂声调 → 学会拼读 → 背单词。</p>' +
       '<div class="section-label">✏️ 特殊字母速记（越南语特有 6 个）</div><div id="special"></div>' +
       '<div class="section-label">🎵 6 个声调（以「ma」演示，最关键）</div><div id="tones"></div>' +
       '<div class="section-label">🔡 拼读小课堂（一个字怎么拼出来）</div><div id="spell"></div>' +
-      '<div class="section-label">🔤 今日 10 个必背词</div><div id="words"></div>' +
-      '<div class="row wrap" style="margin-top:10px;gap:6px"><span class="muted" style="font-size:13px;width:100%">整体跟练入口：</span>' + vnLinks('越南语 入门 声调 字母') + '</div></div>' +
+      '<div class="section-label">🔤 必背 10 词</div><div id="words"></div>' +
+      '<div class="row wrap" style="margin-top:10px;gap:6px"><span class="muted" style="font-size:13px;width:100%">🎬 语音 / 视频跟练入口：</span>' + vnLinks('入门 声调 字母') + '</div></div>' +
       '<div class="card"><div class="card-title">🎴 单词闪卡自测</div>' +
       '<p class="muted" style="margin:0 0 10px">看着中文先自己回想越南语，点卡片揭晓答案，测测记住没。</p><div id="flash"></div></div>' +
       /* 🚀 进阶练习 */
       '<div class="vn-level-head">🚀 进阶练习 · 能开口后练这些</div>' +
       '<div class="card"><div class="card-title">🍜 实用场景短句（去越南直接能用）</div>' +
-      '<p class="muted" style="margin:0 0 10px">点每句右边喇叭跟读，出门点餐问路都不怕。建议先用「显示译文」看懂，再遮住中文自己说。</p><div id="scenes"></div></div>' +
-      '<div class="card"><div class="card-title">📚 分课跟读（阶段 1 课文）</div><div id="units"></div></div>' +
-      '' +
+      '<p class="muted" style="margin:0 0 10px">每句都能 🔊 听、🎤 跟练。建议先用「显示译文」看懂，再遮住中文自己说。</p><div id="scenes"></div></div>' +
+      '<div class="card"><div class="card-title">📚 分课跟读（5 课）</div><div id="units"></div>' +
+      '<div class="row wrap" style="margin-top:10px;gap:6px"><span class="muted" style="font-size:13px;width:100%">🎬 语音 / 视频跟练入口：</span>' + vnLinks('日常对话 慢速 跟读') + '</div></div>' +
       /* 推荐资源 + 统计 */
-      '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="res"></div></div>' +
+      '<div class="card"><div class="card-title">⭐ 推荐资源（教材 / B站 / 喜马拉雅 / 小红书 / 抖音）</div><div id="res"></div></div>' +
       '<div class="card"><div class="card-title">📈 学习统计</div><div id="stats"></div>' +
       '<button id="add" class="btn block" style="margin-top:10px">➕ 记录今天学习</button><div id="list" style="margin-top:10px"></div></div>';
 
@@ -1531,6 +1564,163 @@
     $('#vnReset').onclick = async () => {
       if (await confirmDel('重置越南语阶段进度？')) { await DB.put('meta', { id: 'vnStages', value: [] }); renderViet(view); }
     };
+
+    // ========== 今日练习（跟着学习进度 + 每天自动换一批） ==========
+    const ALL_LETTERS = VN_VOWELS.concat(VN_CONSONANTS);
+    const ALL_SENTS = VN_SCENES.reduce((a, sc) => a.concat(sc.items), []).concat(VN_SENTENCES.map(s => [s.vn, s.zh]));
+    const UNIT_VOCAB = VN_UNITS.reduce((a, u) => a.concat(u.vocab.map(v => ({ vn: v[0], zh: v[1] }))), []);
+    const UNIT_SENTS = VN_UNITS.reduce((a, u) => a.concat(u.sentences), []);
+    const TONE_WORDS = VN_TONES.map(t => ({ vn: t.word, zh: t.zh + '（' + t.cn + '）' }));
+    const SPELL_WORDS = VN_SPELL.map(s => ({ vn: s.word, zh: s.zh }));
+    const SIMPLE_SENTS = VN_UNITS[0].sentences.concat(VN_UNITS[1].sentences); // 打招呼 + 自我介绍（最简单）
+    function dedupVn(arr) { const seen = {}; return arr.filter(x => { const k = (x.vn || '').toLowerCase(); if (seen[k]) return false; seen[k] = 1; return true; }); }
+    // 当前阶段（0-4）：全部完成后按最后一阶段（全混合实战）出题
+    const stage = Math.min(cur, VN_STAGES.length - 1);
+    // 每个阶段的「今日内容配方」：主攻当前阶段内容 + 少量前面阶段复习
+    const DAY_PLAN = [
+      { tip: '你在第 1 阶段「字母与发音」：今天主攻 6 个字母，配 2 个见面词、1 句打招呼混个耳熟。',
+        L: { pool: ALL_LETTERS, n: 6 }, W: { pool: VN_WORDS.slice(0, 4), n: 2 }, S: { pool: SIMPLE_SENTS, n: 1 } },
+      { tip: '你在第 2 阶段「声调与拼读」：今天主攻声调字和拼读词，字母留 3 个当复习。',
+        L: { pool: ALL_LETTERS, n: 3 }, W: { pool: dedupVn(TONE_WORDS.concat(SPELL_WORDS)), n: 5 }, S: { pool: SIMPLE_SENTS, n: 2 } },
+      { tip: '你在第 3 阶段「高频词汇」：今天主攻单词（必背词 + 课文词汇），每天 6 个滚动背。',
+        L: { pool: ALL_LETTERS, n: 2 }, W: { pool: dedupVn(VN_WORDS.concat(UNIT_VOCAB)), n: 6 }, S: { pool: UNIT_SENTS, n: 2 } },
+      { tip: '你在第 4 阶段「句型与场景对话」：今天主攻整句（课文 + 场景短句），每天 4 句，词汇当复习。',
+        L: { pool: ALL_LETTERS, n: 0 }, W: { pool: dedupVn(VN_WORDS.concat(UNIT_VOCAB)), n: 3 }, S: { pool: dedupVn(UNIT_SENTS.concat(ALL_SENTS).map(s => ({ vn: s[0], zh: s[1] }))).map(o => [o.vn, o.zh]), n: 4 } },
+      { tip: '你在第 5 阶段「自由表达 & 实战」：全部内容混合实战，句子为主，保持手感。',
+        L: { pool: ALL_LETTERS, n: 2 }, W: { pool: dedupVn(VN_WORDS.concat(UNIT_VOCAB).concat(TONE_WORDS)), n: 4 }, S: { pool: dedupVn(ALL_SENTS.concat(UNIT_SENTS).map(s => ({ vn: s[0], zh: s[1] }))).map(o => [o.vn, o.zh]), n: 4 } },
+    ];
+    const plan = DAY_PLAN[stage];
+    // 盐里带上阶段号：同一天里你一升阶段，练习和闯关内容也立刻跟着换
+    const dayLetters = dayPick(plan.L.pool, plan.L.n, 1 + stage * 10);
+    const dayWords = dayPick(plan.W.pool, plan.W.n, 2 + stage * 10);
+    const daySents = dayPick(plan.S.pool, plan.S.n, 3 + stage * 10);
+    // 每一条：内容 + 🔊听发音 + 🎤跟练
+    function dailyRow(main, sub, sayText, box) {
+      const r = el('<div class="vn-day-row"></div>');
+      r.innerHTML = '<div class="vn-day-txt"><b>' + esc(main) + '</b>' + (sub ? '<span class="muted"> ' + esc(sub) + '</span>' : '') + '</div>' +
+        '<button class="btn sm ghost d-say">🔊 听发音</button><button class="btn sm ghost d-follow">🎤 跟练</button>';
+      r.querySelector('.d-say').onclick = () => speakVi(sayText);
+      r.querySelector('.d-follow').onclick = () => followVi(sayText);
+      box.append(r);
+    }
+    // 阶段提示条：告诉你今天的内容为什么是这些
+    const tipBox = $('#dayStageTip');
+    if (tipBox) tipBox.innerHTML = '🎯 ' + esc(plan.tip);
+    dayLetters.forEach(x => dailyRow(x.l, x.c, x.l, $('#dayLetters')));
+    dayWords.forEach(w => dailyRow(w.vn, w.zh, w.vn, $('#dayWords')));
+    daySents.forEach(s => dailyRow(s[0], s[1], s[0], $('#daySents')));
+    // 某类今天不练（如第 4 阶段不练字母）就隐藏对应小节，避免空白
+    [['dayLetters', dayLetters.length], ['dayWords', dayWords.length], ['daySents', daySents.length]].forEach(p => {
+      if (!p[1]) {
+        const lab = $('#' + p[0] + 'Lab'), bx = $('#' + p[0]);
+        if (lab) lab.style.display = 'none';
+        if (bx) bx.style.display = 'none';
+      }
+    });
+
+    // ========== 当日闯关小游戏 + 错题集 ==========
+    async function getWrongBook() {
+      const m = await DB.get('meta', 'vnWrongBook');
+      return (m && m.value) || [];
+    }
+    async function setWrongBook(arr) { await DB.put('meta', { id: 'vnWrongBook', value: arr }); }
+
+    function buildQuiz() {
+      // 题库跟着学习进度走：第 1-2 阶段带字母题，越往后越偏词和整句
+      // 两种题型：听音选义 / 看中文选越南语；字母题的干扰项也用字母（不和词句混）
+      const letterItems = stage <= 1 ? dayLetters.map(x => ({ vn: x.l, zh: x.c, isL: true })) : [];
+      const pool = letterItems
+        .concat(dayWords.map(w => ({ vn: w.vn, zh: w.zh })))
+        .concat(daySents.map(s => ({ vn: s[0], zh: s[1] })));
+      const dLetters = ALL_LETTERS.map(x => ({ vn: x.l, zh: x.c, isL: true }));
+      const dOther = dedupVn(VN_WORDS.concat(UNIT_VOCAB)).map(w => ({ vn: w.vn, zh: w.zh })).concat(ALL_SENTS.map(s => ({ vn: s[0], zh: s[1] })));
+      return pool.map((item, qi) => {
+        const type = qi % 2 === 0 ? 'listen' : 'zh2vn'; // 偶数题听音选义，奇数题看中文选越南语
+        // 干扰项：字母题从字母池取，词句题从词句池取（按 daySeed 稳定取，避免每次渲染变）
+        const distract = item.isL ? dLetters : dOther;
+        const opts = [item];
+        let p = (daySeed + qi * 13) % distract.length;
+        while (opts.length < 4) {
+          const cand = distract[p % distract.length]; p += 7;
+          if (!opts.some(o => o.vn === cand.vn)) opts.push(cand);
+        }
+        // 稳定打乱
+        const order = [(qi + 1) % 4, (qi + 3) % 4, qi % 4, (qi + 2) % 4];
+        const shuffled = order.map(k => opts[k]);
+        return { type, item, opts: shuffled };
+      });
+    }
+
+    let quiz = buildQuiz(), qi = 0, qRight = 0, qAnswered = false;
+    async function paintGame() {
+      const box = $('#vnGame');
+      if (!box) return;
+      if (qi >= quiz.length) {
+        const pass = qRight >= Math.ceil(quiz.length * 0.6);
+        box.innerHTML = '<div class="vn-game-end">' + (pass ? '🎉' : '💪') + ' 闯关结束：答对 <b>' + qRight + '</b> / ' + quiz.length + ' 题' +
+          '<div class="muted" style="font-size:13px;margin-top:6px">' + (pass ? '真棒！答错的已收进下方错题集，睡前再听一遍。' : '没关系，错题都在下方错题集里，跟练几遍再来一次！') + '</div>' +
+          '<button id="qAgain" class="btn sm" style="margin-top:10px">🔁 再闯一次</button></div>';
+        $('#qAgain').onclick = () => { quiz = buildQuiz(); qi = 0; qRight = 0; qAnswered = false; paintGame(); };
+        return;
+      }
+      const q = quiz[qi];
+      const title = q.item.isL
+        ? (q.type === 'listen' ? '👂 听发音，选出是哪个字母' : '🔤 看中文近似音，选字母')
+        : (q.type === 'listen' ? '👂 听发音，选中文意思' : '🀄 看中文，选越南语');
+      box.innerHTML = '<div class="row spread" style="margin-bottom:8px"><span class="muted" style="font-size:13px">第 ' + (qi + 1) + ' / ' + quiz.length + ' 关 ｜ 已对 ' + qRight + '</span></div>' +
+        '<div class="vn-q-title">' + title + '</div>' +
+        (q.type === 'listen'
+          ? '<button id="qPlay" class="btn sm" style="margin:8px 0">🔊 播放发音（可多听几遍）</button>'
+          : '<div class="vn-q-zh">' + esc(q.item.zh) + '</div>') +
+        '<div id="qOpts"></div><div id="qFeed" style="margin-top:8px"></div>';
+      if (q.type === 'listen') { $('#qPlay').onclick = () => speakVi(q.item.vn); }
+      const ob = $('#qOpts');
+      q.opts.forEach(o => {
+        const label = q.type === 'listen' ? o.zh : o.vn;
+        const b = el('<button class="vn-q-opt"></button>');
+        b.textContent = label;
+        b.onclick = async () => {
+          if (qAnswered) return;
+          qAnswered = true;
+          const ok = o.vn === q.item.vn;
+          b.classList.add(ok ? 'right' : 'wrong');
+          if (ok) { qRight++; $('#qFeed').innerHTML = '<span class="vn-q-ok">✓ 答对了！</span>'; speakVi(q.item.vn); }
+          else {
+            $('#qFeed').innerHTML = '<span class="vn-q-no">✗ 正确答案：' + esc(q.item.vn) + '（' + esc(q.item.zh) + '），已收进错题集</span>';
+            ob.querySelectorAll('.vn-q-opt').forEach(x => { if (x.textContent === (q.type === 'listen' ? q.item.zh : q.item.vn)) x.classList.add('right'); });
+            const wb = await getWrongBook();
+            if (!wb.some(w => w.vn === q.item.vn)) { wb.unshift({ vn: q.item.vn, zh: q.item.zh, date: todayStr() }); await setWrongBook(wb.slice(0, 60)); paintWrong(); }
+            speakVi(q.item.vn);
+          }
+          const next = el('<button class="btn sm" style="margin-left:10px">下一关 →</button>');
+          next.onclick = () => { qi++; qAnswered = false; paintGame(); };
+          $('#qFeed').append(next);
+        };
+        ob.append(b);
+      });
+    }
+    paintGame();
+
+    async function paintWrong() {
+      const box = $('#vnWrong');
+      if (!box) return;
+      const wb = await getWrongBook();
+      if (!wb.length) { box.innerHTML = emptyTip('🌟', '目前没有错题，太棒了！'); return; }
+      box.innerHTML = '';
+      wb.forEach(w => {
+        const r = el('<div class="vn-day-row"></div>');
+        r.innerHTML = '<div class="vn-day-txt"><b>' + esc(w.vn) + '</b><span class="muted"> ' + esc(w.zh) + '</span></div>' +
+          '<button class="btn sm ghost d-say">🔊</button><button class="btn sm ghost d-follow">🎤</button><button class="btn sm ghost d-done">✓ 已掌握</button>';
+        r.querySelector('.d-say').onclick = () => speakVi(w.vn);
+        r.querySelector('.d-follow').onclick = () => followVi(w.vn);
+        r.querySelector('.d-done').onclick = async () => {
+          const arr = (await getWrongBook()).filter(x => x.vn !== w.vn);
+          await setWrongBook(arr); paintWrong(); toast('已移出错题集 👍');
+        };
+        box.append(r);
+      });
+    }
+    paintWrong();
 
     // 上路引导：三步
     VN_START.steps.forEach(s => {
@@ -1563,9 +1753,10 @@
       const parts = s.parts.filter(Boolean).map(p => '<span class="spell-part">' + esc(p) + '</span>').join('<span class="spell-plus">+</span>');
       c.innerHTML = '<div class="spell-eq">' + parts + '<span class="spell-arrow">=</span>' +
         '<span class="spell-word">' + esc(s.word) + '</span>' +
-        '<button class="btn sm ghost spell-play">🔊</button></div>' +
+        '<button class="btn sm ghost spell-play">🔊</button><button class="btn sm ghost spell-follow">🎤</button></div>' +
         '<div class="muted" style="font-size:12.5px;margin-top:6px">' + esc(s.note) + '</div>';
       c.querySelector('.spell-play').onclick = () => speakVi(s.word);
+      c.querySelector('.spell-follow').onclick = () => followVi(s.word);
       spellBox.append(c);
     });
 
@@ -1599,8 +1790,9 @@
       sc.items.forEach(it => {
         const r = el('<div class="scene-line"></div>');
         r.innerHTML = '<div class="scene-txt"><div class="scene-vn">' + esc(it[0]) + '</div><div class="scene-zh">' + esc(it[1]) + '</div></div>' +
-          '<button class="btn sm ghost scene-play">🔊</button>';
+          '<button class="btn sm ghost scene-play">🔊</button><button class="btn sm ghost scene-follow">🎤</button>';
         r.querySelector('.scene-play').onclick = () => speakVi(it[0]);
+        r.querySelector('.scene-follow').onclick = () => followVi(it[0]);
         c.append(r);
       });
       scenesBox.append(c);
@@ -1619,10 +1811,11 @@
     VN_TONES.forEach(t => {
       const c = el('<div class="tone-card"></div>');
       c.innerHTML = '<div class="row spread"><b>' + esc(t.name) + ' <span class="tone-cn">' + esc(t.cn) + '</span></b>' +
-        '<button class="btn sm ghost tone-play">🔊</button></div>' +
+        '<span class="row" style="gap:6px"><button class="btn sm ghost tone-play">🔊</button><button class="btn sm ghost tone-follow">🎤</button></span></div>' +
         '<div class="tone-word">' + esc(t.word) + ' <span class="muted">' + esc(t.zh) + '</span></div>' +
         '<div class="muted" style="font-size:13px">' + esc(t.sym) + ' · ' + esc(t.note) + '</div>';
       c.querySelector('.tone-play').onclick = () => speakVi(t.word);
+      c.querySelector('.tone-follow').onclick = () => followVi(t.word);
       tonesBox.append(c);
     });
 
@@ -1631,8 +1824,9 @@
     VN_WORDS.forEach(w => {
       const c = el('<div class="vn-word"></div>');
       c.innerHTML = '<div class="vn-w-en">' + esc(w.vn) + '</div><div class="vn-w-zh">' + esc(w.zh) + '</div>' +
-        '<button class="btn sm ghost vn-w-play">🔊</button>';
+        '<button class="btn sm ghost vn-w-play">🔊</button><button class="btn sm ghost vn-w-follow">🎤</button>';
       c.querySelector('.vn-w-play').onclick = () => speakVi(w.vn);
+      c.querySelector('.vn-w-follow').onclick = () => followVi(w.vn);
       wBox.append(c);
     });
 
@@ -1676,9 +1870,10 @@
         bodyEl.innerHTML = '';
         u.sentences.forEach(s => {
           const d = el('<div class="seg' + (showZh ? ' show-zh' : '') + '"></div>');
-          d.innerHTML = '<div class="row spread"><div class="en">' + esc(s[0]) + '</div><button class="btn sm ghost seg-play">🔊</button></div>' +
+          d.innerHTML = '<div class="row spread"><div class="en">' + esc(s[0]) + '</div><span class="row" style="gap:6px"><button class="btn sm ghost seg-play">🔊</button><button class="btn sm ghost seg-follow">🎤</button></span></div>' +
             (showZh ? '<div class="zh">' + esc(s[1]) + '</div>' : '');
           d.querySelector('.seg-play').onclick = () => speakVi(s[0]);
+          d.querySelector('.seg-follow').onclick = () => followVi(s[0]);
           bodyEl.append(d);
         });
       }
