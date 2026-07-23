@@ -470,3 +470,4 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 /* 越南语「在线真人发音」小工具 */
 .vi-native-box { border: 1px dashed var(--line); border-radius: var(--radius); padding: 10px 12px; margin: 4px 0 2px; background: #FAFBFC; }
 .vi-native-box .inp { padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 14px; background: var(--surface); color: var(--text); }
+.vi-status { font-size: 13px; line-height: 1.5; padding: 8px 10px; border-radius: var(--radius-s); margin: 8px 0; background: #F4F8F4; border: 1px solid #DCEAD9; color: #2f5d34; }

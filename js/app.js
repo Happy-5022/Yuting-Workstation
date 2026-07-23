@@ -120,30 +120,21 @@
   }
 
   // 越南语「在线真人发音」小工具：优先用翻译网站的真人音源，打不开则跳百度翻译
+  // 越南语「在线真人发音」入口：直接打开百度翻译越南语页（国内可用、点喇叭即听真人音）
   function renderNativeVi(mount) {
     if (!mount) return;
     mount.innerHTML = '<div class="vi-native-box">' +
       '<div class="section-label">🌐 想听更标准的真人发音？</div>' +
       '<div class="row" style="gap:6px"><input id="viNativeIn" class="inp" placeholder="输入或粘贴越南语，如 xin chào" style="flex:1">' +
-      '<button id="viNativePlay" class="btn sm">🔊 听真人</button></div>' +
-      '<div class="muted" style="font-size:12px;margin-top:6px">优先用在线真人发音（需联网）；若打不开会自动给你百度翻译链接去听。</div></div>';
+      '<button id="viNativePlay" class="btn sm">🌐 打开百度听真人</button></div>' +
+      '<div class="muted" style="font-size:12px;margin-top:6px">点按钮会打开「百度翻译」越南语页（国内可用、无需翻墙），在那页点喇叭🔊即可听真人发音。下方喇叭用的是你 iPhone 的语音包，若不准请先按上面的提示下载越南语语音包。</div></div>';
     const inp = mount.querySelector('#viNativeIn');
     const play = mount.querySelector('#viNativePlay');
     play.onclick = () => {
       const t = (inp.value || '').trim();
       if (!t) { toast('先在框里输入越南语'); return; }
-      const enc = encodeURIComponent(t);
-      const baidu = 'https://fanyi.baidu.com/#vi/zh/' + enc;
-      toast('正在播放真人发音…');
-      try {
-        const a = new Audio('https://translate.google.com/translate_tts?client=tw-ob&tl=vi&q=' + enc);
-        let opened = false, playing = false;
-        a.onplaying = () => { playing = true; };
-        const fb = () => { if (!opened && !playing) { opened = true; window.open(baidu, '_blank'); } };
-        a.onerror = fb;
-        const p = a.play(); if (p && p.catch) p.catch(fb);
-        setTimeout(fb, 4000);
-      } catch (e) { window.open(baidu, '_blank'); }
+      window.open('https://fanyi.baidu.com/#vi/zh/' + encodeURIComponent(t), '_blank');
+      toast('已打开百度翻译，点页面上的🔊听真人越南语音');
     };
   }
 
@@ -1414,7 +1405,7 @@
       '<p class="muted" style="margin:0 0 12px">别慌，越南语用的是和英文一样的字母，跟着下面三步走就行 👇</p>' +
       '<div id="vnStart"></div>' +
       '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div>' +
-      '<div id="viVoicePick" style="margin:10px 0"></div><div id="viNative"></div></div>' +
+      '<div id="viVoicePick" style="margin:10px 0"></div><div id="viVoiceStatus" class="vi-status"></div><div id="viNative"></div></div>' +
       /* 4 阶段自学路线 */
       '<div class="card"><div class="card-title">' + vnFlag() + ' 越南语 · 新手自学（4 阶段）</div>' +
       '<div class="vn-route-top row spread"><div class="muted">已掌握 <b>' + doneStages.length + '</b>/' + VN_STAGES.length + ' 阶段' +
@@ -1460,6 +1451,17 @@
     setTimeout(vietTipCheck, 800);
     renderVoicePicker('vi-VN', $('#viVoicePick'), '🗣 越南语发音人');
     renderNativeVi($('#viNative'));
+    // 实时显示越南语嗓音状态，帮用户判断是否需要去 iPhone 下载语音包
+    const viStatusEl = $('#viVoiceStatus');
+    const paintViStatus = () => {
+      if (!viStatusEl || !viStatusEl.isConnected) return;
+      const v = pickVoice('vi-VN');
+      viStatusEl.innerHTML = v
+        ? ('✅ 越南语嗓音已就位：<b>' + esc(v.name) + '</b>（母语音，下面喇叭即可标准朗读）')
+        : '⚠️ 未找到越南语语音包：iPhone 请到「设置 → 辅助功能 → 朗读内容 → 嗓音」点 + 添加「越南语」并下载，刷新本页后下面喇叭即变标准。';
+    };
+    if (VOICES.length) paintViStatus();
+    else { loadVoices(); const _vt = setInterval(() => { if (VOICES.length) { paintViStatus(); clearInterval(_vt); } }, 300); setTimeout(() => clearInterval(_vt), 6000); }
 
     // 阶段路线
     const sbox = $('#vnStages');
