@@ -64,12 +64,12 @@
     const doSpeak = () => {
       try { synth.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = lang;
+      u.lang = lang; // 始终用标准语言标签（如 vi-VN），让系统自动选对应母语嗓音
       let v = null;
       const pref = (opts.voiceName != null) ? opts.voiceName : getVoicePref(lang);
+      // 仅当用户主动选过发音人(pref 非空)时才绑定指定 voice；否则只靠 lang，避免自动挑到的 voice 用 vi_VN 等非常规标签把语言带偏（这是之前越南语读错的根因）
       if (pref) v = VOICES.find(x => x.name === pref) || null;
-      if (!v) v = pickVoice(lang);
-      if (v) { u.voice = v; u.lang = v.lang; } // 用 voice 自身的 lang 字段，规避 vi-VN / vi_VN 激活差异
+      if (v) u.voice = v;
       u.rate = (opts.rate != null ? opts.rate : 1);
       u.pitch = (opts.pitch != null ? opts.pitch : 1);
       if (opts.onend) u.onend = opts.onend;
