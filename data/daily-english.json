@@ -1,0 +1,71 @@
+{
+  "date": "2026-07-23",
+  "source": "每日9点·BBC热点选题灵感",
+  "articles": [
+    {
+      "id": "d1",
+      "en": "How Reading Shapes Your Brain",
+      "zh": "阅读如何重塑你的大脑",
+      "words": 215, "dur": 122, "vocab": 23,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "body": [
+        ["Scientists have found that learning to read actually changes the structure of the brain, not just what we know.", "科学家发现,学会阅读真的会改变大脑的结构,而不只是我们知道的东西。"],
+        ["Regular reading strengthens the connections between different areas, helping us focus and understand ideas more deeply.", "经常阅读会加强大脑不同区域之间的连接,帮助我们更专注、更深入地理解想法。"],
+        ["Even ten minutes of reading a day, in any language, can slowly reshape how your mind works.", "哪怕每天只读十分钟,用任何语言都行,都能慢慢重塑你大脑的运作方式。"]
+      ],
+      "tips": [["structure", "结构"], ["connections", "连接"], ["reshape", "重塑"]]
+    },
+    {
+      "id": "d2",
+      "en": "Making Cities Feel Quieter",
+      "zh": "如何让城市更安静",
+      "words": 210, "dur": 120, "vocab": 22,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "body": [
+        ["Many cities are noisy places, and constant noise can quietly raise our stress without us noticing.", "很多城市都很吵,而持续的噪音会在我们没察觉时悄悄升高压力。"],
+        ["Some towns are now adding more trees, quiet zones and softer road surfaces to lower the everyday noise.", "一些城镇正通过多种树、设置安静区和更柔软的路面,来降低日常噪音。"],
+        ["Finding a quiet corner for a few minutes each day can help your ears and your mind rest.", "每天找个安静的角落待上几分钟,能让你的耳朵和头脑得到休息。"]
+      ],
+      "tips": [["constant noise", "持续的噪音"], ["quiet zones", "安静区"], ["rest", "休息"]]
+    },
+    {
+      "id": "d3",
+      "en": "The Power of Poetry",
+      "zh": "诗歌的力量",
+      "words": 205, "dur": 118, "vocab": 21,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "body": [
+        ["Poetry is not only something we study at school; for many people it brings comfort in hard times.", "诗歌不只是学校里学的东西;对很多人来说,它在艰难时刻带来慰藉。"],
+        ["A few short lines can express feelings that are hard to say in ordinary words.", "短短几行就能表达那些用平常话很难说清的感受。"],
+        ["Reading or writing a small poem can be a gentle way to understand your own emotions.", "读一首或写一首小诗,是理解自己情绪的一种温柔方式。"]
+      ],
+      "tips": [["comfort", "慰藉/安慰"], ["express feelings", "表达感受"], ["emotions", "情绪"]]
+    },
+    {
+      "id": "d4",
+      "en": "Why Are We All So Stressed?",
+      "zh": "为什么我们都这么焦虑",
+      "words": 218, "dur": 124, "vocab": 24,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "body": [
+        ["Modern life keeps us busy, and many people feel stressed almost every single day.", "现代生活让我们忙个不停,很多人几乎每天都感到有压力。"],
+        ["Some stress can push us to act, but too much of it harms our sleep, mood and health.", "适度的压力能推动我们行动,但压力太大会损害睡眠、情绪和健康。"],
+        ["Simple habits like slow breathing, a short walk or talking to a friend can ease the pressure.", "一些简单的习惯,比如慢呼吸、走一小段路或找朋友聊聊,就能缓解压力。"]
+      ],
+      "tips": [["stressed", "有压力的/焦虑的"], ["harms", "损害"], ["ease the pressure", "缓解压力"]]
+    },
+    {
+      "id": "d5",
+      "en": "How Advertisers Make Us Spend Money",
+      "zh": "广告如何让我们花钱",
+      "words": 208, "dur": 119, "vocab": 22,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "body": [
+        ["Advertisers use clever tricks to make us want things we did not plan to buy.", "广告商用巧妙的手法,让我们想要那些本没打算买的东西。"],
+        ["Bright colours, limited-time offers and happy faces are all designed to push us to spend.", "鲜艳的颜色、限时优惠和快乐的表情,都是为了推动我们消费而设计的。"],
+        ["Knowing these tricks helps us pause, think, and keep more of our own money.", "了解这些手法能帮我们停一停、想一想,把更多钱留在自己手里。"]
+      ],
+      "tips": [["advertisers", "广告商"], ["limited-time offers", "限时优惠"], ["spend", "花钱"]]
+    }
+  ]
+}
