@@ -145,22 +145,29 @@
     voiceWarned[lang] = true; toast(msg);
   }
 
-  // 越南语「在线真人发音」小工具：优先用翻译网站的真人音源，打不开则跳百度翻译
-  // 越南语「在线真人发音」入口：直接打开百度翻译越南语页（国内可用、点喇叭即听真人音）
+  // 越南语「在线真人发音」小工具：直接播放百度翻译真人语音（国内可直连，最标准），失败则打开百度翻译对照页
   function renderNativeVi(mount) {
     if (!mount) return;
     mount.innerHTML = '<div class="vi-native-box">' +
-      '<div class="section-label">🌐 想听更标准的真人发音？</div>' +
+      '<div class="section-label">🌐 任意越南语 · 听真人发音（进阶好帮手）</div>' +
       '<div class="row" style="gap:6px"><input id="viNativeIn" class="inp" placeholder="输入或粘贴越南语，如 xin chào" style="flex:1">' +
-      '<button id="viNativePlay" class="btn sm">🌐 打开百度听真人</button></div>' +
-      '<div class="muted" style="font-size:12px;margin-top:6px">点按钮会打开「百度翻译」越南语页（国内可用、无需翻墙），在那页点喇叭🔊即可听真人发音。下方喇叭用的是你 iPhone 的语音包，若不准请先按上面的提示下载越南语语音包。</div></div>';
+      '<button id="viNativePlay" class="btn sm">🔊 听真人</button></div>' +
+      '<div class="muted" style="font-size:12px;margin-top:6px">输入任何越南语（单词 / 句子都行），点「听真人」即播放百度翻译真人语音；若个别词没出声会自动打开百度翻译页对照。</div></div>';
     const inp = mount.querySelector('#viNativeIn');
     const play = mount.querySelector('#viNativePlay');
     play.onclick = () => {
       const t = (inp.value || '').trim();
       if (!t) { toast('先在框里输入越南语'); return; }
-      window.open('https://fanyi.baidu.com/#vi/zh/' + encodeURIComponent(t), '_blank');
-      toast('已打开百度翻译，点页面上的🔊听真人越南语音');
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      const tex = encodeURIComponent(t);
+      const baidu = 'https://tts.baidu.com/text2audio?tex=' + tex + '&lan=vie&spd=5&pit=5&vol=9&source=web';
+      const fanyi = 'https://fanyi.baidu.com/#vie/zh/' + tex;
+      const a = new Audio(baidu);
+      let fell = false;
+      const fallback = () => { if (fell) return; fell = true; try { window.open(fanyi, '_blank'); } catch (e) {} toast('已打开百度翻译，点🔊听真人'); };
+      a.onloadedmetadata = () => { if (!a.duration || isNaN(a.duration) || a.duration < 0.1) fallback(); };
+      a.onerror = fallback;
+      const p = a.play(); if (p && p.catch) p.catch(fallback);
     };
   }
 
@@ -1408,9 +1415,20 @@
   async function renderViet(view) {
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     function speakVi(text) {
-      speakLang(text, 'vi-VN', { rate: 0.85 });
+      // 越南语发音统一用「百度翻译真人语音」（国内可直连、越南语最标准），不再依赖手机自带语音包
+      // —— iPhone 中文系统会把越南语退回中文嗓音逐字母读，设备语音不可靠，故走在线真人音最稳
+      if (!text) return;
+      const tex = encodeURIComponent(text);
+      const baidu = 'https://tts.baidu.com/text2audio?tex=' + tex + '&lan=vie&spd=5&pit=5&vol=9&source=web';
+      const fanyi = 'https://fanyi.baidu.com/#vie/zh/' + tex;
+      const a = new Audio(baidu);
+      let fell = false;
+      const fallback = () => { if (fell) return; fell = true; try { window.open(fanyi, '_blank'); } catch (e) {} toast('已打开百度翻译，点页面🔊听真人越南语'); };
+      a.onloadedmetadata = () => { if (!a.duration || isNaN(a.duration) || a.duration < 0.1) fallback(); };
+      a.onerror = fallback;
+      const p = a.play();
+      if (p && p.catch) p.catch(fallback);
     }
-    setVoicePref('vi-VN', ''); // 进越南语模块即清掉已知脏记忆（英语嗓音名被记到越南语），恢复系统越南语发音
 
     function vnLinks(kw) {
       const dy = 'https://www.douyin.com/search/' + encodeURIComponent(kw + ' 越南语');
@@ -1426,68 +1444,45 @@
     const cur = doneStages.length; // 当前正在学的阶段（0-based）
 
     view.innerHTML =
-      /* 零基础上路引导 */
+      /* 发音说明（新） */
+      '<div class="card vn-audio-note"><div class="card-title">🔊 关于发音</div>' +
+      '<p class="muted" style="margin:0">本模块越南语发音采用 <b>百度翻译真人语音</b>（国内可正常收听，最标准）。点任意 🔊 喇叭即可听；若个别词没出声，会自动打开百度翻译对照页，点那页喇叭即可。</p></div>' +
+      /* 🌱 新手入门 */
+      '<div class="vn-level-head">🌱 新手入门 · 先把这几关练熟</div>' +
       '<div class="card vn-start-card"><div class="card-title">🚀 零基础？先看这里</div>' +
-      '<p class="muted" style="margin:0 0 12px">别慌，越南语用的是和英文一样的字母，跟着下面三步走就行 👇</p>' +
+      '<p class="muted" style="margin:0 0 12px">越南语用和英文一样的字母，跟着三步走 👇</p>' +
       '<div id="vnStart"></div>' +
-      '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div>' +
-      '<div id="viVoicePick" style="margin:10px 0"></div><div id="viVoiceStatus" class="vi-status"></div><div id="viNative"></div></div>' +
-      /* 4 阶段自学路线 */
+      '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div></div>' +
       '<div class="card"><div class="card-title">' + vnFlag() + ' 越南语 · 新手自学（4 阶段）</div>' +
       '<div class="vn-route-top row spread"><div class="muted">已掌握 <b>' + doneStages.length + '</b>/' + VN_STAGES.length + ' 阶段' +
       (cur < VN_STAGES.length ? ' ｜ 当前：第 ' + (cur + 1) + ' 阶段' : ' ｜ 全部完成 🎉') + '</div>' +
       '<button id="vnReset" class="btn sm ghost">重置进度</button></div>' +
       '<div id="vnStages" style="margin-top:10px"></div></div>' +
-      /* 完整字母表 */
       '<div class="card"><div class="card-title">🔤 完整字母表（点字母听发音）</div>' +
       '<p class="muted" style="margin:0 0 10px">共 29 个字母。先眼熟，再点着一个个跟读，每天读一遍。</p>' +
       '<div class="section-label">🅰️ 元音（12 个）</div><div id="vowels" class="alpha-grid"></div>' +
       '<div class="section-label">🅱️ 辅音（17 个）</div><div id="consonants" class="alpha-grid"></div></div>' +
-      /* 今日重点 */
       '<div class="card"><div class="card-title">📖 今日重点</div><p class="muted" style="margin:0 0 10px">顺序：特殊字母 → 弄懂声调 → 学会拼读 → 背单词，每步都配跟练视频。</p>' +
       '<div class="section-label">✏️ 特殊字母速记（越南语特有 6 个）</div><div id="special"></div>' +
       '<div class="section-label">🎵 6 个声调（以「ma」演示，最关键）</div><div id="tones"></div>' +
       '<div class="section-label">🔡 拼读小课堂（一个字怎么拼出来）</div><div id="spell"></div>' +
       '<div class="section-label">🔤 今日 10 个必背词</div><div id="words"></div>' +
       '<div class="row wrap" style="margin-top:10px;gap:6px"><span class="muted" style="font-size:13px;width:100%">整体跟练入口：</span>' + vnLinks('越南语 入门 声调 字母') + '</div></div>' +
-      /* 单词闪卡自测 */
       '<div class="card"><div class="card-title">🎴 单词闪卡自测</div>' +
       '<p class="muted" style="margin:0 0 10px">看着中文先自己回想越南语，点卡片揭晓答案，测测记住没。</p><div id="flash"></div></div>' +
-      /* 实用场景短句 */
+      /* 🚀 进阶练习 */
+      '<div class="vn-level-head">🚀 进阶练习 · 能开口后练这些</div>' +
       '<div class="card"><div class="card-title">🍜 实用场景短句（去越南直接能用）</div>' +
-      '<p class="muted" style="margin:0 0 10px">点每句右边喇叭跟读，出门点餐问路都不怕。</p><div id="scenes"></div></div>' +
-      /* 分课跟读（阶段1课文） */
+      '<p class="muted" style="margin:0 0 10px">点每句右边喇叭跟读，出门点餐问路都不怕。建议先用「显示译文」看懂，再遮住中文自己说。</p><div id="scenes"></div></div>' +
       '<div class="card"><div class="card-title">📚 分课跟读（阶段 1 课文）</div><div id="units"></div></div>' +
-      /* 推荐资源 */
+      '<div class="card"><div class="card-title">🌐 任意越南语 · 听真人发音</div><div id="viNative"></div></div>' +
+      /* 推荐资源 + 统计 */
       '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="res"></div></div>' +
-      /* 学习统计 */
       '<div class="card"><div class="card-title">📈 学习统计</div><div id="stats"></div>' +
       '<button id="add" class="btn block" style="margin-top:10px">➕ 记录今天学习</button><div id="list" style="margin-top:10px"></div></div>';
 
-    // 语音包检测：若设备没有越南语母语发音人，给出解决办法提示
-    if (!VOICES.length) loadVoices();
-    const vietTipCheck = () => {
-      if (!view.isConnected) return;
-      if (view.querySelector('.viet-voice-tip')) return;
-      const tip = el('<div class="viet-voice-tip info-note" style="margin:0 0 12px"></div>');
-      tip.innerHTML = '🔊 越南语朗读使用手机自带的越南语发音引擎，点任意喇叭即可跟读。如某个词想听更标准的真人发音，可用顶部「真人发音」工具对照。';
-      view.prepend(tip);
-    };
-    vietTipCheck();
-    setTimeout(vietTipCheck, 800);
-    renderVoicePicker('vi-VN', $('#viVoicePick'), '🗣 越南语发音人');
+    // 越南语发音统一走百度翻译真人语音（见 speakVi），无需设备语音包/发音人下拉
     renderNativeVi($('#viNative'));
-    // 实时显示越南语嗓音状态，帮用户判断是否需要去 iPhone 下载语音包
-    const viStatusEl = $('#viVoiceStatus');
-    const paintViStatus = () => {
-      if (!viStatusEl || !viStatusEl.isConnected) return;
-      const v = pickVoice('vi-VN');
-      viStatusEl.innerHTML = v
-        ? ('✅ 越南语发音已就绪：<b>' + esc(v.name) + '</b>（点下方任意喇叭即可标准朗读）')
-        : 'ℹ️ 本模块使用系统越南语发音引擎朗读（iPhone 自带支持，点喇叭即可跟读）。如个别词想听更标准真人音，可用顶部「真人发音」工具对照。';
-    };
-    if (VOICES.length) paintViStatus();
-    else { loadVoices(); const _vt = setInterval(() => { if (VOICES.length) { paintViStatus(); clearInterval(_vt); } }, 300); setTimeout(() => clearInterval(_vt), 6000); }
 
     // 阶段路线
     const sbox = $('#vnStages');
