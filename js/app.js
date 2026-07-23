@@ -504,12 +504,12 @@
       ['Bạn nói tiếng Anh không?', '你会说英语吗？'],
     ]},
   ];
-  // 推荐资源
+  // 推荐资源（均用国内平台，避免 Google / YouTube 等境外站点打不开）
   const VN_RES = [
-    { t: '📕 自学教材推荐', url: 'https://www.google.com/search?q=' + encodeURIComponent('越南语 自学 教材 推荐 新手') },
-    { t: '🦉 Duolingo 越南语', url: 'https://www.duolingo.com/course/vi/en/learn' },
-    { t: '▶ YouTube 入门课', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent('Learn Vietnamese for beginners') },
-    { t: '🎧 Spotify 慢速播客', url: 'https://www.google.com/search?q=' + encodeURIComponent('Spotify 越南语 慢速 播客 听力') },
+    { t: '📺 B站：越南语零基础入门', url: 'https://search.bilibili.com/all?keyword=' + encodeURIComponent('越南语 零基础 入门 教程') },
+    { t: '🎵 喜马拉雅：越南语听力慢速', url: 'https://www.ximalaya.com/search?q=' + encodeURIComponent('越南语 听力 慢速') },
+    { t: '📕 小红书：教材 & 经验帖', url: 'https://www.xiaohongshu.com/search_result?keyword=' + encodeURIComponent('越南语 自学 教材 推荐') },
+    { t: '▶ 抖音：越南语跟练短视频', url: 'https://www.douyin.com/search/' + encodeURIComponent('越南语 跟练 入门') },
   ];
   // 新手自学课程（每课：标题 + 双语句 + 词汇）
   const VN_UNITS = [
@@ -1411,10 +1411,10 @@
     function vnLinks(kw) {
       const dy = 'https://www.douyin.com/search/' + encodeURIComponent(kw + ' 越南语');
       const bz = 'https://search.bilibili.com/all?keyword=' + encodeURIComponent(kw + ' 越南语 教程');
-      const yt = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(kw + ' Vietnamese pronunciation');
+      const xhs = 'https://www.xiaohongshu.com/search_result?keyword=' + encodeURIComponent(kw + ' 越南语 学习');
       return '<button class="btn sm ghost vn-go" data-url="' + dy + '">抖音跟练</button>' +
         '<button class="btn sm ghost vn-go" data-url="' + bz + '">B站跟练</button>' +
-        '<button class="btn sm ghost vn-go" data-url="' + yt + '">教学视频</button>';
+        '<button class="btn sm ghost vn-go" data-url="' + xhs + '">小红书经验</button>';
     }
 
     const meta = await DB.get('meta', 'vnStages');
