@@ -35,6 +35,42 @@
   let toastTimer;
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1800); }
 
+  // ---------- 语音发音（智能挑选母语发音人） ----------
+  // 浏览器自带的“念字”功能依赖设备已安装的语音包；不指定发音人时，
+  // 可能用错嗓音（如用中文嗓音读英语/越南语），听起来就别扭。
+  let VOICES = [];
+  function loadVoices() { try { VOICES = (window.speechSynthesis && speechSynthesis.getVoices()) || []; } catch (e) { VOICES = []; } }
+  if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+  // 按语言挑最合适的 voice：先精确匹配（en-US / vi-VN），再同语种（en-* / vi-*）
+  function pickVoice(lang) {
+    if (!VOICES.length) return null;
+    const want = (lang || '').toLowerCase(), base = want.split('-')[0];
+    let v = VOICES.find(x => (x.lang || '').toLowerCase() === want);
+    if (!v && base) v = VOICES.find(x => (x.lang || '').toLowerCase().indexOf(base + '-') === 0);
+    return v || null;
+  }
+  // 通用朗读：自动选母语发音人，语速可调；返回是否成功
+  function speakLang(text, lang, opts) {
+    opts = opts || {};
+    const synth = window.speechSynthesis;
+    if (!synth || !text) return false;
+    try { synth.cancel(); } catch (e) {}
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
+    const v = pickVoice(lang); if (v) u.voice = v;
+    u.rate = (opts.rate != null ? opts.rate : 1);
+    u.pitch = (opts.pitch != null ? opts.pitch : 1);
+    if (opts.onend) u.onend = opts.onend;
+    synth.speak(u);
+    return true;
+  }
+  function voiceReady(lang) { return !!pickVoice(lang); }
+  const voiceWarned = {};
+  function warnVoiceOnce(lang, msg) {
+    if (voiceWarned[lang] || voiceReady(lang)) return;
+    voiceWarned[lang] = true; toast(msg);
+  }
+
   // 底部弹窗表单，返回填写的对象或 null（取消）
   function promptForm(title, fields) {
     return new Promise((resolve) => {
@@ -1223,10 +1259,8 @@
         $('#ptime').textContent = fmt(played) + ' / ' + fmt(a.dur);
       }
       function speak(text, onend) {
-        synth.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = speed; u.onend = onend || null;
-        synth.speak(u);
+        speakLang(text, 'en-US', { rate: speed, onend: onend || null });
+        warnVoiceOnce('en-US', '设备无英语母语发音包，朗读可能带口音');
       }
       function playSeg(i) {
         if (i >= total) {
@@ -1279,11 +1313,8 @@
   async function renderViet(view) {
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     function speakVi(text) {
-      const synth = window.speechSynthesis;
-      synth.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'vi-VN'; u.rate = 0.85;
-      synth.speak(u);
+      speakLang(text, 'vi-VN', { rate: 0.85 });
+      warnVoiceOnce('vi-VN', '设备无越南语母语发音包，朗读不准 · 用手机听最准');
     }
 
     function vnLinks(kw) {
@@ -1336,6 +1367,18 @@
       /* 学习统计 */
       '<div class="card"><div class="card-title">📈 学习统计</div><div id="stats"></div>' +
       '<button id="add" class="btn block" style="margin-top:10px">➕ 记录今天学习</button><div id="list" style="margin-top:10px"></div></div>';
+
+    // 语音包检测：若设备没有越南语母语发音人，给出解决办法提示
+    if (!VOICES.length) loadVoices();
+    const vietTipCheck = () => {
+      if (voiceReady('vi-VN') || !view.isConnected) return;
+      if (view.querySelector('.viet-voice-tip')) return;
+      const tip = el('<div class="viet-voice-tip warn-note" style="margin:0 0 12px"></div>');
+      tip.innerHTML = '🔊 <b>为什么越南语朗读不准？</b> 你的设备没有越南语母语发音包，现在是用其它嗓音“硬读”的。两个办法：①用手机打开本页（iPhone/安卓自带越南语音，最省事）；②电脑：Windows 设置 → 时间和语言 → 语言和区域 → 添加“越南语” → 选项 → 语音，下载语音包后刷新本页。';
+      view.prepend(tip);
+    };
+    vietTipCheck();
+    setTimeout(vietTipCheck, 800);
 
     // 阶段路线
     const sbox = $('#vnStages');
