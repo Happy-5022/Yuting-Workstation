@@ -94,15 +94,24 @@
     let tries = 0;
     const build = () => {
       if (!mountEl.isConnected) return;
-      if (!VOICES.length) { if (tries++ < 6) setTimeout(build, 400); return; }
+      if (!VOICES.length) {
+        if (tries++ < 25) { setTimeout(build, 300); return; } // 最多等约 7.5 秒，覆盖 iOS 语音列表异步加载慢的情况（之前只等 2.4 秒导致下拉不显示）
+        mountEl.innerHTML = '<div class="voice-pick"><span class="voice-pick-label">' + label + '</span><span class="muted" style="font-size:12px">（设备暂未返回语音列表，请刷新页面重试）</span></div>';
+        return;
+      }
       const base = normLang(lang).split('-')[0];
       const list = VOICES.filter(v => { const l = normLang(v.lang); return l.indexOf(base + '-') === 0 || l === base; });
       mountEl.innerHTML = '';
-      if (!list.length) return; // 该语言没有可用嗓音就不显示
+      if (!list.length) {
+        mountEl.innerHTML = '<div class="voice-pick"><span class="voice-pick-label">' + label + '</span><span class="muted" style="font-size:12px">（本设备未安装该语言语音包）</span></div>';
+        return;
+      }
       const sel = document.createElement('select'); sel.className = 'voice-sel';
       const auto = document.createElement('option'); auto.value = ''; auto.textContent = '自动（推荐）'; sel.append(auto);
       list.forEach(v => { const o = document.createElement('option'); o.value = v.name; o.textContent = v.name + (v.lang ? ' (' + v.lang + ')' : ''); sel.append(o); });
-      const pref = getVoicePref(lang);
+      // 已保存的偏好若不在当前设备可用列表内（如系统更新后嗓音名变化、或之前选到了怪异嗓音），自动清空，回落到"自动"用系统母语音
+      let pref = getVoicePref(lang);
+      if (pref && !list.some(x => x.name === pref)) { setVoicePref(lang, ''); pref = ''; }
       try { sel.value = pref || ''; } catch (e) {}
       sel.onchange = () => setVoicePref(lang, sel.value);
       const wrap = document.createElement('div'); wrap.className = 'voice-pick';
@@ -111,6 +120,12 @@
       mountEl.append(wrap);
     };
     build();
+    // 语音列表异步就绪后再触发一次渲染（把原本的 onvoiceschanged 一起包住，避免覆盖 loadVoices）
+    const onReady = () => { if (VOICES.length && mountEl.isConnected) build(); };
+    if (window.speechSynthesis) {
+      const prev = window.speechSynthesis.onvoiceschanged;
+      window.speechSynthesis.onvoiceschanged = (e) => { try { prev && prev(e); } catch (_) {} onReady(); };
+    }
   }
   function voiceReady(lang) { return !!pickVoice(lang); }
   const voiceWarned = {};
