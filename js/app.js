@@ -56,8 +56,8 @@
   function getVoicePref(lang) { try { return localStorage.getItem('voicePref_' + lang) || ''; } catch (e) { return ''; } }
   function setVoicePref(lang, name) { try { localStorage.setItem('voicePref_' + lang, name || ''); } catch (e) {} }
 
-  // 通用朗读：默认只靠语言标签让系统自动选对应母语嗓音（最稳，越南语/英语都靠这个）；
-  // 仅当用户主动选过、且该发音人确实属于目标语言时才绑定，避免脏记忆（如英语嗓音名被记到越南语）导致越南语被当英文逐字母读
+  // 通用朗读：显式挑出对应语言的母语嗓音并绑定（iOS 中文手机上只设 lang 会退回默认中文嗓音逐字母读，必须显式绑定）；
+  // 仅当用户主动选过、且该发音人确实属于目标语言时才优先用其选择，否则一律自动选该语言母语嗓音
   function speakLang(text, lang, opts) {
     opts = opts || {};
     const synth = window.speechSynthesis;
@@ -67,27 +67,31 @@
       try { synth.resume(); } catch (e) {}
       try { synth.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = lang; // 始终用标准语言标签（如 vi-VN），让系统自动选对应母语嗓音
+      u.lang = lang;
       let v = null;
       const pref = (opts.voiceName != null) ? opts.voiceName : getVoicePref(lang);
       if (pref) {
         const found = VOICES.find(x => x.name === pref);
-        // 只有当该发音人确实属于目标语言时（如都是 vi）才绑定；否则视为脏记忆，清除，只用 lang 朗读
+        // 只有当该发音人确实属于目标语言时（如都是 vi）才用其选择；否则视为脏记忆，清除
         if (found && normLang(found.lang).split('-')[0] === base) v = found;
         else if (found) setVoicePref(lang, ''); // 清掉错语言的脏记忆（例如英语嗓音被记到了越南语）
       }
-      if (v) u.voice = v;
+      if (!v) v = pickVoice(lang); // 自动选该语言母语嗓音并显式绑定（iOS 上关键，避免退回默认中文嗓音逐字母读）
+      if (v) { u.voice = v; try { u.lang = v.lang || lang; } catch (e) {} } // 用 voice 自身的语言标签，规避 vi-VN / vi_VN 差异
       u.rate = (opts.rate != null ? opts.rate : 1);
       u.pitch = (opts.pitch != null ? opts.pitch : 1);
       if (opts.onend) u.onend = opts.onend;
       try { synth.speak(u); } catch (e) {}
     };
-    // 语音列表是异步加载的：若还没就绪，先按语言朗读（iOS 会自动选对应母语音），稍后再补一次
+    // 语音列表异步加载：列表没就绪前不急着出声，等加载完再读，避免先以错误嗓音念出来
     if (!VOICES.length) {
       loadVoices();
       if (!VOICES.length) {
-        doSpeak();
-        setTimeout(() => { if (!VOICES.length) loadVoices(); if (VOICES.length) doSpeak(); }, 320);
+        let waited = 0;
+        const wait = setInterval(() => {
+          waited += 100;
+          if (VOICES.length || waited >= 3000) { clearInterval(wait); doSpeak(); }
+        }, 100);
         return true;
       }
     }
