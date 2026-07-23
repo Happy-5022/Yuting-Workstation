@@ -56,26 +56,33 @@
   function getVoicePref(lang) { try { return localStorage.getItem('voicePref_' + lang) || ''; } catch (e) { return ''; } }
   function setVoicePref(lang, name) { try { localStorage.setItem('voicePref_' + lang, name || ''); } catch (e) {} }
 
-  // 通用朗读：优先用用户挑的发音人，否则自动选母语发音人；语速可调
+  // 通用朗读：默认只靠语言标签让系统自动选对应母语嗓音（最稳，越南语/英语都靠这个）；
+  // 仅当用户主动选过、且该发音人确实属于目标语言时才绑定，避免脏记忆（如英语嗓音名被记到越南语）导致越南语被当英文逐字母读
   function speakLang(text, lang, opts) {
     opts = opts || {};
     const synth = window.speechSynthesis;
     if (!synth || !text) return false;
+    const base = normLang(lang).split('-')[0];
     const doSpeak = () => {
+      try { synth.resume(); } catch (e) {}
       try { synth.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
       u.lang = lang; // 始终用标准语言标签（如 vi-VN），让系统自动选对应母语嗓音
       let v = null;
       const pref = (opts.voiceName != null) ? opts.voiceName : getVoicePref(lang);
-      // 仅当用户主动选过发音人(pref 非空)时才绑定指定 voice；否则只靠 lang，避免自动挑到的 voice 用 vi_VN 等非常规标签把语言带偏（这是之前越南语读错的根因）
-      if (pref) v = VOICES.find(x => x.name === pref) || null;
+      if (pref) {
+        const found = VOICES.find(x => x.name === pref);
+        // 只有当该发音人确实属于目标语言时（如都是 vi）才绑定；否则视为脏记忆，清除，只用 lang 朗读
+        if (found && normLang(found.lang).split('-')[0] === base) v = found;
+        else if (found) setVoicePref(lang, ''); // 清掉错语言的脏记忆（例如英语嗓音被记到了越南语）
+      }
       if (v) u.voice = v;
       u.rate = (opts.rate != null ? opts.rate : 1);
       u.pitch = (opts.pitch != null ? opts.pitch : 1);
       if (opts.onend) u.onend = opts.onend;
-      synth.speak(u);
+      try { synth.speak(u); } catch (e) {}
     };
-    // 语音列表是异步加载的：若还没就绪，先按语言朗读（iOS 会自动选对应母语音），稍后再用精准嗓音重读一次
+    // 语音列表是异步加载的：若还没就绪，先按语言朗读（iOS 会自动选对应母语音），稍后再补一次
     if (!VOICES.length) {
       loadVoices();
       if (!VOICES.length) {
@@ -91,27 +98,25 @@
   // 在模块里渲染"发音人"下拉选择器（让用户自己挑最顺耳的嗓音）
   function renderVoicePicker(lang, mountEl, label) {
     if (!window.speechSynthesis || !mountEl) return;
+    const base = normLang(lang).split('-')[0];
     let tries = 0;
     const build = () => {
       if (!mountEl.isConnected) return;
       if (!VOICES.length) {
-        if (tries++ < 25) { setTimeout(build, 300); return; } // 最多等约 7.5 秒，覆盖 iOS 语音列表异步加载慢的情况（之前只等 2.4 秒导致下拉不显示）
-        mountEl.innerHTML = '<div class="voice-pick"><span class="voice-pick-label">' + label + '</span><span class="muted" style="font-size:12px">（设备暂未返回语音列表，请刷新页面重试）</span></div>';
-        return;
+        if (tries++ < 25) { setTimeout(build, 300); return; } // 最多等约 7.5 秒，覆盖 iOS 语音列表异步加载慢的情况
       }
-      const base = normLang(lang).split('-')[0];
       const list = VOICES.filter(v => { const l = normLang(v.lang); return l.indexOf(base + '-') === 0 || l === base; });
-      mountEl.innerHTML = '';
-      if (!list.length) {
-        mountEl.innerHTML = '<div class="voice-pick"><span class="voice-pick-label">' + label + '</span><span class="muted" style="font-size:12px">（本设备未安装该语言语音包）</span></div>';
-        return;
+      // 关键：先清除"错语言/失效"的脏记忆（例如英语嗓音名被记到越南语），否则它会污染朗读。
+      // 即使本机 getVoices 不返回该语言 voice（list 为空）也照样执行清除与渲染，不再提前 return 导致下拉和"恢复默认"按钮消失。
+      let pref = getVoicePref(lang);
+      if (pref) {
+        const found = VOICES.find(x => x.name === pref);
+        if (!found || normLang(found.lang).split('-')[0] !== base) { setVoicePref(lang, ''); pref = ''; }
       }
+      mountEl.innerHTML = '';
       const sel = document.createElement('select'); sel.className = 'voice-sel';
       const auto = document.createElement('option'); auto.value = ''; auto.textContent = '自动（推荐）'; sel.append(auto);
       list.forEach(v => { const o = document.createElement('option'); o.value = v.name; o.textContent = v.name + (v.lang ? ' (' + v.lang + ')' : ''); sel.append(o); });
-      // 已保存的偏好若不在当前设备可用列表内（如系统更新后嗓音名变化、或之前选到了怪异嗓音），自动清空，回落到"自动"用系统母语音
-      let pref = getVoicePref(lang);
-      if (pref && !list.some(x => x.name === pref)) { setVoicePref(lang, ''); pref = ''; }
       try { sel.value = pref || ''; } catch (e) {}
       sel.onchange = () => setVoicePref(lang, sel.value);
       const wrap = document.createElement('div'); wrap.className = 'voice-pick';
@@ -122,8 +127,8 @@
       mountEl.append(wrap);
     };
     build();
-    // 语音列表异步就绪后再触发一次渲染（把原本的 onvoiceschanged 一起包住，避免覆盖 loadVoices）
-    const onReady = () => { if (VOICES.length && mountEl.isConnected) build(); };
+    // 语音列表异步就绪后再触发一次渲染（包住原有的 onvoiceschanged，避免覆盖 loadVoices）
+    const onReady = () => { if (mountEl.isConnected) build(); };
     if (window.speechSynthesis) {
       const prev = window.speechSynthesis.onvoiceschanged;
       window.speechSynthesis.onvoiceschanged = (e) => { try { prev && prev(e); } catch (_) {} onReady(); };
@@ -1400,8 +1405,8 @@
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     function speakVi(text) {
       speakLang(text, 'vi-VN', { rate: 0.85 });
-      warnVoiceOnce('vi-VN', '设备无越南语母语发音包，朗读不准 · 用手机听最准');
     }
+    setVoicePref('vi-VN', ''); // 进越南语模块即清掉已知脏记忆（英语嗓音名被记到越南语），恢复系统越南语发音
 
     function vnLinks(kw) {
       const dy = 'https://www.douyin.com/search/' + encodeURIComponent(kw + ' 越南语');
@@ -1458,10 +1463,10 @@
     // 语音包检测：若设备没有越南语母语发音人，给出解决办法提示
     if (!VOICES.length) loadVoices();
     const vietTipCheck = () => {
-      if (voiceReady('vi-VN') || !view.isConnected) return;
+      if (!view.isConnected) return;
       if (view.querySelector('.viet-voice-tip')) return;
-      const tip = el('<div class="viet-voice-tip warn-note" style="margin:0 0 12px"></div>');
-      tip.innerHTML = '🔊 <b>为什么越南语朗读不准？</b> 你的设备没有越南语母语发音包，现在是用其它嗓音“硬读”的。两个办法：①用手机打开本页（iPhone/安卓自带越南语音，最省事）；②电脑：Windows 设置 → 时间和语言 → 语言和区域 → 添加“越南语” → 选项 → 语音，下载语音包后刷新本页。';
+      const tip = el('<div class="viet-voice-tip info-note" style="margin:0 0 12px"></div>');
+      tip.innerHTML = '🔊 越南语朗读使用手机自带的越南语发音引擎，点任意喇叭即可跟读。如某个词想听更标准的真人发音，可用顶部「真人发音」工具对照。';
       view.prepend(tip);
     };
     vietTipCheck();
@@ -1474,8 +1479,8 @@
       if (!viStatusEl || !viStatusEl.isConnected) return;
       const v = pickVoice('vi-VN');
       viStatusEl.innerHTML = v
-        ? ('✅ 越南语嗓音已就位：<b>' + esc(v.name) + '</b>（母语音，下面喇叭即可标准朗读）')
-        : '⚠️ 未找到越南语语音包：iPhone 请到「设置 → 辅助功能 → 朗读内容 → 嗓音」点 + 添加「越南语」并下载，刷新本页后下面喇叭即变标准。';
+        ? ('✅ 越南语发音已就绪：<b>' + esc(v.name) + '</b>（点下方任意喇叭即可标准朗读）')
+        : 'ℹ️ 本模块使用系统越南语发音引擎朗读（iPhone 自带支持，点喇叭即可跟读）。如个别词想听更标准真人音，可用顶部「真人发音」工具对照。';
     };
     if (VOICES.length) paintViStatus();
     else { loadVoices(); const _vt = setInterval(() => { if (VOICES.length) { paintViStatus(); clearInterval(_vt); } }, 300); setTimeout(() => clearInterval(_vt), 6000); }
