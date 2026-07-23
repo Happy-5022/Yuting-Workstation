@@ -461,3 +461,9 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .g-count { font-size: 13px; padding: 4px 11px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
 .g-count.on { background: var(--primary); color: #fff; border-color: var(--primary); }
 .g-home-alert { border-color: var(--accent); background: #FBF3E0; }
+
+/* 发音人选择器（英语/越南语模块内） */
+.voice-pick { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
+.voice-pick-label { font-size: 13px; color: var(--muted); }
+.voice-sel { padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 13px; background: var(--surface); color: var(--text); max-width: 100%; }
+.voice-sel:focus { border-color: var(--primary); background: #fff; }

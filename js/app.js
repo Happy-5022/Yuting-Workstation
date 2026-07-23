@@ -49,7 +49,11 @@
     if (!v && base) v = VOICES.find(x => (x.lang || '').toLowerCase().indexOf(base + '-') === 0);
     return v || null;
   }
-  // 通用朗读：自动选母语发音人，语速可调；返回是否成功
+  // 朗读发音人偏好（按设备存，用户可在模块里手动挑最喜欢的嗓音）
+  function getVoicePref(lang) { try { return localStorage.getItem('voicePref_' + lang) || ''; } catch (e) { return ''; } }
+  function setVoicePref(lang, name) { try { localStorage.setItem('voicePref_' + lang, name || ''); } catch (e) {} }
+
+  // 通用朗读：优先用用户挑的发音人，否则自动选母语发音人；语速可调
   function speakLang(text, lang, opts) {
     opts = opts || {};
     const synth = window.speechSynthesis;
@@ -57,12 +61,41 @@
     try { synth.cancel(); } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
-    const v = pickVoice(lang); if (v) u.voice = v;
+    let v = null;
+    const pref = (opts.voiceName != null) ? opts.voiceName : getVoicePref(lang);
+    if (pref) v = VOICES.find(x => x.name === pref) || null;
+    if (!v) v = pickVoice(lang);
+    if (v) u.voice = v;
     u.rate = (opts.rate != null ? opts.rate : 1);
     u.pitch = (opts.pitch != null ? opts.pitch : 1);
     if (opts.onend) u.onend = opts.onend;
     synth.speak(u);
     return true;
+  }
+
+  // 在模块里渲染"发音人"下拉选择器（让用户自己挑最顺耳的嗓音）
+  function renderVoicePicker(lang, mountEl, label) {
+    if (!window.speechSynthesis || !mountEl) return;
+    let tries = 0;
+    const build = () => {
+      if (!mountEl.isConnected) return;
+      if (!VOICES.length) { if (tries++ < 6) setTimeout(build, 400); return; }
+      const base = lang.toLowerCase().split('-')[0];
+      const list = VOICES.filter(v => (v.lang || '').toLowerCase().indexOf(base) === 0);
+      mountEl.innerHTML = '';
+      if (!list.length) return; // 该语言没有可用嗓音就不显示
+      const sel = document.createElement('select'); sel.className = 'voice-sel';
+      const auto = document.createElement('option'); auto.value = ''; auto.textContent = '自动（推荐）'; sel.append(auto);
+      list.forEach(v => { const o = document.createElement('option'); o.value = v.name; o.textContent = v.name + (v.lang ? ' (' + v.lang + ')' : ''); sel.append(o); });
+      const pref = getVoicePref(lang);
+      try { sel.value = pref || ''; } catch (e) {}
+      sel.onchange = () => setVoicePref(lang, sel.value);
+      const wrap = document.createElement('div'); wrap.className = 'voice-pick';
+      const lab = document.createElement('span'); lab.className = 'voice-pick-label'; lab.textContent = label;
+      wrap.append(lab); wrap.append(sel);
+      mountEl.append(wrap);
+    };
+    build();
   }
   function voiceReady(lang) { return !!pickVoice(lang); }
   const voiceWarned = {};
@@ -1147,7 +1180,8 @@
     view.innerHTML =
       '<div class="card"><div class="card-title">🌍 英语学习 · BBC 随身英语</div>' +
       '<p class="muted" id="enMeta" style="margin:0 0 8px">每天 30 分钟盲听练习：先听不看译文，再对照学。挑一篇进入。</p>' +
-      '<button id="refreshEn" class="btn ghost sm" style="margin-bottom:10px">🔄 立即刷新文章</button></div>' +
+      '<button id="refreshEn" class="btn ghost sm" style="margin-bottom:10px">🔄 立即刷新文章</button>' +
+      '<div id="enVoicePick" style="margin:8px 0"></div></div>' +
       '<div id="artList"></div>' +
       '<div class="card"><div class="card-title">📈 学习统计</div><div id="stats"></div>' +
       '<button id="add" class="btn block" style="margin-top:10px">➕ 记录今天学习</button><div id="list" style="margin-top:10px"></div></div>';
@@ -1307,6 +1341,7 @@
     dailyEn = await loadDailyEn() || localDailyEn();
     $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + '。每天 9 点自动更新。';
     await renderList(); refreshStats();
+    renderVoicePicker('en-US', $('#enVoicePick'), '🗣 英语发音人');
   }
 
   // 8. 越南语
@@ -1335,7 +1370,8 @@
       '<div class="card vn-start-card"><div class="card-title">🚀 零基础？先看这里</div>' +
       '<p class="muted" style="margin:0 0 12px">别慌，越南语用的是和英文一样的字母，跟着下面三步走就行 👇</p>' +
       '<div id="vnStart"></div>' +
-      '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div></div>' +
+      '<div class="section-label">📅 新手第一周计划</div><div id="vnWeek"></div>' +
+      '<div id="viVoicePick" style="margin:10px 0"></div></div>' +
       /* 4 阶段自学路线 */
       '<div class="card"><div class="card-title">' + vnFlag() + ' 越南语 · 新手自学（4 阶段）</div>' +
       '<div class="vn-route-top row spread"><div class="muted">已掌握 <b>' + doneStages.length + '</b>/' + VN_STAGES.length + ' 阶段' +
@@ -1379,6 +1415,7 @@
     };
     vietTipCheck();
     setTimeout(vietTipCheck, 800);
+    renderVoicePicker('vi-VN', $('#viVoicePick'), '🗣 越南语发音人');
 
     // 阶段路线
     const sbox = $('#vnStages');
