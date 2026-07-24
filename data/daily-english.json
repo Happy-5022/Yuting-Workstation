@@ -1,71 +1,101 @@
 {
-  "date": "2026-07-23",
+  "date": "2026-07-24",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "How Reading Shapes Your Brain",
-      "zh": "阅读如何重塑你的大脑",
-      "words": 215, "dur": 122, "vocab": 23,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Rude Emails: Why Words on a Screen Can Hurt",
+      "zh": "无礼邮件：屏幕上的文字为何伤人",
+      "words": 96,
+      "dur": 60,
+      "vocab": 950,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260702",
       "body": [
-        ["Scientists have found that learning to read actually changes the structure of the brain, not just what we know.", "科学家发现,学会阅读真的会改变大脑的结构,而不只是我们知道的东西。"],
-        ["Regular reading strengthens the connections between different areas, helping us focus and understand ideas more deeply.", "经常阅读会加强大脑不同区域之间的连接,帮助我们更专注、更深入地理解想法。"],
-        ["Even ten minutes of reading a day, in any language, can slowly reshape how your mind works.", "哪怕每天只读十分钟,用任何语言都行,都能慢慢重塑你大脑的运作方式。"]
+        ["Have you ever opened an email that felt cold or even rude? Many workers say uncivil messages ruin their whole day.", "你有没有打开过一封让你觉得冷冰冰甚至无礼的邮件？很多上班族说，不礼貌的信息会毁掉他们一整天的心情。"],
+        ["Without a smile or a friendly voice, short replies like 'Fine.' can sound angry, even when the writer is just busy.", "没有微笑和友好的语气，像'行。'这样的简短回复听起来会很生气，哪怕写的人只是太忙了。"],
+        ["Experts suggest reading your message out loud before sending it, and adding a small greeting to keep things warm.", "专家建议发送前把邮件读出声，并加上一句小小的问候，让语气保持温暖。"]
       ],
-      "tips": [["structure", "结构"], ["connections", "连接"], ["reshape", "重塑"]]
+      "tips": [
+        ["uncivil", "不礼貌的，无礼的"],
+        ["ruin one's day", "毁掉某人一天的好心情"],
+        ["read out loud", "大声读出来"]
+      ]
     },
     {
       "id": "d2",
-      "en": "Making Cities Feel Quieter",
-      "zh": "如何让城市更安静",
-      "words": 210, "dur": 120, "vocab": 22,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Why Cycling Makes Cities Happier",
+      "zh": "为什么骑行让城市更快乐",
+      "words": 92,
+      "dur": 58,
+      "vocab": 900,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260709",
       "body": [
-        ["Many cities are noisy places, and constant noise can quietly raise our stress without us noticing.", "很多城市都很吵,而持续的噪音会在我们没察觉时悄悄升高压力。"],
-        ["Some towns are now adding more trees, quiet zones and softer road surfaces to lower the everyday noise.", "一些城镇正通过多种树、设置安静区和更柔软的路面,来降低日常噪音。"],
-        ["Finding a quiet corner for a few minutes each day can help your ears and your mind rest.", "每天找个安静的角落待上几分钟,能让你的耳朵和头脑得到休息。"]
+        ["How often do you ride a bicycle? In many cities, more and more people are choosing two wheels instead of cars.", "你多久骑一次自行车？在很多城市，越来越多的人选择两个轮子而不是汽车。"],
+        ["Cycling is cheap, keeps you fit, and produces no pollution, so it helps both your body and the planet.", "骑行便宜、能保持身材，还零污染，所以它对你的身体和地球都有好处。"],
+        ["Cities with safe bike lanes report that people feel less stressed and enjoy their daily journeys much more.", "拥有安全自行车道的城市反馈说，人们压力更小，也更享受每天的通勤路程。"]
       ],
-      "tips": [["constant noise", "持续的噪音"], ["quiet zones", "安静区"], ["rest", "休息"]]
+      "tips": [
+        ["two wheels", "两个轮子（指自行车）"],
+        ["keep fit", "保持健康/身材"],
+        ["bike lane", "自行车道"]
+      ]
     },
     {
       "id": "d3",
-      "en": "The Power of Poetry",
-      "zh": "诗歌的力量",
-      "words": 205, "dur": 118, "vocab": 21,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Living with Debt: Small Steps to Feel in Control",
+      "zh": "与债务共处：找回掌控感的小步骤",
+      "words": 94,
+      "dur": 60,
+      "vocab": 1000,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260528",
       "body": [
-        ["Poetry is not only something we study at school; for many people it brings comfort in hard times.", "诗歌不只是学校里学的东西;对很多人来说,它在艰难时刻带来慰藉。"],
-        ["A few short lines can express feelings that are hard to say in ordinary words.", "短短几行就能表达那些用平常话很难说清的感受。"],
-        ["Reading or writing a small poem can be a gentle way to understand your own emotions.", "读一首或写一首小诗,是理解自己情绪的一种温柔方式。"]
+        ["Are you good at saving money? For many people, borrowing has become a normal part of everyday life.", "你擅长存钱吗？对很多人来说，借钱已经成了日常生活的一部分。"],
+        ["Debt itself is not always bad, but hiding from the numbers often makes people feel anxious and out of control.", "债务本身不一定是坏事，但逃避不看账单往往让人焦虑、感觉失控。"],
+        ["Money experts say the first step is simple: write down what you owe, then pay off a little at a time.", "理财专家说第一步很简单：写下你欠了多少，然后一点一点地还。"]
       ],
-      "tips": [["comfort", "慰藉/安慰"], ["express feelings", "表达感受"], ["emotions", "情绪"]]
+      "tips": [
+        ["in control", "掌控局面"],
+        ["out of control", "失控"],
+        ["pay off", "还清（债务）"]
+      ]
     },
     {
       "id": "d4",
-      "en": "Why Are We All So Stressed?",
-      "zh": "为什么我们都这么焦虑",
-      "words": 218, "dur": 124, "vocab": 24,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Should Children Have Less Screen Time?",
+      "zh": "孩子们该少看点屏幕吗？",
+      "words": 90,
+      "dur": 56,
+      "vocab": 950,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260618",
       "body": [
-        ["Modern life keeps us busy, and many people feel stressed almost every single day.", "现代生活让我们忙个不停,很多人几乎每天都感到有压力。"],
-        ["Some stress can push us to act, but too much of it harms our sleep, mood and health.", "适度的压力能推动我们行动,但压力太大会损害睡眠、情绪和健康。"],
-        ["Simple habits like slow breathing, a short walk or talking to a friend can ease the pressure.", "一些简单的习惯,比如慢呼吸、走一小段路或找朋友聊聊,就能缓解压力。"]
+        ["Children today spend hours every day looking at phones, tablets and televisions, and many parents are worried.", "如今的孩子每天花好几个小时盯着手机、平板和电视，很多家长为此担心。"],
+        ["Too much screen time may affect sleep, eyesight and even the way young brains learn and grow.", "过多的屏幕时间可能影响睡眠、视力，甚至影响小孩大脑学习和发育的方式。"],
+        ["Instead of a total ban, experts suggest screen-free meals and more outdoor play as a healthy balance.", "专家建议不必完全禁止，可以试试吃饭不看屏幕、多去户外玩耍，找到健康的平衡。"]
       ],
-      "tips": [["stressed", "有压力的/焦虑的"], ["harms", "损害"], ["ease the pressure", "缓解压力"]]
+      "tips": [
+        ["screen time", "屏幕时间"],
+        ["total ban", "完全禁止"],
+        ["screen-free", "不使用屏幕的"]
+      ]
     },
     {
       "id": "d5",
-      "en": "How Advertisers Make Us Spend Money",
-      "zh": "广告如何让我们花钱",
-      "words": 208, "dur": 119, "vocab": 22,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Scared of Speaking English? You Are Not Alone",
+      "zh": "害怕开口说英语？你不是一个人",
+      "words": 95,
+      "dur": 60,
+      "vocab": 900,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260122",
       "body": [
-        ["Advertisers use clever tricks to make us want things we did not plan to buy.", "广告商用巧妙的手法,让我们想要那些本没打算买的东西。"],
-        ["Bright colours, limited-time offers and happy faces are all designed to push us to spend.", "鲜艳的颜色、限时优惠和快乐的表情,都是为了推动我们消费而设计的。"],
-        ["Knowing these tricks helps us pause, think, and keep more of our own money.", "了解这些手法能帮我们停一停、想一想,把更多钱留在自己手里。"]
+        ["Does your heart beat faster when you have to speak English? This fear is so common it has a name: language anxiety.", "要开口说英语时你会心跳加速吗？这种恐惧太常见了，它甚至有个名字：语言焦虑。"],
+        ["Many learners stay silent because they are afraid of making mistakes and looking silly in front of others.", "很多学习者保持沉默，因为他们害怕犯错、害怕在别人面前出丑。"],
+        ["Teachers say mistakes are proof that you are trying, and every small conversation makes the fear a little weaker.", "老师们说，犯错恰恰证明你在努力，而每一次小小的对话都会让恐惧减弱一点。"]
       ],
-      "tips": [["advertisers", "广告商"], ["limited-time offers", "限时优惠"], ["spend", "花钱"]]
+      "tips": [
+        ["language anxiety", "语言焦虑"],
+        ["look silly", "显得傻/出丑"],
+        ["proof that...", "……的证明"]
+      ]
     }
   ]
 }

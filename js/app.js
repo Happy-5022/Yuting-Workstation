@@ -939,21 +939,42 @@
     let curCat = '全部';
 
     // 取自动化每天推的热点/挑战；不是今天的（电脑没开/离线）就用本地兜底
+    // 离线兜底用的最小内置题库（防止完全没网 / 文件未推送时板块空白或崩溃）
+    const FALLBACK_HOT = [
+      { title: '用英语/越南语介绍一道中国美食', cat: '生活', source: '内置', desc: '双语+美食，流量稳，适合冷启动', hot: '' },
+      { title: '小城慢游 vlog · 慢充旅行', cat: '生活', source: '内置', desc: '旅游管理老师身份，专业背书强', hot: '' },
+      { title: '尤克里里翻弹当下热门神曲', cat: '弹琴', source: '内置', desc: '音乐类账号蹭顶流 BGM 涨粉最快', hot: '' },
+      { title: '每天一句实用英语/越南语', cat: '思考', source: '内置', desc: '教师口条好，适合日更养号', hot: '' },
+      { title: '探店 vlog + 场景英语教学', cat: '生活', source: '内置', desc: '美食与语言双结合，有场景', hot: '' },
+      { title: '零基础手势舞改编弹唱版', cat: '唱歌', source: '内置', desc: '比纯手势舞更有记忆点', hot: '' },
+    ];
+    const FALLBACK_CHAL = [
+      { topic: '#慢充旅行', cat: '生活', desc: '带定位+话题发小城慢游视频或图文', join: '48万', why: '旅游老师身份契合，时间灵活正好拍' },
+      { topic: '#跟我学一句英语', cat: '思考', desc: '结合当天热点教一句实用英语', join: '26万', why: '教师出身口条好，适合日更' },
+      { topic: '#生气了', cat: '弹琴', desc: '用热门神曲当 BGM 翻弹/对口型', join: '120万', why: '音乐类涨粉快，翻弹版稀缺' },
+      { topic: '#是不是嘛对不对嘛', cat: '唱歌', desc: '零基础手势舞改弹唱版做差异化', join: '35万', why: '门槛低出片快' },
+      { topic: '#世界杯夜宵', cat: '生活', desc: '拍看球夜宵探店或熬夜拉伸操', join: '89万', why: '赛事流量池巨大' },
+    ];
+    function pickFrom(arr, n, seed) {
+      if (!arr || !arr.length) return [];
+      const rnd = mulberry32(seed + arr.length); const pool = arr.slice(); const out = [];
+      for (let i = 0; i < n && pool.length; i++) out.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]);
+      return out;
+    }
     async function loadDailyHot() {
+      let bank = null;
       try {
         const r = await fetch('./data/daily-hot.json?v=' + todayStr(), { cache: 'no-store' });
-        if (r.ok) { const j = await r.json(); if (j && j.date === todayStr()) return j; }
+        if (r.ok) { const j = await r.json(); if (j && (j.hot || j.challenges)) bank = j; }
       } catch (e) { /* 离线兜底 */ }
-      return null;
+      if (!bank) return null;
+      // 用当天日期做随机种子，从题库里挑一批；不要求 date 必须是今天，保证每天换一批、永不空白
+      const seed = parseInt(todayStr().replace(/-/g, ''), 10);
+      return { date: todayStr(), source: bank.source || '热点题库 · 每日轮换', hot: pickFrom(bank.hot, 5), challenges: pickFrom(bank.challenges, 5) };
     }
     function localDailyHot() {
       const seed = parseInt(todayStr().replace(/-/g, ''), 10);
-      const pick = (bank, n) => {
-        const rnd = mulberry32(seed + bank.length); const pool = bank.slice(); const out = [];
-        for (let i = 0; i < n && pool.length; i++) out.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]);
-        return out;
-      };
-      return { date: todayStr(), source: '本地自动生成（离线兜底）', hot: pick(HOT_BANK, 5), challenges: pick(CHAL_BANK, 5) };
+      return { date: todayStr(), source: '本地内置题库（离线兜底）', hot: pickFrom(FALLBACK_HOT, 5), challenges: pickFrom(FALLBACK_CHAL, 5) };
     }
     let daily = null;
 
