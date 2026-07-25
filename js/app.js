@@ -1516,28 +1516,6 @@
       console.warn('[VN] 无预录音频:', text);
       return false;
     }
-    // 本机语音诊断（保留供参考，已确诊 iOS 中文机 Web Speech 拿不到越南语嗓音，现改用预录音频方案）
-    function vnDiagnose() {
-      const synth = window.speechSynthesis;
-      const out = $('#vnDiagOut');
-      if (!synth) { if (out) out.innerHTML = '❌ 本机不支持网页朗读'; return; }
-      const refresh = () => {
-        const voices = (synth.getVoices && synth.getVoices()) || VOICES || [];
-        const viVoices = voices.filter(v => { const l = normLang(v.lang || ''); return l === 'vi-vn' || l.indexOf('vi-') === 0 || l === 'vi'; });
-        const uniq = Array.from(new Set(voices.map(v => v.lang).filter(Boolean))).sort();
-        let h = '本机网页可用嗓音共 <b>' + voices.length + '</b> 个。<br>';
-        if (viVoices.length) {
-          h += '✅ 检测到越南语嗓音：<br>' + viVoices.map(v => '· ' + esc(v.name) + ' (' + esc(v.lang) + ')').join('<br>');
-          h += '<br><br>有越南语嗓音却仍拼字母？请<b>删除主屏图标、重新添加到主屏幕</b>后再试。';
-        } else {
-          h += '❌ <b>未检测到越南语嗓音</b>。当前仅有：' + (uniq.join('、') || '（无）') + '<br><br>';
-          h += '👉 请到 iPhone：<b>设置 → 辅助功能 → 朗读内容 → 声音</b>，点「添加新语言」选 <b>越南语 Tiếng Việt</b> 并下载（建议选"优化音质"）。下载后<b>删除主屏图标、重新添加到主屏幕</b>，再点「听发音」。';
-        }
-        if (out) out.innerHTML = h;
-      };
-      refresh();
-      if (typeof synth.onvoiceschanged !== 'undefined') { synth.onvoiceschanged = refresh; }
-    }
     function makeRecorder() {
       let rec = null, stream = null, chunks = [];
       return {
@@ -1620,11 +1598,6 @@
         '</div>' +
         '<div class="card"><div class="card-title">🧭 学习路线（5 阶段）</div><div id="vnRoute"></div></div>' +
         '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="vnRes"></div></div>' +
-        '<div class="card"><div class="card-title">🔍 发音诊断</div>' +
-          '<div class="muted" style="font-size:12px">当前使用「预录音频包」方案（微软 TTS 生成，完全离线）。若点「听发音」没声音，点此检查。</div>' +
-          '<button class="btn ghost sm" id="vnDiag" style="margin-top:8px">检查本机语音</button>' +
-          '<div id="vnDiagOut" style="margin-top:8px;font-size:12px;line-height:1.7"></div>' +
-        '</div>' +
         '</div>';
       $('#goLesson').onclick = paintLesson;
       view.querySelectorAll('.vn-card').forEach(c => c.onclick = () => {
@@ -1636,7 +1609,6 @@
       });
       const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">已点亮 ' + stage + ' / ' + VN_STAGES.length + ' 阶段 · 当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」</div>'; route.innerHTML = h; }
       const res = $('#vnRes'); if (res) res.innerHTML = VN_RES.map(r => '<a class="vn-res" href="' + r.url + '" target="_blank" rel="noopener">' + esc(r.t) + '</a>').join('');
-      const diag = $('#vnDiag'); if (diag) diag.onclick = vnDiagnose;
     }
 
     // ---------- 今日课程 ----------
