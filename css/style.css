@@ -437,6 +437,7 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 /* 概览：每日一言 + 收藏 */
 .q-text { font-size: 17px; font-weight: 600; line-height: 1.6; margin: 0; color: var(--text); }
 .q-author { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin-top: 6px; }
+.q-cat { display: inline-block; font-size: 12px; color: var(--primary); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; margin-top: 10px; }
 .fav-item { display: flex; align-items: flex-start; gap: 10px; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 10px 12px; margin-bottom: 8px; }
 .fav-txt { flex: 1; font-size: 14.5px; line-height: 1.55; }
 .fav-item .del { flex: 0 0 auto; }
