@@ -1429,8 +1429,9 @@
     async function wrongDel(id) { await DB.del(STORE_WRONG, id); }
     function daySeed() { return parseInt(todayStr().replace(/-/g, ''), 10); }
     function dayPick(seed, arr, n) { const rnd = mulberry32(seed); const pool = arr.slice(); const out = []; for (let i = 0; i < n && pool.length; i++) out.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]); return out; }
-    // 越南语发音：优先用 iPhone 本机自带的越南语嗓音（完全离线、国内可用）；
-    // 中文机默认 Web Speech 列表里可能没有，故先等嗓音列表加载、再从中挑一个越南语嗓音显式绑定。
+    // 越南语发音：优先用 iPhone 本机自带的越南语嗓音（完全离线、国内可用）。
+    // 关键点：iOS 中文机 Web Speech 默认不把越南语放进 getVoices() 列表，
+    // 故实时读取嗓音列表（不用页面加载时缓存的 VOICES），找不到 vi 时仍用 u.lang='vi-VN' 兜底（iOS 可能动态加载系统越南语嗓音）。
     function vnSpeak(text, opts) {
       opts = opts || {};
       text = (text || '').toString().trim();
@@ -1441,28 +1442,47 @@
       const doSpeak = () => {
         try { synth.cancel(); } catch (e) {}
         const u = new SpeechSynthesisUtterance(text);
-        // 从设备嗓音列表里挑越南语嗓音（vi / vi-VN / vi_VN 都算）
-        const vi = VOICES.find(v => { const l = normLang(v.lang || ''); return l === 'vi-vn' || l.indexOf('vi-') === 0 || l === 'vi'; });
-        if (vi) { u.voice = vi; u.lang = vi.lang; }   // 用本机越南语嗓音（离线）
-        else { u.lang = 'vi-VN'; }                    // 本机没越南语嗓音时的兜底（多半会拼字母）
+        const voices = (synth.getVoices && synth.getVoices()) || VOICES || [];
+        const vi = voices.find(v => { const l = normLang(v.lang || ''); return l === 'vi-vn' || l.indexOf('vi-') === 0 || l === 'vi'; });
+        if (vi) { u.voice = vi; u.lang = normLang(vi.lang) || 'vi-VN'; }  // 用本机越南语嗓音（离线）
+        else { u.lang = 'vi-VN'; }                                       // 兜底：iOS 可能动态加载系统越南语嗓音
         u.rate = speed; u.pitch = 1;
         if (opts.onend) u.onend = opts.onend;
         try { synth.speak(u); } catch (e) {}
       };
       // 嗓音列表可能还没加载好，等加载完再读，避免用错默认嗓音
-      if (!VOICES.length) {
-        loadVoices();
-        if (!VOICES.length) {
-          let waited = 0;
-          const t = setInterval(() => {
-            waited += 100;
-            if (VOICES.length || waited >= 3000) { clearInterval(t); doSpeak(); }
-          }, 100);
-          return true;
-        }
+      if (!synth.getVoices || !synth.getVoices().length) {
+        let waited = 0;
+        const t = setInterval(() => {
+          waited += 100;
+          if ((synth.getVoices && synth.getVoices().length) || waited >= 3000) { clearInterval(t); doSpeak(); }
+        }, 100);
+        return true;
       }
       doSpeak();
       return true;
+    }
+    // 本机语音诊断：在手机上直接显示 Web Speech 当前能拿到的所有嗓音（含越南语与否），定位"拼字母"根因
+    function vnDiagnose() {
+      const synth = window.speechSynthesis;
+      const out = $('#vnDiagOut');
+      if (!synth) { if (out) out.innerHTML = '❌ 本机不支持网页朗读'; return; }
+      const refresh = () => {
+        const voices = (synth.getVoices && synth.getVoices()) || VOICES || [];
+        const viVoices = voices.filter(v => { const l = normLang(v.lang || ''); return l === 'vi-vn' || l.indexOf('vi-') === 0 || l === 'vi'; });
+        const uniq = Array.from(new Set(voices.map(v => v.lang).filter(Boolean))).sort();
+        let h = '本机网页可用嗓音共 <b>' + voices.length + '</b> 个。<br>';
+        if (viVoices.length) {
+          h += '✅ 检测到越南语嗓音：<br>' + viVoices.map(v => '· ' + esc(v.name) + ' (' + esc(v.lang) + ')').join('<br>');
+          h += '<br><br>有越南语嗓音却仍拼字母？请<b>删除主屏图标、重新添加到主屏幕</b>后再试。';
+        } else {
+          h += '❌ <b>未检测到越南语嗓音</b>。当前仅有：' + (uniq.join('、') || '（无）') + '<br><br>';
+          h += '👉 请到 iPhone：<b>设置 → 辅助功能 → 朗读内容 → 声音</b>，点「添加新语言」选 <b>越南语 Tiếng Việt</b> 并下载（建议选"优化音质"）。下载后<b>删除主屏图标、重新添加到主屏幕</b>，再点「听发音」。';
+        }
+        if (out) out.innerHTML = h;
+      };
+      refresh();
+      if (typeof synth.onvoiceschanged !== 'undefined') { synth.onvoiceschanged = refresh; }
     }
     function makeRecorder() {
       let rec = null, stream = null, chunks = [];
@@ -1546,6 +1566,11 @@
         '</div>' +
         '<div class="card"><div class="card-title">🧭 学习路线（5 阶段）</div><div id="vnRoute"></div></div>' +
         '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="vnRes"></div></div>' +
+        '<div class="card"><div class="card-title">🔍 发音诊断</div>' +
+          '<div class="muted" style="font-size:12px">若「听发音」是拼字母而非越南语，点此查看本机是否有越南语嗓音</div>' +
+          '<button class="btn ghost sm" id="vnDiag" style="margin-top:8px">检查本机语音</button>' +
+          '<div id="vnDiagOut" style="margin-top:8px;font-size:12px;line-height:1.7"></div>' +
+        '</div>' +
         '</div>';
       $('#goLesson').onclick = paintLesson;
       view.querySelectorAll('.vn-card').forEach(c => c.onclick = () => {
@@ -1557,6 +1582,7 @@
       });
       const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">已点亮 ' + stage + ' / ' + VN_STAGES.length + ' 阶段 · 当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」</div>'; route.innerHTML = h; }
       const res = $('#vnRes'); if (res) res.innerHTML = VN_RES.map(r => '<a class="vn-res" href="' + r.url + '" target="_blank" rel="noopener">' + esc(r.t) + '</a>').join('');
+      const diag = $('#vnDiag'); if (diag) diag.onclick = vnDiagnose;
     }
 
     // ---------- 今日课程 ----------
