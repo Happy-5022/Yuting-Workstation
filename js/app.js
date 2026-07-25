@@ -81,7 +81,7 @@
         // 没有该语言的嗓音：绝不用别的嗓音乱念（如中文嗓音逐字母读越南语），改为提醒用户去开启
         if (opts.onNoVoice) { try { opts.onNoVoice(); } catch (e) {} return false; }
       }
-      if (v) { u.voice = v; try { u.lang = v.lang || lang; } catch (e) {} } // 用 voice 自身的语言标签，规避 vi-VN / vi_VN 差异
+      if (v) { u.voice = v; try { u.lang = normLang(v.lang) || lang; } catch (e) {} } // 用 voice 自身语言标签并归一化（vi_VN→vi-vn），规避 iOS 返回下划线写法被写回导致退回中文逐字母读
       u.rate = (opts.rate != null ? opts.rate : 1);
       u.pitch = (opts.pitch != null ? opts.pitch : 1);
       if (opts.onend) u.onend = opts.onend;
@@ -1399,6 +1399,279 @@
   }
 
 
+  // 8.5 越南语学习（全新蓝图：仪表盘 + 四张功能卡 + 听/跟练 + 收藏 + 分阶段）
+  async function renderViet(view) {
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    await bumpCheckin(); // 打开即打卡当天
+
+    // ---------- 本地存储助手 ----------
+    const STORE_FAV = 'vnFav', STORE_WRONG = 'vnWrong';
+    async function getStage() { const m = await DB.get('meta', 'vnStage'); return (m && typeof m.value === 'number') ? m.value : 0; }
+    async function setStage(n) { await DB.put('meta', { id: 'vnStage', value: n }); }
+    function ymd(y) { const p = x => String(x).padStart(2, '0'); const [Y, M, D] = y.split('-').map(Number); const d = new Date(Y, M - 1, D); d.setDate(d.getDate() - 1); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+    function curStreak(arr) { const s = new Set(arr); let n = 0, base = todayStr(); if (!s.has(base)) { const y = ymd(base); if (!s.has(y)) return 0; base = y; } while (s.has(base)) { n++; base = ymd(base); } return n; }
+    async function bumpCheckin() { const m = await DB.get('meta', 'vnCheckin'); const arr = (m && Array.isArray(m.value)) ? m.value : []; const t = todayStr(); if (!arr.includes(t)) arr.push(t); await DB.put('meta', { id: 'vnCheckin', value: arr }); return curStreak(arr); }
+    async function getStreak() { const m = await DB.get('meta', 'vnCheckin'); return curStreak((m && Array.isArray(m.value)) ? m.value : []); }
+    async function getDone() { const m = await DB.get('meta', 'vnDone_' + todayStr()); return (m && Array.isArray(m.value)) ? m.value : []; }
+    async function addDone(key) { const arr = await getDone(); if (!arr.includes(key)) { arr.push(key); await DB.put('meta', { id: 'vnDone_' + todayStr(), value: arr }); } }
+    async function favList() { return await DB.all(STORE_FAV); }
+    async function favHas(id) { return !!(await DB.get(STORE_FAV, id)); }
+    async function favAdd(vn, zh) { if (await favHas(vn)) return false; await DB.put(STORE_FAV, { id: vn, vn, zh, createdAt: Date.now() }); return true; }
+    async function favDel(id) { await DB.del(STORE_FAV, id); }
+    async function wrongList() { return await DB.all(STORE_WRONG); }
+    async function wrongAdd(vn, zh) { if (await DB.get(STORE_WRONG, vn)) return; await DB.put(STORE_WRONG, { id: vn, vn, zh, createdAt: Date.now() }); }
+    async function wrongDel(id) { await DB.del(STORE_WRONG, id); }
+    function daySeed() { return parseInt(todayStr().replace(/-/g, ''), 10); }
+    function dayPick(seed, arr, n) { const rnd = mulberry32(seed); const pool = arr.slice(); const out = []; for (let i = 0; i < n && pool.length; i++) out.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]); return out; }
+    function vnSpeak(text, opts) { speakLang(text, 'vi-VN', opts || {}); }
+    function makeRecorder() {
+      let rec = null, stream = null, chunks = [];
+      return {
+        supported: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder),
+        async start() { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); rec = new MediaRecorder(stream); chunks = []; rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); }; rec.start(); },
+        stop() { return new Promise(res => { rec.onstop = () => { const blob = new Blob(chunks, { type: rec.mimeType || 'audio/webm' }); const url = URL.createObjectURL(blob); if (stream) stream.getTracks().forEach(t => t.stop()); res(url); }; rec.stop(); }); }
+      };
+    }
+    function buildLesson(stage) {
+      const seed = daySeed() + stage * 100; let items = [];
+      if (stage <= 0) {
+        dayPick(seed, VN_VOWELS.concat(VN_CONSONANTS), 6).forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l }));
+        dayPick(seed + 1, VN_SPECIAL, 2).forEach(s => items.push({ kind: 'special', vn: s.l, zh: s.c, key: 'S' + s.l }));
+      } else if (stage === 1) {
+        VN_TONES.forEach(t => items.push({ kind: 'tone', vn: t.word, zh: t.cn + ' ' + t.zh, key: 'T' + t.word }));
+        dayPick(seed, VN_SPELL, 3).forEach(s => items.push({ kind: 'spell', vn: s.word, zh: s.zh, key: 'P' + s.word }));
+      } else if (stage === 2) {
+        dayPick(seed, VN_WORDS, 6).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
+      } else if (stage === 3) {
+        dayPick(seed, VN_SENTENCES, 3).forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
+        dayPick(seed + 1, VN_SCENES.reduce((a, sc) => a.concat(sc.items), []), 3).forEach(s => items.push({ kind: 'sentence', vn: s[0], zh: s[1], key: 'SC' + s[0] }));
+      } else {
+        dayPick(seed, VN_WORDS, 4).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
+        dayPick(seed + 1, VN_SENTENCES, 4).forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
+        dayPick(seed + 2, VN_VOWELS.concat(VN_CONSONANTS), 2).forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l }));
+      }
+      return items;
+    }
+    function card(icon, title, sub, go) { return '<div class="vn-card" data-go="' + go + '"><div class="vn-card-ic">' + icon + '</div><div class="vn-card-t">' + esc(title) + '</div><div class="vn-card-s">' + esc(sub) + '</div></div>'; }
+
+    // ---------- 仪表盘 ----------
+    async function paintHome() {
+      const stage = await getStage();
+      const done = await getDone();
+      const streakN = await getStreak();
+      const favs = await favList();
+      const wrongs = await wrongList();
+      const stageInfo = VN_STAGES[stage];
+      const lesson = buildLesson(stage);
+      const total = lesson.length;
+      const doneCount = lesson.filter(it => done.includes(it.key)).length;
+      const pct = total ? Math.round(doneCount / total * 100) : 0;
+      view.innerHTML =
+        '<div class="vn-home">' +
+        '<div class="vn-top">' +
+          '<div class="vn-greet"><div class="vn-greet-h">Xin chào!</div><div class="muted" style="font-size:12px">越南语学习 · 每天一点点</div></div>' +
+          '<div class="vn-stats">' +
+            '<div class="vn-stat"><b>' + doneCount + '/' + total + '</b><span>今日进度</span></div>' +
+            '<div class="vn-stat"><b>' + streakN + '</b><span>连续打卡(天)</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="vn-grid">' +
+          card('📚', '今日课程', stageInfo ? ('第' + (stage + 1) + '阶段 · ' + stageInfo.t) : '全部完成', 'paintLesson') +
+          card('🎮', '单词闯关', wrongs.length ? ('错题 ' + wrongs.length + ' 待复习') : '听音选义练耳', 'paintChallenge') +
+          card('🎤', '口语练习', '居中跟读 · 录音回放', 'paintSpeak') +
+          card('🃏', '闪卡与生词本', favs.length ? ('收藏 ' + favs.length + ' 词') : '翻卡记忆', 'paintFlash') +
+        '</div>' +
+        '<div class="card"><div class="card-title">🧭 学习路线（5 阶段）</div><div id="vnRoute"></div></div>' +
+        '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="vnRes"></div></div>' +
+        '</div>';
+      view.querySelectorAll('.vn-card').forEach(c => c.onclick = () => {
+        const f = c.getAttribute('data-go');
+        if (f === 'paintLesson') paintLesson();
+        else if (f === 'paintChallenge') paintChallenge();
+        else if (f === 'paintSpeak') paintSpeak();
+        else if (f === 'paintFlash') paintFlash();
+      });
+      const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」</div>'; route.innerHTML = h; }
+      const res = $('#vnRes'); if (res) res.innerHTML = VN_RES.map(r => '<a class="vn-res" href="' + r.url + '" target="_blank" rel="noopener">' + esc(r.t) + '</a>').join('');
+    }
+
+    // ---------- 今日课程 ----------
+    async function paintLesson() {
+      if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      const stage = await getStage();
+      const done = await getDone();
+      const lesson = buildLesson(stage);
+      const total = lesson.length;
+      let dc = lesson.filter(it => done.includes(it.key)).length;
+      const pct = total ? Math.round(dc / total * 100) : 0;
+      view.innerHTML =
+        '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
+        '<div class="card"><div class="card-title">📚 今日课程 · 第 ' + (stage + 1) + ' 阶段</div>' +
+        '<p class="muted" style="margin:0 0 8px">' + esc(VN_STAGES[stage] ? VN_STAGES[stage].goal : '') + '</p>' +
+        '<div class="vn-prog"><i style="width:' + pct + '%"></i></div>' +
+        '<div class="muted" style="font-size:12px;margin:6px 0 0">已完成 <span class="vn-donecount">' + dc + '</span>/' + total + '</div></div>' +
+        '<div id="lessonList"></div>' +
+        (stage < VN_STAGES.length - 1 ? '<button class="btn block" id="master" style="margin-top:10px">✅ 标记掌握本阶段</button>' : '<div class="muted" style="margin-top:10px">已是最后一阶段，保持练习即可 🎉</div>');
+      const list = $('#lessonList');
+      lesson.forEach(it => {
+        const row = el('<div class="vn-row"></div>');
+        const doneIt = done.includes(it.key);
+        row.innerHTML = '<div class="vn-row-main"><div class="vn-row-vn">' + esc(it.vn) + '</div><div class="vn-row-zh">' + esc(it.zh) + '</div></div>' +
+          '<div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊 听</button><button class="btn sm ghost vn-follow">🎤 跟练</button>' + (doneIt ? '<span class="vn-done">✓</span>' : '') + '</div>';
+        row.querySelector('.vn-listen').onclick = () => vnSpeak(it.vn);
+        row.querySelector('.vn-follow').onclick = () => {
+          vnSpeak(it.vn, { rate: 0.9 });
+          addDone(it.key);
+          if (!row.querySelector('.vn-done')) { row.querySelector('.vn-row-btns').append(el('<span class="vn-done">✓</span>')); dc++; const bar = view.querySelector('.vn-prog i'); if (bar) bar.style.width = (total ? Math.round(dc / total * 100) : 0) + '%'; const t = view.querySelector('.vn-donecount'); if (t) t.textContent = dc; }
+        };
+        list.append(row);
+      });
+      $('#back').onclick = paintHome;
+      const mb = $('#master');
+      if (mb) mb.onclick = async () => { await setStage(stage + 1); toast('已解锁第 ' + (stage + 2) + ' 阶段'); paintHome(); };
+    }
+
+    // ---------- 单词闯关 ----------
+    async function paintChallenge() {
+      if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      const words = VN_WORDS.map(w => ({ vn: w.vn, zh: w.zh }));
+      const sents = VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
+      const sceneItems = VN_SCENES.reduce((a, sc) => a.concat(sc.items.map(i => ({ vn: i[0], zh: i[1] }))), []);
+      const pool = words.concat(sents, sceneItems);
+      const seed = daySeed() + 777; const N = 8; const quiz = [];
+      for (let i = 0; i < N; i++) {
+        const item = pool[(seed + i * 31) % pool.length];
+        const type = i % 2 === 0 ? 'listen' : 'zh2vn';
+        const opts = [item]; let p = (seed + i * 13) % pool.length;
+        while (opts.length < 4) { const c = pool[p % pool.length]; p += 7; if (!opts.some(o => o.vn === c.vn)) opts.push(c); }
+        const order = [(i + 1) % 4, (i + 3) % 4, i % 4, (i + 2) % 4];
+        quiz.push({ type, item, opts: order.map(k => opts[k]) });
+      }
+      let qi = 0, score = 0;
+      view.innerHTML = '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
+        '<div class="card"><div class="card-title">🎮 单词闯关</div><div id="qbox"></div></div>' +
+        '<div class="card"><div class="card-title">📕 错题集（' + (await wrongList()).length + '）</div><div id="wrongBox"></div></div>';
+      $('#back').onclick = paintHome;
+      paintWrong($('#wrongBox'));
+      paintQ();
+      function paintQ() {
+        const box = $('#qbox');
+        if (qi >= N) { box.innerHTML = '<div class="vn-end">本轮完成！得分 <b>' + score + '/' + N + '</b><br><span class="muted">明天题目会自动换一批</span></div>'; return; }
+        const q = quiz[qi];
+        const title = q.type === 'listen' ? '👂 听发音，选中文意思' : '🀄 看中文，选越南语';
+        let h = '<div class="vn-q-head">第 ' + (qi + 1) + '/' + N + ' 题 · ' + title + '</div>';
+        if (q.type === 'listen') h += '<button class="btn sm" id="qplay">🔊 播放</button>'; else h += '<div class="vn-q-zh">' + esc(q.item.zh) + '</div>';
+        h += '<div class="vn-q-opts">';
+        q.opts.forEach((o, idx) => { h += '<button class="vn-q-opt" data-i="' + idx + '">' + esc(q.type === 'listen' ? o.zh : o.vn) + '</button>'; });
+        h += '</div>';
+        box.innerHTML = h;
+        if (q.type === 'listen') { $('#qplay').onclick = () => vnSpeak(q.item.vn); vnSpeak(q.item.vn); }
+        box.querySelectorAll('.vn-q-opt').forEach(b => b.onclick = () => {
+          const chosen = q.opts[+b.getAttribute('data-i')];
+          const correct = chosen.vn === q.item.vn;
+          box.querySelectorAll('.vn-q-opt').forEach(x => x.disabled = true);
+          b.classList.add(correct ? 'right' : 'wrong');
+          box.querySelectorAll('.vn-q-opt').forEach(x => { if (q.opts[+x.getAttribute('data-i')].vn === q.item.vn) x.classList.add('right'); });
+          if (!correct) wrongAdd(q.item.vn, q.item.zh);
+          setTimeout(() => { qi++; paintQ(); }, 950);
+        });
+      }
+      function paintWrong(mount) {
+        wrongList().then(list => {
+          if (!list.length) { mount.innerHTML = '<div class="muted" style="font-size:13px">还没有错题，闯关全对就清空啦 🎉</div>'; return; }
+          mount.innerHTML = '';
+          list.slice(0, 20).forEach(w => {
+            const r = el('<div class="vn-row"></div>');
+            r.innerHTML = '<div class="vn-row-main"><div class="vn-row-vn">' + esc(w.vn) + '</div><div class="vn-row-zh">' + esc(w.zh) + '</div></div>' +
+              '<div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊</button><button class="btn sm ghost vn-fav">⭐</button><button class="btn sm ghost vn-del">✕</button></div>';
+            r.querySelector('.vn-listen').onclick = () => vnSpeak(w.vn);
+            r.querySelector('.vn-fav').onclick = async () => { if (await favAdd(w.vn, w.zh)) toast('已加入收藏'); };
+            r.querySelector('.vn-del').onclick = async () => { await wrongDel(w.id); paintWrong(mount); };
+            mount.append(r);
+          });
+        });
+      }
+    }
+
+    // ---------- 口语练习（居中跟读 + 录音回放） ----------
+    async function paintSpeak(focus) {
+      if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      const stage = await getStage();
+      let list = stage <= 2 ? VN_WORDS.map(w => ({ vn: w.vn, zh: w.zh })) : VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
+      if (stage >= 3) VN_SCENES.forEach(sc => sc.items.forEach(i => list.push({ vn: i[0], zh: i[1] })));
+      const picks = dayPick(daySeed() + 99, list, 5);
+      if (focus && !picks.find(p => p.vn === focus.vn)) picks.unshift(focus);
+      let idx = 0; const rec = makeRecorder();
+      view.innerHTML =
+        '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
+        '<div class="vn-speak">' +
+          '<div class="vn-speak-card" id="spCard"><div class="vn-speak-vn" id="spVn"></div><div class="vn-speak-zh" id="spZh"></div></div>' +
+          '<div class="vn-speak-btns"><button class="btn sm" id="spListen">🔊 听标准音</button><button class="btn sm" id="spRec">🎤 跟读录音</button><button class="btn sm ghost" id="spPlay" style="display:none">▶ 听我的</button></div>' +
+          '<div class="muted" style="font-size:12px;text-align:center;margin-top:8px" id="spHint">' + (rec.supported ? '点「跟读录音」读完点停止，再「听我的」对比标准音' : '本设备不支持录音，可直接听标准音跟读') + '</div>' +
+        '</div>' +
+        '<div class="card" style="margin-top:12px"><div class="card-title">今日练习词（点任一切换）</div><div id="spList" class="vn-sp-list"></div></div>';
+      $('#back').onclick = paintHome;
+      function show(i) { idx = i; const it = picks[i]; $('#spVn').textContent = it.vn; $('#spZh').textContent = it.zh; $('#spPlay').style.display = 'none'; const rb = $('#spRec'); rb.textContent = '🎤 跟读录音'; rb.disabled = false; rb.classList.remove('rec'); }
+      $('#spListen').onclick = () => vnSpeak(picks[idx].vn);
+      $('#spRec').onclick = async () => {
+        const btn = $('#spRec');
+        if (btn.textContent.indexOf('停止') < 0) {
+          try { await rec.start(); btn.textContent = '■ 停止录音'; btn.classList.add('rec'); }
+          catch (e) { toast('无法访问麦克风，请检查权限'); }
+        } else {
+          btn.textContent = '🎤 跟读录音'; btn.classList.remove('rec');
+          const url = await rec.stop(); const a = new Audio(url); $('#spPlay').style.display = ''; $('#spPlay').onclick = () => a.play();
+          toast('录好了，点「听我的」对比标准音');
+        }
+      };
+      const spList = $('#spList');
+      picks.forEach((it, i) => { const b = el('<button class="vn-sp-item"></button>'); b.textContent = it.vn; b.onclick = () => show(i); spList.append(b); });
+      show(0);
+    }
+
+    // ---------- 闪卡与生词本 ----------
+    async function paintFlash() {
+      if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      const deck = dayPick(daySeed() + 55, VN_WORDS, 8);
+      view.innerHTML =
+        '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
+        '<div class="row" style="gap:6px;margin-bottom:10px"><button class="btn sm" id="tFlash">🃏 闪卡</button><button class="btn sm ghost" id="tFav">⭐ 收藏夹(' + (await favList()).length + ')</button></div>' +
+        '<div id="flashBox"></div>';
+      $('#back').onclick = paintHome;
+      function paintDeck() {
+        const box = $('#flashBox'); box.innerHTML = '';
+        deck.forEach(w => {
+          const c = el('<div class="vn-flash"></div>');
+          c.innerHTML = '<div class="vn-flash-inner"><div class="vn-flash-front">' + esc(w.vn) + '</div><div class="vn-flash-back">' + esc(w.zh) + '</div></div>' +
+            '<div class="vn-flash-btns"><button class="btn sm ghost vn-listen">🔊 听</button><button class="btn sm ghost vn-fav">⭐ 收藏</button></div>';
+          const inner = c.querySelector('.vn-flash-inner');
+          inner.onclick = () => inner.classList.toggle('flip');
+          c.querySelector('.vn-listen').onclick = e => { e.stopPropagation(); vnSpeak(w.vn); };
+          c.querySelector('.vn-fav').onclick = async e => { e.stopPropagation(); if (await favAdd(w.vn, w.zh)) toast('已加入收藏'); };
+          box.append(c);
+        });
+      }
+      async function paintFav() {
+        const box = $('#flashBox'); const favs = await favList();
+        if (!favs.length) { box.innerHTML = '<div class="muted">还没有收藏，去闪卡点 ⭐ 加入吧</div>'; return; }
+        box.innerHTML = '';
+        favs.forEach(w => {
+          const r = el('<div class="vn-row"></div>');
+          r.innerHTML = '<div class="vn-row-main"><div class="vn-row-vn">' + esc(w.vn) + '</div><div class="vn-row-zh">' + esc(w.zh) + '</div></div>' +
+            '<div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊</button><button class="btn sm ghost vn-del">✕</button></div>';
+          r.querySelector('.vn-listen').onclick = () => vnSpeak(w.vn);
+          r.querySelector('.vn-del').onclick = async () => { await favDel(w.id); paintFav(); $('#tFav').textContent = '⭐ 收藏夹(' + (await favList()).length + ')'; };
+          box.append(r);
+        });
+      }
+      $('#tFlash').onclick = () => { $('#tFlash').classList.remove('ghost'); $('#tFav').classList.add('ghost'); paintDeck(); };
+      $('#tFav').onclick = () => { $('#tFav').classList.remove('ghost'); $('#tFlash').classList.add('ghost'); paintFav(); };
+      paintDeck();
+    }
+
+    paintHome();
+  }
+
   // 9. 古法健身操
   async function renderFitness(view) {
     view.innerHTML =
@@ -1603,6 +1876,7 @@
     { key: 'ideas', emoji: '💡', title: '选题灵感', render: renderIdeas },
     { key: 'hot', emoji: '🔥', title: '爆款二创', render: renderHot },
     { key: 'english', emoji: '🌍', title: '英语学习', render: renderEnglish },
+    { key: 'viet', emoji: '🇻🇳', title: '越南语学习', render: renderViet, flag: true },
     { key: 'uke', emoji: '🎻', title: '尤克里里', render: renderUke },
     { key: 'fitness', emoji: '💪', title: '古法健身操', render: renderFitness },
     { key: 'gratitude', emoji: '🙏', title: '每日感恩', render: renderGratitude },

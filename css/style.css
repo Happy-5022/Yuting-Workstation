@@ -492,3 +492,55 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .vn-q-ok { color: #2f5d34; font-weight: 700; font-size: 14px; }
 .vn-q-no { color: #963a2c; font-size: 13.5px; line-height: 1.5; }
 .vn-game-end { text-align: center; padding: 14px 6px; font-size: 16px; }
+
+/* ===== 越南语学习（新版仪表盘蓝图） ===== */
+.vn-home { display: block; }
+.vn-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: linear-gradient(135deg, #EAF2FB, #F4FAF4); border: 1.5px solid #CFE3F5; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; }
+.vn-greet-h { font-size: 20px; font-weight: 700; color: var(--text); }
+.vn-stats { display: flex; gap: 10px; }
+.vn-stat { text-align: center; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 6px 12px; min-width: 64px; }
+.vn-stat b { display: block; font-size: 18px; color: var(--primary); }
+.vn-stat span { font-size: 11px; color: var(--muted); }
+.vn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+.vn-card { background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 14px 12px; cursor: pointer; transition: .15s; text-align: center; }
+.vn-card:active { transform: scale(.98); border-color: var(--primary); }
+.vn-card-ic { font-size: 26px; }
+.vn-card-t { font-weight: 700; font-size: 14px; margin: 4px 0 2px; color: var(--text); }
+.vn-card-s { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+.vn-route { display: flex; gap: 6px; flex-wrap: wrap; }
+.vn-step { flex: 1 1 0; min-width: 88px; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 8px; text-align: center; font-size: 12px; color: var(--muted); }
+.vn-step b { display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: var(--surface); border: 1.5px solid var(--line); margin-right: 4px; font-size: 12px; }
+.vn-step.done { border-color: #BFE3C4; background: #EFF7EF; color: #2f5d34; }
+.vn-step.done b { background: #4C9A57; color: #fff; border-color: #4C9A57; }
+.vn-step.cur { border-color: var(--primary); background: #EAF2FB; color: var(--primary); }
+.vn-step.cur b { background: var(--primary); color: #fff; border-color: var(--primary); }
+.vn-res { display: block; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 9px 12px; margin-bottom: 6px; font-size: 13.5px; color: var(--text); text-decoration: none; }
+.vn-res:active { background: var(--surface); }
+.vn-prog { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.vn-prog i { display: block; height: 100%; background: var(--primary); border-radius: 99px; transition: width .3s; }
+.vn-row { display: flex; align-items: center; gap: 8px; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 9px 10px; margin-bottom: 6px; }
+.vn-row-main { flex: 1 1 auto; min-width: 0; }
+.vn-row-vn { font-size: 15px; font-weight: 600; color: var(--text); word-break: break-word; }
+.vn-row-zh { font-size: 12.5px; color: var(--muted); }
+.vn-row-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.vn-done { color: #4C9A57; font-weight: 700; font-size: 15px; }
+.vn-q-head { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.vn-q-opts { margin-top: 8px; }
+.vn-end { text-align: center; padding: 14px 6px; font-size: 16px; }
+.vn-speak { display: flex; flex-direction: column; align-items: center; padding: 18px 10px; }
+.vn-speak-card { width: 100%; max-width: 360px; background: linear-gradient(135deg, #EAF2FB, #F4FAF4); border: 1.5px solid #CFE3F5; border-radius: var(--radius); padding: 26px 16px; text-align: center; margin-bottom: 16px; }
+.vn-speak-vn { font-size: 28px; font-weight: 700; color: var(--text); word-break: break-word; }
+.vn-speak-zh { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.vn-speak-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.vn-speak-btns .rec { background: #C86A5A; color: #fff; border-color: #C86A5A; }
+.vn-sp-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.vn-sp-item { background: var(--surface-2); border: 1.5px solid var(--line); border-radius: 99px; padding: 6px 12px; font-size: 13px; color: var(--text); cursor: pointer; }
+.vn-sp-item:active { border-color: var(--primary); }
+.vn-flash { background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; text-align: center; }
+.vn-flash-inner { background: var(--surface-2); border: 1.5px dashed var(--line); border-radius: var(--radius-s); padding: 22px 12px; margin-bottom: 10px; cursor: pointer; }
+.vn-flash-inner.flip { background: #EAF2FB; border-color: #CFE3F5; }
+.vn-flash-front, .vn-flash-back { font-size: 22px; font-weight: 700; color: var(--text); }
+.vn-flash-back { display: none; color: var(--primary); }
+.vn-flash-inner.flip .vn-flash-front { display: none; }
+.vn-flash-inner.flip .vn-flash-back { display: block; }
+@media (max-width: 480px) { .vn-grid { grid-template-columns: repeat(2, 1fr); } }
