@@ -1429,40 +1429,94 @@
     async function wrongDel(id) { await DB.del(STORE_WRONG, id); }
     function daySeed() { return parseInt(todayStr().replace(/-/g, ''), 10); }
     function dayPick(seed, arr, n) { const rnd = mulberry32(seed); const pool = arr.slice(); const out = []; for (let i = 0; i < n && pool.length; i++) out.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]); return out; }
-    // 越南语发音：优先用 iPhone 本机自带的越南语嗓音（完全离线、国内可用）。
-    // 关键点：iOS 中文机 Web Speech 默认不把越南语放进 getVoices() 列表，
-    // 故实时读取嗓音列表（不用页面加载时缓存的 VOICES），找不到 vi 时仍用 u.lang='vi-VN' 兜底（iOS 可能动态加载系统越南语嗓音）。
+    // ── 越南语预录音频包（完全离线、国内可用）──
+    // 原因：iOS 中文 iPhone 的 Web Speech 不把越南语嗓音暴露给网页（已确诊），
+    // 故改用微软 Edge TTS 预录的 mp3 文件，点「听发音」= 播放本地音频。
+    // 音频文件在 audio/vn/ 目录，由 scripts/gen_vn_audio.py 批量生成。
+    // 越南语文本 → 音频文件 key 的对照表（覆盖所有模块中可能传入 vnSpeak 的文本）
+    const VN_AUDIO_MAP = (function () {
+      var m = {};
+      // 字母表（29 个）
+      'a ă â e ê i o ô ơ u ư y'.split(' ').forEach(function (l) { m[l] = 'L_' + l; });
+      'b c d đ g h k l m n p q r s t v x'.split(' ').forEach(function (l) { m[l] = 'L_' + l; });
+      // 高频词汇
+      m['Xin chào'] = 'W_xinchao'; m['Cảm ơn'] = 'W_camon'; m['Phở'] = 'W_pho';
+      m['Tạm biệt'] = 'W_tambiet'; m['Bạn khỏe không?'] = 'W_bankhoe';
+      m['Tôi tên là…'] = 'W_tenla'; m['Không'] = 'W_khong'; m['Có'] = 'W_co';
+      m['Bao nhiêu?'] = 'W_baonhieu'; m['Ngon'] = 'W_ngon';
+      // 常用句子
+      m['Xin chào, tôi tên là Ngọc.'] = 'S_hello';
+      m['Tôi đang học tiếng Việt.'] = 'S_learning';
+      m['Một ngày một chút.'] = 'S_daily';
+      m['Cảm ơn bạn rất nhiều.'] = 'S_thanks';
+      m['Việt Nam rất đẹp.'] = 'S_beautiful';
+      // 声调 ma 家族
+      m['ma'] = 'T_ma_ngang'; m['mà'] = 'T_ma_huyen'; m['má'] = 'T_ma_sac';
+      m['mả'] = 'T_ma_hoi'; m['mã'] = 'T_ma_nga'; m['mạ'] = 'T_ma_nang';
+      // 拼读示例
+      m['phở'] = 'SP_pho'; m['cà phê'] = 'SP_cafe'; m['xin chào'] = 'SP_xinchao';
+      // 场景对话
+      m['Cho tôi một bát phở.'] = 'SC_order1'; m['Không cay nhé.'] = 'SC_order2';
+      m['Ngon quá!'] = 'SC_order3'; m['Tính tiền.'] = 'SC_order4';
+      m['Cái này bao nhiêu tiền?'] = 'SC_shop1'; m['Đắt quá!'] = 'SC_shop2';
+      m['Giảm giá được không?'] = 'SC_shop3'; m['Tôi mua cái này.'] = 'SC_shop4';
+      m['Nhà vệ sinh ở đâu?'] = 'SC_dir1'; m['Đi thẳng.'] = 'SC_dir2';
+      m['Rẽ trái.'] = 'SC_dir3'; m['Ở gần đây không?'] = 'SC_dir4';
+      m['Cứu tôi với!'] = 'SC_emerg1'; m['Tôi bị lạc.'] = 'SC_emerg2';
+      m['Tôi cần bác sĩ.'] = 'SC_emerg3'; m['Bạn nói tiếng Anh không?'] = 'SC_emerg4';
+      // 课程句子
+      m['Xin chào.'] = 'U1_1'; m['Bạn khỏe không?'] = 'U1_2';
+      m['Tôi khỏe, cảm ơn.'] = 'U1_3'; m['Tạm biệt!'] = 'U1_4';
+      m['Tôi tên là Lan.'] = 'U2_1'; m['Rất vui được gặp bạn.'] = 'U2_2';
+      m['Tôi đến từ Trung Quốc.'] = 'U2_3'; m['Bạn làm nghề gì?'] = 'U2_4';
+      m['một, hai, ba'] = 'U3_1'; m['bốn, năm, sáu'] = 'U3_2';
+      m['bảy, tám, chín, mười'] = 'U3_3'; m['Tôi có hai con mèo.'] = 'U3_4';
+      m['Tôi không hiểu.'] = 'U4_3'; m['Bạn nói tiếng Trung không?'] = 'U4_4';
+      // 课程词汇（单词级别）
+      m['khỏe'] = 'V_khoe'; m['tên'] = 'V_ten'; m['rất vui'] = 'V_ratvui';
+      m['đến từ'] = 'V_dentu'; m['nghề'] = 'V_nghề'; m['một'] = 'V_mot';
+      m['hai'] = 'V_hai'; m['năm'] = 'V_nam'; m['mười'] = 'V_muoi';
+      m['bao nhiêu'] = 'V_baonhieu_word'; m['tiền'] = 'V_tien';
+      m['hiểu'] = 'V_hieu';
+      return m;
+    })();
+    // 音频文件基础路径（与 gen_vn_audio.py 输出目录对应）
+    const VN_AUDIO_BASE = 'audio/vn/';
+    // 播放越南语预录音频：查找 VN_AUDIO_MAP 匹配文本 → 播放对应 mp3；
+    // 未命中时降级提示（不再走 Web Speech / Google 等注定拼字母的方案）。
     function vnSpeak(text, opts) {
       opts = opts || {};
       text = (text || '').toString().trim();
       if (!text) return false;
-      const synth = window.speechSynthesis;
-      if (!synth) return false;
-      const speed = (opts.rate != null ? opts.rate : 1);
-      const doSpeak = () => {
-        try { synth.cancel(); } catch (e) {}
-        const u = new SpeechSynthesisUtterance(text);
-        const voices = (synth.getVoices && synth.getVoices()) || VOICES || [];
-        const vi = voices.find(v => { const l = normLang(v.lang || ''); return l === 'vi-vn' || l.indexOf('vi-') === 0 || l === 'vi'; });
-        if (vi) { u.voice = vi; u.lang = normLang(vi.lang) || 'vi-VN'; }  // 用本机越南语嗓音（离线）
-        else { u.lang = 'vi-VN'; }                                       // 兜底：iOS 可能动态加载系统越南语嗓音
-        u.rate = speed; u.pitch = 1;
-        if (opts.onend) u.onend = opts.onend;
-        try { synth.speak(u); } catch (e) {}
-      };
-      // 嗓音列表可能还没加载好，等加载完再读，避免用错默认嗓音
-      if (!synth.getVoices || !synth.getVoices().length) {
-        let waited = 0;
-        const t = setInterval(() => {
-          waited += 100;
-          if ((synth.getVoices && synth.getVoices().length) || waited >= 3000) { clearInterval(t); doSpeak(); }
-        }, 100);
-        return true;
+      const key = VN_AUDIO_MAP[text];
+      if (key) {
+        // 命中预录音频 → 本地播放（离线、国内可用、发音标准）
+        const url = VN_AUDIO_BASE + key + '.mp3';
+        const speed = (opts.rate != null ? opts.rate : 1);
+        try {
+          const a = new Audio(url);
+          a.playbackRate = speed;
+          if (opts.onend) a.onended = opts.onend;
+          a.onerror = function () {
+            // 本地文件缺失时静默失败（不应发生，生成脚本应覆盖全量）
+            console.warn('[VN] 音频未找到:', url);
+            if (opts.onend) try { opts.onend(); } catch (e) {}
+          };
+          a.play().catch(function () {
+            // Safari 需要用户交互才能 autoplay，已在按钮点击回调中调用则不会触发
+            if (opts.onend) try { opts.onend(); } catch (e) {}
+          });
+          return true;
+        } catch (e) {
+          console.warn('[VN] Audio 播放异常:', e);
+          return false;
+        }
       }
-      doSpeak();
-      return true;
+      // 未命中音频映射 → 提示开发者补充（正常使用不应走到这里）
+      console.warn('[VN] 无预录音频:', text);
+      return false;
     }
-    // 本机语音诊断：在手机上直接显示 Web Speech 当前能拿到的所有嗓音（含越南语与否），定位"拼字母"根因
+    // 本机语音诊断（保留供参考，已确诊 iOS 中文机 Web Speech 拿不到越南语嗓音，现改用预录音频方案）
     function vnDiagnose() {
       const synth = window.speechSynthesis;
       const out = $('#vnDiagOut');
@@ -1567,7 +1621,7 @@
         '<div class="card"><div class="card-title">🧭 学习路线（5 阶段）</div><div id="vnRoute"></div></div>' +
         '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="vnRes"></div></div>' +
         '<div class="card"><div class="card-title">🔍 发音诊断</div>' +
-          '<div class="muted" style="font-size:12px">若「听发音」是拼字母而非越南语，点此查看本机是否有越南语嗓音</div>' +
+          '<div class="muted" style="font-size:12px">当前使用「预录音频包」方案（微软 TTS 生成，完全离线）。若点「听发音」没声音，点此检查。</div>' +
           '<button class="btn ghost sm" id="vnDiag" style="margin-top:8px">检查本机语音</button>' +
           '<div id="vnDiagOut" style="margin-top:8px;font-size:12px;line-height:1.7"></div>' +
         '</div>' +
