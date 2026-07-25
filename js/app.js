@@ -1429,7 +1429,41 @@
     async function wrongDel(id) { await DB.del(STORE_WRONG, id); }
     function daySeed() { return parseInt(todayStr().replace(/-/g, ''), 10); }
     function dayPick(seed, arr, n) { const rnd = mulberry32(seed); const pool = arr.slice(); const out = []; for (let i = 0; i < n && pool.length; i++) out.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]); return out; }
-    function vnSpeak(text, opts) { speakLang(text, 'vi-VN', opts || {}); }
+    // 越南语发音：优先用 iPhone 本机自带的越南语嗓音（完全离线、国内可用）；
+    // 中文机默认 Web Speech 列表里可能没有，故先等嗓音列表加载、再从中挑一个越南语嗓音显式绑定。
+    function vnSpeak(text, opts) {
+      opts = opts || {};
+      text = (text || '').toString().trim();
+      if (!text) return false;
+      const synth = window.speechSynthesis;
+      if (!synth) return false;
+      const speed = (opts.rate != null ? opts.rate : 1);
+      const doSpeak = () => {
+        try { synth.cancel(); } catch (e) {}
+        const u = new SpeechSynthesisUtterance(text);
+        // 从设备嗓音列表里挑越南语嗓音（vi / vi-VN / vi_VN 都算）
+        const vi = VOICES.find(v => { const l = normLang(v.lang || ''); return l === 'vi-vn' || l.indexOf('vi-') === 0 || l === 'vi'; });
+        if (vi) { u.voice = vi; u.lang = vi.lang; }   // 用本机越南语嗓音（离线）
+        else { u.lang = 'vi-VN'; }                    // 本机没越南语嗓音时的兜底（多半会拼字母）
+        u.rate = speed; u.pitch = 1;
+        if (opts.onend) u.onend = opts.onend;
+        try { synth.speak(u); } catch (e) {}
+      };
+      // 嗓音列表可能还没加载好，等加载完再读，避免用错默认嗓音
+      if (!VOICES.length) {
+        loadVoices();
+        if (!VOICES.length) {
+          let waited = 0;
+          const t = setInterval(() => {
+            waited += 100;
+            if (VOICES.length || waited >= 3000) { clearInterval(t); doSpeak(); }
+          }, 100);
+          return true;
+        }
+      }
+      doSpeak();
+      return true;
+    }
     function makeRecorder() {
       let rec = null, stream = null, chunks = [];
       return {
