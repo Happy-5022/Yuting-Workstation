@@ -547,4 +547,22 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .vn-flash-back { display: none; color: var(--primary); }
 .vn-flash-inner.flip .vn-flash-front { display: none; }
 .vn-flash-inner.flip .vn-flash-back { display: block; }
+/* ===== 英语 · 导游口语练习 ===== */
+.en-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+.en-tab { flex: 1; padding: 10px 6px; border: 1.5px solid var(--line); background: var(--surface); border-radius: var(--radius); font-size: 14px; color: var(--muted); cursor: pointer; }
+.en-tab.on { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 600; }
+.dg-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.dg-chip { padding: 5px 12px; border: 1.5px solid var(--line); background: var(--surface); border-radius: 99px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.dg-chip.on { background: #BA7517; color: #fff; border-color: #BA7517; }
+.dg-card { background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 12px; }
+.dg-scene { font-size: 12px; color: #BA7517; font-weight: 600; margin-bottom: 8px; }
+.dg-line { font-size: 15px; line-height: 1.5; margin: 4px 0; padding-left: 8px; border-left: 3px solid var(--line); }
+.dg-line.tour { border-left-color: #9BBCE0; }
+.dg-line.guide { border-left-color: #BA7517; }
+.dg-role { display: inline-block; font-size: 11px; color: var(--muted); margin-right: 6px; background: var(--surface-2); padding: 1px 6px; border-radius: 6px; }
+.dg-zh { font-size: 13px; color: var(--muted); padding-left: 8px; margin-bottom: 6px; }
+.dg-line mark { background: #FFF1C2; color: #854F0B; padding: 0 2px; border-radius: 3px; font-weight: 600; }
+.dg-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.dg-btns .rec { background: #C86A5A; color: #fff; border-color: #C86A5A; }
+
 @media (max-width: 480px) { .vn-grid { grid-template-columns: repeat(2, 1fr); } }

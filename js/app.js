@@ -1228,10 +1228,68 @@
   }
 
   // 7. 英语
+  // 导游口语练习数据：按场景组织对话（游客一句 t + 导游一句 g），k=关键短语
+  const EN_GUIDE = [
+    { scene: '接机', items: [
+      { t: 'Where can I find my luggage?', g: 'Your luggage will come on Belt 5, just over there.', zt: '我的行李在哪里取？', zg: '您的行李会在 5 号传送带，就在那边。', k: 'will come on Belt 5' },
+      { t: 'Is there a shuttle bus to the city center?', g: 'The shuttle leaves every 30 minutes from Gate 3.', zt: '有去市中心的班车吗？', zg: '班车每 30 分钟一班，从 3 号门发车。', k: 'leaves every 30 minutes' },
+      { t: 'Could you help me with my suitcase?', g: 'Sure, let me give you a hand with that.', zt: '能帮我拿一下箱子吗？', zg: '没问题，我来帮您拿。', k: 'give you a hand' },
+      { t: 'How long does it take to the hotel?', g: 'It is about a 40-minute drive from here.', zt: '到酒店要多久？', zg: '从这里开车大约 40 分钟。', k: 'a 40-minute drive' },
+      { t: 'Do you have a sign with my name?', g: 'Yes, I am holding a sign that says "Welcome, Yu Ting".', zt: '您有写我名字的牌子吗？', zg: '有，我举着写有「欢迎，玉婷」的牌子。', k: 'holding a sign' }
+    ]},
+    { scene: '酒店', items: [
+      { t: 'I would like to check in, please.', g: 'May I have your passport and booking number?', zt: '我想办理入住。', zg: '请出示您的护照和预订号。', k: 'passport and booking number' },
+      { t: 'What time is breakfast served?', g: 'Breakfast is available from 6:30 to 10:00.', zt: '早餐几点供应？', zg: '早餐 6:30 到 10:00 供应。', k: 'from 6:30 to 10:00' },
+      { t: 'Could I get an extra towel?', g: 'I will send one up to your room right away.', zt: '能多给一条毛巾吗？', zg: '我马上让人送到您房间。', k: 'right away' },
+      { t: 'Is there a safe in the room?', g: 'Yes, the safe is inside the wardrobe.', zt: '房间里有保险箱吗？', zg: '有，保险箱在衣柜里。', k: 'inside the wardrobe' },
+      { t: 'Can you recommend a good restaurant nearby?', g: "I'd recommend the noodle house just around the corner.", zt: '能推荐附近好吃的餐厅吗？', zg: '我推荐街角那家面馆。', k: 'just around the corner' }
+    ]},
+    { scene: '景点讲解', items: [
+      { t: 'How old is this temple?', g: 'It was built over 800 years ago, during the Ming dynasty.', zt: '这座寺庙有多少年历史？', zg: '它建于 800 多年前，明朝时期。', k: 'over 800 years ago' },
+      { t: 'Why is this place famous?', g: 'It is famous for its sunrise and sea of clouds.', zt: '这里为什么有名？', zg: '它以日出和云海闻名。', k: 'famous for' },
+      { t: 'Can we take photos here?', g: 'Yes, but please do not use flash inside the hall.', zt: '这里可以拍照吗？', zg: '可以，但大厅内请勿使用闪光灯。', k: 'do not use flash' },
+      { t: 'How long do we stay here?', g: "We'll spend about an hour, then move on to the next stop.", zt: '我们在这待多久？', zg: '我们大约待一小时，然后去下一站。', k: 'about an hour' },
+      { t: 'What is that building over there?', g: 'That is the bell tower, the landmark of our city.', zt: '那边那栋建筑是什么？', zg: '那是钟楼，我们城市的地标。', k: 'the landmark of' }
+    ]},
+    { scene: '餐饮', items: [
+      { t: 'Do you have a menu in English?', g: "Sure, here is the English menu, and today's special is hot pot.", zt: '有英文菜单吗？', zg: '有，这是英文菜单，今日特色是火锅。', k: "today's special" },
+      { t: 'Is this dish spicy?', g: 'It is mildly spicy, but I can ask for a non-spicy version.', zt: '这道菜辣吗？', zg: '微微辣，不过我可以帮您要不辣的。', k: 'non-spicy version' },
+      { t: 'Could we have the bill, please?', g: "Of course, I'll bring the bill right over.", zt: '请买单。', zg: '好的，我马上把账单拿过来。', k: 'right over' },
+      { t: 'Do you have a vegetarian option?', g: 'Yes, we have several vegetarian dishes on the menu.', zt: '有素食选择吗？', zg: '有，菜单上有几道素食。', k: 'vegetarian dishes' },
+      { t: 'Can you show me how to use chopsticks?', g: 'Sure, let me show you the proper way to hold them.', zt: '能教我怎么用筷子吗？', zg: '当然，我教您正确的握法。', k: 'proper way to hold' }
+    ]},
+    { scene: '购物', items: [
+      { t: 'How much is this?', g: 'It is 120 yuan, but you can bargain a little.', zt: '这个多少钱？', zg: '120 元，不过可以稍微讲讲价。', k: 'bargain a little' },
+      { t: 'Is this silk authentic?', g: 'Yes, it comes with a certificate of authenticity.', zt: '这丝绸是真的吗？', zg: '是真的，附有权威鉴定证书。', k: 'certificate of authenticity' },
+      { t: 'Can I pay by card?', g: 'Sure, most shops here accept Alipay and WeChat too.', zt: '可以刷卡吗？', zg: '可以，这里大部分店也收支付宝和微信。', k: 'accept Alipay' },
+      { t: 'Where can I buy local snacks?', g: 'The night market is the best place for local snacks.', zt: '哪里能买到本地小吃？', zg: '夜市是买本地小吃最好的地方。', k: 'the best place' },
+      { t: 'Could you help me wrap it as a gift?', g: "No problem, I'll ask them to wrap it nicely.", zt: '能帮我包成礼物吗？', zg: '没问题，我让他们包得漂亮些。', k: 'wrap it nicely' }
+    ]},
+    { scene: '应急', items: [
+      { t: 'I feel sick, can you help?', g: "Let's go to the clinic nearby, I'll go with you.", zt: '我不舒服，能帮忙吗？', zg: '我们去附近的诊所，我陪您去。', k: 'go with you' },
+      { t: 'I lost my passport!', g: "Don't worry, we'll call the embassy right away.", zt: '我的护照丢了！', zg: '别慌，我们马上联系大使馆。', k: 'call the embassy' },
+      { t: 'Where is the nearest hospital?', g: 'The nearest one is a 10-minute walk from here.', zt: '最近的医院在哪？', zg: '最近的一家走路 10 分钟就到。', k: 'a 10-minute walk' },
+      { t: 'My phone is out of battery.', g: 'You can use my power bank to charge it.', zt: '我手机没电了。', zg: '您可以用我的充电宝充。', k: 'power bank' }
+    ]},
+    { scene: '跨文化', items: [
+      { t: 'Why do people offer things with two hands?', g: 'It is a sign of respect in our culture.', zt: '为什么递东西要用双手？', zg: '这是我们文化中尊重的表现。', k: 'a sign of respect' },
+      { t: 'Is it okay to tip in restaurants?', g: "Tipping isn't expected here, but it's always appreciated.", zt: '餐厅给小费可以吗？', zg: '这里不强制小费，但给了总是受欢迎。', k: 'always appreciated' },
+      { t: 'Why shouldn’t I point with my finger?', g: 'We use the whole hand to show direction politely.', zt: '为什么不能用手指指人？', zg: '我们用整只手示意方向更礼貌。', k: 'the whole hand' },
+      { t: 'Can I visit the temple during festivals?', g: 'Yes, but please dress modestly and keep quiet.', zt: '节日期间能去寺庙吗？', zg: '可以，但请衣着端庄、保持安静。', k: 'dress modestly' }
+    ]}
+  ];
+  // 英语模块子标签：BBC 随身英语 / 导游口语练习
+  function enTab(active) {
+    return '<div class="en-tabs">' +
+      '<button class="en-tab ' + (active === 'bbc' ? 'on' : '') + '" id="tabBbc">🌍 BBC 随身英语</button>' +
+      '<button class="en-tab ' + (active === 'guide' ? 'on' : '') + '" id="tabGuide">🗣️ 导游口语练习</button>' +
+    '</div>';
+  }
+
   async function renderEnglish(view) {
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     const fmt = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-    view.innerHTML =
+    view.innerHTML = enTab('bbc') +
       '<div class="card"><div class="card-title">🌍 英语学习 · BBC 随身英语</div>' +
       '<p class="muted" id="enMeta" style="margin:0 0 8px">每天 30 分钟盲听练习：先听不看译文，再对照学。挑一篇进入。</p>' +
       '<button id="refreshEn" class="btn ghost sm" style="margin-bottom:10px">🔄 立即刷新文章</button>' +
@@ -1396,8 +1454,66 @@
     $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + '。每天 9 点自动更新。';
     await renderList(); refreshStats();
     renderVoicePicker('en-US', $('#enVoicePick'), '🗣 英语发音人');
+    const tg = $('#tabGuide'); if (tg) tg.onclick = () => renderGuide(view);
   }
 
+
+  // 8. 导游口语练习（新增：场景对话 + 关键短语提示 + 跟读 + 收藏/错题 + 按天轮换）
+  async function renderGuide(view) {
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+    function daySeed(){return parseInt(todayStr().replace(/-/g,''),10);}
+    function dayPick(seed,arr,n){const rnd=mulberry32(seed);const pool=arr.slice();const out=[];for(let i=0;i<n&&pool.length;i++)out.push(pool.splice(Math.floor(rnd()*pool.length),1)[0]);return out;}
+    const STORE_FAV='enFav',STORE_WRONG='enWrong';
+    async function favList(){return await DB.all(STORE_FAV);}
+    async function favHas(id){return !!(await DB.get(STORE_FAV,id));}
+    async function favAdd(g,zg){if(await favHas(g))return false;await DB.put(STORE_FAV,{id:g,g:g,zg:zg,createdAt:Date.now()});return true;}
+    async function favDel(id){await DB.del(STORE_FAV,id);}
+    async function wrongList(){return await DB.all(STORE_WRONG);}
+    async function wrongAdd(g,zg){if(await DB.get(STORE_WRONG,g))return;await DB.put(STORE_WRONG,{id:g,g:g,zg:zg,createdAt:Date.now()});}
+    async function wrongDel(id){await DB.del(STORE_WRONG,id);}
+    function makeRecorder(){let rec=null,stream=null,chunks=[];return{supported:!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder),async start(){stream=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(stream);chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};rec.start();},stop(){return new Promise(res=>{rec.onstop=()=>{const blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});const url=URL.createObjectURL(blob);if(stream)stream.getTracks().forEach(t=>t.stop());res(url);};rec.stop();});}};}
+    function highlight(g,k,on){const eg=esc(g);if(!on||!k)return eg;const ek=esc(k);return eg.split(ek).join('<mark>'+ek+'</mark>');}
+    const all=[];EN_GUIDE.forEach(s=>s.items.forEach(it=>all.push(Object.assign({scene:s.scene},it))));
+    let showKey=true,filter='all';
+    const rec=makeRecorder();
+    view.innerHTML=enTab('guide')+
+      '<div class="card"><div class="card-title">🗣️ 导游口语练习</div>'+
+      '<p class="muted" style="margin:0 0 8px">跟游客一来一回练对话，重点练「导游(你)」那句。关键短语已高亮。</p>'+
+      '<label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:8px"><input type="checkbox" id="keyToggle" checked> <span style="font-size:13px">显示关键短语提示</span></label>'+
+      '<div id="sceneChips" class="dg-chips"></div></div>'+
+      '<div id="guideList"></div>'+
+      '<div class="card" style="margin-top:12px"><div class="card-title">⭐ 收藏夹(<span id="favN">0</span>) · ⚠️ 错题(<span id="wrongN">0</span>)</div>'+
+      '<div class="row" style="gap:6px"><button class="btn sm" id="tFav">查看收藏</button><button class="btn sm ghost" id="tWrong">查看错题</button></div>'+
+      '<div id="storeBox" style="margin-top:10px"></div></div>';
+    $('#tabBbc').onclick=()=>renderEnglish(view);
+    function currentList(){if(filter==='all')return dayPick(daySeed()+777,all,8);const items=all.filter(x=>x.scene===filter);return dayPick(daySeed()+filter.length*31,items,Math.min(6,items.length));}
+    function paintChips(){const box=$('#sceneChips');box.innerHTML='';const scenes=['all'].concat(EN_GUIDE.map(s=>s.scene));scenes.forEach(sc=>{const b=el('<button class="dg-chip"></button>');b.textContent=sc==='all'?'全部':sc;b.classList.toggle('on',filter===sc);b.onclick=()=>{filter=sc;paintChips();paintList();};box.append(b);});}
+    function paintList(){const list=currentList();const box=$('#guideList');box.innerHTML='';list.forEach(it=>{const card=el('<div class="dg-card"></div>');card.innerHTML=
+      '<div class="dg-scene">'+esc(it.scene)+'</div>'+
+      '<div class="dg-line tour"><span class="dg-role">游客</span>'+esc(it.t)+'</div>'+
+      '<div class="dg-zh">'+esc(it.zt)+'</div>'+
+      '<div class="dg-line guide"><span class="dg-role">导游(你)</span>'+highlight(it.g,it.k,showKey)+'</div>'+
+      '<div class="dg-zh">'+esc(it.zg)+'</div>'+
+      '<div class="dg-btns">'+
+        '<button class="btn sm" data-act="listen">🔊 听</button>'+
+        '<button class="btn sm" data-act="rec">🎤 跟读</button>'+
+        '<button class="btn sm ghost" data-act="fav">⭐ 收藏</button>'+
+        '<button class="btn sm ghost" data-act="wrong">⚠️ 错题</button>'+
+        '<button class="btn sm ghost" data-act="my" style="display:none">▶ 听我的</button>'+
+      '</div>';
+      card.querySelector('[data-act="listen"]').onclick=()=>speakLang(it.g,'en-US');
+      const recBtn=card.querySelector('[data-act="rec"]');const myBtn=card.querySelector('[data-act="my"]');
+      recBtn.onclick=async()=>{if(recBtn.textContent.indexOf('停止')<0){try{await rec.start();recBtn.textContent='■ 停止';recBtn.classList.add('rec');}catch(e){toast('无法访问麦克风，请检查权限');}}else{recBtn.textContent='🎤 跟读';recBtn.classList.remove('rec');const url=await rec.stop();const a=new Audio(url);myBtn.style.display='';myBtn.onclick=()=>a.play();toast('录好了，点「听我的」对比标准音');}};
+      card.querySelector('[data-act="fav"]').onclick=async()=>{if(await favAdd(it.g,it.zg)){toast('已加入收藏');refreshN();}else toast('已在收藏');};
+      card.querySelector('[data-act="wrong"]').onclick=async()=>{await wrongAdd(it.g,it.zg);toast('已加入错题');refreshN();};
+      box.append(card);});}
+    async function refreshN(){$('#favN').textContent=(await favList()).length;$('#wrongN').textContent=(await wrongList()).length;}
+    $('#keyToggle').onchange=()=>{showKey=$('#keyToggle').checked;paintList();};
+    $('#tFav').onclick=async()=>{const box=$('#storeBox');const favs=await favList();if(!favs.length){box.innerHTML='<div class="muted">还没有收藏</div>';return;}box.innerHTML='';favs.forEach(w=>{const r=el('<div class="vn-row"></div>');r.innerHTML='<div class="vn-row-main"><div class="vn-row-vn">'+esc(w.g)+'</div><div class="vn-row-zh">'+esc(w.zg)+'</div></div><div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊</button><button class="btn sm ghost vn-del">✕</button></div>';r.querySelector('.vn-listen').onclick=()=>speakLang(w.g,'en-US');r.querySelector('.vn-del').onclick=async()=>{await favDel(w.id);$('#tFav').click();refreshN();};box.append(r);});};
+    $('#tWrong').onclick=async()=>{const box=$('#storeBox');const ws=await wrongList();if(!ws.length){box.innerHTML='<div class="muted">还没有错题</div>';return;}box.innerHTML='';ws.forEach(w=>{const r=el('<div class="vn-row"></div>');r.innerHTML='<div class="vn-row-main"><div class="vn-row-vn">'+esc(w.g)+'</div><div class="vn-row-zh">'+esc(w.zg)+'</div></div><div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊</button><button class="btn sm ghost vn-del">✕</button></div>';r.querySelector('.vn-listen').onclick=()=>speakLang(w.g,'en-US');r.querySelector('.vn-del').onclick=async()=>{await wrongDel(w.id);$('#tWrong').click();refreshN();};box.append(r);});};
+    paintChips();paintList();refreshN();
+  }
 
   // 8.5 越南语学习（全新蓝图：仪表盘 + 四张功能卡 + 听/跟练 + 收藏 + 分阶段）
   async function renderViet(view) {
