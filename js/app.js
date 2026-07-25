@@ -1401,8 +1401,12 @@
 
   // 8.5 越南语学习（全新蓝图：仪表盘 + 四张功能卡 + 听/跟练 + 收藏 + 分阶段）
   async function renderViet(view) {
+    try {
+    console.log('[VN] renderViet start, view=', !!view);
     if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    console.log('[VN] before bumpCheckin');
     await bumpCheckin(); // 打开即打卡当天
+    console.log('[VN] after bumpCheckin');
 
     // ---------- 本地存储助手 ----------
     const STORE_FAV = 'vnFav', STORE_WRONG = 'vnWrong';
@@ -1695,7 +1699,16 @@
       paintDeck();
     }
 
+    console.log('[VN] about to call paintHome');
     paintHome();
+    console.log('[N] paintHome done, no error');
+    } catch (err) {
+      const msg = '⚠️ 越南语模块加载出错：' + String(err.stack || err.message);
+      console.error('[VN ERROR]', err);
+      alert(msg);
+      if (view) view.innerHTML = '<div style="padding:20px;color:#e24b4a;font-size:14px;white-space:pre-wrap;background:#fff">' + msg.replace(/</g,'&lt;') + '</div>';
+      document.body.insertAdjacentHTML('beforeend', '<div style="position:fixed;top:0;left:0;right:0;z-index:99999;padding:16px;background:#e24b4a;color:#fff;font-size:14px;white-space:pre-wrap">' + msg.replace(/</g,'&lt;') + '</div>');
+    }
   }
 
   // 9. 古法健身操
@@ -1918,7 +1931,9 @@
     $('#pageTitle').textContent = m.title;
     const view = $('#view'); view.scrollTop = 0; view.innerHTML = '';
     closeDrawer();
-    m.render(view);
+    try { m.render(view); } catch (syncErr) {
+      view.innerHTML = '<div style="padding:20px;color:#e24b4a;font-size:14px">⚠️ [' + m.key + '] 同步错误：' + String(syncErr.stack || syncErr.message) + '</div>';
+    }
   }
 
   function openDrawer() { $('#drawer').classList.add('open'); $('#backdrop').classList.add('show'); $('#drawer').setAttribute('aria-hidden', 'false'); }
@@ -1934,6 +1949,10 @@
   }
 
   function init() {
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('[UNHANDLED]', e.reason);
+      alert('⚠️ 未捕获错误：' + String(e.reason && (e.reason.stack || e.reason.message || e.reason)));
+    });
     const nav = $('#nav');
     MODULES.forEach(m => {
       const icon = m.flag ? vnFlag('vn-flag nav-flag') : '<span class="emoji">' + m.emoji + '</span>';
