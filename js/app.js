@@ -1776,10 +1776,16 @@
     // ---------- 闪卡与生词本 ----------
     async function paintFlash() {
       if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
-      const deck = dayPick(daySeed() + 55, VN_WORDS, 8);
+      const stage = await getStage();
+      const stageName = (VN_STAGES[stage - 1] && VN_STAGES[stage - 1].t) || '';
+      // 抽卡范围跟着学习阶段扩展：前期只抽必背词；学到后面阶段自动加入句子与场景短句，与口语练习保持一致
+      let pool = stage <= 2 ? VN_WORDS.slice() : VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
+      if (stage >= 3) VN_SCENES.forEach(sc => sc.items.forEach(i => pool.push({ vn: i[0], zh: i[1] })));
+      const deck = dayPick(daySeed() + 55, pool, 8);
       view.innerHTML =
         '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
         '<div class="row" style="gap:6px;margin-bottom:10px"><button class="btn sm" id="tFlash">🃏 闪卡</button><button class="btn sm ghost" id="tFav">⭐ 收藏夹(' + (await favList()).length + ')</button></div>' +
+        '<div class="muted" style="font-size:12px;margin-bottom:10px">当前阶段：' + esc(stageName) + ' · 抽卡范围随进度扩展（前期记词，后期加句子与场景短句）</div>' +
         '<div id="flashBox"></div>';
       $('#back').onclick = paintHome;
       function paintDeck() {
