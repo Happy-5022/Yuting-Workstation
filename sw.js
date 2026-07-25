@@ -1,5 +1,5 @@
-/* Service Worker：把应用外壳缓存到本地，没网也能打开 */
-const CACHE = 'yt-wb-v1';
+/* Service Worker：有网优先拿最新，离线才用缓存 —— 避免改了代码还显示旧版 */
+const CACHE = 'yt-wb-v2';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './css/style.css', './js/db.js', './js/app.js',
@@ -7,7 +7,8 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  // 预缓存外壳；即使个别资源失败也不阻塞安装
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(() => {})).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -17,25 +18,27 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+// 网络优先：先联网取最新；失败（离线）才用缓存。改了代码刷新即生效，不再被旧缓存卡住
+async function netFirst(req) {
+  try {
+    const res = await fetch(req);
+    if (res && res.status === 200 && res.type === 'basic') {
+      const cp = res.clone();
+      caches.open(CACHE).then(c => c.put(req, cp)).catch(() => {});
+    }
+    return res;
+  } catch (e) {
+    const cached = await caches.match(req);
+    if (cached) return cached;
+    if (req.mode === 'navigate') return caches.match('./index.html');
+    throw e;
+  }
+}
+
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== location.origin) return;
-
-  // 页面导航：先联网，失败用缓存的首页（保证离线能开）
-  if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).catch(() => caches.match('./index.html')));
-    return;
-  }
-  // 其他资源：缓存优先，同时后台更新
-  e.respondWith(
-    caches.match(req).then(cached => {
-      const net = fetch(req).then(res => {
-        if (res && res.status === 200) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(req, cp)); }
-        return res;
-      }).catch(() => cached);
-      return cached || net;
-    })
-  );
+  if (url.origin !== location.origin) return; // 跨域（百度、B站等）不拦截
+  e.respondWith(netFirst(req));
 });

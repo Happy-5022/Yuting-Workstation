@@ -501,6 +501,10 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .vn-stat { text-align: center; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 6px 12px; min-width: 64px; }
 .vn-stat b { display: block; font-size: 18px; color: var(--primary); }
 .vn-stat span { font-size: 11px; color: var(--muted); }
+.vn-action { display: flex; align-items: center; gap: 14px; background: #EAF2FB; border: 1.5px solid #CFE3F5; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; }
+.vn-action-t { font-size: 15px; font-weight: 700; color: #185FA5; }
+.vn-action-btn { display: inline-block; background: #378add; color: #fff; border: none; font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: var(--radius-s); cursor: pointer; }
+.vn-action-btn:active { background: #185FA5; }
 .vn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
 .vn-card { background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 14px 12px; cursor: pointer; transition: .15s; text-align: center; }
 .vn-card:active { transform: scale(.98); border-color: var(--primary); }

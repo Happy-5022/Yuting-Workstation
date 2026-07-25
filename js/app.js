@@ -1414,6 +1414,8 @@
     async function getStreak() { const m = await DB.get('meta', 'vnCheckin'); return curStreak((m && Array.isArray(m.value)) ? m.value : []); }
     async function getDone() { const m = await DB.get('meta', 'vnDone_' + todayStr()); return (m && Array.isArray(m.value)) ? m.value : []; }
     async function addDone(key) { const arr = await getDone(); if (!arr.includes(key)) { arr.push(key); await DB.put('meta', { id: 'vnDone_' + todayStr(), value: arr }); } }
+    async function getSpoke() { const m = await DB.get('meta', 'vnSpoke_' + todayStr()); return !!(m && m.value); }
+    async function markSpoke() { try { await DB.put('meta', { id: 'vnSpoke_' + todayStr(), value: true }); } catch (e) {} }
     async function favList() { return await DB.all(STORE_FAV); }
     async function favHas(id) { return !!(await DB.get(STORE_FAV, id)); }
     async function favAdd(vn, zh) { if (await favHas(vn)) return false; await DB.put(STORE_FAV, { id: vn, vn, zh, createdAt: Date.now() }); return true; }
@@ -1458,32 +1460,56 @@
     async function paintHome() {
       const stage = await getStage();
       const done = await getDone();
-      const streakN = await getStreak();
+      const ckM = await DB.get('meta', 'vnCheckin');
+      const ckArr = (ckM && Array.isArray(ckM.value)) ? ckM.value : [];
+      const streakN = curStreak(ckArr);
+      const totalDays = ckArr.length;
       const favs = await favList();
       const wrongs = await wrongList();
+      const spoke = await getSpoke();
       const stageInfo = VN_STAGES[stage];
       const lesson = buildLesson(stage);
       const total = lesson.length;
       const doneCount = lesson.filter(it => done.includes(it.key)).length;
+      const remain = total - doneCount;
       const pct = total ? Math.round(doneCount / total * 100) : 0;
+      const now = new Date();
+      const wd = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][now.getDay()];
+      const dateStr = wd + ' · ' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
+      const ringOff = (150.8 * (1 - pct / 100)).toFixed(1);
+      const lessonSub = remain > 0 ? ('第' + (stage + 1) + '阶段 · 还差' + remain + '节') : '今日已完成 ✓';
+      const speakSub = spoke ? '今日已练 ✓' : '今日未练习';
       view.innerHTML =
         '<div class="vn-home">' +
         '<div class="vn-top">' +
-          '<div class="vn-greet"><div class="vn-greet-h">Xin chào!</div><div class="muted" style="font-size:12px">越南语学习 · 每天一点点</div></div>' +
+          '<div class="vn-greet"><div class="vn-greet-h">Xin chào! 玉婷</div><div class="muted" style="font-size:12px">' + dateStr + '</div></div>' +
           '<div class="vn-stats">' +
-            '<div class="vn-stat"><b>' + doneCount + '/' + total + '</b><span>今日进度</span></div>' +
-            '<div class="vn-stat"><b>' + streakN + '</b><span>连续打卡(天)</span></div>' +
+            '<div class="vn-stat"><b style="color:#e24b4a">' + streakN + '</b><span>连续天</span></div>' +
+            '<div class="vn-stat"><b style="color:#378add">' + totalDays + '</b><span>累计天</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="vn-action">' +
+          '<svg width="56" height="56" viewBox="0 0 56 56" style="flex:0 0 auto">' +
+            '<circle cx="28" cy="28" r="24" fill="none" stroke="#e6e6e6" stroke-width="6"/>' +
+            '<circle cx="28" cy="28" r="24" fill="none" stroke="#378add" stroke-width="6" stroke-dasharray="150.8" stroke-dashoffset="' + ringOff + '" transform="rotate(-90 28 28)"/>' +
+            '<text x="28" y="32" text-anchor="middle" font-size="13" fill="#378add" font-weight="500">' + pct + '%</text>' +
+          '</svg>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div class="vn-action-t">今日课程' + (remain > 0 ? '还差 ' + remain + ' 节' : '已完成') + '</div>' +
+            '<div class="muted" style="font-size:12px;margin:2px 0 8px">已完成 ' + doneCount + ' / ' + total + ' 节</div>' +
+            '<button class="vn-action-btn" id="goLesson">继续学习</button>' +
           '</div>' +
         '</div>' +
         '<div class="vn-grid">' +
-          card('📚', '今日课程', stageInfo ? ('第' + (stage + 1) + '阶段 · ' + stageInfo.t) : '全部完成', 'paintLesson') +
+          card('📚', '今日课程', lessonSub, 'paintLesson') +
           card('🎮', '单词闯关', wrongs.length ? ('错题 ' + wrongs.length + ' 待复习') : '听音选义练耳', 'paintChallenge') +
-          card('🎤', '口语练习', '居中跟读 · 录音回放', 'paintSpeak') +
+          card('🎤', '口语练习', speakSub, 'paintSpeak') +
           card('🃏', '闪卡与生词本', favs.length ? ('收藏 ' + favs.length + ' 词') : '翻卡记忆', 'paintFlash') +
         '</div>' +
         '<div class="card"><div class="card-title">🧭 学习路线（5 阶段）</div><div id="vnRoute"></div></div>' +
         '<div class="card"><div class="card-title">⭐ 推荐资源</div><div id="vnRes"></div></div>' +
         '</div>';
+      $('#goLesson').onclick = paintLesson;
       view.querySelectorAll('.vn-card').forEach(c => c.onclick = () => {
         const f = c.getAttribute('data-go');
         if (f === 'paintLesson') paintLesson();
@@ -1491,7 +1517,7 @@
         else if (f === 'paintSpeak') paintSpeak();
         else if (f === 'paintFlash') paintFlash();
       });
-      const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」</div>'; route.innerHTML = h; }
+      const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">已点亮 ' + stage + ' / ' + VN_STAGES.length + ' 阶段 · 当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」</div>'; route.innerHTML = h; }
       const res = $('#vnRes'); if (res) res.innerHTML = VN_RES.map(r => '<a class="vn-res" href="' + r.url + '" target="_blank" rel="noopener">' + esc(r.t) + '</a>').join('');
     }
 
@@ -1612,7 +1638,7 @@
         '<div class="card" style="margin-top:12px"><div class="card-title">今日练习词（点任一切换）</div><div id="spList" class="vn-sp-list"></div></div>';
       $('#back').onclick = paintHome;
       function show(i) { idx = i; const it = picks[i]; $('#spVn').textContent = it.vn; $('#spZh').textContent = it.zh; $('#spPlay').style.display = 'none'; const rb = $('#spRec'); rb.textContent = '🎤 跟读录音'; rb.disabled = false; rb.classList.remove('rec'); }
-      $('#spListen').onclick = () => vnSpeak(picks[idx].vn);
+      $('#spListen').onclick = () => { vnSpeak(picks[idx].vn); markSpoke(); };
       $('#spRec').onclick = async () => {
         const btn = $('#spRec');
         if (btn.textContent.indexOf('停止') < 0) {
@@ -1621,7 +1647,7 @@
         } else {
           btn.textContent = '🎤 跟读录音'; btn.classList.remove('rec');
           const url = await rec.stop(); const a = new Audio(url); $('#spPlay').style.display = ''; $('#spPlay').onclick = () => a.play();
-          toast('录好了，点「听我的」对比标准音');
+          markSpoke(); toast('录好了，点「听我的」对比标准音');
         }
       };
       const spList = $('#spList');
