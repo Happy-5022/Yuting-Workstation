@@ -572,9 +572,10 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .dg-scene-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 .dg-scene-preview { font-size: 13px; color: var(--muted); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dg-expand-hint { display: inline-block; font-size: 12px; color: #185FA5; font-weight: 600; margin-top: 4px; }
-/* 展开后的对话内容 */
-.dg-scene-body { border-top: 1.5px solid var(--line); padding: 16px; animation: dgSlideIn 0.25s ease-out; }
-@keyframes dgSlideIn { from{opacity:0;transform:-4px} to{opacity:1;transform:0} }
+/* 展开后的对话内容（默认隐藏，展开时显示） */
+.dg-scene-body { display: none; border-top: 1.5px solid var(--line); padding: 16px; }
+.dg-scene-card.expanded .dg-scene-body { display: block; animation: dgSlideIn 0.25s ease-out; }
+@keyframes dgSlideIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 .dg-turn { margin-bottom: 14px; padding-left: 12px; }
 .dg-turn-you { border-left: 3px solid #BA7517; padding-left: 10px; }
 .dg-turn-client { border-left: 3px solid #9BBCE0; padding-left: 10px; }
