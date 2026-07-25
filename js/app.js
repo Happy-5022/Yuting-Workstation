@@ -689,8 +689,7 @@
       const idx = await getQuoteIdx();
       const q = QUOTES[idx];
       $('#quoteText').innerHTML = '“' + esc(q.t) + '”' +
-        (q.a ? '<span class="q-author">—— ' + esc(q.a) + '</span>' : '') +
-        '<span class="q-cat">' + esc(q.c || '感悟') + '</span>';
+        (q.a ? '<span class="q-author">—— ' + esc(q.a) + '</span>' : '');
       $('#quoteSwitch').onclick = async () => {
         let n = idx; while (n === idx) n = Math.floor(Math.random() * QUOTES.length);
         await DB.put('meta', { id: 'dailyQuote', value: { date: todayStr(), idx: n } });
