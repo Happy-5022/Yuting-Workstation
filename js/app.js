@@ -56,8 +56,9 @@
   function getVoicePref(lang) { try { return localStorage.getItem('voicePref_' + lang) || ''; } catch (e) { return ''; } }
   function setVoicePref(lang, name) { try { localStorage.setItem('voicePref_' + lang, name || ''); } catch (e) {} }
 
-  // 通用朗读：显式挑出对应语言的母语嗓音并绑定（iOS 中文手机上只设 lang 会退回默认中文嗓音逐字母读，必须显式绑定）；
-  // 仅当用户主动选过、且该发音人确实属于目标语言时才优先用其选择，否则一律自动选该语言母语嗓音
+  // 通用朗读：默认【不绑 voice、只设语言标签】，交给 iOS/系统用该语言自带的母语嗓音
+  // （中文 iPhone 上显式绑 getVoices() 里的嗓音反而会让越南语逐字母念、英语变机械音）；
+  // 仅当用户在发音人选择器里手动挑过、且该嗓音确实属于目标语言时，才优先用其选择。
   function speakLang(text, lang, opts) {
     opts = opts || {};
     const synth = window.speechSynthesis;
@@ -76,12 +77,11 @@
         if (found && normLang(found.lang).split('-')[0] === base) v = found;
         else if (found) setVoicePref(lang, ''); // 清掉错语言的脏记忆（例如英语嗓音被记到了越南语）
       }
-      if (!v) v = pickVoice(lang); // 自动选该语言母语嗓音并显式绑定（iOS 上关键，避免退回默认中文嗓音逐字母读）
-      if (!v) {
-        // 没有该语言的嗓音：绝不用别的嗓音乱念（如中文嗓音逐字母读越南语），改为提醒用户去开启
-        if (opts.onNoVoice) { try { opts.onNoVoice(); } catch (e) {} return false; }
-      }
-      if (v) { u.voice = v; try { u.lang = normLang(v.lang) || lang; } catch (e) {} } // 用 voice 自身语言标签并归一化（vi_VN→vi-vn），规避 iOS 返回下划线写法被写回导致退回中文逐字母读
+      // 关键修复：默认（用户没手动挑过嗓音）绝不显式绑 voice，
+      // 只设语言标签，交给 iOS/系统用该语言自带的母语嗓音。
+      // 显式绑 getVoices() 里的嗓音在中文 iPhone 上会让越南语被当成字母逐字念、英语变机械音。
+      // 仅当用户在发音人选择器里手动挑过、且该嗓音确实属于目标语言时，上面才会把 v 设上并绑。
+      if (v) { u.voice = v; try { u.lang = normLang(v.lang) || lang; } catch (e) {} }
       u.rate = (opts.rate != null ? opts.rate : 1);
       u.pitch = (opts.pitch != null ? opts.pitch : 1);
       if (opts.onend) u.onend = opts.onend;
