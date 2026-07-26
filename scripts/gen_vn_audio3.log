@@ -1,0 +1,229 @@
+vn-data 单词级词条 120，对照表已有 65 key，需新生成 113
+  待生成: 'Không có gì'
+  待生成: 'Xin lỗi'
+  待生成: 'Tên tôi là…'
+  待生成: 'Bạn tên là gì?'
+  待生成: 'Không sao.'
+  待生成: 'Cơm'
+  待生成: 'Bánh mì'
+  待生成: 'Nước'
+  待生成: 'Cà phê'
+  待生成: 'Trà'
+  待生成: 'Thịt'
+  待生成: 'Cá'
+  待生成: 'Rau'
+  待生成: 'Khách sạn'
+  待生成: 'Phòng'
+  待生成: 'Nhà'
+  待生成: 'Giường'
+  待生成: 'Nhà vệ sinh'
+  待生成: 'Nóng'
+  待生成: 'Lạnh'
+  待生成: 'Sạch'
+  待生成: 'Bẩn'
+  待生成: 'Chìa khóa'
+  待生成: 'Xe buýt'
+  待生成: 'Xe taxi'
+  待生成: 'Xe máy'
+  待生成: 'Sân bay'
+  待生成: 'Ga tàu'
+  待生成: 'Đi'
+  待生成: 'Đến'
+  待生成: 'Về'
+  待生成: 'Trạm dừng'
+  待生成: 'Vé'
+  待生成: 'Tiền'
+  待生成: 'Bao nhiêu'
+  待生成: 'Đắt'
+  待生成: 'Rẻ'
+  待生成: 'Mua'
+  待生成: 'Bán'
+  待生成: 'Chợ'
+  待生成: 'Cửa hàng'
+  待生成: 'Màu'
+  待生成: 'Kích thước'
+  待生成: 'Bác sĩ'
+  待生成: 'Thuốc'
+  待生成: 'Bệnh viện'
+  待生成: 'Đau'
+  待生成: 'Sốt'
+  待生成: 'Mệt'
+  待生成: 'Cứu'
+  待生成: 'Hiệu thuốc'
+  待生成: 'Tiêm'
+  待生成: 'Nhức'
+  待生成: 'Tôi'
+  待生成: 'Bạn'
+  待生成: 'Anh'
+  待生成: 'Chị'
+  待生成: 'Em'
+  待生成: 'Bố'
+  待生成: 'Mẹ'
+  待生成: 'Con'
+  待生成: 'Người'
+  待生成: 'Gia đình'
+  待生成: 'Hôm nay'
+  待生成: 'Ngày'
+  待生成: 'Tháng'
+  待生成: 'Năm'
+  待生成: 'Giờ'
+  待生成: 'Sáng'
+  待生成: 'Chiều'
+  待生成: 'Tối'
+  待生成: 'Một'
+  待生成: 'Hai'
+  待生成: 'Trời'
+  待生成: 'Mưa'
+  待生成: 'Nắng'
+  待生成: 'Gió'
+  待生成: 'Núi'
+  待生成: 'Sông'
+  待生成: 'Biển'
+  待生成: 'Cây'
+  待生成: 'Hoa'
+  待生成: 'Mặt trời'
+  待生成: 'Ăn'
+  待生成: 'Uống'
+  待生成: 'Ngủ'
+  待生成: 'Thích'
+  待生成: 'Biết'
+  待生成: 'Hiểu'
+  待生成: 'Nói'
+  待生成: 'Nghe'
+  待生成: 'Xem'
+  待生成: 'Làm'
+  待生成: 'Đâu'
+  待生成: 'Đây'
+  待生成: 'Đó'
+  待生成: 'Trái'
+  待生成: 'Phải'
+  待生成: 'Trước'
+  待生成: 'Sau'
+  待生成: 'Gần'
+  待生成: 'Xa'
+  待生成: 'Trên'
+  待生成: 'Hộ chiếu'
+  待生成: 'Visa'
+  待生成: 'Vali'
+  待生成: 'Quà'
+  待生成: 'Ảnh'
+  待生成: 'Bản đồ'
+  待生成: 'Danh bạ'
+  待生成: 'Điện thoại'
+  待生成: 'Internet'
+  待生成: 'Sim'
+OK   NW_001  Không có gì
+OK   NW_002  Xin lỗi
+OK   NW_003  Tên tôi là…
+OK   NW_004  Bạn tên là gì?
+OK   NW_005  Không sao.
+OK   NW_006  Cơm
+OK   NW_007  Bánh mì
+OK   NW_008  Nước
+OK   NW_009  Cà phê
+OK   NW_010  Trà
+OK   NW_011  Thịt
+OK   NW_012  Cá
+OK   NW_013  Rau
+OK   NW_014  Khách sạn
+OK   NW_015  Phòng
+OK   NW_016  Nhà
+OK   NW_017  Giường
+OK   NW_018  Nhà vệ sinh
+OK   NW_019  Nóng
+OK   NW_020  Lạnh
+OK   NW_021  Sạch
+OK   NW_022  Bẩn
+OK   NW_023  Chìa khóa
+OK   NW_024  Xe buýt
+OK   NW_025  Xe taxi
+OK   NW_026  Xe máy
+OK   NW_027  Sân bay
+OK   NW_028  Ga tàu
+OK   NW_029  Đi
+OK   NW_030  Đến
+OK   NW_031  Về
+OK   NW_032  Trạm dừng
+OK   NW_033  Vé
+OK   NW_034  Tiền
+OK   NW_035  Bao nhiêu
+OK   NW_036  Đắt
+OK   NW_037  Rẻ
+OK   NW_038  Mua
+OK   NW_039  Bán
+OK   NW_040  Chợ
+OK   NW_041  Cửa hàng
+OK   NW_042  Màu
+OK   NW_043  Kích thước
+OK   NW_044  Bác sĩ
+OK   NW_045  Thuốc
+OK   NW_046  Bệnh viện
+OK   NW_047  Đau
+OK   NW_048  Sốt
+OK   NW_049  Mệt
+OK   NW_050  Cứu
+OK   NW_051  Hiệu thuốc
+OK   NW_052  Tiêm
+OK   NW_053  Nhức
+OK   NW_054  Tôi
+OK   NW_055  Bạn
+OK   NW_056  Anh
+OK   NW_057  Chị
+OK   NW_058  Em
+OK   NW_059  Bố
+OK   NW_060  Mẹ
+OK   NW_061  Con
+OK   NW_062  Người
+OK   NW_063  Gia đình
+OK   NW_064  Hôm nay
+OK   NW_065  Ngày
+OK   NW_066  Tháng
+OK   NW_067  Năm
+OK   NW_068  Giờ
+OK   NW_069  Sáng
+OK   NW_070  Chiều
+OK   NW_071  Tối
+OK   NW_072  Một
+OK   NW_073  Hai
+OK   NW_074  Trời
+OK   NW_075  Mưa
+OK   NW_076  Nắng
+OK   NW_077  Gió
+OK   NW_078  Núi
+OK   NW_079  Sông
+OK   NW_080  Biển
+OK   NW_081  Cây
+OK   NW_082  Hoa
+OK   NW_083  Mặt trời
+OK   NW_084  Ăn
+OK   NW_085  Uống
+OK   NW_086  Ngủ
+OK   NW_087  Thích
+OK   NW_088  Biết
+OK   NW_089  Hiểu
+OK   NW_090  Nói
+OK   NW_091  Nghe
+OK   NW_092  Xem
+OK   NW_093  Làm
+OK   NW_094  Đâu
+OK   NW_095  Đây
+OK   NW_096  Đó
+OK   NW_097  Trái
+OK   NW_098  Phải
+OK   NW_099  Trước
+OK   NW_100  Sau
+OK   NW_101  Gần
+OK   NW_102  Xa
+OK   NW_103  Trên
+OK   NW_104  Hộ chiếu
+OK   NW_105  Visa
+OK   NW_106  Vali
+OK   NW_107  Quà
+OK   NW_108  Ảnh
+OK   NW_109  Bản đồ
+OK   NW_110  Danh bạ
+OK   NW_111  Điện thoại
+OK   NW_112  Internet
+OK   NW_113  Sim
+
+映射已写出到 scripts/vn_new_map.js，共 113 条
