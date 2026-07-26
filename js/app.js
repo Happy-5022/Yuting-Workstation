@@ -1205,7 +1205,37 @@
     refresh();
   }
 
-  // 5. 备忘录（升级版：极速记录 + 标签 + 搜索 + 图文语音 + 复盘 + 成文导出）
+  // 智能分类：根据内容自动打标签（纯前端关键词匹配，离线可用，不依赖外部 AI）
+  function autoClassify(text) {
+    const t = (text || '').toLowerCase();
+    if (!t.trim()) return [];
+    const CATS = {
+      '副业': ['副业', '公众号', '短视频', '涨粉', '变现', '自媒体', '小红书', '抖音', '流量', '带货', '盈利', '赚钱', '创业', '选题', '标题党'],
+      '越南语': ['越南语', '越南', '越语', '河内', '胡志明', 'hoaimy', '发音'],
+      '英语': ['英语', '英文', 'english', '单词', '四六级', '雅思', '托福'],
+      '学习': ['学习', '读书', '阅读', '课程', '备考', '考试', '笔记', '网课'],
+      '健身': ['健身', '运动', '跑步', '瑜伽', '金刚功', '八段锦', '锻炼', '减肥', '拉伸', '体态'],
+      '健康': ['健康', '睡眠', '失眠', '饮食', '养生', '医院', '身体', '头疼', '感冒', '体检'],
+      '工作': ['工作', '面试', '简历', '招聘', '人事', '工资', '离职', '跳槽', '同事', '老板', '公积金'],
+      '生活': ['生活', '家务', '购物', '买菜', '做饭', '旅行', '旅游', '快递', '装修', '搬家'],
+      '情感': ['心情', '情绪', '焦虑', '开心', '难过', '家人', '朋友', '恋爱', '孤独', '压力', 'emo'],
+      '灵感': ['灵感', '创意', '点子', '想法', '金句'],
+      '待办': ['待办', '计划', '目标', '明天', '下周', '记得', '安排', '预约', '截止', '提醒'],
+      '财务': ['钱', '理财', '存款', '收入', '支出', '预算', '攒钱', '花呗', '信用卡', '基金', '股票'],
+    };
+    const score = {};
+    for (const cat in CATS) {
+      let n = 0;
+      for (const kw of CATS[cat]) if (t.includes(kw.toLowerCase())) n++;
+      if (n) score[cat] = n;
+    }
+    let tags = Object.keys(score).sort((a, b) => score[b] - score[a]);
+    if (tags.length > 3) tags = tags.slice(0, 3); // 最多 3 个，避免过碎
+    if (!tags.length) tags = ['随记'];
+    return tags;
+  }
+
+  // 5. 备忘录（升级版：极速记录 + 语音转文字 + 智能分类 + 搜索 + 图文 + 复盘 + 成文导出）
   async function renderMemo(view) {
     view.innerHTML =
       '<div class="memo-bar">' +
@@ -1220,7 +1250,7 @@
         '<button id="memoExport" class="btn sm">📄 合并成文 / 导出</button>' +
       '</div>' +
       '<div class="memo-compose">' +
-        '<textarea id="memoInput" placeholder="想到啥写啥，点「记下来」即存（首行自动当标题）。用 #标签 分类，如 #副业 #公众号"></textarea>' +
+        '<textarea id="memoInput" placeholder="想到啥写啥，点 🎤 直接说话自动转文字；保存时按内容自动分类，不用您打标签"></textarea>' +
         '<div class="memo-compose-bar">' +
           '<button id="memoImg" class="btn ghost sm">🖼 图</button>' +
           '<button id="memoVoice" class="btn ghost sm">🎤 语音</button>' +
@@ -1235,7 +1265,6 @@
     let selMode = false;
     const selIds = new Set();
     let pendingMedia = [];
-    let recorder = null, recChunks = [], recording = false;
 
     function parseTags(text) {
       const out = []; const re = /#([^\s#]+)/g; let mm;
@@ -1326,7 +1355,8 @@
           ]);
           if (f) {
             m.title = f.title; m.body = f.body;
-            m.tags = parseTags(f.tags + ' ' + f.body + ' ' + f.title);
+            const manualTags = parseTags(f.tags + ' ' + f.body + ' ' + f.title);
+            m.tags = [...new Set(manualTags.concat(autoClassify(f.title + ' ' + f.body)))];
             m.updatedAt = Date.now();
             await DB.put('memos', m); load();
           }
@@ -1343,8 +1373,10 @@
     // 极速记录
     $('#memoSave').onclick = async () => {
       const text = $('#memoInput').value.trim();
-      if (!text && !pendingMedia.length) { toast('写点啥，或加点图片 / 语音 / 链接'); return; }
-      const tags = parseTags(text);
+      if (!text && !pendingMedia.length) { toast('写点啥，或加点图片 / 链接'); return; }
+      const manualTags = parseTags(text);
+      const autoTags = autoClassify(text);
+      const tags = [...new Set(manualTags.concat(autoTags))];
       const rawFirst = (text.split('\n')[0] || '').trim();
       const title = rawFirst.replace(/#\S+/g, '').trim().slice(0, 40) || (pendingMedia.length ? '（媒体备忘）' : '（无标题）');
       const m = { title: title, body: text, tags: tags, media: pendingMedia.slice(), pinned: false, fav: false, createdAt: Date.now(), updatedAt: Date.now() };
@@ -1352,7 +1384,7 @@
       m.id = id;
       pendingMedia = [];
       $('#memoInput').value = '';
-      toast('已记下 ✓');
+      toast('已记下 ✓ 自动归类：#' + tags.join(' #'));
       load();
     };
     $('#memoInput').addEventListener('keydown', (e) => {
@@ -1368,22 +1400,42 @@
       e.target.value = '';
     };
 
-    // 语音
-    $('#memoVoice').onclick = async () => {
-      try {
-        if (!recording) {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          recorder = new MediaRecorder(stream); recChunks = [];
-          recorder.ondataavailable = (ev) => recChunks.push(ev.data);
-          recorder.onstop = async () => {
-            const blob = new Blob(recChunks, { type: recorder.mimeType || 'audio/webm' });
-            pendingMedia.push({ type: 'voice', data: await blobToDataURL(blob) });
-            toast('已录好语音，点「记下来」保存');
-            stream.getTracks().forEach(t => t.stop());
+    // 语音输入（说话直接转成文字，保留打字）
+    let recog = null, voiceOn = false, voiceBase = '', finalTranscript = '';
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    $('#memoVoice').onclick = () => {
+      if (!SR) { toast('当前浏览器不支持语音输入，请直接打字'); return; }
+      if (!voiceOn) {
+        try {
+          recog = new SR();
+          recog.lang = 'zh-CN';
+          recog.continuous = true;
+          recog.interimResults = true;
+          voiceBase = $('#memoInput').value;
+          finalTranscript = '';
+          recog.onresult = (e) => {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const r = e.results[i];
+              if (r.isFinal) finalTranscript += r[0].transcript; else interim += r[0].transcript;
+            }
+            $('#memoInput').value = voiceBase + finalTranscript + interim;
           };
-          recorder.start(); recording = true; $('#memoVoice').textContent = '⏹ 停止';
-        } else { recorder.stop(); recording = false; $('#memoVoice').textContent = '🎤 语音'; }
-      } catch (err) { toast('麦克风打不开：' + (err && err.message ? err.message : err)); }
+          recog.onerror = (e) => { toast('语音识别出错：' + (e.error || '未知错误')); };
+          recog.onend = () => {
+            voiceOn = false;
+            $('#memoVoice').textContent = '🎤 语音';
+            $('#memoVoice').classList.remove('listening');
+            $('#memoInput').value = voiceBase + finalTranscript;
+          };
+          recog.start();
+          voiceOn = true;
+          $('#memoVoice').textContent = '⏹ 停止';
+          $('#memoVoice').classList.add('listening');
+        } catch (err) { toast('语音不可用：' + (err && err.message ? err.message : err)); }
+      } else {
+        try { recog.stop(); } catch (_) {}
+      }
     };
 
     // 链接
