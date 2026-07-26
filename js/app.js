@@ -1963,7 +1963,7 @@
       m['Tôi không hiểu.'] = 'U4_3'; m['Bạn nói tiếng Trung không?'] = 'U4_4';
       // 课程词汇（单词级别）
       m['khỏe'] = 'V_khoe'; m['tên'] = 'V_ten'; m['rất vui'] = 'V_ratvui';
-      m['đến từ'] = 'V_dentu'; m['nghề'] = 'V_nghề'; m['một'] = 'V_mot';
+      m['đến từ'] = 'V_dentu'; m['nghề'] = 'V_nghiep'; m['một'] = 'V_mot';
       m['hai'] = 'V_hai'; m['năm'] = 'V_nam'; m['mười'] = 'V_muoi';
       m['bao nhiêu'] = 'V_baonhieu_word'; m['tiền'] = 'V_tien';
       m['hiểu'] = 'V_hieu';
