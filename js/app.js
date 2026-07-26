@@ -2001,8 +2001,23 @@
           return false;
         }
       }
-      // 未命中音频映射 → 提示开发者补充（正常使用不应走到这里）
-      console.warn('[VN] 无预录音频:', text);
+      // 未命中预录音频 → 仅在浏览器本机确有越南语嗓音时，用 Web Speech 朗读；
+      // （iPhone 中文机通常不暴露越南语音，故仍静默；避免无嗓音时被当成英文字母逐字念）
+      try {
+        var synth2 = window.speechSynthesis;
+        if (synth2 && synth2.getVoices) {
+          var vs = synth2.getVoices();
+          var vi = null;
+          for (var k = 0; k < vs.length; k++) { if ((vs[k].lang || '').toLowerCase().indexOf('vi') === 0) { vi = vs[k]; break; } }
+          if (vi) {
+            var u = new SpeechSynthesisUtterance(text);
+            u.lang = vi.lang; u.voice = vi; u.rate = (opts.rate != null ? opts.rate : 0.95);
+            synth2.cancel(); synth2.speak(u);
+            return true;
+          }
+        }
+      } catch (e2) { /* 忽略，走下面的静默 */ }
+      console.warn('[VN] 无预录音频且本机无越南语音:', text);
       return false;
     }
     function makeRecorder() {
@@ -2218,9 +2233,9 @@
         '<div class="card" style="margin-top:12px"><div class="card-title">今日练习词（点任一切换）</div><div id="spList" class="vn-sp-list"></div></div>';
       $('#back').onclick = paintHome;
       let curEx = null;
-      function show(i) { idx = i; const it = picks[i]; $('#spVn').textContent = it.vn; $('#spZh').textContent = it.zh; $('#spPlay').style.display = 'none'; $('#spEx').style.display = 'none'; curEx = VN_EX_MAP[it.vn] || null; const exb = $('#spExBtn'); exb.style.display = curEx ? '' : 'none'; const rb = $('#spRec'); rb.textContent = '🎤 跟读录音'; rb.disabled = false; rb.classList.remove('rec'); }
+      function show(i) { idx = i; const it = picks[i]; $('#spVn').textContent = it.vn; $('#spZh').textContent = it.zh; $('#spPlay').style.display = 'none'; $('#spEx').style.display = 'none'; curEx = VN_EX_MAP[it.vn] || null; const exb = $('#spExBtn'); exb.style.display = ''; const rb = $('#spRec'); rb.textContent = '🎤 跟读录音'; rb.disabled = false; rb.classList.remove('rec'); }
       $('#spListen').onclick = () => { vnSpeak(picks[idx].vn); markSpoke(); };
-      $('#spExBtn').onclick = () => { const b = $('#spEx'); if (!curEx) return; b.style.display = b.style.display === 'none' ? 'block' : 'none'; if (b.style.display === 'block') b.innerHTML = '💡 例句：<b>' + esc(curEx.vn) + '</b><br><span class="muted">' + esc(curEx.zh) + '</span>'; };
+      $('#spExBtn').onclick = () => { const b = $('#spEx'); if (b.style.display === 'block') { b.style.display = 'none'; return; } if (!curEx) { b.innerHTML = '💡 这个词暂未配例句，先跟读单词吧～'; b.style.display = 'block'; return; } b.innerHTML = '💡 例句：<b>' + esc(curEx.vn) + '</b><br><span class="muted">' + esc(curEx.zh) + '</span>'; b.style.display = 'block'; };
       $('#spRec').onclick = async () => {
         const btn = $('#spRec');
         if (btn.textContent.indexOf('停止') < 0) {
