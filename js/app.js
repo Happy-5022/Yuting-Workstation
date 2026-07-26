@@ -1,4 +1,4 @@
-/* ===== 玉婷工作台 · 主程序 =====
+/* ===== Happy赖工作台 · 主程序 =====
    全程本地运行：数据存在这台设备的浏览器里，没网也能开、能记。 */
 (function () {
   'use strict';
@@ -2508,7 +2508,7 @@
     for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'quotes', 'meta']) out[s] = await DB.all(s);
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = '玉婷工作台备份_' + todayStr() + '.json'; a.click();
+    a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
     toast('已导出备份到下载文件夹');
   }
 
