@@ -1238,17 +1238,6 @@
   // 5. 备忘录（升级版：极速记录 + 语音转文字 + 智能分类 + 搜索 + 图文 + 复盘 + 成文导出）
   async function renderMemo(view) {
     view.innerHTML =
-      '<div class="memo-bar">' +
-        '<input id="memoSearch" class="grow" placeholder="🔍 搜标题 / 内容 / 标签"/>' +
-        '<button id="memoMulti" class="btn ghost sm">✅ 多选</button>' +
-        '<button id="memoReview" class="btn ghost sm">🧠 复盘</button>' +
-      '</div>' +
-      '<div id="memoTags" class="memo-tags"></div>' +
-      '<div id="memoList" class="memo-list"></div>' +
-      '<div id="memoExportBar" class="memo-export" style="display:none">' +
-        '<span class="muted">已选 <b id="memoSelCount">0</b> 条</span>' +
-        '<button id="memoExport" class="btn sm">📄 合并成文 / 导出</button>' +
-      '</div>' +
       '<div class="memo-compose">' +
         '<textarea id="memoInput" placeholder="想到啥写啥，点 🎤 直接说话自动转文字；保存时按内容自动分类，不用您打标签"></textarea>' +
         '<div class="memo-compose-bar">' +
@@ -1258,6 +1247,21 @@
           '<button id="memoSave" class="btn sm">记下来</button>' +
         '</div>' +
         '<input id="memoFile" type="file" accept="image/*" style="display:none"/>' +
+      '</div>' +
+      '<div class="memo-bar">' +
+        '<input id="memoSearch" class="grow" placeholder="🔍 搜标题 / 内容 / 标签"/>' +
+        '<button id="memoMulti" class="btn ghost sm">✅ 多选</button>' +
+        '<button id="memoReview" class="btn ghost sm">🧠 复盘</button>' +
+      '</div>' +
+      '<div id="memoTags" class="memo-tags"></div>' +
+      '<div class="memo-list-head">' +
+        '<button id="memoListToggle" class="memo-list-toggle">📋 已记 <b id="memoCount">0</b> 条 <span id="memoChev">▾</span></button>' +
+        '<button id="memoExpand" class="btn ghost sm" style="display:none"></button>' +
+      '</div>' +
+      '<div id="memoList" class="memo-list"></div>' +
+      '<div id="memoExportBar" class="memo-export" style="display:none">' +
+        '<span class="muted">已选 <b id="memoSelCount">0</b> 条</span>' +
+        '<button id="memoExport" class="btn sm">📄 合并成文 / 导出</button>' +
       '</div>';
 
     let curTags = [];
@@ -1265,6 +1269,9 @@
     let selMode = false;
     const selIds = new Set();
     let pendingMedia = [];
+    let listCollapsed = false;
+    let listExpanded = false;
+    const MEMO_LIMIT = 8;
 
     function parseTags(text) {
       const out = []; const re = /#([^\s#]+)/g; let mm;
@@ -1284,7 +1291,19 @@
       }
       if (curTags.length) list = list.filter(m => curTags.every(t => m.tags.includes(t)));
       list.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
-      renderList(list);
+      const total = list.length;
+      $('#memoCount').textContent = total;
+      const chev = $('#memoChev'); if (chev) chev.textContent = listCollapsed ? '▸' : '▾';
+      const expBtn = $('#memoExpand');
+      if (total > MEMO_LIMIT) {
+        expBtn.style.display = '';
+        expBtn.textContent = listExpanded ? '收起到 ' + MEMO_LIMIT + ' 条' : '展开全部 ' + total + ' 条';
+      } else { expBtn.style.display = 'none'; }
+      const listEl = $('#memoList');
+      if (listCollapsed) { listEl.style.display = 'none'; listEl.innerHTML = ''; return; }
+      listEl.style.display = '';
+      const shown = (!listExpanded && total > MEMO_LIMIT) ? list.slice(0, MEMO_LIMIT) : list;
+      renderList(shown);
     }
 
     function renderTags() {
@@ -1458,6 +1477,10 @@
 
     // 复盘
     $('#memoReview').onclick = () => doReview();
+
+    // 列表折叠 / 展开全部
+    $('#memoListToggle').onclick = () => { listCollapsed = !listCollapsed; load(); };
+    $('#memoExpand').onclick = () => { listExpanded = !listExpanded; load(); };
 
     load();
   }
