@@ -1,100 +1,145 @@
 {
-  "date": "2026-07-25",
+  "date": "2026-07-26",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "What's in a footballer's brain?",
-      "zh": "足球运动员的大脑里藏着什么？",
-      "words": 102,
+      "en": "Why are billionaires building bunkers?",
+      "zh": "亿万富翁为什么在建地堡？",
+      "words": 92,
       "dur": 55,
-      "vocab": 780,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260716",
+      "vocab": 400,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260129",
       "body": [
-        ["Top footballers are not just fit bodies; their brains are trained too. Scientists say the best players scan the pitch more often and make faster decisions than average players.", "顶级球员不只是身体好，他们的大脑也经过训练。科学家发现最优秀的球员会更频繁地扫视球场，比普通球员更快做决定。"],
-        ["Pressure moments like penalties test the mind more than the legs. Players who breathe slowly and follow a fixed routine before the kick usually perform better under stress.", "点球这样的高压时刻，考验的更多是心态而不是腿脚。罚球前慢慢呼吸、按固定流程准备的球员，通常在压力下表现更好。"],
-        ["The lesson works off the pitch too. Whether you face an interview or a live video, practising a calm routine helps your brain stay in control.", "这个道理在球场之外同样适用。无论你面对的是面试还是直播，练出一套让自己冷静的流程，都能帮大脑稳住阵脚。"]
+        [
+          "Some of the world's richest people are spending millions on underground shelters, and this episode asks a simple question: what exactly are they afraid of?",
+          "世界上一些最有钱的人正花几百万建地下庇护所，这期节目问了一个简单的问题：他们到底在怕什么？"
+        ],
+        [
+          "The hosts explain that these bunkers can include swimming pools, cinemas and food supplies for years, which sounds more like a luxury hotel than a hiding place.",
+          "主持人介绍说，这些地堡里可以有游泳池、电影院和够吃好几年的食物，听起来更像豪华酒店而不是藏身处。"
+        ],
+        [
+          "In the end, the discussion turns to ordinary people: instead of preparing for the end of the world, maybe we should work together to make it better.",
+          "最后，讨论回到普通人身上：与其为世界末日做准备，不如一起努力让世界变得更好。"
+        ]
       ],
       "tips": [
-        ["under pressure", "在压力之下"],
-        ["make a decision", "做决定"],
-        ["a fixed routine", "固定的流程/习惯动作"]
+        ["doomsday", "世界末日"],
+        ["shelter", "庇护所、躲避处"],
+        ["prepare for the worst", "做最坏的打算"]
       ]
     },
     {
       "id": "d2",
-      "en": "Why some people are mosquito magnets",
-      "zh": "为什么有的人特别招蚊子？",
-      "words": 96,
-      "dur": 50,
-      "vocab": 720,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/lingohack",
+      "en": "Should we pay more for chocolate?",
+      "zh": "我们该为巧克力多花钱吗？",
+      "words": 88,
+      "dur": 52,
+      "vocab": 380,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260312",
       "body": [
-        ["Do mosquitoes always choose you at a picnic? Research shows some people really are 'mosquito magnets', and it is mostly about the smell of their skin.", "野餐时蚊子总是先咬你吗？研究显示有些人真的是'蚊子磁铁'，原因主要在于皮肤散发的气味。"],
-        ["Certain acids on our skin attract mosquitoes strongly, and this body chemistry hardly changes over time. That is why the same person gets bitten summer after summer.", "皮肤上某些酸性物质对蚊子有很强的吸引力，而这种体质几乎不会随时间改变。所以同一个人年年夏天都被咬。"],
-        ["Washing more does not help much, sadly. Experts suggest light-coloured clothes and repellent are still the most practical protection in hot weather.", "遗憾的是，多洗澡帮助不大。专家建议，浅色衣服加驱蚊剂仍是炎热天气里最实用的防护。"]
+        [
+          "Chocolate prices keep rising, and this episode explains why: bad weather and plant disease have damaged cocoa farms in West Africa, where most of the world's cocoa grows.",
+          "巧克力价格一直在涨，这期节目解释了原因：恶劣天气和植物病害破坏了西非的可可农场，而世界上大部分可可都产自那里。"
+        ],
+        [
+          "Surprisingly, many cocoa farmers stay poor even when chocolate is expensive, because only a tiny part of the price goes back to them.",
+          "令人意外的是，即使巧克力卖得很贵，很多可可农依然贫穷，因为价格里只有很小一部分回到他们手中。"
+        ],
+        [
+          "The hosts suggest that paying a little more for fairly traded chocolate could help farmers earn a decent living and protect the future of chocolate itself.",
+          "主持人建议，为公平贸易巧克力多付一点钱，既能让农民过上体面生活，也能保住巧克力本身的未来。"
+        ]
       ],
       "tips": [
-        ["a mosquito magnet", "特别招蚊子的人"],
-        ["body chemistry", "身体的化学特质/体质"],
-        ["insect repellent", "驱蚊剂"]
+        ["cocoa", "可可"],
+        ["fair trade", "公平贸易"],
+        ["make a living", "谋生、维持生计"]
       ]
     },
     {
       "id": "d3",
-      "en": "Why singing is surprisingly good for your health",
-      "zh": "为什么唱歌对健康有意想不到的好处？",
-      "words": 98,
-      "dur": 52,
-      "vocab": 700,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/lingohack",
+      "en": "What English phrases really mean",
+      "zh": "英国人的客套话到底什么意思？",
+      "words": 90,
+      "dur": 54,
+      "vocab": 360,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260115",
       "body": [
-        ["Singing is more than fun. When we sing, our breathing becomes deeper and steadier, and the body releases chemicals that lift our mood almost immediately.", "唱歌不只是好玩。唱歌时呼吸会变得更深更稳，身体还会释放让心情迅速变好的物质。"],
-        ["Singing with others adds another layer of benefit. Group singers report feeling less lonely, and studies link regular singing to lower stress levels.", "和别人一起唱好处更多。合唱的人普遍感觉不那么孤独，研究也发现常唱歌的人压力水平更低。"],
-        ["You do not need a perfect voice to gain these benefits. Experts say singing along with an instrument at home works just as well.", "想获得这些好处并不需要完美的嗓音。专家说，在家抱着乐器跟着弹唱效果一样好。"]
+        [
+          "British people are famous for not saying what they really mean, and this episode looks at the hidden messages behind everyday polite phrases.",
+          "英国人以'不直说心里话'闻名，这期节目研究了日常客套话背后隐藏的真实意思。"
+        ],
+        [
+          "For example, when someone says 'not bad', they may actually mean 'very good', and 'interesting' can secretly mean 'I don't like it at all'.",
+          "比如有人说 not bad（不差），其实可能是'非常好'；而 interesting（有意思），可能偷偷表示'我一点也不喜欢'。"
+        ],
+        [
+          "Learning these unwritten rules helps language learners avoid confusion and understand what British speakers are really thinking behind their smiles.",
+          "学会这些不成文的规则，能帮语言学习者少踩坑，听懂英国人微笑背后真正在想什么。"
+        ]
       ],
       "tips": [
-        ["lift your mood", "让心情变好"],
-        ["feel less lonely", "感觉不那么孤独"],
-        ["sing along with", "跟着……一起唱"]
+        ["read between the lines", "听出言外之意"],
+        ["polite", "礼貌的、客套的"],
+        ["unwritten rule", "不成文的规则"]
       ]
     },
     {
       "id": "d4",
-      "en": "Stress-free family meals",
-      "zh": "没有压力的家庭聚餐",
-      "words": 94,
+      "en": "Why the rainbow you see is unique to you",
+      "zh": "为什么你看到的彩虹独一无二？",
+      "words": 85,
       "dur": 50,
-      "vocab": 680,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260625",
+      "vocab": 370,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/lingohack",
       "body": [
-        ["Family dinners can turn into battles, especially when children refuse certain foods. Experts say forcing anyone to eat usually makes the problem worse, not better.", "家庭晚餐有时会变成一场战争，尤其当孩子拒绝某些食物时。专家说，强迫任何人吃东西通常只会让问题更糟。"],
-        ["A calmer approach is to keep offering different foods without pressure. Tastes change slowly, and a food we hated as children may become a favourite later.", "更从容的做法是不施压地持续提供不同食物。口味是慢慢变化的，小时候讨厌的东西长大后也许会变成最爱。"],
-        ["The real value of a shared meal is the talking, not the menu. A relaxed table helps everyone eat better and feel closer.", "一顿家常饭真正的价值在于聊天，而不是菜单。轻松的餐桌能让每个人吃得更好，也更亲近。"]
+        [
+          "This story shares a lovely science fact: no two people ever see exactly the same rainbow, because it depends on where each person is standing.",
+          "这个故事分享了一个可爱的科学事实：没有两个人能看到完全相同的彩虹，因为彩虹取决于每个人站的位置。"
+        ],
+        [
+          "A rainbow is made when sunlight passes through raindrops and splits into different colours, so the light reaching your eyes follows its own special path.",
+          "彩虹是阳光穿过雨滴、分解成不同颜色形成的，所以到达你眼睛的光走的是一条专属路线。"
+        ],
+        [
+          "In other words, the rainbow you admire belongs only to you – a nice reminder that everyone sees the world a little differently.",
+          "换句话说，你欣赏的那道彩虹只属于你——这也温柔地提醒我们：每个人看世界的角度都不太一样。"
+        ]
       ],
       "tips": [
-        ["refuse to do something", "拒绝做某事"],
-        ["under no pressure", "没有压力"],
-        ["a shared meal", "一起吃的一顿饭"]
+        ["raindrop", "雨滴"],
+        ["split into", "分解成、分裂为"],
+        ["unique", "独一无二的"]
       ]
     },
     {
       "id": "d5",
-      "en": "Should we eat ultra-processed food?",
-      "zh": "超加工食品到底能不能吃？",
-      "words": 100,
-      "dur": 54,
-      "vocab": 760,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260430",
+      "en": "How unhygienic is it to wear your shoes at home?",
+      "zh": "在家穿鞋到底有多不卫生？",
+      "words": 87,
+      "dur": 52,
+      "vocab": 390,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/lingohack",
       "body": [
-        ["Ultra-processed foods are everywhere: instant noodles, packaged snacks and sweet drinks. They are cheap, tasty and convenient, which is exactly why we eat so much of them.", "超加工食品无处不在：方便面、包装零食、甜饮料。它们便宜、好吃又方便，这正是我们吃得太多的原因。"],
-        ["Scientists worry because these foods are designed to make us keep eating. Diets full of them are linked to weight gain and other health problems.", "科学家的担忧在于，这些食品的设计就是让人停不下嘴。长期大量吃这类食品，与体重增加等健康问题相关。"],
-        ["The advice is balance, not fear. Cooking simple meals at home more often is the easiest way to cut down without giving up convenience completely.", "建议是保持平衡而不是恐慌。更多在家做简单饭菜，是既不完全放弃便利、又能减少摄入的最简单办法。"]
+        [
+          "Do you take your shoes off at the door? This story looks at what scientists found on the bottom of everyday shoes – and it is not pretty.",
+          "你进门会脱鞋吗？这个故事讲了科学家在日常鞋底上发现的东西——画面不太美好。"
+        ],
+        [
+          "Research shows shoes can carry bacteria from streets, toilets and soil into our homes, spreading germs onto clean floors and carpets.",
+          "研究显示，鞋子会把街道、厕所和泥土里的细菌带进家里，把病菌传到干净的地板和地毯上。"
+        ],
+        [
+          "The good news is simple: leaving shoes at the door, a habit common in many Asian homes, is one of the easiest ways to keep your home healthier.",
+          "好消息很简单：把鞋留在门口——很多亚洲家庭的老习惯——就是让家更健康的最简单方法之一。"
+        ]
       ],
       "tips": [
-        ["ultra-processed food", "超加工食品"],
-        ["be linked to", "与……相关"],
-        ["cut down (on)", "减少（摄入/消费）"]
+        ["unhygienic", "不卫生的"],
+        ["bacteria", "细菌"],
+        ["take off your shoes", "脱鞋"]
       ]
     }
   ]
