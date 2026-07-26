@@ -607,3 +607,33 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .dg-fav-prev { opacity: 0.75; }
 
 @media (max-width: 480px) { .vn-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ===== 备忘录（升级版） ===== */
+.memo-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.memo-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.memo-chip { display: inline-block; padding: 4px 10px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; font-size: 13px; cursor: pointer; }
+.memo-chip.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+.memo-chip.clear { background: transparent; color: var(--danger); border-color: transparent; }
+.memo-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.memo-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); cursor: pointer; }
+.memo-head { display: flex; align-items: center; gap: 8px; }
+.memo-star { font-size: 14px; }
+.memo-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--text); flex: 1; word-break: break-word; }
+.memo-pin { font-size: 14px; }
+.memo-ops { display: flex; gap: 2px; margin-left: auto; }
+.memo-op { border: none; background: transparent; font-size: 16px; padding: 2px 6px; border-radius: 8px; cursor: pointer; color: var(--muted); }
+.memo-op:hover { background: var(--surface-2); }
+.memo-body { margin: 8px 0 0; white-space: pre-wrap; word-break: break-word; color: var(--text); font-size: 15px; }
+.memo-media-wrap { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.memo-media { max-width: 100%; border-radius: var(--radius-s); }
+.memo-link { display: block; color: var(--primary-d); font-size: 13px; word-break: break-all; text-decoration: none; margin-top: 4px; }
+.memo-tags-inline { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+.memo-tag { font-size: 12px; color: var(--primary-d); background: #EAF6F1; padding: 2px 8px; border-radius: 999px; }
+.memo-meta { margin-top: 8px; font-size: 12px; color: var(--muted); }
+.memo-compose { margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.memo-compose textarea { width: 100%; min-height: 64px; resize: vertical; border: 1px solid var(--line); border-radius: var(--radius-s); padding: 10px; font: inherit; background: var(--surface); color: var(--text); }
+.memo-compose textarea:focus { outline: none; border-color: var(--primary); }
+.memo-compose-bar { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+.memo-compose-bar .btn.sm { margin-left: auto; }
+.memo-export { display: flex; align-items: center; gap: 10px; margin: 10px 0; padding: 10px 12px; background: #EAF6F1; border: 1px solid var(--line); border-radius: var(--radius); }
+.memo-export .muted { color: var(--muted); font-size: 13px; }

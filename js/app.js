@@ -1205,37 +1205,267 @@
     refresh();
   }
 
-  // 5. 备忘录
+  // 5. 备忘录（升级版：极速记录 + 标签 + 搜索 + 图文语音 + 复盘 + 成文导出）
   async function renderMemo(view) {
-    view.innerHTML = '<div class="row" style="margin-bottom:12px"><input id="ti" class="grow" placeholder="标题（选填）"/><button id="add" class="btn">➕ 新建</button></div><div id="list"></div>';
-    async function refresh() {
-      const list = await DB.all('memos');
-      list.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
-      const box = $('#list');
-      if (!list.length) { box.innerHTML = emptyTip('📝', '随手记点什么'); return; }
+    view.innerHTML =
+      '<div class="memo-bar">' +
+        '<input id="memoSearch" class="grow" placeholder="🔍 搜标题 / 内容 / 标签"/>' +
+        '<button id="memoMulti" class="btn ghost sm">✅ 多选</button>' +
+        '<button id="memoReview" class="btn ghost sm">🧠 复盘</button>' +
+      '</div>' +
+      '<div id="memoTags" class="memo-tags"></div>' +
+      '<div id="memoList" class="memo-list"></div>' +
+      '<div id="memoExportBar" class="memo-export" style="display:none">' +
+        '<span class="muted">已选 <b id="memoSelCount">0</b> 条</span>' +
+        '<button id="memoExport" class="btn sm">📄 合并成文 / 导出</button>' +
+      '</div>' +
+      '<div class="memo-compose">' +
+        '<textarea id="memoInput" placeholder="想到啥写啥，点「记下来」即存（首行自动当标题）。用 #标签 分类，如 #副业 #公众号"></textarea>' +
+        '<div class="memo-compose-bar">' +
+          '<button id="memoImg" class="btn ghost sm">🖼 图</button>' +
+          '<button id="memoVoice" class="btn ghost sm">🎤 语音</button>' +
+          '<button id="memoLink" class="btn ghost sm">🔗 链接</button>' +
+          '<button id="memoSave" class="btn sm">记下来</button>' +
+        '</div>' +
+        '<input id="memoFile" type="file" accept="image/*" style="display:none"/>' +
+      '</div>';
+
+    let curTags = [];
+    let curQuery = '';
+    let selMode = false;
+    const selIds = new Set();
+    let pendingMedia = [];
+    let recorder = null, recChunks = [], recording = false;
+
+    function parseTags(text) {
+      const out = []; const re = /#([^\s#]+)/g; let mm;
+      while ((mm = re.exec(text))) { const t = mm[1].replace(/[，。、,!！?？；;]/g, ''); if (t) out.push(t); }
+      return out;
+    }
+    function fileToDataURL(file) {
+      return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+    }
+    function blobToDataURL(blob) {
+      return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(blob); });
+    }
+
+    async function load() {
+      let list = await DB.all('memos');
+      list.forEach(m => { m.tags = m.tags || []; m.media = m.media || []; });
+      if (curQuery) {
+        const q = curQuery.toLowerCase();
+        list = list.filter(m => (m.title || '').toLowerCase().includes(q) || (m.body || '').toLowerCase().includes(q) || m.tags.join(' ').toLowerCase().includes(q));
+      }
+      if (curTags.length) list = list.filter(m => curTags.every(t => m.tags.includes(t)));
+      list.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+      renderList(list);
+    }
+
+    function renderTags() {
+      DB.all('memos').then(all => {
+        const set = {}; all.forEach(m => (m.tags || []).forEach(t => set[t] = 1));
+        const box = $('#memoTags');
+        const chips = Object.keys(set).map(t => '<span class="memo-chip' + (curTags.includes(t) ? ' on' : '') + '" data-t="' + esc(t) + '">#' + esc(t) + '</span>').join('');
+        box.innerHTML = (curTags.length ? '<span class="memo-chip clear" data-t="">✕ 清除</span>' : '') + chips;
+        box.querySelectorAll('.memo-chip').forEach(c => c.onclick = () => {
+          const t = c.dataset.t;
+          if (!t) { curTags = []; } else { curTags.includes(t) ? curTags.splice(curTags.indexOf(t), 1) : curTags.push(t); }
+          load();
+        });
+      });
+    }
+
+    function renderList(list) {
+      const box = $('#memoList');
+      if (!list.length) { box.innerHTML = emptyTip('📝', curQuery || curTags.length ? '没有匹配的备忘' : '随手记点什么'); return; }
       box.innerHTML = '';
       list.forEach(m => {
-        const card = el('<div class="item"></div>');
-        card.innerHTML = '<div class="row spread"><h4 style="margin:0">' + esc(m.title || '（无标题）') + '</h4><button class="del">🗑</button></div>' +
-          (m.body ? '<p>' + esc(m.body) + '</p>' : '') + '<div class="meta">' + esc(m.updatedAt ? new Date(m.updatedAt).toLocaleString('zh-CN') : '') + '</div>';
+        const card = el('<div class="memo-card"></div>');
+        const tagsHtml = m.tags.map(t => '<span class="memo-tag">#' + esc(t) + '</span>').join('');
+        const mediaHtml = m.media.map(md => {
+          if (md.type === 'image') return '<img class="memo-media" src="' + md.data + '"/>';
+          if (md.type === 'voice') return '<audio class="memo-media" controls src="' + md.data + '"></audio>';
+          if (md.type === 'link') return '<a class="memo-link" href="' + esc(md.url) + '" target="_blank" onclick="event.stopPropagation()">🔗 ' + esc(md.url) + '</a>';
+          return '';
+        }).join('');
+        card.innerHTML =
+          '<div class="memo-head">' +
+            (selMode ? '<input type="checkbox" class="memo-check"' + (selIds.has(m.id) ? ' checked' : '') + '/>' : (m.fav ? '<span class="memo-star">⭐</span>' : '')) +
+            '<h4 class="memo-title">' + esc(m.title || '（无标题）') + '</h4>' +
+            (m.pinned ? '<span class="memo-pin" title="已置顶">📌</span>' : '') +
+            '<span class="memo-ops">' +
+              '<button class="memo-op" data-act="pin">' + (m.pinned ? '📌' : '📍') + '</button>' +
+              '<button class="memo-op" data-act="fav">' + (m.fav ? '⭐' : '☆') + '</button>' +
+              '<button class="memo-op" data-act="del">🗑</button>' +
+            '</span>' +
+          '</div>' +
+          (m.body ? '<p class="memo-body">' + esc(m.body) + '</p>' : '') +
+          (mediaHtml ? '<div class="memo-media-wrap">' + mediaHtml + '</div>' : '') +
+          (tagsHtml ? '<div class="memo-tags-inline">' + tagsHtml + '</div>' : '') +
+          '<div class="memo-meta">' + esc(m.updatedAt ? new Date(m.updatedAt).toLocaleString('zh-CN') : '') + '</div>';
+
+        card.querySelectorAll('.memo-op').forEach(btn => btn.onclick = async (e) => {
+          e.stopPropagation();
+          const act = btn.dataset.act;
+          if (act === 'del') { if (await confirmDel('删除这条备忘？')) { await DB.del('memos', m.id); if (selIds.has(m.id)) selIds.delete(m.id); load(); } }
+          else if (act === 'pin') { m.pinned = !m.pinned; m.updatedAt = Date.now(); await DB.put('memos', m); load(); }
+          else if (act === 'fav') { m.fav = !m.fav; m.updatedAt = Date.now(); await DB.put('memos', m); load(); }
+        });
+
         card.onclick = async (e) => {
-          if (e.target.classList.contains('del')) return;
+          if (selMode) {
+            const cb = e.target.closest('.memo-check');
+            if (cb) { cb.checked ? selIds.add(m.id) : selIds.delete(m.id); updateSelCount(); return; }
+            return;
+          }
+          if (e.target.closest('a') || e.target.closest('.memo-op') || e.target.closest('.memo-check')) return;
           const f = await promptForm('编辑备忘', [
             { name: 'title', label: '标题', value: m.title || '' },
             { name: 'body', label: '内容', type: 'textarea', value: m.body || '' },
+            { name: 'tags', label: '标签（空格或 # 隔开）', value: m.tags.join(' ') },
           ]);
-          if (f) { m.title = f.title; m.body = f.body; m.updatedAt = Date.now(); await DB.put('memos', m); refresh(); }
+          if (f) {
+            m.title = f.title; m.body = f.body;
+            m.tags = parseTags(f.tags + ' ' + f.body + ' ' + f.title);
+            m.updatedAt = Date.now();
+            await DB.put('memos', m); load();
+          }
         };
-        card.querySelector('.del').onclick = async (e) => { e.stopPropagation(); if (await confirmDel('删除这条备忘？')) { await DB.del('memos', m.id); refresh(); } };
         box.append(card);
       });
     }
-    $('#add').onclick = async () => {
-      const title = $('#ti').value.trim();
-      await DB.put('memos', { title, body: '', createdAt: Date.now(), updatedAt: Date.now() });
-      $('#ti').value = ''; refresh();
+
+    function updateSelCount() {
+      $('#memoSelCount').textContent = selIds.size;
+      $('#memoExportBar').style.display = (selMode && selIds.size) ? '' : 'none';
+    }
+
+    // 极速记录
+    $('#memoSave').onclick = async () => {
+      const text = $('#memoInput').value.trim();
+      if (!text && !pendingMedia.length) { toast('写点啥，或加点图片 / 语音 / 链接'); return; }
+      const tags = parseTags(text);
+      const rawFirst = (text.split('\n')[0] || '').trim();
+      const title = rawFirst.replace(/#\S+/g, '').trim().slice(0, 40) || (pendingMedia.length ? '（媒体备忘）' : '（无标题）');
+      const m = { title: title, body: text, tags: tags, media: pendingMedia.slice(), pinned: false, fav: false, createdAt: Date.now(), updatedAt: Date.now() };
+      const id = await DB.put('memos', m);
+      m.id = id;
+      pendingMedia = [];
+      $('#memoInput').value = '';
+      toast('已记下 ✓');
+      load();
     };
-    refresh();
+    $('#memoInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); $('#memoSave').click(); }
+    });
+
+    // 图片
+    $('#memoImg').onclick = () => $('#memoFile').click();
+    $('#memoFile').onchange = async (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      pendingMedia.push({ type: 'image', data: await fileToDataURL(file) });
+      toast('已加图片，点「记下来」保存');
+      e.target.value = '';
+    };
+
+    // 语音
+    $('#memoVoice').onclick = async () => {
+      try {
+        if (!recording) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          recorder = new MediaRecorder(stream); recChunks = [];
+          recorder.ondataavailable = (ev) => recChunks.push(ev.data);
+          recorder.onstop = async () => {
+            const blob = new Blob(recChunks, { type: recorder.mimeType || 'audio/webm' });
+            pendingMedia.push({ type: 'voice', data: await blobToDataURL(blob) });
+            toast('已录好语音，点「记下来」保存');
+            stream.getTracks().forEach(t => t.stop());
+          };
+          recorder.start(); recording = true; $('#memoVoice').textContent = '⏹ 停止';
+        } else { recorder.stop(); recording = false; $('#memoVoice').textContent = '🎤 语音'; }
+      } catch (err) { toast('麦克风打不开：' + (err && err.message ? err.message : err)); }
+    };
+
+    // 链接
+    $('#memoLink').onclick = () => {
+      const url = prompt('粘贴链接（网页 / 文章 / 视频）：');
+      if (!url) return;
+      pendingMedia.push({ type: 'link', url: url, data: '' });
+      toast('已加链接，点「记下来」保存');
+    };
+
+    // 搜索
+    $('#memoSearch').addEventListener('input', (e) => { curQuery = e.target.value.trim(); load(); });
+
+    // 多选
+    $('#memoMulti').onclick = () => {
+      selMode = !selMode;
+      if (!selMode) selIds.clear();
+      $('#memoMulti').textContent = selMode ? '✅ 取消多选' : '✅ 多选';
+      updateSelCount();
+      load();
+    };
+    $('#memoExport').onclick = () => doExport();
+
+    // 复盘
+    $('#memoReview').onclick = () => doReview();
+
+    load();
+  }
+
+  // 复盘：扫描全部备忘，生成近期摘要（纯前端统计，离线可用）
+  async function computeReview() {
+    const list = await DB.all('memos');
+    const total = list.length;
+    const tagCount = {};
+    list.forEach(m => (m.tags || []).forEach(t => tagCount[t] = (tagCount[t] || 0) + 1));
+    const topTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const now = Date.now();
+    const week = list.filter(m => (m.updatedAt || m.createdAt || 0) > now - 7 * 864e5).length;
+    const days = new Set(list.map(m => new Date(m.updatedAt || m.createdAt).toLocaleDateString('zh-CN')));
+    const recent = list.slice().sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0)).slice(0, 5).map(m => '· ' + esc((m.title || m.body || '').slice(0, 30)));
+    let s = '';
+    s += '📊 你一共记了 ' + total + ' 条备忘\n';
+    s += '🗓 最近 7 天记了 ' + week + ' 条\n';
+    s += '📅 累计在 ' + days.size + ' 天里记过东西\n';
+    if (topTags.length) s += '🏷 最近常想的主题：' + topTags.map(t => '#' + t[0] + '(' + t[1] + ')').join('、') + '\n';
+    if (recent.length) s += '💡 最近的几条：\n' + recent.join('\n') + '\n';
+    s += '\n👉 一句话：你最近主要在琢磨 ' + (topTags.length ? topTags.slice(0, 3).map(t => '#' + t[0]).join('、') : '各种事') + '，保持记录，想法会越来越清楚！';
+    return s;
+  }
+
+  async function doReview() {
+    const summary = await computeReview();
+    const f = await promptForm('🧠 近期复盘', [
+      { name: 's', label: '看看你最近在想什么', type: 'textarea', value: summary },
+    ]);
+    if (f && f.s && confirm('要把这份复盘存成一条备忘吗？')) {
+      await DB.put('memos', { title: '复盘 ' + new Date().toLocaleDateString('zh-CN'), body: f.s, tags: ['复盘'], media: [], pinned: false, fav: false, createdAt: Date.now(), updatedAt: Date.now() });
+      toast('复盘已存为备忘 ✓');
+    }
+  }
+
+  // 多选合并成文 + 导出（Markdown 下载 + 复制长文）
+  async function doExport() {
+    const all = await DB.all('memos');
+    const pick = all.filter(m => selIds.has(m.id));
+    if (!pick.length) { toast('先多选几条再合并'); return; }
+    pick.sort((a, b) => (a.createdAt || a.updatedAt || 0) - (b.createdAt || b.updatedAt || 0));
+    let md = '# 备忘合集（' + pick.length + ' 条）\n\n';
+    pick.forEach(m => {
+      if (m.title) md += '## ' + m.title + '\n';
+      if (m.tags && m.tags.length) md += '*标签：' + m.tags.map(t => '#' + t).join(' ') + '*\n\n';
+      if (m.body) md += m.body + '\n\n';
+      (m.media || []).forEach(mm => { if (mm.type === 'image') md += '![图片](' + (mm.data && mm.data.slice(0, 30)) + '...)\n'; });
+    });
+    const plain = md.replace(/^#+\s*/gm, '').replace(/\*标签[^*]*\*/g, '').replace(/!\[图片\][^\n]*/g, '[图片]');
+    try { await navigator.clipboard.writeText(plain); toast('已复制成长文，去公众号粘贴吧'); } catch (e) { toast('复制失败，可改用下载的 MD 文件'); }
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '备忘合集_' + new Date().toLocaleDateString('zh-CN') + '.md';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
   // 6. 尤克里里
