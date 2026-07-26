@@ -1485,13 +1485,23 @@
 
   async function doReview() {
     const summary = await computeReview();
-    const f = await promptForm('🧠 近期复盘', [
-      { name: 's', label: '看看你最近在想什么', type: 'textarea', value: summary },
-    ]);
-    if (f && f.s && confirm('要把这份复盘存成一条备忘吗？')) {
-      await DB.put('memos', { title: '复盘 ' + new Date().toLocaleDateString('zh-CN'), body: f.s, tags: ['复盘'], media: [], pinned: false, fav: false, createdAt: Date.now(), updatedAt: Date.now() });
-      toast('复盘已存为备忘 ✓');
-    }
+    const mask = el('<div class="modal-mask"><div class="modal review-modal"><h3>🧠 近期复盘</h3><div class="review-box"></div><div class="modal-actions"><button class="btn ghost grow" id="rClose">关闭</button><button class="btn ghost grow" id="rCopy">📋 复制</button><button class="btn grow" id="rSave">💾 存为备忘</button></div></div></div>');
+    mask.querySelector('.review-box').textContent = summary;
+    document.body.append(mask);
+    requestAnimationFrame(() => mask.classList.add('show'));
+    function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+    mask.onclick = (e) => { if (e.target === mask) close(); };
+    mask.querySelector('#rClose').onclick = close;
+    mask.querySelector('#rCopy').onclick = async () => {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(summary); toast('已复制 ✓'); }
+        else { const ta = document.createElement('textarea'); ta.value = summary; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('已复制 ✓'); }
+      } catch (_) { toast('复制失败，请手动选择文字'); }
+    };
+    mask.querySelector('#rSave').onclick = async () => {
+      await DB.put('memos', { title: '复盘 ' + new Date().toLocaleDateString('zh-CN'), body: summary, tags: ['复盘'].concat(autoClassify(summary)), media: [], pinned: false, fav: false, createdAt: Date.now(), updatedAt: Date.now() });
+      toast('复盘已存为备忘 ✓'); close();
+    };
   }
 
   // 多选合并成文 + 导出（Markdown 下载 + 复制长文）
