@@ -2137,13 +2137,14 @@
       const sceneItems = VN_SCENES.reduce((a, sc) => a.concat(sc.items.map(i => ({ vn: i[0], zh: i[1] }))), []);
       const pool = words.concat(sents, sceneItems);
       const seed = daySeed() + 777; const N = 8; const quiz = [];
+      const chosen = dayPick(seed, pool, N);   // 从题池抽 8 个互不相同的词
       for (let i = 0; i < N; i++) {
-        const item = pool[(seed + i * 31) % pool.length];
+        const item = chosen[i];
         const type = i % 2 === 0 ? 'listen' : 'zh2vn';
-        const opts = [item]; let p = (seed + i * 13) % pool.length;
-        while (opts.length < 4) { const c = pool[p % pool.length]; p += 7; if (!opts.some(o => o.vn === c.vn)) opts.push(c); }
-        const order = [(i + 1) % 4, (i + 3) % 4, i % 4, (i + 2) % 4];
-        quiz.push({ type, item, opts: order.map(k => opts[k]) });
+        const others = pool.filter(o => o.vn !== item.vn);
+        const distractors = dayPick(seed + i * 101 + 7, others, 3);   // 3 个干扰项（不重复、且非正确答案）
+        const opts = dayPick(seed + i * 211 + 13, [item].concat(distractors), 4);  // 打乱选项顺序（每天固定）
+        quiz.push({ type, item, opts });
       }
       let qi = 0, score = 0;
       view.innerHTML = '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
