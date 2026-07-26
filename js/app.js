@@ -431,6 +431,13 @@
     { vn: 'Bao nhiêu?', zh: '多少钱？' },
     { vn: 'Ngon', zh: '好吃' },
   ];
+  // 生活高频词（按主题分组补充，第一波约 120 词；后续可继续补充到 300–500）
+  const VN_WORDS_ALL = VN_WORDS.slice();
+  const VN_EX_MAP = {};
+  (typeof VN_TOPIC_WORDS !== 'undefined' ? VN_TOPIC_WORDS : []).forEach(t => (t.words || []).forEach(w => {
+    VN_WORDS_ALL.push({ vn: w.vn, zh: w.zh });
+    if (w.ex) VN_EX_MAP[w.vn] = w.ex;
+  }));
   // 零基础上路引导（3 步 + 第一周计划）
   const VN_START = {
     steps: [
@@ -2015,12 +2022,12 @@
         VN_TONES.forEach(t => items.push({ kind: 'tone', vn: t.word, zh: t.cn + ' ' + t.zh, key: 'T' + t.word }));
         dayPick(seed, VN_SPELL, 3).forEach(s => items.push({ kind: 'spell', vn: s.word, zh: s.zh, key: 'P' + s.word }));
       } else if (stage === 2) {
-        dayPick(seed, VN_WORDS, 6).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
+        dayPick(seed, VN_WORDS_ALL, 6).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
       } else if (stage === 3) {
         dayPick(seed, VN_SENTENCES, 3).forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
         dayPick(seed + 1, VN_SCENES.reduce((a, sc) => a.concat(sc.items), []), 3).forEach(s => items.push({ kind: 'sentence', vn: s[0], zh: s[1], key: 'SC' + s[0] }));
       } else {
-        dayPick(seed, VN_WORDS, 4).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
+        dayPick(seed, VN_WORDS_ALL, 4).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
         dayPick(seed + 1, VN_SENTENCES, 4).forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
         dayPick(seed + 2, VN_VOWELS.concat(VN_CONSONANTS), 2).forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l }));
       }
@@ -2132,7 +2139,7 @@
     // ---------- 单词闯关 ----------
     async function paintChallenge() {
       if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
-      const words = VN_WORDS.map(w => ({ vn: w.vn, zh: w.zh }));
+      const words = VN_WORDS_ALL.map(w => ({ vn: w.vn, zh: w.zh }));
       const sents = VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
       const sceneItems = VN_SCENES.reduce((a, sc) => a.concat(sc.items.map(i => ({ vn: i[0], zh: i[1] }))), []);
       const pool = words.concat(sents, sceneItems);
@@ -2196,7 +2203,7 @@
     async function paintSpeak(focus) {
       if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
       const stage = await getStage();
-      let list = stage <= 2 ? VN_WORDS.map(w => ({ vn: w.vn, zh: w.zh })) : VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
+      let list = stage <= 2 ? VN_WORDS_ALL.map(w => ({ vn: w.vn, zh: w.zh })) : VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
       if (stage >= 3) VN_SCENES.forEach(sc => sc.items.forEach(i => list.push({ vn: i[0], zh: i[1] })));
       const picks = dayPick(daySeed() + 99, list, 5);
       if (focus && !picks.find(p => p.vn === focus.vn)) picks.unshift(focus);
@@ -2204,14 +2211,16 @@
       view.innerHTML =
         '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
         '<div class="vn-speak">' +
-          '<div class="vn-speak-card" id="spCard"><div class="vn-speak-vn" id="spVn"></div><div class="vn-speak-zh" id="spZh"></div></div>' +
-          '<div class="vn-speak-btns"><button class="btn sm" id="spListen">🔊 听标准音</button><button class="btn sm" id="spRec">🎤 跟读录音</button><button class="btn sm ghost" id="spPlay" style="display:none">▶ 听我的</button></div>' +
+          '<div class="vn-speak-card" id="spCard"><div class="vn-speak-vn" id="spVn"></div><div class="vn-speak-zh" id="spZh"></div><div class="vn-ex" id="spEx" style="display:none"></div></div>' +
+          '<div class="vn-speak-btns"><button class="btn sm" id="spListen">🔊 听标准音</button><button class="btn sm" id="spRec">🎤 跟读录音</button><button class="btn sm ghost" id="spPlay" style="display:none">▶ 听我的</button><button class="btn sm ghost" id="spExBtn" style="display:none">💡 例句</button></div>' +
           '<div class="muted" style="font-size:12px;text-align:center;margin-top:8px" id="spHint">' + (rec.supported ? '点「跟读录音」读完点停止，再「听我的」对比标准音' : '本设备不支持录音，可直接听标准音跟读') + '</div>' +
         '</div>' +
         '<div class="card" style="margin-top:12px"><div class="card-title">今日练习词（点任一切换）</div><div id="spList" class="vn-sp-list"></div></div>';
       $('#back').onclick = paintHome;
-      function show(i) { idx = i; const it = picks[i]; $('#spVn').textContent = it.vn; $('#spZh').textContent = it.zh; $('#spPlay').style.display = 'none'; const rb = $('#spRec'); rb.textContent = '🎤 跟读录音'; rb.disabled = false; rb.classList.remove('rec'); }
+      let curEx = null;
+      function show(i) { idx = i; const it = picks[i]; $('#spVn').textContent = it.vn; $('#spZh').textContent = it.zh; $('#spPlay').style.display = 'none'; $('#spEx').style.display = 'none'; curEx = VN_EX_MAP[it.vn] || null; const exb = $('#spExBtn'); exb.style.display = curEx ? '' : 'none'; const rb = $('#spRec'); rb.textContent = '🎤 跟读录音'; rb.disabled = false; rb.classList.remove('rec'); }
       $('#spListen').onclick = () => { vnSpeak(picks[idx].vn); markSpoke(); };
+      $('#spExBtn').onclick = () => { const b = $('#spEx'); if (!curEx) return; b.style.display = b.style.display === 'none' ? 'block' : 'none'; if (b.style.display === 'block') b.innerHTML = '💡 例句：<b>' + esc(curEx.vn) + '</b><br><span class="muted">' + esc(curEx.zh) + '</span>'; };
       $('#spRec').onclick = async () => {
         const btn = $('#spRec');
         if (btn.textContent.indexOf('停止') < 0) {
@@ -2234,7 +2243,7 @@
       const stage = await getStage();
       const stageName = (VN_STAGES[stage - 1] && VN_STAGES[stage - 1].t) || '';
       // 抽卡范围跟着学习阶段扩展：前期只抽必背词；学到后面阶段自动加入句子与场景短句，与口语练习保持一致
-      let pool = stage <= 2 ? VN_WORDS.slice() : VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
+      let pool = stage <= 2 ? VN_WORDS_ALL.slice() : VN_SENTENCES.map(s => ({ vn: s.vn, zh: s.zh }));
       if (stage >= 3) VN_SCENES.forEach(sc => sc.items.forEach(i => pool.push({ vn: i[0], zh: i[1] })));
       const deck = dayPick(daySeed() + 55, pool, 8);
       view.innerHTML =
