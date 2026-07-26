@@ -2347,15 +2347,12 @@
     const today = todayStr();
     const saved = await DB.get('gratitude', today);
     const items = (saved && saved.items) || [];
-    const cm = await DB.get('meta', 'gratCount');
-    let count = (cm && cm.value) || 5;
+    const count = 5;
 
     view.innerHTML =
       '<div class="card"><div class="card-title">🙏 每日感恩 · 今天</div>' +
       '<p class="muted" style="margin:0 0 10px">睡前写下今天值得感恩的事，哪怕很小。写完点保存，回头能翻看。</p>' +
-      '<div class="row spread" style="margin-bottom:8px"><div class="g-counts">' +
-      '<button class="g-count" data-n="3">3 件</button><button class="g-count" data-n="5">5 件</button><button class="g-count" data-n="10">10 件</button></div>' +
-      '<button id="gMusic" class="btn sm ghost">🎵 治愈轻音乐</button></div>' +
+      '<div class="row spread" style="margin-bottom:8px"><button id="gMusic" class="btn sm ghost">🎵 治愈轻音乐</button></div>' +
       '<div id="gList"></div>' +
       '<button id="gSave" class="btn green block" style="margin-top:14px">💾 保存今天的感恩</button>' +
       '<div id="gMsg" class="muted" style="margin-top:8px;text-align:center"></div></div>' +
@@ -2372,16 +2369,7 @@
       }
     }
     paintList(items);
-    function markCounts() { view.querySelectorAll('.g-count').forEach(b => b.classList.toggle('on', +b.dataset.n === count)); }
-    markCounts();
-    view.querySelectorAll('.g-count').forEach(b => {
-      b.onclick = async () => {
-        const cur = [...list.querySelectorAll('.g-input')].map(inp => inp.value.trim());
-        count = +b.dataset.n;
-        await DB.put('meta', { id: 'gratCount', value: count });
-        paintList(cur); markCounts();
-      };
-    });
+    // 感恩固定为 5 件，不提供 3/10 切换
 
     let gratAudio = null;
     $('#gMusic').onclick = async () => {
@@ -2453,6 +2441,7 @@
       await DB.put('gratitude', { id: today, date: today, items: vals, ts: Date.now() });
       $('#gMsg').textContent = '✅ 已保存 ' + vals.length + ' 件，感恩完成！';
       toast('感恩已记下 💚');
+      paintList([]);
       paintHistory();
     };
 
