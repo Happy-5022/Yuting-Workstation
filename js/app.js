@@ -2545,14 +2545,24 @@
       it.onclick = () => go(m.key);
       nav.append(it);
     });
-    const foot = el('<button id="exportBtn" class="btn ghost block">⬇ 导出备份</button>');
-    foot.onclick = exportAll;
-    const imp = el('<button id="importBtn" class="btn ghost block">⬆ 导入备份</button>');
+    // 数据备份：默认收起，点「💾 数据备份」才展开导出/导入
+    const backupBox = el('<div class="backup-box"></div>');
+    backupBox.innerHTML =
+      '<button id="backupToggle" class="backup-toggle" type="button">💾 数据备份</button>' +
+      '<div id="backupActions" class="backup-actions" style="display:none">' +
+        '<button id="exportBtn" class="btn ghost sm block" type="button">⬇ 导出备份</button>' +
+        '<button id="importBtn" class="btn ghost sm block" type="button">⬆ 导入备份</button>' +
+      '</div>';
     const fileInput = el('<input type="file" accept="application/json" style="display:none">');
-    imp.onclick = () => fileInput.click();
     fileInput.onchange = () => { if (fileInput.files && fileInput.files[0]) importAll(fileInput.files[0]); fileInput.value = ''; };
     const sn = $('#storageNote');
-    sn.before(foot); sn.before(imp); sn.before(fileInput);
+    sn.before(backupBox); sn.before(fileInput);
+    $('#backupToggle').onclick = () => {
+      const box = $('#backupActions');
+      box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+    };
+    $('#exportBtn').onclick = exportAll;
+    $('#importBtn').onclick = () => fileInput.click();
 
     $('#menuBtn').onclick = openDrawer;
     $('#homeBtn').onclick = () => go('home');
