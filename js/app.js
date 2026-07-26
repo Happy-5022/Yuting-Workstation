@@ -2505,11 +2505,32 @@
 
   async function exportAll() {
     const out = {};
-    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'quotes', 'meta']) out[s] = await DB.all(s);
+    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
     toast('已导出备份到下载文件夹');
+  }
+
+  async function importAll(file) {
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
+      let count = 0;
+      for (const s of stores) {
+        const arr = data[s];
+        if (!Array.isArray(arr)) continue;
+        for (const rec of arr) {
+          if (rec && typeof rec === 'object') { await DB.put(s, rec); count++; }
+        }
+      }
+      toast('已从备份恢复 ' + count + ' 条数据 💚');
+      route();
+    } catch (e) {
+      console.error(e);
+      toast('导入失败：这好像不是备份文件');
+    }
   }
 
   function init() {
@@ -2526,7 +2547,12 @@
     });
     const foot = el('<button id="exportBtn" class="btn ghost block">⬇ 导出备份</button>');
     foot.onclick = exportAll;
-    $('#storageNote').before(foot);
+    const imp = el('<button id="importBtn" class="btn ghost block">⬆ 导入备份</button>');
+    const fileInput = el('<input type="file" accept="application/json" style="display:none">');
+    imp.onclick = () => fileInput.click();
+    fileInput.onchange = () => { if (fileInput.files && fileInput.files[0]) importAll(fileInput.files[0]); fileInput.value = ''; };
+    const sn = $('#storageNote');
+    sn.before(foot); sn.before(imp); sn.before(fileInput);
 
     $('#menuBtn').onclick = openDrawer;
     $('#homeBtn').onclick = () => go('home');
