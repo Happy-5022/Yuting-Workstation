@@ -431,12 +431,13 @@
     { vn: 'Bao nhiêu?', zh: '多少钱？' },
     { vn: 'Ngon', zh: '好吃' },
   ];
-  // 生活高频词（按主题分组补充，第一波约 120 词；后续可继续补充到 300–500）
+  // 生活高频词（按主题分组，已扩充到约 380 词，覆盖吃喝/交通/购物/应急等 20 个场景）
   const VN_WORDS_ALL = VN_WORDS.slice();
   const VN_EX_MAP = {};
+  const _seenVn = {};
   (typeof VN_TOPIC_WORDS !== 'undefined' ? VN_TOPIC_WORDS : []).forEach(t => (t.words || []).forEach(w => {
-    VN_WORDS_ALL.push({ vn: w.vn, zh: w.zh });
-    if (w.ex) VN_EX_MAP[w.vn] = w.ex;
+    if (w && w.vn && !_seenVn[w.vn]) { _seenVn[w.vn] = 1; VN_WORDS_ALL.push({ vn: w.vn, zh: w.zh }); }
+    if (w && w.vn && w.ex) VN_EX_MAP[w.vn] = w.ex;
   }));
   // 零基础上路引导（3 步 + 第一周计划）
   const VN_START = {
@@ -2006,10 +2007,14 @@
     // 取自动化每天推过来的 BBC 文章；取不到（离线/电脑没开）就用内置 5 篇兜底
     async function loadDailyEn() {
       try {
-        const r = await fetch('./data/daily-english.json?v=' + todayStr(), { cache: 'no-store' });
+        const r = await fetch('./data/daily-english.json?v=' + Date.now(), { cache: 'no-store' });
         if (!r.ok) return null;
         const j = await r.json();
-        if (j && j.date === todayStr() && Array.isArray(j.articles) && j.articles.length) return j;
+        // 文件有效即用——不再强求日期=今天，避免跨天后被误判成离线兜底
+        if (j && Array.isArray(j.articles) && j.articles && j.articles.length) {
+          j._stale = (j.date !== todayStr());
+          return j;
+        }
       } catch (e) { /* 离线或取不到，走本地兜底 */ }
       return null;
     }
@@ -2125,12 +2130,14 @@
 
     $('#refreshEn').onclick = async () => {
       dailyEn = await loadDailyEn() || localDailyEn();
-      $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + '。每天 9 点自动更新。';
+      const _stale = dailyEn._stale ? ' · 非今日生成（点刷新可重载）' : '';
+      $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + _stale + '。每天 9 点自动更新。';
       await renderList(); toast('已刷新 🔄');
     };
 
     dailyEn = await loadDailyEn() || localDailyEn();
-    $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + '。每天 9 点自动更新。';
+    const _stale = dailyEn._stale ? ' · 非今日生成（点刷新可重载）' : '';
+    $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + _stale + '。每天 9 点自动更新。';
     await renderList(); refreshStats();
     renderVoicePicker('en-US', $('#enVoicePick'), '🗣 英语发音人');
     const tg = $('#tabGuide'); if (tg) tg.onclick = () => renderGuide(view);
@@ -2540,6 +2547,15 @@
       m['Điện thoại'] = 'NW_111';
       m['Internet'] = 'NW_112';
       m['Sim'] = 'NW_113';
+      // 自动为新增主题词分配 NX_ 序号（跳过已有手写映射的词，避免覆盖旧 NW_ 文件）
+      (function () {
+        var n = 1;
+        (typeof VN_TOPIC_WORDS !== 'undefined' ? VN_TOPIC_WORDS : []).forEach(function (t) {
+          (t.words || []).forEach(function (w) {
+            if (w && w.vn && !m[w.vn]) { m[w.vn] = 'NX_' + ('000' + n).slice(-3); n++; }
+          });
+        });
+      })();
       return m;
     })();
     // 音频文件基础路径（与 gen_vn_audio.py 输出目录对应）

@@ -158,6 +158,40 @@ UNIT_VOCAB = [
 ITEMS.extend(UNIT_VOCAB)
 
 
+# === 自动为新增主题词生成 NX_ 音频 ===
+# 逻辑与 app.js 中 VN_AUDIO_MAP 的自动映射保持一致：
+# 遍历 vn-data.js 的全部主题词，跳过已在 app.js 映射表覆盖的文本，
+# 为其余（新增）主题词按出现顺序分配 NX_001、NX_002……并生成 mp3。
+def _load_covered_texts():
+    """从 app.js 的 VN_AUDIO_MAP 提取所有已映射的越南语文本（m['...'] = '...'）"""
+    try:
+        _appjs = os.path.join(PROJECT_ROOT, 'js', 'app.js')
+        with open(_appjs, encoding='utf-8') as _f:
+            _src = _f.read()
+        return set(re.findall(r"m\['([^']*)'\]\s*=\s*'([^']*)'", _src))
+    except Exception:
+        return set()
+
+
+def _load_topic_words():
+    """从 vn-data.js 提取所有主题词的 vn 文本（按出现顺序）"""
+    try:
+        _vnd = os.path.join(PROJECT_ROOT, 'js', 'vn-data.js')
+        with open(_vnd, encoding='utf-8') as _f:
+            _src = _f.read()
+        return re.findall(r"vn:\s*'([^']*)'", _src)
+    except Exception:
+        return []
+
+
+_covered = _load_covered_texts()
+_n = 1
+for _vn in _load_topic_words():
+    if _vn and _vn not in _covered:
+        ITEMS.append(('NX_' + ('%03d' % _n), _vn))
+        _n += 1
+
+
 async def generate_one(edge, key, text, voice, output_dir):
     """生成单个音频文件"""
     out_path = os.path.join(output_dir, key + '.mp3')
