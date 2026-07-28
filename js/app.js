@@ -870,8 +870,8 @@
   async function renderIdeas(view) {
     view.innerHTML =
       '<div class="card idea-header"><div class="row spread"><b>🔥 每日灵感来源</b> <span class="muted" id="ideaMeta"></span></div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">每天由「每日9点·热点选题灵感」自动化产出；若当天未生成则显示最近一批。每条附跳转链接——点开即跳去搜相关视频 / 文章。点「立即刷新」可随时换一批新灵感。</p>' +
-      '<div class="row" style="margin-top:10px;gap:8px"><button id="refreshIdea" class="btn sm ghost">🔄 立即刷新</button></div></div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">每天由「每日9点·热点选题灵感」自动化产出；若当天未生成则显示最近一批。每条附跳转链接——点开即跳去搜相关视频 / 文章。「🔄 立即刷新」拉取云端最新一批；「🎲 换一批」从手机本地题库随机洗牌（无需联网）。</p>' +
+      '<div class="row" style="margin-top:10px;gap:8px"><button id="refreshIdea" class="btn sm ghost">🔄 立即刷新</button><button id="shuffleIdea" class="btn sm ghost">🎲 换一批(本地)</button></div></div>' +
       '<div id="ideaList"></div>' +
       '<div class="section-label" style="margin-top:18px">➕ 我的灵感（收藏 / 手动添加）</div>' +
       '<div class="row wrap" style="margin-bottom:10px;gap:8px"><button id="manual" class="btn">➕ 添加灵感</button></div>' +
@@ -911,18 +911,18 @@
       card.querySelectorAll('.idea-go').forEach(btn => { btn.onclick = () => openLink(btn.dataset.url); });
     }
 
-    async function renderDaily(fresh) {
+    async function renderDaily(mode) {
       const box = $('#ideaList');
       let data;
-      if (fresh) {
-        data = localDaily(Date.now());            // 立即刷新：用时间种子，每次都换一批新灵感
+      if (mode === 'local') {
+        data = localDaily(Date.now());            // 🎲 换一批：从本地题库随机洗牌，每次都不同，不联网
       } else {
-        data = await loadDaily() || localDaily();  // 进入时优先用每日文件，没有再用本地灵感库
+        data = await loadDaily() || localDaily();  // 进入 / 🔄立即刷新：优先拉云端每日文件，拉不到退本地
       }
       const items = data.items;
       const off = data.source && data.source.indexOf('本地') >= 0;
       const stale = !off && data.date && data.date !== todayStr();
-      $('#ideaMeta').textContent = '(' + (data.date || todayStr('cn')) + ' · ' + items.length + ' 条' + (stale ? ' · 非今日，点“立即刷新”换一批' : (off ? ' · 本地灵感' : '')) + ')';
+      $('#ideaMeta').textContent = '(' + (data.date || todayStr('cn')) + ' · ' + items.length + ' 条' + (stale ? ' · 非今日，点“🎲 换一批”换一批' : (off ? ' · 本地灵感' : '')) + ')';
       box.innerHTML = '';
       items.forEach((it, idx) => {
         const card = el('<div class="idea-card"></div>');
@@ -969,7 +969,8 @@
       });
     }
 
-    $('#refreshIdea').onclick = async () => { await renderDaily(true); toast('已换一批新灵感 🔄'); };
+    $('#refreshIdea').onclick = async () => { await renderDaily('cloud'); toast('已拉取云端最新一批 🔄'); };
+    $('#shuffleIdea').onclick = async () => { await renderDaily('local'); toast('已换一批本地灵感 🎲'); };
     $('#manual').onclick = async () => {
       const f = await promptForm('添加灵感', [
         { name: 'text', label: '灵感内容', type: 'textarea', placeholder: '想做点什么内容？' },
