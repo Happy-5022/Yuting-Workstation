@@ -1880,7 +1880,9 @@
     let dailyEn = null;
 
     async function renderList() {
-      const list = $('#artList'); list.innerHTML = '';
+      const list = $('#artList');
+      if (!list || !dailyEn || !dailyEn.articles) return;
+      list.innerHTML = '';
       for (const a of dailyEn.articles) {
         const heard = (await DB.get('meta', 'enHeard_' + a.id) || {}).value || 0;
         const card = el('<div class="art-card"></div>');
@@ -1900,7 +1902,7 @@
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       let cur = 0, speed = 1, playing = false, showZh = false, loop = false;
       const total = a.body.length, synth = window.speechSynthesis, heardMeta = 'enHeard_' + a.id;
-      (async () => { const h = (await DB.get('meta', heardMeta) || {}).value || 0; await DB.put('meta', { id: heardMeta, value: h + 1 }); renderList(); })();
+      (async () => { const h = (await DB.get('meta', heardMeta) || {}).value || 0; await DB.put('meta', { id: heardMeta, value: h + 1 }); })();
 
       view.innerHTML =
         '<button id="back" class="btn ghost sm" style="margin-bottom:10px">← 返回列表</button>' +
@@ -1970,7 +1972,7 @@
       $('#reset').onclick = async () => {
         synth.cancel(); playing = false; cur = 0; showZh = true;
         $('#showZh').textContent = '📖 隐藏译文'; paintBody(); updateProgress(); $('#play').textContent = '▶';
-        await DB.put('meta', { id: heardMeta, value: 0 }); renderList(); toast('进度已重置');
+        await DB.put('meta', { id: heardMeta, value: 0 }); toast('进度已重置');
       };
       $('#rate').oninput = () => { speed = parseFloat($('#rate').value); $('#rateTxt').textContent = speed.toFixed(1) + 'x'; };
       $('#play').onclick = () => {
