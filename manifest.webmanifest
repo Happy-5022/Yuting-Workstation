@@ -1,7 +1,7 @@
 {
   "name": "Happy赖工作台",
-  "short_name": "玉婷台",
-  "description": "玉婷的个人创作+学习工作台",
+  "short_name": "Happy赖",
+  "description": "Happy赖的个人创作与学习工作台",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",

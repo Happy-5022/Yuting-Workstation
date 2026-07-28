@@ -558,7 +558,7 @@
     },
   ];
 
-  // 每日一言（适合玉婷的副业 / 学习 / 生活）
+  // 每日一言（适合副业 / 学习 / 生活）
   const QUOTES = [
     { t: '种一棵树最好的时间是十年前，其次是现在。', a: '谚语', c: '成长' },
     { t: '你不需要很厉害才能开始，但你需要开始才能很厉害。', a: '', c: '行动' },
@@ -1804,7 +1804,7 @@
     {
       scene: '机场接机', icon: '✈️',
       dialogues: [
-        { role:'You',  lines:["Excuse me, are you Mr. Johnson from Australia?",'Welcome to China! I\'m Yu Ting, your tour guide.'], zh:['请问，您是从澳大利亚来的 Johnson 先生吗？','欢迎来到中国！我是玉婷，您的导游。'] },
+        { role:'You',  lines:["Excuse me, are you Mr. Johnson from Australia?",'Welcome to China! I\'m your tour guide.'], zh:['请问，您是从澳大利亚来的 Johnson 先生吗？','欢迎来到中国！我是您的导游。'] },
         { role:'Client',lines:["Yes, that's me. Nice to meet you!",'Thank you for coming to pick me up.'], zh:['是我，很高兴见到你！','谢谢你来接我。'] },
         { role:'You',  lines:['My pleasure! How was your flight?',"I hope it wasn't too tiring."], zh:['我的荣幸！旅途怎么样？','希望不会太累。'] },
         { role:'Client',lines:['It was long but comfortable. I managed to sleep a bit.'], zh:['挺长的但还算舒服，我睡了一会儿。'] },
@@ -1870,7 +1870,7 @@
     {
       scene: '紧急情况·医疗', icon: '🏥',
       dialogues: [
-        { role:'Client',lines:["Yu Ting... I don't feel well. My stomach hurts badly."], zh:['玉婷……我不舒服。胃很痛。'] },
+        { role:'Client',lines:["Guide... I don't feel well. My stomach hurts badly."], zh:['导游……我不舒服。胃很痛。'] },
         { role:'You',  lines:['Oh no! How long have you been feeling this way? ','Did you eat anything unusual today?'], zh:['天哪！这种情况多久了？','今天吃了什么不寻常的东西吗？'] },
         { role:'Client',lines:['It started after lunch. Maybe the street food...'], zh:['午饭后开始的。可能是路边摊……'] },
         { role:'You',  lines:["Don't worry, I'm taking you to the hospital right now. ","There's an international medical center 15 minutes from here."], zh:['别担心，我现在就带你去医院。','离这儿 15 分钟有个国际医疗中心。'] },
@@ -1915,7 +1915,7 @@
         { role:'You',  lines:['It was my honor to be your guide. You were a wonderful group. ','Did you enjoy the highlights — the Great Wall, the water town, and Peking duck?'], zh:['能当你们的导游是我的荣幸。你们是很棒的团体。','你们喜欢那些亮点吗——长城、水镇、北京烤鸭？'] },
         { role:'Client',lines:['Every single moment! Especially the cooking class — I\'ll definitely make dumplings at home.'], zh:['每一刻都喜欢！尤其是烹饪课——我回家肯定要包饺子。'] },
         { role:'You',  lines:["That's wonderful to hear! Here are some souvenirs from our team — ","a silk fan and some tea. A small token of our appreciation."], zh:['听到这个太好了！这是我们团队的一点纪念品——','一把扇子和一些茶。一点小心意。'] },
-        { role:'Client',lines:["Oh, you shouldn't have! This is so thoughtful. Thank you, Yu Ting."], zh:['哦，你们太客气了！太有心了。谢谢你，玉婷。'] },
+        { role:'Client',lines:["Oh, you shouldn't have! This is so thoughtful. Thank you, guide."], zh:['哦，你们太客气了！太有心了。谢谢导游。'] },
         { role:'You',  lines:['Safe travels home, and please come back to visit China again! ','Feel free to contact me anytime if you need anything.'], zh:['回家一路平安，欢迎再来中国！','随时联系我，有任何需要都可以找我。'] }
       ],
       keyPhrases:[{en:'highlight',zh:'亮点/精彩部分'},{en:'token of appreciation',zh:'心意/纪念'},{en:'safe travels',zh:'一路平安'}]
@@ -1923,7 +1923,7 @@
     {
       scene: '带团流程·第一天集合', icon: '🚌',
       dialogues: [
-        { role:'You',  lines:['Good morning, everyone! Welcome to China. I\'m Yu Ting, your national guide ','for this 8-day tour. Before we set off, let me go through today\'s plan.'], zh:['大家早上好！欢迎来到中国。我是玉婷，你们这次 8 日游的全陪导游。','出发前，我先说一下今天的计划。'] },
+        { role:'You',  lines:['Good morning, everyone! Welcome to China. I\'m your national guide ','for this 8-day tour. Before we set off, let me go through today\'s plan.'], zh:['大家早上好！欢迎来到中国。我是你们这次 8 日游的全陪导游。','出发前，我先说一下今天的计划。'] },
         { role:'Client',lines:['Excuse me, where is the restroom on this bus?'], zh:['请问，大巴上的洗手间在哪？'] },
         { role:'You',  lines:["It's at the back of the bus on the right side. Also, there are bottled waters ","and umbrellas in the seat pockets — please take one, it might rain later."], zh:['在车厢后部右侧。座位口袋里有矿泉水','和雨伞——请各取一把，后面可能会下雨。'] },
         { role:'Client',lines:["What time do we arrive at the hotel?"], zh:['我们几点到酒店？'] },
@@ -2642,7 +2642,7 @@
       view.innerHTML =
         '<div class="vn-home">' +
         '<div class="vn-top">' +
-          '<div class="vn-greet"><div class="vn-greet-h">Xin chào! 玉婷</div><div class="muted" style="font-size:12px">' + dateStr + '</div></div>' +
+          '<div class="vn-greet"><div class="vn-greet-h">Xin chào!</div><div class="muted" style="font-size:12px">' + dateStr + '</div></div>' +
           '<div class="vn-stats">' +
             '<div class="vn-stat"><b style="color:#e24b4a">' + streakN + '</b><span>连续天</span></div>' +
             '<div class="vn-stat"><b style="color:#378add">' + totalDays + '</b><span>累计天</span></div>' +
