@@ -244,6 +244,17 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
 .review-box { white-space: pre-wrap; word-break: break-word; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-s); padding: 14px 16px; font-size: 15px; line-height: 1.75; color: var(--text); }
 .review-modal { max-height: 88vh; }
+
+/* ===== 内容复盘（升级） ===== */
+.rev-badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+.rev-badge.b-good { background: #e6f7ef; color: #0E9C8E; }
+.rev-badge.b-ok { background: #e7f1ff; color: #2f6fed; }
+.rev-badge.b-mid { background: #eef1f4; color: #5b6b7b; }
+.rev-badge.b-low { background: #fff3e0; color: #c47d10; }
+.rev-badge.b-bad { background: #fdeaea; color: #d14343; }
+.rev-pf { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); white-space: nowrap; }
+.rev-metrics { margin-top: 8px; font-size: 13px; color: var(--text); background: var(--surface-2); border-radius: var(--radius-s); padding: 8px 10px; }
+.rev-fix { margin-top: 8px; font-size: 13px; color: var(--text); background: #eef7f6; border-left: 3px solid var(--primary); border-radius: var(--radius-s); padding: 8px 10px; }
 @media (min-width: 600px) { .modal-mask { align-items: center; } .modal { width: 560px; max-width: 92vw; border-radius: 18px; } }
 
 /* ===== 每日计划 · 分组卡片式 ===== */

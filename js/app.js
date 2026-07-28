@@ -1177,38 +1177,169 @@
     renderCats(); renderDaily(); renderMine();
   }
 
-  // 4. 内容复盘
+  // 4. 内容复盘（升级：平台/评级/结构化数据 + 顶部统计 + 智能复盘报告 + 模板 + 平台筛选）
+  const REV_PLATFORMS = ['公众号', '短视频', '小红书', '抖音', '其他'];
+  const REV_RATINGS = ['爆款', '良好', '一般', '较差', '翻车'];
+  const RATING_SCORE = { '爆款': 5, '良好': 4, '一般': 3, '较差': 2, '翻车': 1 };
+  const RATING_CLS = { '爆款': 'b-good', '良好': 'b-ok', '一般': 'b-mid', '较差': 'b-low', '翻车': 'b-bad' };
+  function fmtNum(n) { n = Number(n) || 0; if (!n) return ''; if (n >= 10000) return (n / 10000).toFixed(1) + '万'; return '' + n; }
+  function ratingBadge(r) { return '<span class="rev-badge ' + (RATING_CLS[r] || 'b-mid') + '">' + esc(r || '未评') + '</span>'; }
+  function platformBadge(p) { return '<span class="rev-pf">' + esc(p || '其他') + '</span>'; }
+  function metricsLine(r) {
+    const m = r.metrics || {}; const parts = [];
+    if (m.views) parts.push('▶ ' + fmtNum(m.views) + (r.platform === '短视频' ? '播放' : '阅读'));
+    if (m.likes) parts.push('👍 ' + fmtNum(m.likes));
+    if (m.comments) parts.push('💬 ' + fmtNum(m.comments));
+    if (m.shares) parts.push('🔁 ' + fmtNum(m.shares));
+    if (m.fans) parts.push('➕' + fmtNum(m.fans) + '粉');
+    if (parts.length) return parts.join(' · ');
+    if (r.data) return '📋 ' + esc(r.data);
+    return '';
+  }
+  function weekRange() {
+    const d = new Date(); const day = d.getDay() || 7; const mon = new Date(d); mon.setDate(d.getDate() - day + 1);
+    const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+    const f = (x) => (x.getMonth() + 1) + '.' + x.getDate();
+    return f(mon) + '-' + f(sun);
+  }
+
   async function renderReview(view) {
-    view.innerHTML = '<button id="add" class="btn block" style="margin-bottom:12px">➕ 复盘一条内容</button><div id="list"></div>';
+    view.innerHTML =
+      '<div class="stat-grid" id="revStats"></div>' +
+      '<div class="row" style="gap:8px;margin:10px 0 12px;flex-wrap:wrap">' +
+        '<button id="addRev" class="btn sm">➕ 复盘一条</button>' +
+        '<button id="revTpl" class="btn ghost sm">📝 套模板</button>' +
+        '<button id="revInsight" class="btn ghost sm">📊 智能复盘报告</button>' +
+        '<select id="revFilter" class="grow" style="max-width:150px">' +
+          '<option value="">全部平台</option>' + REV_PLATFORMS.map(p => '<option value="' + p + '">' + p + '</option>').join('') +
+        '</select>' +
+      '</div>' +
+      '<div id="list"></div>';
+
     async function refresh() {
       const list = await DB.all('reviews');
       list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      const box = $('#list');
-      if (!list.length) { box.innerHTML = emptyTip('📊', '发完内容来这里复盘'); return; }
-      box.innerHTML = '';
+      const n = list.length;
+      let bombs = 0, sum = 0; const pfBomb = {};
       list.forEach(r => {
+        const rt = r.rating || '未评';
+        if (rt === '爆款') { bombs++; const p = r.platform || '其他'; pfBomb[p] = (pfBomb[p] || 0) + 1; }
+        if (RATING_SCORE[rt]) sum += RATING_SCORE[rt];
+      });
+      const avg = n ? (sum / n).toFixed(1) : '—';
+      let bp = '—', bx = -1; for (const p in pfBomb) if (pfBomb[p] > bx) { bx = pfBomb[p]; bp = p; }
+      $('#revStats').innerHTML =
+        '<div class="stat"><b>' + n + '</b><span>复盘条数</span></div>' +
+        '<div class="stat"><b>' + bombs + '</b><span>爆款数</span></div>' +
+        '<div class="stat"><b>' + avg + '</b><span>平均评级</span></div>' +
+        '<div class="stat"><b>' + bp + '</b><span>最佳平台</span></div>';
+      const box = $('#list');
+      const filter = $('#revFilter').value;
+      const shown = filter ? list.filter(r => (r.platform || '其他') === filter) : list;
+      if (!shown.length) { box.innerHTML = emptyTip('📊', filter ? (filter + ' 还没有复盘') : '发完内容来这里复盘'); return; }
+      box.innerHTML = '';
+      shown.forEach(r => {
+        const ml = metricsLine(r);
         const card = el('<div class="item"></div>');
-        card.innerHTML = '<div class="row spread"><h4 style="margin:0">' + esc(r.title) + '</h4><button class="del">🗑</button></div>' +
+        card.innerHTML =
+          '<div class="row spread"><h4 style="margin:0">' + esc(r.title || '无标题') + '</h4>' +
+          '<div class="row" style="gap:6px">' + platformBadge(r.platform) + ratingBadge(r.rating) + '<button class="del">🗑</button></div></div>' +
+          (ml ? '<div class="rev-metrics">' + ml + '</div>' : '') +
           '<div class="quad" style="margin-top:8px">' +
-          '<div><b>亮点</b>' + esc(r.good || '—') + '</div>' +
-          '<div><b>不足</b>' + esc(r.bad || '—') + '</div>' +
-          '<div><b>数据</b>' + esc(r.data || '—') + '</div>' +
-          '<div><b>优化</b>' + esc(r.fix || '—') + '</div></div>' +
+          '<div><b>亮点 / 为什么好</b>' + esc(r.good || '—') + '</div>' +
+          '<div><b>不足 / 为什么差</b>' + esc(r.bad || '—') + '</div></div>' +
+          (r.fix ? '<div class="rev-fix">➡️ 下次：' + esc(r.fix) + '</div>' : '') +
           '<div class="meta">' + esc(r.date || '') + '</div>';
         card.querySelector('.del').onclick = async () => { if (await confirmDel('删除这条复盘？')) { await DB.del('reviews', r.id); refresh(); } };
         box.append(card);
       });
     }
-    $('#add').onclick = async () => {
-      const f = await promptForm('内容复盘', [
-        { name: 'title', label: '内容标题', placeholder: '这条内容叫什么' },
-        { name: 'good', label: '亮点', type: 'textarea' },
-        { name: 'bad', label: '不足', type: 'textarea' },
-        { name: 'data', label: '数据', type: 'textarea', placeholder: '播放/点赞/转发…' },
-        { name: 'fix', label: '优化', type: 'textarea', placeholder: '下次怎么改' },
-      ]);
-      if (f && f.title) { await DB.put('reviews', Object.assign({ date: todayStr(), createdAt: Date.now() }, f)); refresh(); }
+
+    function addReview(preset) {
+      preset = preset || {};
+      return promptForm('内容复盘' + (preset.tag ? (' · ' + preset.tag) : ''), [
+        { name: 'title', label: '内容标题', value: preset.title || '', placeholder: '这条内容叫什么' },
+        { name: 'platform', label: '发布平台', type: 'select', options: REV_PLATFORMS.map(p => ({ value: p, label: p })), value: preset.platform || '' },
+        { name: 'rating', label: '表现评级', type: 'select', options: REV_RATINGS.map(r => ({ value: r, label: r })), value: preset.rating || '' },
+        { name: 'views', label: '播放 / 阅读数', type: 'number', placeholder: '如 12000' },
+        { name: 'likes', label: '点赞数', type: 'number', placeholder: '如 230' },
+        { name: 'comments', label: '评论数', type: 'number', placeholder: '如 18' },
+        { name: 'shares', label: '转发数', type: 'number', placeholder: '如 5' },
+        { name: 'fans', label: '涨粉数', type: 'number', placeholder: '如 38' },
+        { name: 'good', label: '亮点 / 为什么好', type: 'textarea', value: preset.good || '' },
+        { name: 'bad', label: '不足 / 为什么差', type: 'textarea', value: preset.bad || '' },
+        { name: 'fix', label: '下次具体动作', type: 'textarea', value: preset.fix || '' },
+      ]).then(async f => {
+        if (!f || !f.title) return;
+        const metrics = { views: +f.views || 0, likes: +f.likes || 0, comments: +f.comments || 0, shares: +f.shares || 0, fans: +f.fans || 0 };
+        await DB.put('reviews', Object.assign({ date: todayStr(), createdAt: Date.now() }, {
+          title: f.title, platform: f.platform || '其他', rating: f.rating || '未评',
+          metrics: metrics, good: f.good, bad: f.bad, fix: f.fix
+        }));
+        refresh();
+      });
+    }
+
+    $('#addRev').onclick = () => addReview();
+    $('#revTpl').onclick = () => {
+      const m = el('<div class="modal-mask"><div class="modal" style="max-width:320px"><h3>📝 选个复盘模板</h3><div class="col" style="display:flex;flex-direction:column;gap:10px;margin-top:8px">' +
+        '<button class="btn" id="tDaily">📅 日复盘（5 分钟）</button>' +
+        '<button class="btn" id="tWeek">🗓 周复盘（30 分钟）</button>' +
+        '<button class="btn" id="tMonth">📆 月复盘（1 小时）</button></div>' +
+        '<div class="modal-actions"><button class="btn ghost grow" id="tClose">取消</button></div></div></div>');
+      document.body.append(m); requestAnimationFrame(() => m.classList.add('show'));
+      const close = () => { m.classList.remove('show'); setTimeout(() => m.remove(), 200); };
+      m.querySelector('#tClose').onclick = close; m.onclick = e => { if (e.target === m) close(); };
+      m.querySelector('#tDaily').onclick = () => { close(); addReview({ tag: '日复盘', title: '【日复盘】' + todayStr(), good: '今天数据最好的内容 / 亮点：', bad: '今天数据最差的：', fix: '明天改进（只写 1 条）：' }); };
+      m.querySelector('#tWeek').onclick = () => { close(); addReview({ tag: '周复盘', title: '【周复盘】' + weekRange(), good: '本周最佳 2 条及原因：', bad: '本周最差 2 条及原因：', fix: '下周重点（1-3 条）：' }); };
+      m.querySelector('#tMonth').onclick = () => { close(); addReview({ tag: '月复盘', title: '【月复盘】' + new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }), good: '本月爆款 / 最佳共性：', bad: '本月问题通病：', fix: '下月核心目标（1-3 条）：' }); };
     };
+    $('#revFilter').onchange = refresh;
+    $('#revInsight').onclick = genRevInsight;
+
+    async function genRevInsight() {
+      const list = await DB.all('reviews');
+      if (!list.length) { toast('还没有复盘记录，先记几条吧'); return; }
+      const scored = list.map(r => ({ r, s: RATING_SCORE[r.rating] || 3 }));
+      scored.sort((a, b) => b.s - a.s);
+      const best = scored.slice(0, 3).filter(x => x.r.rating && x.r.rating !== '未评').map(x => '· 《' + (x.r.title || '无标题') + '》[' + x.r.rating + (x.r.platform ? ('/' + x.r.platform) : '') + '] 亮点：' + (x.r.good || '—'));
+      const worst = scored.slice(-3).reverse().filter(x => x.r.rating && x.r.rating !== '未评').map(x => '· 《' + (x.r.title || '无标题') + '》[' + x.r.rating + '] 不足：' + (x.r.bad || '—'));
+      const dist = {}; list.forEach(r => { const k = r.rating || '未评'; dist[k] = (dist[k] || 0) + 1; });
+      const distStr = REV_RATINGS.concat(['未评']).filter(k => dist[k]).map(k => k + ' ' + dist[k]).join(' / ');
+      const pf = {}; list.forEach(r => { const p = r.platform || '其他'; pf[p] = (pf[p] || 0) + 1; });
+      const pfStr = Object.keys(pf).map(p => p + ' ' + pf[p] + '条').join('、');
+      const pfBomb = {}; list.forEach(r => { if (r.rating === '爆款') { const p = r.platform || '其他'; pfBomb[p] = (pfBomb[p] || 0) + 1; } });
+      const pfBombStr = Object.keys(pfBomb).length ? Object.keys(pfBomb).map(p => p + ' ' + pfBomb[p] + '爆').join('、') : '暂无爆款';
+      const fixes = list.map(r => r.fix).filter(Boolean).slice(0, 6);
+      const avg = (list.reduce((s, r) => s + (RATING_SCORE[r.rating] || 3), 0) / list.length).toFixed(1);
+      let one;
+      if (dist['爆款']) one = '已经跑出爆款苗头🎉 把最佳那条的成功原因固化成你的「爆款模板」，下一批照着做，让好结果可复制。';
+      else if (avg >= 4) one = '整体表现不错，重点是把「良好」往「爆款」推——挑一条复制它的开头和标题结构。';
+      else if (avg <= 2.5) one = '还在摸索期很正常，多记录、多测试不同开头 / 标题 / 发布时间，规律会慢慢浮现，别急。';
+      else one = '有起有伏，关键是把「最佳」和「最差」的原因写清楚，下次照着好的做、避开差的。';
+      const text = '📊 内容复盘报告（共 ' + list.length + ' 条）\n\n' +
+        '📈 表现分布：' + distStr + '\n' +
+        '🏆 最佳（评级高）：\n' + (best.join('\n') || '（暂无评级）') + '\n\n' +
+        '🔧 待改进（评级低）：\n' + (worst.join('\n') || '（暂无评级）') + '\n\n' +
+        '📱 平台分布：' + pfStr + '\n' +
+        '🔥 各平台爆款数：' + pfBombStr + '\n\n' +
+        '💡 你写下的「下次动作」：\n' + (fixes.map((f, i) => (i + 1) + '. ' + f).join('\n') || '（暂无）') + '\n\n' +
+        '—— 一句话 ——\n' + one;
+      const mask = el('<div class="modal-mask"><div class="modal review-modal"><h3>📊 内容复盘报告</h3><div class="review-box"></div><div class="modal-actions"><button class="btn ghost grow" id="riClose">关闭</button><button class="btn ghost grow" id="riCopy">📋 复制</button><button class="btn grow" id="riSave">💾 存为备忘</button></div></div></div>');
+      mask.querySelector('.review-box').textContent = text;
+      document.body.append(mask); requestAnimationFrame(() => mask.classList.add('show'));
+      const close = () => { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); };
+      mask.querySelector('#riClose').onclick = close;
+      mask.querySelector('#riCopy').onclick = () => {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(() => toast('已复制 ✓')).catch(() => toast('复制失败')); }
+        else { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.append(ta); ta.select(); try { document.execCommand('copy'); toast('已复制 ✓'); } catch (e) { toast('复制失败'); } ta.remove(); }
+      };
+      mask.querySelector('#riSave').onclick = async () => {
+        await DB.put('memos', { title: '内容复盘报告 ' + todayStr(), body: text, tags: ['复盘', '内容复盘'].concat(autoClassify(text)), media: [], pinned: false, fav: false, createdAt: Date.now(), updatedAt: Date.now() });
+        toast('已存为备忘 ✓'); close();
+      };
+    }
+
     refresh();
   }
 
