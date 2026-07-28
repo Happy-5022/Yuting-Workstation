@@ -870,7 +870,7 @@
   async function renderIdeas(view) {
     view.innerHTML =
       '<div class="card idea-header"><div class="row spread"><b>🔥 每日灵感来源</b> <span class="muted" id="ideaMeta"></span></div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">每天上午 9 点由「每日9点·热点选题灵感」自动化更新。每条附跳转链接——点开即跳去搜相关视频 / 文章。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">每天由「每日9点·热点选题灵感」自动化产出；若当天未生成则显示最近一批。每条附跳转链接——点开即跳去搜相关视频 / 文章。点「立即刷新」可随时换一批新灵感。</p>' +
       '<div class="row" style="margin-top:10px;gap:8px"><button id="refreshIdea" class="btn sm ghost">🔄 立即刷新</button></div></div>' +
       '<div id="ideaList"></div>' +
       '<div class="section-label" style="margin-top:18px">➕ 我的灵感（收藏 / 手动添加）</div>' +
@@ -883,21 +883,22 @@
         const r = await fetch('./data/daily-ideas.json?v=' + todayStr(), { cache: 'no-store' });
         if (!r.ok) return null;
         const j = await r.json();
-        // 只采用"今天"的自动化产出；不是今天的（比如电脑当天没开机、自动化没跑）就走本地兜底
-        if (j && j.date === todayStr() && Array.isArray(j.items) && j.items.length) return j;
+        // 只要文件有效（有条目）就用——不要求日期正好等于今天，避免“过期文件”被误判成离线兜底
+        if (j && Array.isArray(j.items) && j.items.length) return j;
       } catch (e) { /* 离线或取不到，走本地兜底 */ }
       return null;
     }
-    function localDaily() {
-      const seed = parseInt(todayStr().replace(/-/g, ''), 10);
-      const rnd = mulberry32(seed);
+    // 本地灵感库：从题库抽一批。seed 传时间则用“每次都换一批”，不传则用当天种子（每天稳定）
+    function localDaily(seed) {
+      const s = (typeof seed === 'number') ? seed : parseInt(todayStr().replace(/-/g, ''), 10);
+      const rnd = mulberry32(s);
       const pool = IDEAS_BANK.slice();
       const out = [];
       for (let i = 0; i < 10 && pool.length; i++) {
         const k = Math.floor(rnd() * pool.length);
         out.push({ text: pool.splice(k, 1)[0], tag: IDEA_TAGS[Math.floor(rnd() * IDEA_TAGS.length)], desc: '', potential: '' });
       }
-      return { date: todayStr(), source: '本地自动生成（离线兜底）', items: out };
+      return { date: todayStr(), source: '本地灵感库', items: out };
     }
     function searchBtns(it) {
       const mk = (plat, label) => {
@@ -910,12 +911,18 @@
       card.querySelectorAll('.idea-go').forEach(btn => { btn.onclick = () => openLink(btn.dataset.url); });
     }
 
-    async function renderDaily() {
+    async function renderDaily(fresh) {
       const box = $('#ideaList');
-      const data = await loadDaily() || localDaily();
+      let data;
+      if (fresh) {
+        data = localDaily(Date.now());            // 立即刷新：用时间种子，每次都换一批新灵感
+      } else {
+        data = await loadDaily() || localDaily();  // 进入时优先用每日文件，没有再用本地灵感库
+      }
       const items = data.items;
       const off = data.source && data.source.indexOf('本地') >= 0;
-      $('#ideaMeta').textContent = '(' + (data.date || todayStr('cn')) + ' · ' + items.length + ' 条' + (off ? ' · 离线兜底' : '') + ')';
+      const stale = !off && data.date && data.date !== todayStr();
+      $('#ideaMeta').textContent = '(' + (data.date || todayStr('cn')) + ' · ' + items.length + ' 条' + (stale ? ' · 非今日，点“立即刷新”换一批' : (off ? ' · 本地灵感' : '')) + ')';
       box.innerHTML = '';
       items.forEach((it, idx) => {
         const card = el('<div class="idea-card"></div>');
@@ -962,7 +969,7 @@
       });
     }
 
-    $('#refreshIdea').onclick = async () => { await renderDaily(); toast('已刷新今日选题 🔄'); };
+    $('#refreshIdea').onclick = async () => { await renderDaily(true); toast('已换一批新灵感 🔄'); };
     $('#manual').onclick = async () => {
       const f = await promptForm('添加灵感', [
         { name: 'text', label: '灵感内容', type: 'textarea', placeholder: '想做点什么内容？' },

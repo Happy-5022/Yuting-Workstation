@@ -1,145 +1,100 @@
 {
-  "date": "2026-07-26",
+  "date": "2026-07-28",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Why are billionaires building bunkers?",
-      "zh": "亿万富翁为什么在建地堡？",
-      "words": 92,
-      "dur": 55,
-      "vocab": 400,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260129",
+      "en": "How to Cope with Disappointment",
+      "zh": "如何应对失望情绪",
+      "words": 105,
+      "dur": 60,
+      "vocab": 750,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260727",
       "body": [
-        [
-          "Some of the world's richest people are spending millions on underground shelters, and this episode asks a simple question: what exactly are they afraid of?",
-          "世界上一些最有钱的人正花几百万建地下庇护所，这期节目问了一个简单的问题：他们到底在怕什么？"
-        ],
-        [
-          "The hosts explain that these bunkers can include swimming pools, cinemas and food supplies for years, which sounds more like a luxury hotel than a hiding place.",
-          "主持人介绍说，这些地堡里可以有游泳池、电影院和够吃好几年的食物，听起来更像豪华酒店而不是藏身处。"
-        ],
-        [
-          "In the end, the discussion turns to ordinary people: instead of preparing for the end of the world, maybe we should work together to make it better.",
-          "最后，讨论回到普通人身上：与其为世界末日做准备，不如一起努力让世界变得更好。"
-        ]
+        ["Disappointment is what we feel when life does not match our hopes, like losing a job or missing a chance we really wanted.", "失望，就是生活没有达到我们的期望时的感受，比如丢了工作，或错过了一个特别想要的机会。"],
+        ["Instead of hiding the feeling, experts suggest we name it, accept it, and give ourselves time to feel sad before moving on.", "专家建议不要藏起这种情绪，而是先说出它、接受它，给自己一点难过的时间，再继续前行。"],
+        ["Talking to friends, lowering unrealistic expectations and focusing on small next steps can slowly turn disappointment into a fresh start.", "和朋友聊聊、放下不切实际的期待、专注于下一小步，能慢慢把失望变成一个新的开始。"]
       ],
       "tips": [
-        ["doomsday", "世界末日"],
-        ["shelter", "庇护所、躲避处"],
-        ["prepare for the worst", "做最坏的打算"]
+        ["cope with", "应对、处理"],
+        ["let someone down", "让某人失望"],
+        ["move on", "翻篇、继续前行"]
       ]
     },
     {
       "id": "d2",
-      "en": "Should we pay more for chocolate?",
-      "zh": "我们该为巧克力多花钱吗？",
-      "words": 88,
-      "dur": 52,
-      "vocab": 380,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260312",
+      "en": "The Calming Effects of Rain",
+      "zh": "雨声为何能舒缓身心",
+      "words": 98,
+      "dur": 55,
+      "vocab": 720,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260608",
       "body": [
-        [
-          "Chocolate prices keep rising, and this episode explains why: bad weather and plant disease have damaged cocoa farms in West Africa, where most of the world's cocoa grows.",
-          "巧克力价格一直在涨，这期节目解释了原因：恶劣天气和植物病害破坏了西非的可可农场，而世界上大部分可可都产自那里。"
-        ],
-        [
-          "Surprisingly, many cocoa farmers stay poor even when chocolate is expensive, because only a tiny part of the price goes back to them.",
-          "令人意外的是，即使巧克力卖得很贵，很多可可农依然贫穷，因为价格里只有很小一部分回到他们手中。"
-        ],
-        [
-          "The hosts suggest that paying a little more for fairly traded chocolate could help farmers earn a decent living and protect the future of chocolate itself.",
-          "主持人建议，为公平贸易巧克力多付一点钱，既能让农民过上体面生活，也能保住巧克力本身的未来。"
-        ]
+        ["Many people find the sound of rain deeply relaxing, and some even play recorded rain sounds to help them sleep at night.", "很多人觉得雨声特别让人放松，有人晚上甚至会播放雨声录音来帮助入睡。"],
+        ["Scientists say rain produces gentle, steady noise that masks sudden sounds, which helps our busy brains slow down and rest.", "科学家说，雨声是一种轻柔而平稳的声音，能盖住突然的噪音，让忙碌的大脑慢下来休息。"],
+        ["A rainy day also gives us permission to stay inside, drink something warm and simply watch the world without feeling guilty.", "下雨天还给了我们一个'名正言顺'待在家的理由：喝杯热饮，安心看看窗外的世界，也不觉得内疚。"]
       ],
       "tips": [
-        ["cocoa", "可可"],
-        ["fair trade", "公平贸易"],
-        ["make a living", "谋生、维持生计"]
+        ["calming effect", "镇静、舒缓的效果"],
+        ["white noise", "白噪音"],
+        ["wind down", "放松下来"]
       ]
     },
     {
       "id": "d3",
-      "en": "What English phrases really mean",
-      "zh": "英国人的客套话到底什么意思？",
-      "words": 90,
-      "dur": 54,
-      "vocab": 360,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260115",
+      "en": "Breathwork Techniques to Reduce Stress",
+      "zh": "缓解压力的呼吸法",
+      "words": 100,
+      "dur": 58,
+      "vocab": 760,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260615",
       "body": [
-        [
-          "British people are famous for not saying what they really mean, and this episode looks at the hidden messages behind everyday polite phrases.",
-          "英国人以'不直说心里话'闻名，这期节目研究了日常客套话背后隐藏的真实意思。"
-        ],
-        [
-          "For example, when someone says 'not bad', they may actually mean 'very good', and 'interesting' can secretly mean 'I don't like it at all'.",
-          "比如有人说 not bad（不差），其实可能是'非常好'；而 interesting（有意思），可能偷偷表示'我一点也不喜欢'。"
-        ],
-        [
-          "Learning these unwritten rules helps language learners avoid confusion and understand what British speakers are really thinking behind their smiles.",
-          "学会这些不成文的规则，能帮语言学习者少踩坑，听懂英国人微笑背后真正在想什么。"
-        ]
+        ["Breathing keeps us alive, but the way we breathe can also change how calm or stressed we feel during the day.", "呼吸让我们活着，但呼吸的方式也会影响我们一天中是平静还是紧张。"],
+        ["Simple exercises, such as breathing in slowly and breathing out even more slowly, tell the body it is safe to relax.", "一些简单的练习，比如慢慢吸气、再更慢地呼气，会告诉身体'现在很安全，可以放松了'。"],
+        ["Just a few minutes of breathwork before an interview or a difficult talk can lower stress and help us think more clearly.", "面试或艰难谈话前，只需几分钟的呼吸练习，就能减压，让头脑更清醒。"]
       ],
       "tips": [
-        ["read between the lines", "听出言外之意"],
-        ["polite", "礼貌的、客套的"],
-        ["unwritten rule", "不成文的规则"]
+        ["take a deep breath", "深呼吸"],
+        ["breathe in / out", "吸气 / 呼气"],
+        ["calm your nerves", "稳定情绪、镇定神经"]
       ]
     },
     {
       "id": "d4",
-      "en": "Why the rainbow you see is unique to you",
-      "zh": "为什么你看到的彩虹独一无二？",
-      "words": 85,
-      "dur": 50,
-      "vocab": 370,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/lingohack",
+      "en": "Choosing the Right Yoghurt",
+      "zh": "如何挑选健康的酸奶",
+      "words": 96,
+      "dur": 55,
+      "vocab": 730,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260622",
       "body": [
-        [
-          "This story shares a lovely science fact: no two people ever see exactly the same rainbow, because it depends on where each person is standing.",
-          "这个故事分享了一个可爱的科学事实：没有两个人能看到完全相同的彩虹，因为彩虹取决于每个人站的位置。"
-        ],
-        [
-          "A rainbow is made when sunlight passes through raindrops and splits into different colours, so the light reaching your eyes follows its own special path.",
-          "彩虹是阳光穿过雨滴、分解成不同颜色形成的，所以到达你眼睛的光走的是一条专属路线。"
-        ],
-        [
-          "In other words, the rainbow you admire belongs only to you – a nice reminder that everyone sees the world a little differently.",
-          "换句话说，你欣赏的那道彩虹只属于你——这也温柔地提醒我们：每个人看世界的角度都不太一样。"
-        ]
+        ["Supermarket shelves are full of yoghurts, but many of them contain much more sugar than people expect from a healthy food.", "超市货架上摆满了酸奶，但很多酸奶的含糖量远超人们对'健康食品'的想象。"],
+        ["Experts advise checking the label carefully: plain, natural yoghurt with live cultures is usually a better choice than sweet flavoured ones.", "专家建议仔细看配料表：无糖的原味酸奶、含活性菌的，通常比甜味调味酸奶更好。"],
+        ["If plain yoghurt tastes too sour, adding fresh fruit or a little honey at home is a smarter way to make it sweet.", "如果原味酸奶太酸，回家自己加点新鲜水果或少许蜂蜜，是更聪明的增甜方式。"]
       ],
       "tips": [
-        ["raindrop", "雨滴"],
-        ["split into", "分解成、分裂为"],
-        ["unique", "独一无二的"]
+        ["read the label", "看配料表/标签"],
+        ["added sugar", "添加糖"],
+        ["live cultures", "活性菌"]
       ]
     },
     {
       "id": "d5",
-      "en": "How unhygienic is it to wear your shoes at home?",
-      "zh": "在家穿鞋到底有多不卫生？",
-      "words": 87,
-      "dur": 52,
-      "vocab": 390,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/lingohack",
+      "en": "Weight Loss Drugs",
+      "zh": "减肥药真的靠谱吗",
+      "words": 102,
+      "dur": 60,
+      "vocab": 800,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260326",
       "body": [
-        [
-          "Do you take your shoes off at the door? This story looks at what scientists found on the bottom of everyday shoes – and it is not pretty.",
-          "你进门会脱鞋吗？这个故事讲了科学家在日常鞋底上发现的东西——画面不太美好。"
-        ],
-        [
-          "Research shows shoes can carry bacteria from streets, toilets and soil into our homes, spreading germs onto clean floors and carpets.",
-          "研究显示，鞋子会把街道、厕所和泥土里的细菌带进家里，把病菌传到干净的地板和地毯上。"
-        ],
-        [
-          "The good news is simple: leaving shoes at the door, a habit common in many Asian homes, is one of the easiest ways to keep your home healthier.",
-          "好消息很简单：把鞋留在门口——很多亚洲家庭的老习惯——就是让家更健康的最简单方法之一。"
-        ]
+        ["New weight loss drugs like Ozempic have become world famous because they help people eat less by making them feel full sooner.", "像 Ozempic 这样的新型减肥药在全球爆红，因为它们能让人更快产生饱腹感，从而少吃。"],
+        ["Doctors say these medicines can really help some patients, but they may bring side effects and the weight often returns after stopping.", "医生表示，这类药确实能帮到一部分患者，但可能有副作用，而且停药后体重常常反弹。"],
+        ["Experts remind us that healthy food and regular movement are still the foundation, and no pill can fully replace a good lifestyle.", "专家提醒：健康饮食和规律运动仍是根本，没有任何药片能完全取代好的生活方式。"]
       ],
       "tips": [
-        ["unhygienic", "不卫生的"],
-        ["bacteria", "细菌"],
-        ["take off your shoes", "脱鞋"]
+        ["lose weight", "减重、瘦下来"],
+        ["side effect", "副作用"],
+        ["feel full", "有饱腹感"]
       ]
     }
   ]
