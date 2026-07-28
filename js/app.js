@@ -473,6 +473,13 @@
     { parts: ['ph', 'ơ', '声调 ˀ'], word: 'phở', zh: '河粉', note: 'ph 发「f」音 + ơ（饿）+ 问声 → phở' },
     { parts: ['c', 'à', ''], word: 'cà phê', zh: '咖啡', note: 'c 发「g/k」+ à（玄声，往下降）→ cà，连读 cà phê' },
     { parts: ['x', 'in', ''], word: 'xin chào', zh: '你好', note: 'x 发「s」+ in → xin，配 chào 就是问好' },
+    { parts: ['b', 'a', '玄声'], word: 'ba', zh: '三 / 爸', note: 'b（波）+ a + 玄声（往下降）→ ba' },
+    { parts: ['m', 'i', '玄声'], word: 'mì', zh: '面', note: 'm（摸）+ i（依）+ 玄声 → mì' },
+    { parts: ['t', 'ư', '玄声'], word: 'tư', zh: '思 / 私', note: 't（德）+ ư（扁）+ 玄声 → tư' },
+    { parts: ['n', 'o', '锐声'], word: 'no', zh: '不 / 否', note: 'n（呢）+ o（哦）+ 锐声（上扬）→ no' },
+    { parts: ['h', 'ỏ', '问声'], word: 'hỏ', zh: '坏 / 问', note: 'h（喝）+ ỏ（问声，先降后升）→ hỏ' },
+    { parts: ['đ', 'i', '平声'], word: 'đi', zh: '去', note: 'đ（得，带横杠）+ i（依）+ 平声 → đi' },
+    { parts: ['v', 'ũ', '跌声'], word: 'vũ', zh: '武 / 雨', note: 'v（喂）+ ũ（u 跌声）+ 跌声 → vũ' },
   ];
   // 实用场景短句（去越南直接能用）
   const VN_SCENES = [
@@ -2596,22 +2603,24 @@
       };
     }
     function buildLesson(stage) {
-      const seed = daySeed() + stage * 100; let items = [];
+      let items = [];
       if (stage <= 0) {
-        dayPick(seed, VN_VOWELS.concat(VN_CONSONANTS), 6).forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l }));
-        dayPick(seed + 1, VN_SPECIAL, 2).forEach(s => items.push({ kind: 'special', vn: s.l, zh: s.c, key: 'S' + s.l }));
+        // 完整字母表：12 元音 + 17 辅音，一次列全；6 个特殊字母标「特」
+        const sp = {}; VN_SPECIAL.forEach(s => sp[s.l] = true);
+        VN_VOWELS.forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l, vtype: 'vowel', special: !!sp[l.l] }));
+        VN_CONSONANTS.forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l, vtype: 'consonant', special: !!sp[l.l] }));
       } else if (stage === 1) {
         VN_TONES.forEach(t => items.push({ kind: 'tone', vn: t.word, zh: t.cn + ' ' + t.zh, key: 'T' + t.word }));
-        dayPick(seed, VN_SPELL, 3).forEach(s => items.push({ kind: 'spell', vn: s.word, zh: s.zh, key: 'P' + s.word }));
+        VN_SPELL.forEach(s => items.push({ kind: 'spell', vn: s.word, zh: s.zh, note: s.note, key: 'P' + s.word }));
       } else if (stage === 2) {
-        dayPick(seed, VN_WORDS_ALL, 6).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
+        VN_WORDS_ALL.forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
       } else if (stage === 3) {
-        dayPick(seed, VN_SENTENCES, 3).forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
-        dayPick(seed + 1, VN_SCENES.reduce((a, sc) => a.concat(sc.items), []), 3).forEach(s => items.push({ kind: 'sentence', vn: s[0], zh: s[1], key: 'SC' + s[0] }));
+        VN_SENTENCES.forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
+        VN_SCENES.reduce((a, sc) => a.concat(sc.items), []).forEach(s => items.push({ kind: 'sentence', vn: s[0], zh: s[1], key: 'SC' + s[0] }));
       } else {
-        dayPick(seed, VN_WORDS_ALL, 4).forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
-        dayPick(seed + 1, VN_SENTENCES, 4).forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
-        dayPick(seed + 2, VN_VOWELS.concat(VN_CONSONANTS), 2).forEach(l => items.push({ kind: 'letter', vn: l.l, zh: l.c, key: 'L' + l.l }));
+        VN_WORDS_ALL.forEach(w => items.push({ kind: 'word', vn: w.vn, zh: w.zh, key: 'W' + w.vn }));
+        VN_SENTENCES.forEach(s => items.push({ kind: 'sentence', vn: s.vn, zh: s.zh, key: 'SE' + s.vn }));
+        VN_SCENES.reduce((a, sc) => a.concat(sc.items), []).forEach(s => items.push({ kind: 'sentence', vn: s[0], zh: s[1], key: 'SC' + s[0] }));
       }
       return items;
     }
@@ -2678,7 +2687,7 @@
         else if (f === 'paintSpeak') paintSpeak();
         else if (f === 'paintFlash') paintFlash();
       });
-      const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">已点亮 ' + stage + ' / ' + VN_STAGES.length + ' 阶段 · 当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」</div>'; route.innerHTML = h; }
+      const route = $('#vnRoute'); if (route) { let h = '<div class="vn-route">'; VN_STAGES.forEach((s, i) => { const st = i < stage ? 'done' : (i === stage ? 'cur' : ''); h += '<div class="vn-step ' + st + '" data-i="' + i + '"><b>' + (i + 1) + '</b><span>' + esc(s.t) + '</span></div>'; }); h += '</div><div class="muted" style="font-size:12px;margin-top:8px">已点亮 ' + stage + ' / ' + VN_STAGES.length + ' 阶段 · 当前：第 ' + (stage + 1) + ' 阶段「' + (VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '」 · <span style="color:#0E9C8E;font-weight:600">点任意阶段可跳转复习 ↺</span></div>'; route.innerHTML = h; route.querySelectorAll('.vn-step').forEach(elStep => { elStep.onclick = async () => { const i = +elStep.getAttribute('data-i'); if (i === stage) return; await setStage(i); toast('已切到第 ' + (i + 1) + ' 阶段'); paintHome(); }; }); }
       const res = $('#vnRes'); if (res) res.innerHTML = VN_RES.map(r => '<a class="vn-res" href="' + r.url + '" target="_blank" rel="noopener">' + esc(r.t) + '</a>').join('');
     }
 
@@ -2691,28 +2700,61 @@
       const total = lesson.length;
       let dc = lesson.filter(it => done.includes(it.key)).length;
       const pct = total ? Math.round(dc / total * 100) : 0;
+      const isAlpha = stage === 0;
       view.innerHTML =
         '<button class="btn ghost sm" id="back" style="margin-bottom:10px">← 返回</button>' +
-        '<div class="card"><div class="card-title">📚 今日课程 · 第 ' + (stage + 1) + ' 阶段</div>' +
+        '<div class="card"><div class="card-title">📚 今日课程 · 第 ' + (stage + 1) + ' 阶段 · ' + esc(VN_STAGES[stage] ? VN_STAGES[stage].t : '') + '</div>' +
         '<p class="muted" style="margin:0 0 8px">' + esc(VN_STAGES[stage] ? VN_STAGES[stage].goal : '') + '</p>' +
+        (isAlpha ? '<p class="muted" style="margin:0 0 8px;font-size:12px">🔤 元音标绿、辅音标蓝；带「特」的是越南语特有字母，重点记。点 🔊 听发音并标记已会。</p>' : '') +
         '<div class="vn-prog"><i style="width:' + pct + '%"></i></div>' +
-        '<div class="muted" style="font-size:12px;margin:6px 0 0">已完成 <span class="vn-donecount">' + dc + '</span>/' + total + '</div></div>' +
+        '<div class="muted" style="font-size:12px;margin:6px 0 0">已完成 <span class="vn-donecount">' + dc + '</span>/' + total + ' 个</div></div>' +
         '<div id="lessonList"></div>' +
         (stage < VN_STAGES.length - 1 ? '<button class="btn block" id="master" style="margin-top:10px">✅ 标记掌握本阶段</button>' : '<div class="muted" style="margin-top:10px">已是最后一阶段，保持练习即可 🎉</div>');
       const list = $('#lessonList');
-      lesson.forEach(it => {
-        const row = el('<div class="vn-row"></div>');
-        const doneIt = done.includes(it.key);
-        row.innerHTML = '<div class="vn-row-main"><div class="vn-row-vn">' + esc(it.vn) + '</div><div class="vn-row-zh">' + esc(it.zh) + '</div></div>' +
-          '<div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊 听</button><button class="btn sm ghost vn-follow">🎤 跟练</button>' + (doneIt ? '<span class="vn-done">✓</span>' : '') + '</div>';
-        row.querySelector('.vn-listen').onclick = () => vnSpeak(it.vn);
-        row.querySelector('.vn-follow').onclick = () => {
-          vnSpeak(it.vn, { rate: 0.9 });
-          addDone(it.key);
-          if (!row.querySelector('.vn-done')) { row.querySelector('.vn-row-btns').append(el('<span class="vn-done">✓</span>')); dc++; const bar = view.querySelector('.vn-prog i'); if (bar) bar.style.width = (total ? Math.round(dc / total * 100) : 0) + '%'; const t = view.querySelector('.vn-donecount'); if (t) t.textContent = dc; }
+      if (isAlpha) {
+        const vowels = lesson.filter(it => it.vtype === 'vowel');
+        const cons = lesson.filter(it => it.vtype === 'consonant');
+        const tile = it => {
+          const d = done.includes(it.key);
+          return '<div class="vn-alpha-tile ' + (it.vtype === 'vowel' ? 'vowel' : 'consonant') + (it.special ? ' special' : '') + (d ? ' done' : '') + '" data-key="' + esc(it.key) + '" data-vn="' + esc(it.vn) + '">' +
+            (it.special ? '<span class="vn-sp-badge">特</span>' : '') +
+            '<div class="vn-alpha-l">' + esc(it.vn) + '</div>' +
+            '<div class="vn-alpha-c">' + esc(it.zh) + '</div>' +
+            '<button class="vn-alpha-play">🔊 听</button>' +
+            (d ? '<span class="vn-done">✓</span>' : '') + '</div>';
         };
-        list.append(row);
-      });
+        list.innerHTML = '<div class="vn-alpha-group"><div class="vn-alpha-label">元音（' + vowels.length + ' 个）</div><div class="vn-alpha-grid">' + vowels.map(tile).join('') + '</div></div>' +
+                         '<div class="vn-alpha-group"><div class="vn-alpha-label">辅音（' + cons.length + ' 个）</div><div class="vn-alpha-grid">' + cons.map(tile).join('') + '</div></div>';
+        list.querySelectorAll('.vn-alpha-tile').forEach(t => {
+          const key = t.getAttribute('data-key'), vn = t.getAttribute('data-vn');
+          t.querySelector('.vn-alpha-play').onclick = () => {
+            vnSpeak(vn);
+            if (!done.includes(key)) {
+              addDone(key); t.classList.add('done');
+              if (!t.querySelector('.vn-done')) t.append(el('<span class="vn-done">✓</span>'));
+              dc++;
+              const bar = view.querySelector('.vn-prog i'); if (bar) bar.style.width = (total ? Math.round(dc / total * 100) : 0) + '%';
+              const t2 = view.querySelector('.vn-donecount'); if (t2) t2.textContent = dc;
+            }
+          };
+        });
+      } else {
+        lesson.forEach(it => {
+          const row = el('<div class="vn-row"></div>');
+          const doneIt = done.includes(it.key);
+          const extra = (it.kind === 'spell' && it.note) ? '<div class="muted" style="font-size:12px;margin-top:4px">' + esc(it.note) + '</div>' : '';
+          row.innerHTML = '<div class="vn-row-main"><div class="vn-row-vn">' + esc(it.vn) + '</div><div class="vn-row-zh">' + esc(it.zh) + '</div></div>' +
+            extra +
+            '<div class="vn-row-btns"><button class="btn sm ghost vn-listen">🔊 听</button><button class="btn sm ghost vn-follow">🎤 跟练</button>' + (doneIt ? '<span class="vn-done">✓</span>' : '') + '</div>';
+          row.querySelector('.vn-listen').onclick = () => vnSpeak(it.vn);
+          row.querySelector('.vn-follow').onclick = () => {
+            vnSpeak(it.vn, { rate: 0.9 });
+            addDone(it.key);
+            if (!row.querySelector('.vn-done')) { row.querySelector('.vn-row-btns').append(el('<span class="vn-done">✓</span>')); dc++; const bar = view.querySelector('.vn-prog i'); if (bar) bar.style.width = (total ? Math.round(dc / total * 100) : 0) + '%'; const t = view.querySelector('.vn-donecount'); if (t) t.textContent = dc; }
+          };
+          list.append(row);
+        });
+      }
       $('#back').onclick = paintHome;
       const mb = $('#master');
       if (mb) mb.onclick = async () => { await setStage(stage + 1); toast('已解锁第 ' + (stage + 2) + ' 阶段'); paintHome(); };

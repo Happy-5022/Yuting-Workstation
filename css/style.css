@@ -538,6 +538,20 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .vn-step.done b { background: #10B981; color: #fff; border-color: #10B981; }
 .vn-step.cur { border-color: var(--primary); background: #EAF2FB; color: var(--primary); }
 .vn-step.cur b { background: var(--primary); color: #fff; border-color: var(--primary); }
+.vn-step { cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.vn-step:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.vn-alpha-group { margin: 12px 0; }
+.vn-alpha-label { font-size: 13px; font-weight: 700; color: var(--text); margin: 8px 0 6px; }
+.vn-alpha-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 8px; }
+.vn-alpha-tile { position: relative; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 6px 8px; text-align: center; background: var(--surface-2); }
+.vn-alpha-tile.vowel { border-color: #7CC6BD; background: #F1FAF8; }
+.vn-alpha-tile.consonant { border-color: #9BBCE8; background: #F2F6FD; }
+.vn-alpha-tile.special { border-width: 2px; border-color: #E8A33D; }
+.vn-alpha-tile.done { opacity: .5; }
+.vn-alpha-l { font-size: 26px; font-weight: 800; line-height: 1.1; color: var(--text); }
+.vn-alpha-c { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.vn-alpha-play { margin-top: 6px; border: none; background: var(--primary); color: #fff; border-radius: 8px; padding: 4px 12px; font-size: 13px; }
+.vn-sp-badge { position: absolute; top: 4px; right: 4px; background: #E8A33D; color: #fff; font-size: 10px; border-radius: 6px; padding: 1px 5px; font-weight: 700; }
 .vn-res { display: block; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 9px 12px; margin-bottom: 6px; font-size: 13.5px; color: var(--text); text-decoration: none; }
 .vn-res:active { background: var(--surface); }
 .vn-prog { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
