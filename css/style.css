@@ -491,6 +491,7 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .g-stat-label { font-size: 15px; opacity: .9; margin-bottom: 4px; }
 .g-stat-num { font-size: 42px; font-weight: 800; line-height: 1.1; }
 .g-stat-sub { font-size: 15px; opacity: .85; margin-bottom: 6px; }
+.g-stat-sub2 { font-size: 13px; opacity: .92; background: rgba(255,255,255,.18); display: inline-block; padding: 3px 10px; border-radius: 12px; }
 .g-stat-tip { font-size: 13px; opacity: .8; }
 .g-cal { background: var(--surface); border-radius: var(--radius-m); padding: 14px 12px; }
 .g-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }

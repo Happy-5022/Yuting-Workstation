@@ -769,18 +769,26 @@
     view.append(grid);
 
     const grat = await DB.get('gratitude', todayStr());
+    const gratAll = (await DB.all('gratitude')) || [];
+    const gNow = new Date();
+    const gMonthPrefix = gNow.getFullYear() + '-' + String(gNow.getMonth() + 1).padStart(2, '0') + '-';
+    const gMonthDays = gratAll.filter(r => r.date && r.date.indexOf(gMonthPrefix) === 0).length;
+    const gTotalDays = gratAll.length;
+    const gMonthLine = '<p class="muted" style="margin:0 0 8px">📅 本月已记 <b>' + gMonthDays + '</b> 天</p>';
     const hNow = new Date().getHours();
     const evening = hNow >= 20;
     const gCard = el('<div class="card"></div>');
     if (grat && grat.items && grat.items.length) {
       gCard.innerHTML = '<div class="card-title">🙏 今日感恩</div>' +
         '<p class="muted" style="margin:0 0 8px">今天已写下 <b>' + grat.items.length + '</b> 件感恩 ✅</p>' +
+        gMonthLine +
         '<div class="g-home-prev">' + grat.items.slice(0, 2).map(t => '<div class="g-home-line">· ' + esc(t) + '</div>').join('') +
         (grat.items.length > 2 ? '<div class="muted">…还有 ' + (grat.items.length - 2) + ' 件</div>' : '') + '</div>' +
         '<button id="goGrat" class="btn sm green block" style="margin-top:8px">查看 / 续写</button>';
     } else {
       gCard.innerHTML = '<div class="card-title">🙏 今日感恩' + (evening ? ' ⏰' : '') + '</div>' +
         '<p class="muted" style="margin:0 0 8px">' + (evening ? '睡前别忘了：记下今天 5 件值得感恩的事 🌙' : '今天还没写，睡前花 1 分钟记下开心事 🌙') + '</p>' +
+        gMonthLine +
         '<button id="goGrat" class="btn sm green block" style="margin-top:8px">去写今日感恩</button>';
       if (evening) gCard.classList.add('g-home-alert');
     }
@@ -3010,7 +3018,7 @@
       '<div id="gMsg" class="muted" style="margin-top:8px;text-align:center"></div></div>' +
       '<div class="card"><div class="card-title">📚 历史回看</div><div id="gHistory"></div></div></div>' +
       '<div id="gStatsView" style="display:none">' +
-      '<div class="g-stat-card"><div class="g-stat-label">本月统计</div><div class="g-stat-num" id="gStatNum">0</div><div class="g-stat-sub" id="gStatSub">天记录</div><div class="g-stat-tip" id="gStatTip">坚持记录，让感恩成为习惯 ✨</div></div>' +
+      '<div class="g-stat-card"><div class="g-stat-label">本月统计</div><div class="g-stat-num" id="gStatNum">0</div><div class="g-stat-sub" id="gStatSub">天记录</div><div class="g-stat-sub2" id="gStatSub2">累计记录 0 天</div><div class="g-stat-tip" id="gStatTip">坚持记录，让感恩成为习惯 ✨</div></div>' +
       '<div class="g-cal"><div class="g-cal-head"><button id="gCalPrev" class="btn sm ghost">‹</button><span id="gCalTitle"></span><button id="gCalNext" class="btn sm ghost">›</button></div><div class="g-cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div id="gCalGrid" class="g-cal-grid"></div></div>' +
       '<div class="card" style="margin-top:12px"><div id="gTodayStatus" class="g-today-status"></div></div></div>' +
       '<div class="g-tabs"><button class="g-tab active" id="gTabRec">📝 记录</button><button class="g-tab" id="gTabStat">📊 统计</button></div>';
@@ -3146,6 +3154,7 @@
       recordedDates.forEach(d => { if (d && d.indexOf(monthPrefix) === 0) monthCount++; });
       $('#gStatNum').textContent = monthCount;
       $('#gStatSub').textContent = '天记录';
+      $('#gStatSub2').textContent = '累计记录 ' + ((all || []).length) + ' 天';
       if (monthCount >= 20) $('#gStatTip').textContent = '太棒了！你几乎每天都在感恩 🌟';
       else if (monthCount >= 10) $('#gStatTip').textContent = '坚持记录，让感恩成为习惯 ✨';
       else if (monthCount >= 5) $('#gStatTip').textContent = '每一条感恩都是生活的小确幸 💚';
