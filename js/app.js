@@ -731,10 +731,114 @@
       favs.forEach(f => {
         const c = el('<div class="fav-item"></div>');
         c.innerHTML = '<div class="fav-txt">“' + esc(f.text) + '”' + (f.author ? '<span class="q-author">—— ' + esc(f.author) + '</span>' : '') + '</div>' +
-          '<button class="del">🗑</button>';
+          '<div class="fav-actions"><button class="card-btn">🎴 金句卡</button><button class="del">🗑</button></div>';
+        c.querySelector('.card-btn').onclick = () => openQuoteCard(f);
         c.querySelector('.del').onclick = async () => { if (await confirmDel('取消这条收藏？')) { await DB.del('quotes', f.id); paintFavs(); } };
         box.append(c);
       });
+
+      // ===== 金句卡：一键生成竖屏图片（原生 Canvas，无外部依赖）=====
+      const QUOTE_THEMES = [
+        { name: '青绿', g: ['#0E9C8E', '#0A6E66'], text: '#ffffff', sub: 'rgba(255,255,255,.82)' },
+        { name: '深蓝', g: ['#2C3E50', '#4CA1AF'], text: '#ffffff', sub: 'rgba(255,255,255,.85)' },
+        { name: '暖橙', g: ['#FF9A56', '#FF6A88'], text: '#ffffff', sub: 'rgba(255,255,255,.88)' },
+        { name: '墨黑', g: ['#232526', '#414345'], text: '#F5F5F5', sub: 'rgba(245,245,245,.72)' },
+      ];
+      // 风景背景图（内置，联网用一次后离线也能用）
+      const QUOTE_BG_IMAGES = [
+        { name: '晨雾青山', src: 'images/quotes/Misty_green_mountains_at_dawn__2026-07-29T14-13-17.png' },
+        { name: '极光夜空', src: 'images/quotes/Aurora_borealis_over_quiet_sno_2026-07-29T14-13-17.png' },
+        { name: '星空银河', src: 'images/quotes/Starry_night_milky_way_galaxy__2026-07-29T14-13-26.png' },
+        { name: '海面日落', src: 'images/quotes/Tranquil_ocean_at_sunset__soft_2026-07-29T14-13-16.png' },
+        { name: '樱花春山', src: 'images/quotes/Cherry_blossom_branches_with_s_2026-07-29T14-13-17.png' },
+        { name: '晨光湖面', src: 'images/quotes/Calm_lake_at_sunrise_with_thin_2026-07-29T14-13-17.png' },
+      ];
+      let qcBg = { type: 'color', idx: 0 };
+      function loadImg(src) {
+        return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+      }
+      function wrapText(ctx, text, maxW) {
+        const lines = []; let line = '';
+        for (const ch of text.split('')) {
+          const t = line + ch;
+          if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = ch; }
+          else line = t;
+        }
+        if (line) lines.push(line);
+        return lines;
+      }
+      async function drawQuoteCard(canvas, text, author, bg) {
+        const W = 1080, H = 1920; canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        let th, textColor, subColor;
+        if (bg.type === 'image') {
+          const img = await loadImg(QUOTE_BG_IMAGES[bg.idx].src);
+          const r = Math.max(W / img.width, H / img.height);
+          const dw = img.width * r, dh = img.height * r;
+          ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+          ctx.fillStyle = 'rgba(12,18,30,.42)'; ctx.fillRect(0, 0, W, H);
+          textColor = '#ffffff'; subColor = 'rgba(255,255,255,.88)';
+          th = { sub: subColor, text: textColor };
+        } else {
+          th = QUOTE_THEMES[bg.idx];
+          const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, th.g[0]); g.addColorStop(1, th.g[1]);
+          ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+          textColor = th.text; subColor = th.sub;
+        }
+        ctx.textAlign = 'center';
+        ctx.fillStyle = subColor; ctx.font = '500 36px sans-serif';
+        ctx.fillText('Happy赖 · 每日金句', W / 2, 150);
+        ctx.fillStyle = 'rgba(255,255,255,.16)'; ctx.font = '700 220px serif';
+        ctx.fillText('“', W / 2, 400);
+        let fontSize = 76, lines;
+        while (fontSize > 42) {
+          ctx.font = '600 ' + fontSize + 'px sans-serif';
+          lines = wrapText(ctx, text, W - 160);
+          if (lines.length * fontSize * 1.4 < H * 0.52) break;
+          fontSize -= 4;
+        }
+        ctx.fillStyle = textColor; ctx.font = '600 ' + fontSize + 'px sans-serif';
+        const lh = fontSize * 1.4; let y = H / 2 - (lines.length * lh) / 2 + lh / 2 - 40;
+        lines.forEach(l => { ctx.fillText(l, W / 2, y); y += lh; });
+        if (author) { ctx.fillStyle = subColor; ctx.font = '500 42px sans-serif'; ctx.fillText('—— ' + author, W / 2, y + 70); }
+        ctx.fillStyle = subColor; ctx.font = '400 32px sans-serif';
+        ctx.fillText('来自「Happy赖工作台」', W / 2, H - 130);
+      }
+      function openQuoteCard(f) {
+        const ov = el('<div class="qc-overlay"></div>');
+        ov.innerHTML = '<div class="qc-modal"><div class="qc-head"><span>🎴 金句卡预览</span><button class="qc-close">✕</button></div>' +
+          '<div class="qc-canvas-wrap"><canvas id="qcCanvas"></canvas></div>' +
+          '<div class="qc-label">纯色</div>' +
+          '<div class="qc-themes" id="qcThemes"></div>' +
+          '<div class="qc-label">风景背景</div>' +
+          '<div class="qc-bgs" id="qcBgs"></div>' +
+          '<div class="muted qc-tip">切换后重新点「保存」；保存后在图片上长按可存到相册 💾</div>' +
+          '<button class="btn block green" id="qcSave" style="margin-top:10px">💾 保存图片</button></div>';
+        document.body.append(ov);
+        const canvas = ov.querySelector('#qcCanvas');
+        const tb = ov.querySelector('#qcThemes');
+        const bb = ov.querySelector('#qcBgs');
+        async function redraw() { await drawQuoteCard(canvas, f.text, f.author || '', qcBg); }
+        function clearOn() { [...tb.children].forEach(c => c.classList.remove('on')); [...bb.children].forEach(c => c.classList.remove('on')); }
+        QUOTE_THEMES.forEach((t, i) => {
+          const b = el('<button class="qc-theme' + (qcBg.type === 'color' && qcBg.idx === i ? ' on' : '') + '">' + t.name + '</button>');
+          b.onclick = () => { qcBg = { type: 'color', idx: i }; clearOn(); b.classList.add('on'); redraw(); };
+          tb.append(b);
+        });
+        QUOTE_BG_IMAGES.forEach((t, i) => {
+          const b = el('<button class="qc-bg' + (qcBg.type === 'image' && qcBg.idx === i ? ' on' : '') + '"><img src="' + t.src + '" alt="' + t.name + '"></button>');
+          b.onclick = () => { qcBg = { type: 'image', idx: i }; clearOn(); b.classList.add('on'); redraw(); };
+          bb.append(b);
+        });
+        redraw();
+        ov.querySelector('.qc-close').onclick = () => ov.remove();
+        ov.onclick = e => { if (e.target === ov) ov.remove(); };
+        ov.querySelector('#qcSave').onclick = () => {
+          const url = canvas.toDataURL('image/png');
+          ov.querySelector('.qc-canvas-wrap').innerHTML = '<img class="qc-result" src="' + url + '" alt="金句卡">';
+          toast('已生成图片，长按保存到相册 💾');
+        };
+      }
     }
     await paintQuote();
 

@@ -460,6 +460,26 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .fav-item { display: flex; align-items: flex-start; gap: 10px; background: var(--surface-2); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 10px 12px; margin-bottom: 8px; }
 .fav-txt { flex: 1; font-size: 14.5px; line-height: 1.55; }
 .fav-item .del { flex: 0 0 auto; }
+.fav-actions { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; }
+.fav-actions .card-btn { font-size: 12px; padding: 5px 9px; border-radius: 8px; border: 1.5px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; white-space: nowrap; }
+.fav-actions .card-btn:active { background: var(--primary); color: #fff; }
+
+/* 金句卡弹窗 */
+.qc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; z-index: 60; padding: 16px; }
+.qc-modal { background: #fff; border-radius: 16px; width: 100%; max-width: 360px; padding: 16px; max-height: 92vh; overflow-y: auto; }
+.qc-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 12px; }
+.qc-close { border: none; background: transparent; font-size: 18px; cursor: pointer; color: #888; line-height: 1; }
+.qc-canvas-wrap { width: 100%; }
+.qc-canvas-wrap canvas, .qc-canvas-wrap .qc-result { width: 100%; height: auto; border-radius: 12px; display: block; }
+.qc-themes { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.qc-theme { flex: 1; min-width: 56px; padding: 8px 4px; border-radius: 10px; border: 2px solid transparent; background: #f0f0f0; cursor: pointer; font-size: 13px; color: #555; }
+.qc-theme.on { border-color: var(--primary); background: #e6f7f4; color: var(--primary); font-weight: 600; }
+.qc-label { font-size: 12px; color: #999; margin: 14px 0 -4px; }
+.qc-bgs { display: flex; gap: 8px; margin-top: 8px; overflow-x: auto; padding-bottom: 4px; }
+.qc-bg { flex: 0 0 auto; width: 56px; height: 96px; padding: 0; border-radius: 10px; border: 2px solid transparent; overflow: hidden; cursor: pointer; background: #f0f0f0; }
+.qc-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qc-bg.on { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(14,156,142,.25); }
+.qc-tip { font-size: 12px; margin-top: 10px; line-height: 1.5; }
 
 /* 每日感恩模块 */
 .g-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
