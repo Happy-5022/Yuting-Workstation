@@ -504,6 +504,13 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .g-cal-day.has-record { background: #E8F8EE; color: #27AE60; font-weight: 700; }
 .g-cal-day.is-today { background: var(--primary) !important; color: #fff !important; font-weight: 800; box-shadow: 0 2px 8px rgba(14,156,142,.25); }
 .g-cal-day.is-today small { font-size: 10px; font-weight: 400; opacity: .9; display: block; line-height: 1.1; }
+.g-cal-day.clickable { cursor: pointer; transition: transform .08s ease, box-shadow .12s ease; }
+.g-cal-day.clickable:hover { box-shadow: 0 1px 6px rgba(0,0,0,.12); }
+.g-cal-day.clickable:active { transform: scale(.94); }
+.g-cal-day.selected { outline: 2px solid var(--primary); outline-offset: -2px; background: #D6F2EC !important; color: #0E8275 !important; }
+.g-cal-day.selected.has-record { color: #0E8275 !important; }
+.g-day-panel { padding: 12px 14px; }
+.g-day-panel .muted { padding: 8px 0; }
 .g-today-status { padding: 16px 14px; text-align: center; }
 .g-today-status b { font-size: 15px; }
 

@@ -3020,7 +3020,9 @@
       '<div id="gStatsView" style="display:none">' +
       '<div class="g-stat-card"><div class="g-stat-label">本月统计</div><div class="g-stat-num" id="gStatNum">0</div><div class="g-stat-sub" id="gStatSub">天记录</div><div class="g-stat-sub2" id="gStatSub2">累计记录 0 天</div><div class="g-stat-tip" id="gStatTip">坚持记录，让感恩成为习惯 ✨</div></div>' +
       '<div class="g-cal"><div class="g-cal-head"><button id="gCalPrev" class="btn sm ghost">‹</button><span id="gCalTitle"></span><button id="gCalNext" class="btn sm ghost">›</button></div><div class="g-cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div id="gCalGrid" class="g-cal-grid"></div></div>' +
-      '<div class="card" style="margin-top:12px"><div id="gTodayStatus" class="g-today-status"></div></div></div>' +
+      '<div class="card" style="margin-top:12px"><div id="gTodayStatus" class="g-today-status"></div></div>' +
+      '<div class="card" style="margin-top:12px"><div class="card-title" id="gDayTitle">📅 当日记录</div><div id="gDayPanel" class="g-day-panel"></div></div>' +
+      '</div>' +
       '<div class="g-tabs"><button class="g-tab active" id="gTabRec">📝 记录</button><button class="g-tab" id="gTabStat">📊 统计</button></div>';
 
     const list = $('#gList');
@@ -3140,10 +3142,28 @@
     const tabRec = $('#gTabRec');
     const tabStat = $('#gTabStat');
 
-    let calYear, calMonth; // 当前日历显示的年月
+    let calYear, calMonth, calAll = [], selectedDay = null; // 当前日历显示的年月 / 全部记录 / 选中日
+
+    async function selectDay(dateStr, cell) {
+      selectedDay = dateStr;
+      const grid = $('#gCalGrid');
+      if (grid) [...grid.querySelectorAll('.g-cal-day')].forEach(c => c.classList.remove('selected'));
+      if (cell) cell.classList.add('selected');
+      const rec = (calAll || []).find(r => r.date === dateStr);
+      const title = $('#gDayTitle'); const panel = $('#gDayPanel');
+      if (!title || !panel) return;
+      title.textContent = '📅 ' + dateStr + ' 的感恩';
+      if (rec && rec.items && rec.items.length) {
+        panel.innerHTML = rec.items.map((t, i) => '<div class="g-hist-line"><span>' + (i + 1) + '.</span> ' + esc(t) + '</div>').join('') +
+          '<div class="muted" style="margin-top:6px">共 ' + rec.items.length + ' 件 💚</div>';
+      } else {
+        panel.innerHTML = '<div class="muted">这一天还没有记录感恩呢 🌙</div>';
+      }
+    }
 
     async function paintStats() {
-      const all = await DB.all('gratitude');
+      const all = (await DB.all('gratitude')) || [];
+      calAll = all;
       const recordedDates = new Set((all || []).map(r => r.date).filter(Boolean));
       const now = new Date();
       if (calYear == null) { calYear = now.getFullYear(); calMonth = now.getMonth(); }
@@ -3185,6 +3205,9 @@
         const hasRec = recordedDates.has(dateStr);
         const isToday = dateStr === todayDate;
         const cell = el('<div class="g-cal-day' + (hasRec ? ' has-record' : '') + (isToday ? ' is-today' : '') + '">' + d + '</div>');
+        cell.setAttribute('data-date', dateStr);
+        cell.classList.add('clickable');
+        cell.onclick = () => selectDay(dateStr, cell);
         if (isToday) cell.innerHTML = d + '<br><small>今天</small>';
         grid.append(cell);
       }
@@ -3205,6 +3228,11 @@
       } else {
         tsBox.innerHTML = '<b>🌙 今天还没有记录</b><p class="muted" style="margin:4px 0 0">点击下方「记录」tab，开始记录今天的感恩小事吧</p>';
       }
+
+      // 默认选中：已选中的日期，或今天（让下方「当日记录」面板有内容）
+      if (!selectedDay) selectedDay = todayDate;
+      const defCell = grid.querySelector('[data-date="' + selectedDay + '"]');
+      if (defCell) selectDay(selectedDay, defCell);
     }
 
     function switchTab(toStats) {
