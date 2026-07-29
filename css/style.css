@@ -483,6 +483,29 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 .g-count.on { background: var(--primary); color: #fff; border-color: var(--primary); }
 .g-home-alert { border-color: var(--accent); background: #FBF3E0; }
 
+/* 每日感恩 · 统计页 */
+.g-tabs { display: flex; position: sticky; bottom: 0; background: var(--bg); border-top: 1.5px solid var(--line); z-index: 10; margin-top: 12px; }
+.g-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: 600; color: var(--text-2); background: none; border: none; cursor: pointer; transition: color .2s; }
+.g-tab.active { color: var(--primary); }
+.g-stat-card { background: linear-gradient(135deg, #4FC3DC, #2ECC71); border-radius: var(--radius-m); padding: 20px 18px; color: #fff; margin-bottom: 14px; }
+.g-stat-label { font-size: 15px; opacity: .9; margin-bottom: 4px; }
+.g-stat-num { font-size: 42px; font-weight: 800; line-height: 1.1; }
+.g-stat-sub { font-size: 15px; opacity: .85; margin-bottom: 6px; }
+.g-stat-tip { font-size: 13px; opacity: .8; }
+.g-cal { background: var(--surface); border-radius: var(--radius-m); padding: 14px 12px; }
+.g-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.g-cal-head span { font-weight: 700; font-size: 15px; color: var(--text); }
+.g-cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 6px; }
+.g-cal-week span { text-align: center; font-size: 12px; color: var(--text-2); padding: 4px 0; }
+.g-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.g-cal-day { aspect-ratio: 1; display: grid; place-items: center; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text); background: transparent; min-height: 38px; }
+.g-cal-day.other-month { color: var(--text-3); opacity: .45; }
+.g-cal-day.has-record { background: #E8F8EE; color: #27AE60; font-weight: 700; }
+.g-cal-day.is-today { background: var(--primary) !important; color: #fff !important; font-weight: 800; box-shadow: 0 2px 8px rgba(14,156,142,.25); }
+.g-cal-day.is-today small { font-size: 10px; font-weight: 400; opacity: .9; display: block; line-height: 1.1; }
+.g-today-status { padding: 16px 14px; text-align: center; }
+.g-today-status b { font-size: 15px; }
+
 /* 发音人选择器（英语/越南语模块内） */
 .voice-pick { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
 .voice-pick-label { font-size: 13px; color: var(--muted); }

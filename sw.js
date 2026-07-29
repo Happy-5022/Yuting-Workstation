@@ -1,5 +1,5 @@
 /* Service Worker：有网优先拿最新，离线才用缓存 —— 避免改了代码还显示旧版 */
-const CACHE = 'yt-wb-v7';
+const CACHE = 'yt-wb-v8';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './css/style.css', './js/db.js', './js/app.js',

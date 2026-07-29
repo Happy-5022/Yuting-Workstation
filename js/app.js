@@ -3001,13 +3001,19 @@
     const count = 5;
 
     view.innerHTML =
+      '<div id="gRecordView">' +
       '<div class="card"><div class="card-title">🙏 每日感恩 · 今天</div>' +
       '<p class="muted" style="margin:0 0 10px">睡前写下今天值得感恩的事，哪怕很小。写完点保存，回头能翻看。</p>' +
       '<div class="row spread" style="margin-bottom:8px"><button id="gMusic" class="btn sm ghost">🎵 治愈轻音乐</button></div>' +
       '<div id="gList"></div>' +
       '<button id="gSave" class="btn green block" style="margin-top:14px">💾 保存今天的感恩</button>' +
       '<div id="gMsg" class="muted" style="margin-top:8px;text-align:center"></div></div>' +
-      '<div class="card"><div class="card-title">📚 历史回看</div><div id="gHistory"></div></div>';
+      '<div class="card"><div class="card-title">📚 历史回看</div><div id="gHistory"></div></div></div>' +
+      '<div id="gStatsView" style="display:none">' +
+      '<div class="g-stat-card"><div class="g-stat-label">本月统计</div><div class="g-stat-num" id="gStatNum">0</div><div class="g-stat-sub" id="gStatSub">天记录</div><div class="g-stat-tip" id="gStatTip">坚持记录，让感恩成为习惯 ✨</div></div>' +
+      '<div class="g-cal"><div class="g-cal-head"><button id="gCalPrev" class="btn sm ghost">‹</button><span id="gCalTitle"></span><button id="gCalNext" class="btn sm ghost">›</button></div><div class="g-cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div id="gCalGrid" class="g-cal-grid"></div></div>' +
+      '<div class="card" style="margin-top:12px"><div id="gTodayStatus" class="g-today-status"></div></div></div>' +
+      '<div class="g-tabs"><button class="g-tab active" id="gTabRec">📝 记录</button><button class="g-tab" id="gTabStat">📊 统计</button></div>';
 
     const list = $('#gList');
     function paintList(fill) {
@@ -3120,6 +3126,99 @@
         box.append(card);
       });
     }
+    // === Tab 切换 + 统计页 ===
+    const recView = $('#gRecordView');
+    const statView = $('#gStatsView');
+    const tabRec = $('#gTabRec');
+    const tabStat = $('#gTabStat');
+
+    let calYear, calMonth; // 当前日历显示的年月
+
+    async function paintStats() {
+      const all = await DB.all('gratitude');
+      const recordedDates = new Set((all || []).map(r => r.date).filter(Boolean));
+      const now = new Date();
+      if (calYear == null) { calYear = now.getFullYear(); calMonth = now.getMonth(); }
+
+      // 本月统计
+      const monthPrefix = calYear + '-' + String(calMonth + 1).padStart(2, '0') + '-';
+      let monthCount = 0;
+      recordedDates.forEach(d => { if (d && d.indexOf(monthPrefix) === 0) monthCount++; });
+      $('#gStatNum').textContent = monthCount;
+      $('#gStatSub').textContent = '天记录';
+      if (monthCount >= 20) $('#gStatTip').textContent = '太棒了！你几乎每天都在感恩 🌟';
+      else if (monthCount >= 10) $('#gStatTip').textContent = '坚持记录，让感恩成为习惯 ✨';
+      else if (monthCount >= 5) $('#gStatTip').textContent = '每一条感恩都是生活的小确幸 💚';
+      else if (monthCount > 0) $('#gStatTip').textContent = '开始记录，发现生活中的美好 ✨';
+      else $('#gStatTip').textContent = '还没有本月记录，从今天开始吧 🌱';
+
+      // 日历标题
+      const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+      $('#gCalTitle').textContent = calYear + '年' + months[calMonth];
+
+      // 渲染日历网格
+      const grid = $('#gCalGrid');
+      grid.innerHTML = '';
+      const firstDay = new Date(calYear, calMonth, 1);
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+      const startWeek = firstDay.getDay(); // 0=周日
+      const todayDate = todayStr();
+
+      // 上月尾部填充
+      const prevMonthDays = new Date(calYear, calMonth, 0).getDate();
+      for (let i = startWeek - 1; i >= 0; i--) {
+        const cell = el('<div class="g-cal-day other-month">' + (prevMonthDays - i) + '</div>');
+        grid.append(cell);
+      }
+      // 本月日期
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = calYear + '-' + String(calMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+        const hasRec = recordedDates.has(dateStr);
+        const isToday = dateStr === todayDate;
+        const cell = el('<div class="g-cal-day' + (hasRec ? ' has-record' : '') + (isToday ? ' is-today' : '') + '">' + d + '</div>');
+        if (isToday) cell.innerHTML = d + '<br><small>今天</small>';
+        grid.append(cell);
+      }
+      // 下月头部填充
+      const totalCells = startWeek + daysInMonth;
+      const remaining = totalCells % 7 ? 7 - totalCells % 7 : 0;
+      for (let i = 1; i <= remaining; i++) {
+        const cell = el('<div class="g-cal-day other-month">' + i + '</div>');
+        grid.append(cell);
+      }
+
+      // 今日状态提示
+      const tsBox = $('#gTodayStatus');
+      if (recordedDates.has(todayDate)) {
+        const todayRec = all.find(r => r.date === todayDate);
+        const n = (todayRec && todayRec.items && todayRec.items.length) || 0;
+        tsBox.innerHTML = '<b>🎉 今天已记录</b><p class="muted" style="margin:4px 0 0">记下了 <b>' + n + '</b> 件感恩小事，继续保持！</p>';
+      } else {
+        tsBox.innerHTML = '<b>🌙 今天还没有记录</b><p class="muted" style="margin:4px 0 0">点击下方「记录」tab，开始记录今天的感恩小事吧</p>';
+      }
+    }
+
+    function switchTab(toStats) {
+      if (toStats) {
+        recView.style.display = 'none'; statView.style.display = '';
+        tabRec.classList.remove('active'); tabStat.classList.add('active');
+        paintStats();
+      } else {
+        recView.style.display = ''; statView.style.display = 'none';
+        tabStat.classList.remove('active'); tabRec.classList.add('active');
+      }
+    }
+
+    tabRec.onclick = () => switchTab(false);
+    tabStat.onclick = () => switchTab(true);
+
+    $('#gCalPrev').onclick = () => {
+      calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } paintStats();
+    };
+    $('#gCalNext').onclick = () => {
+      calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } paintStats();
+    };
+
     paintHistory();
   }
 
