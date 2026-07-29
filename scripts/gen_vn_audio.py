@@ -174,12 +174,25 @@ def _load_covered_texts():
 
 
 def _load_topic_words():
-    """从 vn-data.js 提取所有主题词的 vn 文本（按出现顺序）"""
+    """从 vn-data.js 提取『主题词』的 vn 文本（按出现顺序，去重）。
+
+    注意：必须剔除每个词的 ex 例句块（ex: { vn: '...' }），
+    否则例句里的 vn 会被当成主题词一起分配 NX_ 序号，
+    导致脚本生成的 NX_ 序号与网页 VN_AUDIO_MAP 的实际分配错位
+    （表现为『点词听到别的词的发音』）。"""
     try:
         _vnd = os.path.join(PROJECT_ROOT, 'js', 'vn-data.js')
         with open(_vnd, encoding='utf-8') as _f:
             _src = _f.read()
-        return re.findall(r"vn:\s*'([^']*)'", _src)
+        # 剔除所有 ex: { ... } 块（单层，不影响主题词 vn）
+        _src = re.sub(r"ex:\s*\{[^}]*\}", "ex:{}", _src)
+        _vns = re.findall(r"vn:\s*'([^']*)'", _src)
+        # 保持顺序去重，模拟网页『同一 vn 只分配一个 NX_』的行为
+        _seen = set(); _out = []
+        for _v in _vns:
+            if _v and _v not in _seen:
+                _seen.add(_v); _out.append(_v)
+        return _out
     except Exception:
         return []
 
@@ -213,6 +226,17 @@ async def main():
     import edge_tts as edge
 
     os.makedirs(AUDIO_DIR, exist_ok=True)
+
+    # 清理旧的 NX_ 音频：避免序号重排后旧的错误文件残留（会导致词音错位）
+    import glob as _glob
+    _old_nx = _glob.glob(os.path.join(AUDIO_DIR, 'NX_*.mp3'))
+    for _of in _old_nx:
+        try:
+            os.remove(_of)
+        except OSError:
+            pass
+    if _old_nx:
+        print(f'已清理 {len(_old_nx)} 个旧的 NX_ 文件（防止错位残留）')
 
     # 使用微软越南语女声（自然神经网络嗓音）
     VOICE = 'vi-VN-HoaiMyNeural'
