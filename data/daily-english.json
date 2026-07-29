@@ -4,97 +4,97 @@
   "articles": [
     {
       "id": "d1",
-      "en": "Should We Cycle More?",
-      "zh": "我们该多骑自行车吗",
-      "words": 108,
-      "dur": 60,
-      "vocab": 780,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Birdwatching Boom",
+      "zh": "观鸟热潮来了",
+      "words": 104,
+      "dur": 59,
+      "vocab": 760,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["Cities around the world are building more bike lanes, hoping to cut traffic and air pollution at the same time.", "全球不少城市正在增建自行车道，希望同时减少交通拥堵和空气污染。"],
-        ["Cycling is not only good for the planet; doctors say it also lowers stress and keeps the heart healthy with very low risk of injury.", "骑车不仅对环境好，医生还指出它能减压、护心，而且受伤风险很低。"],
-        ["Still, many people hesitate because of unsafe roads or no place to shower at work — small problems that better city planning could fix.", "但许多人仍犹豫，原因多是道路不安全、或单位没地方冲澡——这些小问题，靠更好的城市规划就能解决。"]
+        ["More and more people are picking up binoculars and heading to parks to watch birds, a hobby that used to seem old-fashioned.", "越来越多的人拿起望远镜走进公园观鸟，这个曾被认为'过时'的爱好正在翻红。"],
+        ["Fans say birdwatching forces you to slow down, listen carefully and notice small changes in nature around you.", "爱好者说，观鸟会逼你慢下来、仔细听，去留意身边自然界的细微变化。"],
+        ["You need almost nothing to start: a quiet morning, a bit of patience, and curiosity about the songs above your head.", "入门几乎零门槛：一个安静的早晨、一点耐心，加上对头顶鸟鸣的好奇心就够了。"]
       ],
       "tips": [
-        ["cut traffic", "缓解交通拥堵"],
-        ["low risk of injury", "受伤风险低"],
-        ["city planning", "城市规划"]
+        ["binoculars", "双筒望远镜"],
+        ["old-fashioned", "过时的"],
+        ["slow down", "慢下来"]
       ]
     },
     {
       "id": "d2",
-      "en": "Rude Emails",
-      "zh": "那些让人不舒服的邮件",
-      "words": 102,
-      "dur": 58,
-      "vocab": 740,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "How High Temperatures Affect Sleep",
+      "zh": "高温天为啥睡不好",
+      "words": 106,
+      "dur": 60,
+      "vocab": 780,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["We all get blunt or careless emails, and they can ruin a working relationship before a project even starts.", "我们都收到过生硬或马虎的邮件，它们甚至能在项目开始前就毁掉一段工作关系。"],
-        ["Experts suggest pausing before you send: read it as if you were the receiver, and soften words like 'you must' or 'wrong'.", "专家建议发出前先停一下：把自己当收件人读一遍，把'你必须''你错了'这类词放缓和。"],
-        ["A short polite line at the end, such as 'thanks for your patience', can turn a cold message into a friendly one.", "结尾加一句简短的客套，比如'感谢你的耐心'，就能把冷冰冰的信息变亲切。"]
+        ["On hot summer nights, many of us toss and turn because our body needs to cool down slightly before it can fall asleep.", "炎热的夏夜里我们翻来覆去，因为身体需要先稍微降温才能入睡。"],
+        ["Experts suggest simple tricks: take a warm shower before bed, keep curtains closed in the day, and use light cotton sheets.", "专家给出简单妙招：睡前洗个温水澡、白天拉上窗帘、换轻薄的纯棉床单。"],
+        ["A regular sleep routine matters even more in a heatwave, so try to go to bed at the same time every night.", "热浪天里规律作息更重要，尽量每天同一时间上床睡觉。"]
       ],
       "tips": [
-        ["blunt email", "生硬的邮件"],
-        ["soften words", "把措辞放缓和"],
-        ["working relationship", "工作关系"]
+        ["toss and turn", "翻来覆去睡不着"],
+        ["cool down", "降温"],
+        ["heatwave", "热浪"]
       ]
     },
     {
       "id": "d3",
-      "en": "Stress-free Family Meals",
-      "zh": "不紧绷的家庭餐",
-      "words": 99,
-      "dur": 56,
-      "vocab": 730,
+      "en": "What's in a Footballer's Brain?",
+      "zh": "球员罚点球时脑子里在想啥",
+      "words": 102,
+      "dur": 58,
+      "vocab": 790,
       "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Family dinners often feel stressful because everyone is tired and phones keep buzzing at the table.", "家庭聚餐常让人紧张，因为大家都累，手机还不停在桌上响。"],
-        ["Cooks say the trick is to lower the bar: simple food, no screens, and let everyone help a little with setting the table.", "做饭的人说窍门是降低标准：简单饭菜、不碰屏幕、让每人都帮点小忙摆桌。"],
-        ["When the mood is calm, children actually eat better and talk more — which is the real point of eating together.", "气氛一放松，孩子反而吃得更好、话也更多——这才是一起吃饭的真正意义。"]
+        ["When a footballer steps up to take a penalty, millions watch — and the real battle happens inside the player's head.", "当球员站上点球点，数百万人在看——而真正的较量发生在他的大脑里。"],
+        ["Sports scientists find that top players train their minds like muscles, using breathing and routines to stay calm under pressure.", "运动科学家发现，顶级球员像练肌肉一样训练大脑，用呼吸法和固定流程在压力下保持冷静。"],
+        ["The same tricks work off the pitch too: before an interview or a big talk, slow breathing helps anyone perform better.", "这些技巧场外同样管用：面试或重要发言前，放慢呼吸能让任何人发挥更好。"]
       ],
       "tips": [
-        ["lower the bar", "降低标准 / 放低要求"],
-        ["simple food", "简单的饭菜"],
-        ["the real point", "真正的意义"]
+        ["take a penalty", "主罚点球"],
+        ["under pressure", "在压力之下"],
+        ["off the pitch", "在球场之外"]
       ]
     },
     {
       "id": "d4",
-      "en": "Limiting Screen Time for Children",
-      "zh": "给孩子少点屏幕时间",
-      "words": 104,
-      "dur": 59,
-      "vocab": 760,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Does Planning the Perfect Summer Cause Problems?",
+      "zh": "'完美夏天'计划反而害了你？",
+      "words": 100,
+      "dur": 57,
+      "vocab": 750,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["Many parents worry that tablets and phones steal too much of their children's day.", "许多家长担心平板和手机占掉了孩子太多时间。"],
-        ["Instead of strict bans, child experts suggest 'joint screen time' — watching or playing together, then talking about it.", "儿童专家不建议硬性禁止，而是建议'一起看屏幕'——陪着一起看、一起玩，然后聊一聊。"],
-        ["Clear rules, like no phones at meals and a fixed bedtime, work better than angry arguments every night.", "清晰的规矩，比如吃饭不碰手机、固定睡觉时间，比每晚吵架管用得多。"]
+        ["Social media is full of picture-perfect holidays, and many people feel their own summer must look just as amazing.", "社交媒体上满是完美假期照，很多人觉得自己的夏天也必须同样精彩。"],
+        ["But chasing a perfect plan often brings stress: overpacked schedules leave no room for rest or happy accidents.", "但追求完美计划常带来压力：排得太满的行程，容不下休息和惊喜。"],
+        ["Researchers say the best memories usually come from simple, unplanned moments — an evening walk or an ice cream by the road.", "研究者说，最好的回忆往往来自简单、没计划的时刻——一次傍晚散步，或路边一支冰淇淋。"]
       ],
       "tips": [
-        ["strict bans", "硬性禁止"],
-        ["joint screen time", "一起看屏幕的时间"],
-        ["clear rules", "清晰的规矩"]
+        ["picture-perfect", "完美如画的"],
+        ["overpacked schedule", "排得过满的日程"],
+        ["happy accident", "意外之喜"]
       ]
     },
     {
       "id": "d5",
-      "en": "How Advertisers Make Us Spend Money",
-      "zh": "商家是怎么让我们掏钱的",
-      "words": 106,
-      "dur": 60,
-      "vocab": 790,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Breathwork Techniques to Reduce Stress",
+      "zh": "缓解压力的呼吸法",
+      "words": 103,
+      "dur": 58,
+      "vocab": 770,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["Shops use colour, music and layout to guide where your eyes go and what your hand reaches for.", "商店用颜色、音乐和陈列，引导你的眼睛看哪、手伸向哪。"],
-        ["'Scarcity' tricks like 'only 3 left' or 'sale ends tonight' push us to buy now instead of thinking it over.", "'稀缺'套路，比如'只剩3件''今晚结束'，逼我们立刻买，而不是先想想。"],
-        ["Knowing these tricks helps you pause and ask: do I really need this, or am I just being nudged?", "识破这些套路，你就能停一下自问：我是真需要，还是只是被推了一把？"]
+        ["Breathing keeps us alive, but doing it slowly and on purpose can also calm a racing mind within minutes.", "呼吸维持生命，但有意识地放慢呼吸，几分钟内就能安抚焦躁的大脑。"],
+        ["One popular method is 'box breathing': breathe in for four counts, hold for four, breathe out for four, and hold again.", "流行的'方块呼吸法'：吸气4拍、屏住4拍、呼气4拍、再屏住4拍。"],
+        ["Unlike apps or gym gear, breathwork is free and always with you — a pocket tool for stressful days.", "和APP、健身装备不同，呼吸练习免费又随身——是压力大时的'口袋工具'。"]
       ],
       "tips": [
-        ["layout", "布局 / 陈列"],
-        ["scarcity", "稀缺性"],
-        ["nudged", "被（轻轻）推着做"]
+        ["on purpose", "有意识地、故意地"],
+        ["racing mind", "思绪飞转的大脑"],
+        ["breathe in / out", "吸气 / 呼气"]
       ]
     }
   ]
