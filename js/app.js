@@ -3020,7 +3020,6 @@
       '<div id="gStatsView" style="display:none">' +
       '<div class="g-stat-card"><div class="g-stat-label">本月统计</div><div class="g-stat-num" id="gStatNum">0</div><div class="g-stat-sub" id="gStatSub">天记录</div><div class="g-stat-sub2" id="gStatSub2">累计记录 0 天</div><div class="g-stat-tip" id="gStatTip">坚持记录，让感恩成为习惯 ✨</div></div>' +
       '<div class="g-cal"><div class="g-cal-head"><button id="gCalPrev" class="btn sm ghost">‹</button><span id="gCalTitle"></span><button id="gCalNext" class="btn sm ghost">›</button></div><div class="g-cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div id="gCalGrid" class="g-cal-grid"></div></div>' +
-      '<div class="card" style="margin-top:12px"><div id="gTodayStatus" class="g-today-status"></div></div>' +
       '<div class="card" style="margin-top:12px"><div class="card-title" id="gDayTitle">📅 当日记录</div><div id="gDayPanel" class="g-day-panel"></div></div>' +
       '</div>' +
       '<div class="g-tabs"><button class="g-tab active" id="gTabRec">📝 记录</button><button class="g-tab" id="gTabStat">📊 统计</button></div>';
@@ -3217,16 +3216,6 @@
       for (let i = 1; i <= remaining; i++) {
         const cell = el('<div class="g-cal-day other-month">' + i + '</div>');
         grid.append(cell);
-      }
-
-      // 今日状态提示
-      const tsBox = $('#gTodayStatus');
-      if (recordedDates.has(todayDate)) {
-        const todayRec = all.find(r => r.date === todayDate);
-        const n = (todayRec && todayRec.items && todayRec.items.length) || 0;
-        tsBox.innerHTML = '<b>🎉 今天已记录</b><p class="muted" style="margin:4px 0 0">记下了 <b>' + n + '</b> 件感恩小事，继续保持！</p>';
-      } else {
-        tsBox.innerHTML = '<b>🌙 今天还没有记录</b><p class="muted" style="margin:4px 0 0">点击下方「记录」tab，开始记录今天的感恩小事吧</p>';
       }
 
       // 默认选中：已选中的日期，或今天（让下方「当日记录」面板有内容）
