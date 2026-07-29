@@ -4,97 +4,97 @@
   "articles": [
     {
       "id": "d1",
-      "en": "Micro-dramas: Small screens, big feelings",
-      "zh": "微短剧：小屏幕，大情绪",
-      "words": 96,
+      "en": "Should We Cycle More?",
+      "zh": "我们该多骑自行车吗",
+      "words": 108,
       "dur": 60,
-      "vocab": 12,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260413",
+      "vocab": 780,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Micro-dramas are short shows made for phones, with each episode lasting only one or two minutes.", "微短剧是专为手机制作的短剧，每集只有一两分钟。"],
-        ["They are cheap to make, fast to watch, and full of cliffhangers that keep viewers tapping for the next episode.", "它们制作成本低、观看速度快，而且充满悬念，让观众忍不住点开下一集。"],
-        ["Some people worry they shorten our attention span, while others see them as a new form of storytelling for busy lives.", "有人担心它们让注意力越来越短，也有人认为这是忙碌生活里的新型讲故事方式。"]
+        ["Cities around the world are building more bike lanes, hoping to cut traffic and air pollution at the same time.", "全球不少城市正在增建自行车道，希望同时减少交通拥堵和空气污染。"],
+        ["Cycling is not only good for the planet; doctors say it also lowers stress and keeps the heart healthy with very low risk of injury.", "骑车不仅对环境好，医生还指出它能减压、护心，而且受伤风险很低。"],
+        ["Still, many people hesitate because of unsafe roads or no place to shower at work — small problems that better city planning could fix.", "但许多人仍犹豫，原因多是道路不安全、或单位没地方冲澡——这些小问题，靠更好的城市规划就能解决。"]
       ],
       "tips": [
-        ["cliffhanger", "悬念、扣人心弦的结尾"],
-        ["attention span", "注意力持续时间"],
-        ["binge-watch", "刷剧、连续看个不停"]
+        ["cut traffic", "缓解交通拥堵"],
+        ["low risk of injury", "受伤风险低"],
+        ["city planning", "城市规划"]
       ]
     },
     {
       "id": "d2",
-      "en": "How do we adapt to the cold?",
-      "zh": "人是怎么适应寒冷的？",
-      "words": 92,
+      "en": "Rude Emails",
+      "zh": "那些让人不舒服的邮件",
+      "words": 102,
       "dur": 58,
-      "vocab": 11,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
+      "vocab": 740,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Some people shiver at the first autumn wind, while others swim in icy water and call it fun.", "有人秋风一吹就发抖，有人却在冰水里游泳还乐在其中。"],
-        ["Scientists say our bodies can slowly get used to low temperatures through a process called acclimatisation.", "科学家说，人体可以通过「环境适应」这个过程慢慢习惯低温。"],
-        ["Regular, gentle exposure to the cold may even train the body to burn energy better and feel less discomfort.", "规律而温和地接触寒冷，甚至能训练身体更好地消耗能量，减少不适感。"]
+        ["We all get blunt or careless emails, and they can ruin a working relationship before a project even starts.", "我们都收到过生硬或马虎的邮件，它们甚至能在项目开始前就毁掉一段工作关系。"],
+        ["Experts suggest pausing before you send: read it as if you were the receiver, and soften words like 'you must' or 'wrong'.", "专家建议发出前先停一下：把自己当收件人读一遍，把'你必须''你错了'这类词放缓和。"],
+        ["A short polite line at the end, such as 'thanks for your patience', can turn a cold message into a friendly one.", "结尾加一句简短的客套，比如'感谢你的耐心'，就能把冷冰冰的信息变亲切。"]
       ],
       "tips": [
-        ["shiver", "发抖、打寒颤"],
-        ["acclimatisation", "（对环境的）适应"],
-        ["exposure to", "暴露于、接触"]
+        ["blunt email", "生硬的邮件"],
+        ["soften words", "把措辞放缓和"],
+        ["working relationship", "工作关系"]
       ]
     },
     {
       "id": "d3",
-      "en": "Why are some animals black and white?",
-      "zh": "为什么有些动物是黑白配色？",
-      "words": 90,
+      "en": "Stress-free Family Meals",
+      "zh": "不紧绷的家庭餐",
+      "words": 99,
       "dur": 56,
-      "vocab": 11,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
+      "vocab": 730,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Zebras, pandas and penguins all wear black and white, but for very different reasons.", "斑马、熊猫和企鹅都穿着黑白「外套」，但原因大不相同。"],
-        ["A zebra's stripes may confuse biting insects, making it harder for them to land on the skin.", "斑马的条纹可能会迷惑叮咬的昆虫，让它们更难落在皮肤上。"],
-        ["For pandas, the bold pattern could help them hide in snow and shadow, or send signals to each other.", "对熊猫来说，醒目的黑白图案可能帮它们隐藏在雪地和阴影中，或者用来互相传递信号。"]
+        ["Family dinners often feel stressful because everyone is tired and phones keep buzzing at the table.", "家庭聚餐常让人紧张，因为大家都累，手机还不停在桌上响。"],
+        ["Cooks say the trick is to lower the bar: simple food, no screens, and let everyone help a little with setting the table.", "做饭的人说窍门是降低标准：简单饭菜、不碰屏幕、让每人都帮点小忙摆桌。"],
+        ["When the mood is calm, children actually eat better and talk more — which is the real point of eating together.", "气氛一放松，孩子反而吃得更好、话也更多——这才是一起吃饭的真正意义。"]
       ],
       "tips": [
-        ["stripes", "条纹"],
-        ["camouflage", "伪装、保护色"],
-        ["bold pattern", "醒目的图案"]
+        ["lower the bar", "降低标准 / 放低要求"],
+        ["simple food", "简单的饭菜"],
+        ["the real point", "真正的意义"]
       ]
     },
     {
       "id": "d4",
-      "en": "Rethinking dyslexia: a hidden superpower?",
-      "zh": "重新认识阅读障碍：隐藏的超能力？",
-      "words": 94,
-      "dur": 60,
-      "vocab": 12,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
+      "en": "Limiting Screen Time for Children",
+      "zh": "给孩子少点屏幕时间",
+      "words": 104,
+      "dur": 59,
+      "vocab": 760,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Dyslexia makes reading and spelling harder, and many children with it feel left behind at school.", "阅读障碍会让读写变得困难，许多有阅读障碍的孩子在学校感觉被落下了。"],
-        ["But researchers now believe dyslexic brains are often stronger at big-picture thinking, creativity and problem-solving.", "但研究者现在认为，有阅读障碍的大脑往往更擅长全局思考、创造力和解决问题。"],
-        ["Instead of calling it a weakness, some experts prefer to see it as a different — and valuable — way of thinking.", "有些专家不再把它称为缺陷，而是把它看作一种不同且珍贵的思维方式。"]
+        ["Many parents worry that tablets and phones steal too much of their children's day.", "许多家长担心平板和手机占掉了孩子太多时间。"],
+        ["Instead of strict bans, child experts suggest 'joint screen time' — watching or playing together, then talking about it.", "儿童专家不建议硬性禁止，而是建议'一起看屏幕'——陪着一起看、一起玩，然后聊一聊。"],
+        ["Clear rules, like no phones at meals and a fixed bedtime, work better than angry arguments every night.", "清晰的规矩，比如吃饭不碰手机、固定睡觉时间，比每晚吵架管用得多。"]
       ],
       "tips": [
-        ["dyslexia", "阅读障碍"],
-        ["big-picture thinking", "全局思维"],
-        ["left behind", "被落下、掉队"]
+        ["strict bans", "硬性禁止"],
+        ["joint screen time", "一起看屏幕的时间"],
+        ["clear rules", "清晰的规矩"]
       ]
     },
     {
       "id": "d5",
-      "en": "Love the foods you hate",
-      "zh": "爱上你讨厌的食物",
-      "words": 91,
-      "dur": 57,
-      "vocab": 11,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
+      "en": "How Advertisers Make Us Spend Money",
+      "zh": "商家是怎么让我们掏钱的",
+      "words": 106,
+      "dur": 60,
+      "vocab": 790,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Many of us refuse certain foods as children, then wake up one day and find we actually enjoy them.", "很多人小时候拒绝某些食物，某天却突然发现自己居然爱上了它们。"],
-        ["Taste is not fixed: repeated small tries can slowly teach the brain to accept bitter or strange flavours.", "口味不是一成不变的：反复少量尝试，可以慢慢让大脑接受苦味或奇怪的味道。"],
-        ["Food scientists suggest pairing a disliked food with something you love, so good feelings rub off on it.", "食品科学家建议把讨厌的食物和喜欢的食物搭配着吃，让好感「传染」过去。"]
+        ["Shops use colour, music and layout to guide where your eyes go and what your hand reaches for.", "商店用颜色、音乐和陈列，引导你的眼睛看哪、手伸向哪。"],
+        ["'Scarcity' tricks like 'only 3 left' or 'sale ends tonight' push us to buy now instead of thinking it over.", "'稀缺'套路，比如'只剩3件''今晚结束'，逼我们立刻买，而不是先想想。"],
+        ["Knowing these tricks helps you pause and ask: do I really need this, or am I just being nudged?", "识破这些套路，你就能停一下自问：我是真需要，还是只是被推了一把？"]
       ],
       "tips": [
-        ["acquired taste", "慢慢培养出的爱好（口味）"],
-        ["bitter", "苦的"],
-        ["rub off on", "（情绪/习惯）感染、影响到"]
+        ["layout", "布局 / 陈列"],
+        ["scarcity", "稀缺性"],
+        ["nudged", "被（轻轻）推着做"]
       ]
     }
   ]
