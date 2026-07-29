@@ -1,100 +1,100 @@
 {
-  "date": "2026-07-28",
+  "date": "2026-07-29",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "How to Cope with Disappointment",
-      "zh": "如何应对失望情绪",
-      "words": 105,
+      "en": "Micro-dramas: Small screens, big feelings",
+      "zh": "微短剧：小屏幕，大情绪",
+      "words": 96,
       "dur": 60,
-      "vocab": 750,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260727",
+      "vocab": 12,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260413",
       "body": [
-        ["Disappointment is what we feel when life does not match our hopes, like losing a job or missing a chance we really wanted.", "失望，就是生活没有达到我们的期望时的感受，比如丢了工作，或错过了一个特别想要的机会。"],
-        ["Instead of hiding the feeling, experts suggest we name it, accept it, and give ourselves time to feel sad before moving on.", "专家建议不要藏起这种情绪，而是先说出它、接受它，给自己一点难过的时间，再继续前行。"],
-        ["Talking to friends, lowering unrealistic expectations and focusing on small next steps can slowly turn disappointment into a fresh start.", "和朋友聊聊、放下不切实际的期待、专注于下一小步，能慢慢把失望变成一个新的开始。"]
+        ["Micro-dramas are short shows made for phones, with each episode lasting only one or two minutes.", "微短剧是专为手机制作的短剧，每集只有一两分钟。"],
+        ["They are cheap to make, fast to watch, and full of cliffhangers that keep viewers tapping for the next episode.", "它们制作成本低、观看速度快，而且充满悬念，让观众忍不住点开下一集。"],
+        ["Some people worry they shorten our attention span, while others see them as a new form of storytelling for busy lives.", "有人担心它们让注意力越来越短，也有人认为这是忙碌生活里的新型讲故事方式。"]
       ],
       "tips": [
-        ["cope with", "应对、处理"],
-        ["let someone down", "让某人失望"],
-        ["move on", "翻篇、继续前行"]
+        ["cliffhanger", "悬念、扣人心弦的结尾"],
+        ["attention span", "注意力持续时间"],
+        ["binge-watch", "刷剧、连续看个不停"]
       ]
     },
     {
       "id": "d2",
-      "en": "The Calming Effects of Rain",
-      "zh": "雨声为何能舒缓身心",
-      "words": 98,
-      "dur": 55,
-      "vocab": 720,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260608",
+      "en": "How do we adapt to the cold?",
+      "zh": "人是怎么适应寒冷的？",
+      "words": 92,
+      "dur": 58,
+      "vocab": 11,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
       "body": [
-        ["Many people find the sound of rain deeply relaxing, and some even play recorded rain sounds to help them sleep at night.", "很多人觉得雨声特别让人放松，有人晚上甚至会播放雨声录音来帮助入睡。"],
-        ["Scientists say rain produces gentle, steady noise that masks sudden sounds, which helps our busy brains slow down and rest.", "科学家说，雨声是一种轻柔而平稳的声音，能盖住突然的噪音，让忙碌的大脑慢下来休息。"],
-        ["A rainy day also gives us permission to stay inside, drink something warm and simply watch the world without feeling guilty.", "下雨天还给了我们一个'名正言顺'待在家的理由：喝杯热饮，安心看看窗外的世界，也不觉得内疚。"]
+        ["Some people shiver at the first autumn wind, while others swim in icy water and call it fun.", "有人秋风一吹就发抖，有人却在冰水里游泳还乐在其中。"],
+        ["Scientists say our bodies can slowly get used to low temperatures through a process called acclimatisation.", "科学家说，人体可以通过「环境适应」这个过程慢慢习惯低温。"],
+        ["Regular, gentle exposure to the cold may even train the body to burn energy better and feel less discomfort.", "规律而温和地接触寒冷，甚至能训练身体更好地消耗能量，减少不适感。"]
       ],
       "tips": [
-        ["calming effect", "镇静、舒缓的效果"],
-        ["white noise", "白噪音"],
-        ["wind down", "放松下来"]
+        ["shiver", "发抖、打寒颤"],
+        ["acclimatisation", "（对环境的）适应"],
+        ["exposure to", "暴露于、接触"]
       ]
     },
     {
       "id": "d3",
-      "en": "Breathwork Techniques to Reduce Stress",
-      "zh": "缓解压力的呼吸法",
-      "words": 100,
-      "dur": 58,
-      "vocab": 760,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260615",
+      "en": "Why are some animals black and white?",
+      "zh": "为什么有些动物是黑白配色？",
+      "words": 90,
+      "dur": 56,
+      "vocab": 11,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
       "body": [
-        ["Breathing keeps us alive, but the way we breathe can also change how calm or stressed we feel during the day.", "呼吸让我们活着，但呼吸的方式也会影响我们一天中是平静还是紧张。"],
-        ["Simple exercises, such as breathing in slowly and breathing out even more slowly, tell the body it is safe to relax.", "一些简单的练习，比如慢慢吸气、再更慢地呼气，会告诉身体'现在很安全，可以放松了'。"],
-        ["Just a few minutes of breathwork before an interview or a difficult talk can lower stress and help us think more clearly.", "面试或艰难谈话前，只需几分钟的呼吸练习，就能减压，让头脑更清醒。"]
+        ["Zebras, pandas and penguins all wear black and white, but for very different reasons.", "斑马、熊猫和企鹅都穿着黑白「外套」，但原因大不相同。"],
+        ["A zebra's stripes may confuse biting insects, making it harder for them to land on the skin.", "斑马的条纹可能会迷惑叮咬的昆虫，让它们更难落在皮肤上。"],
+        ["For pandas, the bold pattern could help them hide in snow and shadow, or send signals to each other.", "对熊猫来说，醒目的黑白图案可能帮它们隐藏在雪地和阴影中，或者用来互相传递信号。"]
       ],
       "tips": [
-        ["take a deep breath", "深呼吸"],
-        ["breathe in / out", "吸气 / 呼气"],
-        ["calm your nerves", "稳定情绪、镇定神经"]
+        ["stripes", "条纹"],
+        ["camouflage", "伪装、保护色"],
+        ["bold pattern", "醒目的图案"]
       ]
     },
     {
       "id": "d4",
-      "en": "Choosing the Right Yoghurt",
-      "zh": "如何挑选健康的酸奶",
-      "words": 96,
-      "dur": 55,
-      "vocab": 730,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english/ep-260622",
+      "en": "Rethinking dyslexia: a hidden superpower?",
+      "zh": "重新认识阅读障碍：隐藏的超能力？",
+      "words": 94,
+      "dur": 60,
+      "vocab": 12,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
       "body": [
-        ["Supermarket shelves are full of yoghurts, but many of them contain much more sugar than people expect from a healthy food.", "超市货架上摆满了酸奶，但很多酸奶的含糖量远超人们对'健康食品'的想象。"],
-        ["Experts advise checking the label carefully: plain, natural yoghurt with live cultures is usually a better choice than sweet flavoured ones.", "专家建议仔细看配料表：无糖的原味酸奶、含活性菌的，通常比甜味调味酸奶更好。"],
-        ["If plain yoghurt tastes too sour, adding fresh fruit or a little honey at home is a smarter way to make it sweet.", "如果原味酸奶太酸，回家自己加点新鲜水果或少许蜂蜜，是更聪明的增甜方式。"]
+        ["Dyslexia makes reading and spelling harder, and many children with it feel left behind at school.", "阅读障碍会让读写变得困难，许多有阅读障碍的孩子在学校感觉被落下了。"],
+        ["But researchers now believe dyslexic brains are often stronger at big-picture thinking, creativity and problem-solving.", "但研究者现在认为，有阅读障碍的大脑往往更擅长全局思考、创造力和解决问题。"],
+        ["Instead of calling it a weakness, some experts prefer to see it as a different — and valuable — way of thinking.", "有些专家不再把它称为缺陷，而是把它看作一种不同且珍贵的思维方式。"]
       ],
       "tips": [
-        ["read the label", "看配料表/标签"],
-        ["added sugar", "添加糖"],
-        ["live cultures", "活性菌"]
+        ["dyslexia", "阅读障碍"],
+        ["big-picture thinking", "全局思维"],
+        ["left behind", "被落下、掉队"]
       ]
     },
     {
       "id": "d5",
-      "en": "Weight Loss Drugs",
-      "zh": "减肥药真的靠谱吗",
-      "words": 102,
-      "dur": 60,
-      "vocab": 800,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260326",
+      "en": "Love the foods you hate",
+      "zh": "爱上你讨厌的食物",
+      "words": 91,
+      "dur": 57,
+      "vocab": 11,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026",
       "body": [
-        ["New weight loss drugs like Ozempic have become world famous because they help people eat less by making them feel full sooner.", "像 Ozempic 这样的新型减肥药在全球爆红，因为它们能让人更快产生饱腹感，从而少吃。"],
-        ["Doctors say these medicines can really help some patients, but they may bring side effects and the weight often returns after stopping.", "医生表示，这类药确实能帮到一部分患者，但可能有副作用，而且停药后体重常常反弹。"],
-        ["Experts remind us that healthy food and regular movement are still the foundation, and no pill can fully replace a good lifestyle.", "专家提醒：健康饮食和规律运动仍是根本，没有任何药片能完全取代好的生活方式。"]
+        ["Many of us refuse certain foods as children, then wake up one day and find we actually enjoy them.", "很多人小时候拒绝某些食物，某天却突然发现自己居然爱上了它们。"],
+        ["Taste is not fixed: repeated small tries can slowly teach the brain to accept bitter or strange flavours.", "口味不是一成不变的：反复少量尝试，可以慢慢让大脑接受苦味或奇怪的味道。"],
+        ["Food scientists suggest pairing a disliked food with something you love, so good feelings rub off on it.", "食品科学家建议把讨厌的食物和喜欢的食物搭配着吃，让好感「传染」过去。"]
       ],
       "tips": [
-        ["lose weight", "减重、瘦下来"],
-        ["side effect", "副作用"],
-        ["feel full", "有饱腹感"]
+        ["acquired taste", "慢慢培养出的爱好（口味）"],
+        ["bitter", "苦的"],
+        ["rub off on", "（情绪/习惯）感染、影响到"]
       ]
     }
   ]
