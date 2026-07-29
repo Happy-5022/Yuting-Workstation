@@ -168,7 +168,7 @@ def _load_covered_texts():
         _appjs = os.path.join(PROJECT_ROOT, 'js', 'app.js')
         with open(_appjs, encoding='utf-8') as _f:
             _src = _f.read()
-        return set(re.findall(r"m\['([^']*)'\]\s*=\s*'([^']*)'", _src))
+        return set(m[0] for m in re.findall(r"m\['([^']*)'\]\s*=\s*'([^']*)'", _src))
     except Exception:
         return set()
 
