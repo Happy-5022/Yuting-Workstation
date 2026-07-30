@@ -1,100 +1,145 @@
 {
-  "date": "2026-07-29",
+  "date": "2026-07-30",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Birdwatching Boom",
-      "zh": "观鸟热潮来了",
-      "words": 104,
-      "dur": 59,
-      "vocab": 760,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
+      "en": "Should We Cycle More?",
+      "zh": "我们该多骑自行车吗？",
+      "words": 96,
+      "dur": 60,
+      "vocab": 550,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["More and more people are picking up binoculars and heading to parks to watch birds, a hobby that used to seem old-fashioned.", "越来越多的人拿起望远镜走进公园观鸟，这个曾被认为'过时'的爱好正在翻红。"],
-        ["Fans say birdwatching forces you to slow down, listen carefully and notice small changes in nature around you.", "爱好者说，观鸟会逼你慢下来、仔细听，去留意身边自然界的细微变化。"],
-        ["You need almost nothing to start: a quiet morning, a bit of patience, and curiosity about the songs above your head.", "入门几乎零门槛：一个安静的早晨、一点耐心，加上对头顶鸟鸣的好奇心就够了。"]
+        [
+          "Cycling is deeply ingrained in Dutch culture, and the Netherlands now has about 24 million bikes, more than its population.",
+          "骑行深深植根于荷兰文化，如今荷兰约有2400万辆自行车，比全国人口还多。"
+        ],
+        [
+          "Bikes there took off in the industrial era, changing from a toy for the rich into an everyday tool for ordinary people.",
+          "自行车在工业时代迅速流行起来，从富人的玩具变成了普通人的日常交通工具。"
+        ],
+        [
+          "Hot cities like Dubai are also building cycle tracks, hoping cycling can improve quality of life, though they cannot simply copy and paste the Dutch model.",
+          "迪拜等炎热城市也在修建自行车道，希望骑行能提升生活品质，但它们不能照搬荷兰模式。"
+        ]
       ],
       "tips": [
-        ["binoculars", "双筒望远镜"],
-        ["old-fashioned", "过时的"],
-        ["slow down", "慢下来"]
+        ["deeply ingrained", "根深蒂固的"],
+        ["take off", "迅速流行、腾飞"],
+        ["quality of life", "生活品质"]
       ]
     },
     {
       "id": "d2",
-      "en": "How High Temperatures Affect Sleep",
-      "zh": "高温天为啥睡不好",
-      "words": 106,
-      "dur": 60,
-      "vocab": 780,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
+      "en": "Rude Emails at Work",
+      "zh": "职场里的无礼邮件",
+      "words": 90,
+      "dur": 55,
+      "vocab": 520,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["On hot summer nights, many of us toss and turn because our body needs to cool down slightly before it can fall asleep.", "炎热的夏夜里我们翻来覆去，因为身体需要先稍微降温才能入睡。"],
-        ["Experts suggest simple tricks: take a warm shower before bed, keep curtains closed in the day, and use light cotton sheets.", "专家给出简单妙招：睡前洗个温水澡、白天拉上窗帘、换轻薄的纯棉床单。"],
-        ["A regular sleep routine matters even more in a heatwave, so try to go to bed at the same time every night.", "热浪天里规律作息更重要，尽量每天同一时间上床睡觉。"]
+        [
+          "Have you ever received an uncivil email that ruined your whole morning? Many office workers say rude messages cause real stress.",
+          "你有没有收到过一封没礼貌的邮件，毁掉一整个上午的心情？许多上班族说无礼的信息会带来真实的压力。"
+        ],
+        [
+          "Because emails have no tone of voice or facial expressions, a short reply can easily come across as cold or angry.",
+          "因为邮件没有语气和表情，一句简短的回复很容易让人觉得冷漠甚至生气。"
+        ],
+        [
+          "Experts suggest waiting before replying to an annoying email, and adding polite greetings to soften the message.",
+          "专家建议收到令人恼火的邮件先别急着回，并加上礼貌的问候语来软化语气。"
+        ]
       ],
       "tips": [
-        ["toss and turn", "翻来覆去睡不着"],
-        ["cool down", "降温"],
-        ["heatwave", "热浪"]
+        ["uncivil", "不礼貌的、失礼的"],
+        ["come across as", "给人以……的印象"],
+        ["soften the message", "让措辞变得柔和"]
       ]
     },
     {
       "id": "d3",
-      "en": "What's in a Footballer's Brain?",
-      "zh": "球员罚点球时脑子里在想啥",
-      "words": 102,
+      "en": "Heat, Humidity and the World Cup",
+      "zh": "世界杯遭遇高温高湿考验",
+      "words": 92,
       "dur": 58,
-      "vocab": 790,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "vocab": 560,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["When a footballer steps up to take a penalty, millions watch — and the real battle happens inside the player's head.", "当球员站上点球点，数百万人在看——而真正的较量发生在他的大脑里。"],
-        ["Sports scientists find that top players train their minds like muscles, using breathing and routines to stay calm under pressure.", "运动科学家发现，顶级球员像练肌肉一样训练大脑，用呼吸法和固定流程在压力下保持冷静。"],
-        ["The same tricks work off the pitch too: before an interview or a big talk, slow breathing helps anyone perform better.", "这些技巧场外同样管用：面试或重要发言前，放慢呼吸能让任何人发挥更好。"]
+        [
+          "This summer's World Cup has faced extreme heat, with players competing in temperatures that push their bodies to the limit.",
+          "今夏世界杯遭遇极端高温，球员们在把身体逼到极限的气温下比赛。"
+        ],
+        [
+          "High humidity makes things worse, because sweat cannot evaporate easily and the body struggles to cool down.",
+          "高湿度让情况更糟，因为汗水难以蒸发，身体很难降温。"
+        ],
+        [
+          "Organisers now use cooling breaks and evening kick-offs to protect players and fans from heat stress.",
+          "主办方现在采用补水降温暂停和傍晚开球的办法，保护球员和球迷免受热应激伤害。"
+        ]
       ],
       "tips": [
-        ["take a penalty", "主罚点球"],
-        ["under pressure", "在压力之下"],
-        ["off the pitch", "在球场之外"]
+        ["push to the limit", "逼到极限"],
+        ["evaporate", "蒸发"],
+        ["cooling break", "（比赛中的）降温暂停"]
       ]
     },
     {
       "id": "d4",
-      "en": "Does Planning the Perfect Summer Cause Problems?",
-      "zh": "'完美夏天'计划反而害了你？",
-      "words": 100,
-      "dur": 57,
-      "vocab": 750,
+      "en": "Choosing the Right Yoghurt",
+      "zh": "如何挑选健康的酸奶",
+      "words": 88,
+      "dur": 55,
+      "vocab": 530,
       "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["Social media is full of picture-perfect holidays, and many people feel their own summer must look just as amazing.", "社交媒体上满是完美假期照，很多人觉得自己的夏天也必须同样精彩。"],
-        ["But chasing a perfect plan often brings stress: overpacked schedules leave no room for rest or happy accidents.", "但追求完美计划常带来压力：排得太满的行程，容不下休息和惊喜。"],
-        ["Researchers say the best memories usually come from simple, unplanned moments — an evening walk or an ice cream by the road.", "研究者说，最好的回忆往往来自简单、没计划的时刻——一次傍晚散步，或路边一支冰淇淋。"]
+        [
+          "Supermarket shelves are full of yoghurts, but not all of them are as healthy as their labels suggest.",
+          "超市货架上摆满了各种酸奶，但并不是每一款都像标签宣传的那么健康。"
+        ],
+        [
+          "Many flavoured yoghurts contain added sugar, so checking the ingredients list is smarter than trusting the packaging.",
+          "很多风味酸奶都含有添加糖，所以看配料表比相信包装宣传更聪明。"
+        ],
+        [
+          "Nutritionists say plain yoghurt with live cultures is often the best choice for your gut health.",
+          "营养学家说，含活性菌的原味酸奶通常是对肠道健康最好的选择。"
+        ]
       ],
       "tips": [
-        ["picture-perfect", "完美如画的"],
-        ["overpacked schedule", "排得过满的日程"],
-        ["happy accident", "意外之喜"]
+        ["added sugar", "添加糖"],
+        ["ingredients list", "配料表"],
+        ["gut health", "肠道健康"]
       ]
     },
     {
       "id": "d5",
-      "en": "Breathwork Techniques to Reduce Stress",
-      "zh": "缓解压力的呼吸法",
-      "words": 103,
-      "dur": 58,
-      "vocab": 770,
+      "en": "The Calming Effects of Rain",
+      "zh": "雨声为何让人放松",
+      "words": 90,
+      "dur": 56,
+      "vocab": 540,
       "link": "https://www.bbc.co.uk/learningenglish/chinese/features/take-away-english",
       "body": [
-        ["Breathing keeps us alive, but doing it slowly and on purpose can also calm a racing mind within minutes.", "呼吸维持生命，但有意识地放慢呼吸，几分钟内就能安抚焦躁的大脑。"],
-        ["One popular method is 'box breathing': breathe in for four counts, hold for four, breathe out for four, and hold again.", "流行的'方块呼吸法'：吸气4拍、屏住4拍、呼气4拍、再屏住4拍。"],
-        ["Unlike apps or gym gear, breathwork is free and always with you — a pocket tool for stressful days.", "和APP、健身装备不同，呼吸练习免费又随身——是压力大时的'口袋工具'。"]
+        [
+          "Many people find the sound of rain deeply relaxing, and some even play rain recordings to help them fall asleep.",
+          "很多人觉得雨声特别让人放松，有些人甚至靠播放雨声录音来帮助入睡。"
+        ],
+        [
+          "Scientists explain that steady rain works like white noise, masking sudden sounds that would otherwise disturb our brains.",
+          "科学家解释说，平稳的雨声就像白噪音，能掩盖那些会打扰大脑的突发声响。"
+        ],
+        [
+          "A rainy day also gives us permission to slow down, stay indoors and enjoy a quiet moment with a warm drink.",
+          "雨天还给了我们放慢脚步的理由：待在室内，捧一杯热饮，享受安静时光。"
+        ]
       ],
       "tips": [
-        ["on purpose", "有意识地、故意地"],
-        ["racing mind", "思绪飞转的大脑"],
-        ["breathe in / out", "吸气 / 呼气"]
+        ["white noise", "白噪音"],
+        ["mask a sound", "掩盖声音"],
+        ["slow down", "放慢节奏"]
       ]
     }
   ]
