@@ -1,145 +1,145 @@
 {
-  "date": "2026-07-31",
+  "date": "2026-08-01",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Children in Warzones",
-      "zh": "战火中的孩子",
-      "words": 68,
-      "dur": 45,
+      "en": "Living with Debt",
+      "zh": "背着债过日子",
+      "words": 96,
+      "dur": 60,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260723",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260528",
       "body": [
         [
-          "Millions of children grow up in places affected by conflict, where school, food and safety are never guaranteed.",
-          "全世界有数百万孩子在冲突地区长大，那里上学、吃饭和安全都无法得到保障。"
+          "Most people borrow money at some point in their lives, usually for something big like a home or a car.",
+          "大多数人一生中都会借钱，通常是为了买房、买车这类大件。"
         ],
         [
-          "Aid workers say the damage is not only physical: constant fear can affect a child's sleep, memory and learning for years.",
-          "救援人员说，伤害不只是身体上的：长期的恐惧会在之后很多年里影响孩子的睡眠、记忆和学习。"
+          "But as living costs rise, more people are borrowing just to pay bills or buy food, and that changes everything.",
+          "但随着生活成本上升，越来越多人借钱只是为了付账单和买吃的，性质就完全变了。"
         ],
         [
-          "Simple things, such as a safe classroom or an adult who listens, help children recover more than people expect.",
-          "一些简单的事，比如一间安全的教室、一个愿意倾听的大人，对孩子恢复的帮助远超人们的想象。"
+          "Debt is not only about numbers. It follows you home at night, and talking about it openly is often the first step out.",
+          "债务不只是数字问题。它会跟着你回家、在夜里压着你，而愿意开口谈它，往往是走出来的第一步。"
         ]
       ],
       "tips": [
-        ["warzone", "战区"],
-        ["resilience", "心理韧性、复原力"],
-        ["long-lasting effect", "长期影响"]
+        ["borrow money", "借钱"],
+        ["cost of living", "生活成本"],
+        ["pay back", "偿还、还清"]
       ]
     },
     {
       "id": "d2",
-      "en": "Stress-free Family Meals",
-      "zh": "不再吵架的家庭餐桌",
-      "words": 66,
-      "dur": 44,
+      "en": "Making Cities Feel Quieter",
+      "zh": "让城市安静一点",
+      "words": 92,
+      "dur": 58,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260625",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260521",
       "body": [
         [
-          "For many families, dinner turns into a battle, with parents begging children to eat vegetables they clearly dislike.",
-          "对很多家庭来说，晚饭变成了一场拉锯战，父母不停求孩子吃他们明显不爱吃的蔬菜。"
+          "City life comes with a constant background noise: traffic, building work, and thousands of voices passing by.",
+          "城市生活自带一层持续的背景噪音：车流、施工，还有身边成千上万的人声。"
         ],
         [
-          "Experts suggest putting new food on the table without pressure, and letting children look at it, touch it, or simply ignore it.",
-          "专家建议把新食物放上桌但不施加压力，让孩子看看它、摸摸它，或者干脆无视它。"
+          "Research suggests that long exposure to loud noise can raise our anxiety levels, even when we stop noticing it.",
+          "研究显示，长期暴露在噪音里会推高焦虑水平，哪怕我们早已对它习以为常。"
         ],
         [
-          "Over time, calm repeated exposure works far better than rewards or punishment, and mealtimes get quieter for everyone.",
-          "时间久了，平静地反复接触比奖励或惩罚有效得多，全家的饭点也会安静下来。"
+          "Some cities are fighting back with quiet gardens, softer road surfaces and small green corners where people can simply breathe.",
+          "一些城市正在反击：修建静音花园、铺设更柔软的路面，留出小片绿色角落，让人能好好喘口气。"
         ]
       ],
       "tips": [
-        ["fussy eater", "挑食的人"],
-        ["put pressure on", "对……施加压力"],
-        ["mealtime", "用餐时间"]
+        ["background noise", "背景噪音"],
+        ["exposure to", "暴露于……之中"],
+        ["fight back", "反击、想办法应对"]
       ]
     },
     {
       "id": "d3",
-      "en": "Limiting Screen Time for Children",
-      "zh": "该怎么管孩子的屏幕时间",
-      "words": 70,
-      "dur": 46,
+      "en": "How Reading Shapes Your Brain",
+      "zh": "阅读如何重塑你的大脑",
+      "words": 94,
+      "dur": 59,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260618",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260514",
       "body": [
         [
-          "Screens are now part of childhood, and many parents worry about how many hours their children spend scrolling.",
-          "屏幕已经成了童年的一部分，很多父母担心孩子每天要刷多少小时手机。"
+          "Humans were never born to read. Unlike speaking, reading is a skill our brains had to invent from scratch.",
+          "人类天生并不会阅读。和说话不同，阅读是大脑必须从零发明出来的一项技能。"
         ],
         [
-          "Researchers say the type of content matters as much as the total time; a video call with grandparents is not the same as endless short videos.",
-          "研究者说，内容类型和总时长一样重要：和爷爷奶奶视频通话，跟无休止地刷短视频完全是两回事。"
+          "Learning to read rewires parts of the brain, connecting vision and language in a way that non-readers do not develop.",
+          "学会阅读会重新连接大脑的某些区域，把视觉和语言接在一起，而不识字的人不会形成这种连接。"
         ],
         [
-          "Agreeing on clear rules together, like screen-free meals and no phones before bed, usually works better than a sudden ban.",
-          "一起商定清楚的规则，比如吃饭不看屏幕、睡前不碰手机，通常比突然全面禁止更管用。"
+          "That is good news for adult learners: your brain keeps changing, so it is never too late to pick up a new language.",
+          "这对成年学习者是好消息：大脑一直在变，所以任何时候开始学一门新语言都不算晚。"
         ]
       ],
       "tips": [
-        ["screen time", "屏幕使用时间"],
-        ["scroll", "滑动浏览"],
-        ["set boundaries", "设定界限"]
+        ["from scratch", "从零开始"],
+        ["rewire", "重新接线、重塑（神经连接）"],
+        ["pick up", "（顺带）学会、掌握"]
       ]
     },
     {
       "id": "d4",
-      "en": "How Advertisers Make Us Spend Money",
-      "zh": "广告是怎么让我们掏钱的",
-      "words": 67,
-      "dur": 44,
+      "en": "Searching for Life on Another Planet",
+      "zh": "在别的星球上找生命",
+      "words": 90,
+      "dur": 57,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260611",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260507",
       "body": [
         [
-          "Advertisers study our habits carefully, then design messages that make us feel we are missing out on something.",
-          "广告商会仔细研究我们的习惯，然后设计出让我们觉得「再不买就错过了」的信息。"
+          "For centuries people have looked at the night sky and asked the same question: is anybody else out there?",
+          "几个世纪以来，人们仰望夜空，问的都是同一个问题：那边还有别人吗？"
         ],
         [
-          "Limited offers, countdown timers and 'only three left' notices all push us to decide quickly, before we think.",
-          "限时优惠、倒计时和「仅剩三件」的提示，都在推着我们在思考之前赶紧下单。"
+          "Today scientists no longer look for spaceships. They look for tiny chemical clues in the air of distant planets.",
+          "今天的科学家不再找飞船了，他们在遥远行星的大气里寻找极其微小的化学线索。"
         ],
         [
-          "Noticing the trick is the best defence: wait one day, and most must-have items quietly lose their power.",
-          "识破套路就是最好的防御：等上一天，大多数「非买不可」的东西会悄悄失去魔力。"
+          "Even a hint of the right gas would be huge news, though researchers warn that one clue alone proves nothing.",
+          "哪怕只测到一点点特定气体，都会是天大的新闻——但研究者提醒，单一线索什么也证明不了。"
         ]
       ],
       "tips": [
-        ["impulse buy", "冲动消费"],
-        ["fear of missing out", "错失恐惧（FOMO）"],
-        ["persuade someone to", "说服某人做某事"]
+        ["out there", "在外面、在远方（此处指宇宙中）"],
+        ["clue", "线索"],
+        ["prove nothing", "什么也说明不了"]
       ]
     },
     {
       "id": "d5",
-      "en": "The Power of Poetry",
-      "zh": "诗的力量",
-      "words": 62,
-      "dur": 41,
+      "en": "Should We Eat Ultra-Processed Food?",
+      "zh": "超加工食品到底该不该吃",
+      "words": 98,
+      "dur": 62,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260604",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260430",
       "body": [
         [
-          "Poetry can look difficult, but at heart it is simply language slowed down until we finally notice it.",
-          "诗看起来很难，但本质上不过是把语言放慢，慢到我们终于注意到它。"
+          "Ultra-processed food is everywhere: instant noodles, packaged bread, fizzy drinks and most things in a colourful wrapper.",
+          "超加工食品无处不在：泡面、包装面包、汽水，还有大多数装在花花绿绿包装里的东西。"
         ],
         [
-          "Studies suggest that reading or writing poems helps people name feelings they cannot easily explain.",
-          "研究表明，读诗或写诗能帮人给那些说不清的情绪起个名字。"
+          "It is cheap, convenient and designed to taste good, which is exactly why it is so hard to eat less of it.",
+          "它便宜、方便，而且被专门设计得很好吃——这正是我们很难少吃的原因。"
         ],
         [
-          "You do not need talent to begin: three honest lines about your day already count as a poem.",
-          "开始写诗并不需要天赋：关于今天的三句真心话，就已经算一首诗了。"
+          "Experts are still arguing about the science, but most agree on one simple rule: cook at home when you can.",
+          "专家们对其中的科学仍有争论，但大多数人认同一条朴素的规则：能自己在家做饭就自己做。"
         ]
       ],
       "tips": [
-        ["at heart", "本质上"],
-        ["express emotions", "表达情绪"],
-        ["metaphor", "比喻、隐喻"]
+        ["ultra-processed", "超加工的"],
+        ["convenient", "方便的"],
+        ["cut down on", "减少（摄入）"]
       ]
     }
   ]
