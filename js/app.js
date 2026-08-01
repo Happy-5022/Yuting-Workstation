@@ -376,6 +376,56 @@
       ],
       tips: [['lift our spirits', '提振心情'], ['where words fail', '言语力所不及之处'], ['connecting people', '把人连接起来']],
     },
+    {
+      id: 'a6', en: 'Learning From Mistakes', zh: '从错误中成长',
+      words: 230, dur: 128, vocab: 24,
+      body: [
+        ['Mistakes are not failures. They are signs that you are trying something new.', '犯错不是失败，而是你在尝试新事物的信号。'],
+        ['Each time you get it wrong, your brain records the correct path more clearly.', '每错一次，大脑就更清楚地记下正确的路。'],
+        ['So speak, write, and practise without fear. Progress hides inside the errors.', '所以大胆去说、去写、去练。进步就藏在错误里。'],
+      ],
+      tips: [['not failures', '不是失败'], ['records', '记录'], ['without fear', '毫不害怕']],
+    },
+    {
+      id: 'a7', en: 'The Quiet Power of Reading', zh: '阅读无声的力量',
+      words: 235, dur: 132, vocab: 25,
+      body: [
+        ['Reading gives your mind a place to rest and grow at the same time.', '阅读让心灵同时得到休息与成长。'],
+        ['A few pages a day can change how you see the world by year’s end.', '每天几页书，到年底就能改变你看世界的方式。'],
+        ['Choose books you enjoy; consistency matters more than difficulty.', '选你爱读的书，持续比难度更重要。'],
+      ],
+      tips: [['a place to rest', '休息的地方'], ['by year’s end', '到年底'], ['consistency', '持续性']],
+    },
+    {
+      id: 'a8', en: 'Cooking as a Form of Calm', zh: '做饭也是一种平静',
+      words: 240, dur: 135, vocab: 25,
+      body: [
+        ['Standing in the kitchen, chopping and stirring, can quiet a noisy mind.', '站在厨房里切菜、搅拌，能让喧闹的脑子安静下来。'],
+        ['A simple meal made by your own hands tastes better than any takeaway.', '自己动手做的一顿简餐，比任何外卖都香。'],
+        ['Cooking is a small daily ritual that brings order to a messy day.', '做饭是每天的小仪式，给混乱的一天带来秩序。'],
+      ],
+      tips: [['quiet a noisy mind', '让喧闹的脑子安静'], ['takeaway', '外卖'], ['a small ritual', '一个小仪式']],
+    },
+    {
+      id: 'a9', en: 'Why We Put Things Off', zh: '我们为什么爱拖延',
+      words: 225, dur: 125, vocab: 24,
+      body: [
+        ['We delay not because a task is hard, but because it feels unclear.', '我们拖延，不是因为任务难，而是因为它让人觉得模糊。'],
+        ['Break it into one tiny step, and the fog clears enough to begin.', '把它拆成一个小步骤，迷雾就散了，足以起步。'],
+        ['Action is the antidote to overthinking; start small, start now.', '行动是过度思虑的解药：从小处开始，从现在开始。'],
+      ],
+      tips: [['put things off', '拖延'], ['unclear', '模糊的'], ['antidote', '解药']],
+    },
+    {
+      id: 'a10', en: 'The Gift of Early Mornings', zh: '清晨的馈赠',
+      words: 245, dur: 138, vocab: 26,
+      body: [
+        ['Before the world wakes, the early morning belongs quietly to you.', '在世界醒来之前，清晨静静属于你。'],
+        ['A slow stretch, a warm drink, ten minutes of reading — a calm start.', '缓缓拉伸、一杯热饮、十分钟阅读，就是一个平静的开端。'],
+        ['How you begin the day often shapes how the day unfolds.', '你如何开启一天，往往决定了这一天如何展开。'],
+      ],
+      tips: [['belongs to you', '属于你'], ['a calm start', '平静的开端'], ['unfolds', '展开']],
+    },
   ];
   const EN_SENTENCES = [
     { en: 'Practice makes perfect.', zh: '熟能生巧。' },
@@ -990,7 +1040,7 @@
   async function renderIdeas(view) {
     view.innerHTML =
       '<div class="card idea-header"><div class="row spread"><b>🔥 每日灵感来源</b> <span class="muted" id="ideaMeta"></span></div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">每天由「每日9点·热点选题灵感」自动化产出；若当天未生成则显示最近一批。每条附跳转链接——点开即跳去搜相关视频 / 文章。「🔄 立即刷新」拉取云端最新一批；「🎲 换一批」从手机本地题库随机洗牌（无需联网）。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">每天按日期自动从题库轮换一批新选题；若你当天推送了云端新文件则优先显示。每条附跳转链接——点开即跳去搜相关视频 / 文章。「🔄 立即刷新」拉取云端最新一批；「🎲 换一批」从手机本地题库随机洗牌（无需联网）。</p>' +
       '<div class="row" style="margin-top:10px;gap:8px"><button id="refreshIdea" class="btn sm ghost">🔄 立即刷新</button><button id="shuffleIdea" class="btn sm ghost">🎲 换一批(本地)</button></div></div>' +
       '<div id="ideaList"></div>' +
       '<div class="section-label" style="margin-top:18px">➕ 我的灵感（收藏 / 手动添加）</div>' +
@@ -1037,12 +1087,14 @@
       if (mode === 'local') {
         data = localDaily(Date.now());            // 🎲 换一批：从本地题库随机洗牌，每次都不同，不联网
       } else {
-        data = await loadDaily() || localDaily();  // 进入 / 🔄立即刷新：优先拉云端每日文件，拉不到退本地
+        const cloud = await loadDaily();
+        // 云端文件只当“今天”生成才直接用；否则按当天日期从本地题库轮换，保证每天自动换一批
+        data = (cloud && cloud.date === todayStr()) ? cloud : localDaily();
       }
       const items = data.items;
       const off = data.source && data.source.indexOf('本地') >= 0;
       const stale = !off && data.date && data.date !== todayStr();
-      $('#ideaMeta').textContent = '(' + (data.date || todayStr('cn')) + ' · ' + items.length + ' 条' + (stale ? ' · 非今日，点“🎲 换一批”换一批' : (off ? ' · 本地灵感' : '')) + ')';
+      $('#ideaMeta').textContent = '(' + (data.date || todayStr('cn')) + ' · ' + items.length + ' 条' + (stale ? ' · 非今日，点“🎲 换一批”' : (off ? ' · 本地灵感·每日轮换' : '')) + ')';
       box.innerHTML = '';
       items.forEach((it, idx) => {
         const card = el('<div class="idea-card"></div>');
@@ -1131,6 +1183,10 @@
       { title: '每天一句实用英语/越南语', cat: '思考', source: '内置', desc: '教师口条好，适合日更养号', hot: '' },
       { title: '探店 vlog + 场景英语教学', cat: '生活', source: '内置', desc: '美食与语言双结合，有场景', hot: '' },
       { title: '零基础手势舞改编弹唱版', cat: '唱歌', source: '内置', desc: '比纯手势舞更有记忆点', hot: '' },
+      { title: '失业半年后，我重新养活自己的 100 天', cat: '思考', source: '内置', desc: '真实记录最打动人，教师转行自媒体有反差', hot: '' },
+      { title: '用 Obsidian + AI 搭个人知识库', cat: '思考', source: '内置', desc: '你亲手做过，教程类内容天然有信任感', hot: '' },
+      { title: '越南语点餐/问路实用短句合集', cat: '生活', source: '内置', desc: '蹭「出国热」+ 实用，收藏率高', hot: '' },
+      { title: '每天 10 分钟尤克里里，30 天弹会一首歌', cat: '弹琴', source: '内置', desc: '打卡类内容易引发跟练，评论区活跃', hot: '' },
     ];
     const FALLBACK_CHAL = [
       { topic: '#慢充旅行', cat: '生活', desc: '带定位+话题发小城慢游视频或图文', join: '48万', why: '旅游老师身份契合，时间灵活正好拍' },
@@ -1138,6 +1194,9 @@
       { topic: '#生气了', cat: '弹琴', desc: '用热门神曲当 BGM 翻弹/对口型', join: '120万', why: '音乐类涨粉快，翻弹版稀缺' },
       { topic: '#是不是嘛对不对嘛', cat: '唱歌', desc: '零基础手势舞改弹唱版做差异化', join: '35万', why: '门槛低出片快' },
       { topic: '#世界杯夜宵', cat: '生活', desc: '拍看球夜宵探店或熬夜拉伸操', join: '89万', why: '赛事流量池巨大' },
+      { topic: '#失业不是终点', cat: '思考', desc: '讲你转行自媒体的真实心路，配工作台录屏', join: '62万', why: '真实经历有共鸣，易上热门' },
+      { topic: '#我的第二大脑', cat: '思考', desc: '录屏展示 Happy赖工作台怎么用', join: '30万', why: '工具类内容收藏率高，引流公众号' },
+      { topic: '#零基础学越南语', cat: '生活', desc: '每天教一个实用短句+发音', join: '41万', why: '小语种冷门好做，竞争小' },
     ];
     function pickFrom(arr, n, seed) {
       if (!arr || !arr.length) return [];
@@ -1154,11 +1213,11 @@
       if (!bank) return null;
       // 用当天日期做随机种子，从题库里挑一批；不要求 date 必须是今天，保证每天换一批、永不空白
       const seed = parseInt(todayStr().replace(/-/g, ''), 10);
-      return { date: todayStr(), source: bank.source || '热点题库 · 每日轮换', hot: pickFrom(bank.hot, 5), challenges: pickFrom(bank.challenges, 5) };
+      return { date: todayStr(), source: bank.source || '热点题库 · 每日轮换', hot: pickFrom(bank.hot, 5, seed), challenges: pickFrom(bank.challenges, 5, seed) };
     }
     function localDailyHot() {
       const seed = parseInt(todayStr().replace(/-/g, ''), 10);
-      return { date: todayStr(), source: '本地内置题库（离线兜底）', hot: pickFrom(FALLBACK_HOT, 5), challenges: pickFrom(FALLBACK_CHAL, 5) };
+      return { date: todayStr(), source: '本地内置题库（每日轮换）', hot: pickFrom(FALLBACK_HOT, 5, seed), challenges: pickFrom(FALLBACK_CHAL, 5, seed) };
     }
     let daily = null;
 
@@ -2131,7 +2190,14 @@
       return null;
     }
     function localDailyEn() {
-      return { date: todayStr(), source: '本地自带（离线兜底）', articles: EN_ARTICLES };
+      // 按当天日期做随机种子，从文章库里挑 5 篇——保证每天自动换一批，离线也能轮换
+      const seed = parseInt(todayStr().replace(/-/g, ''), 10);
+      const rnd = mulberry32(seed);
+      const pool = EN_ARTICLES.slice();
+      const n = Math.min(5, pool.length);
+      const picked = [];
+      for (let i = 0; i < n; i++) picked.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]);
+      return { date: todayStr(), source: '本地自带 · 每日轮换', articles: picked };
     }
     let dailyEn = null;
 
@@ -2243,13 +2309,15 @@
     $('#refreshEn').onclick = async () => {
       dailyEn = await loadDailyEn() || localDailyEn();
       const _stale = dailyEn._stale ? ' · 非今日生成（点刷新可重载）' : '';
-      $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + _stale + '。每天 9 点自动更新。';
+      $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + _stale + '。每天自动轮换。';
       await renderList(); toast('已刷新 🔄');
     };
 
-    dailyEn = await loadDailyEn() || localDailyEn();
+    // 默认：云端文件若“今天”生成则优先用，否则按当天日期从本地文章库轮换（与选题灵感一致）；点「立即刷新」仍可拉云端最新（含非今日）
+    const _cloudEn = await loadDailyEn();
+    dailyEn = (_cloudEn && _cloudEn.date === todayStr()) ? _cloudEn : localDailyEn();
     const _stale = dailyEn._stale ? ' · 非今日生成（点刷新可重载）' : '';
-    $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + _stale + '。每天 9 点自动更新。';
+    $('#enMeta').textContent = '更新于 ' + dailyEn.date + ' · ' + (dailyEn.source || '本地自带') + _stale + '。每天自动轮换。';
     await renderList(); refreshStats();
     renderVoicePicker('en-US', $('#enVoicePick'), '🗣 英语发音人');
     const tg = $('#tabGuide'); if (tg) tg.onclick = () => renderGuide(view);
