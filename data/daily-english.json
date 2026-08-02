@@ -1,145 +1,145 @@
 {
-  "date": "2026-08-01",
+  "date": "2026-08-02",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Living with Debt",
-      "zh": "背着债过日子",
-      "words": 96,
-      "dur": 60,
+      "en": "What's in a Footballer's Brain?",
+      "zh": "球员罚点球时，脑子里在想什么",
+      "words": 97,
+      "dur": 62,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260528",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260716",
       "body": [
         [
-          "Most people borrow money at some point in their lives, usually for something big like a home or a car.",
-          "大多数人一生中都会借钱，通常是为了买房、买车这类大件。"
+          "Taking a penalty looks simple, but inside a footballer's head it is anything but simple. In those few seconds, the brain has to handle noise, pressure and the fear of failing in front of millions of people.",
+          "罚一个点球看着简单，但球员脑子里一点都不简单。就那么几秒钟，大脑要同时应付噪音、压力，还有当着几百万人失手的恐惧。"
         ],
         [
-          "But as living costs rise, more people are borrowing just to pay bills or buy food, and that changes everything.",
-          "但随着生活成本上升，越来越多人借钱只是为了付账单和买吃的，性质就完全变了。"
+          "Researchers who study top players say the best ones are not always the calmest. They are simply the fastest at shutting out distractions, so their attention narrows to the ball and nothing else.",
+          "研究顶级球员的学者说，最厉害的那批人不一定是最冷静的，他们只是屏蔽干扰的速度最快——注意力一下就缩到球上，别的什么都不看。"
         ],
         [
-          "Debt is not only about numbers. It follows you home at night, and talking about it openly is often the first step out.",
-          "债务不只是数字问题。它会跟着你回家、在夜里压着你，而愿意开口谈它，往往是走出来的第一步。"
+          "The good news is that this skill can be trained. Breathing slowly, following a fixed routine and picturing the shot before taking it all help ordinary people stay steady under pressure too.",
+          "好消息是，这本事是能练的。慢慢呼吸、每次都走同一套固定流程、动手前先在脑子里过一遍——这几招放在普通人身上，同样能让你在压力下稳住。"
         ]
       ],
       "tips": [
-        ["borrow money", "借钱"],
-        ["cost of living", "生活成本"],
-        ["pay back", "偿还、还清"]
+        ["under pressure", "在压力之下"],
+        ["shut out distractions", "屏蔽干扰"],
+        ["stay steady", "保持稳定发挥"]
       ]
     },
     {
       "id": "d2",
-      "en": "Making Cities Feel Quieter",
-      "zh": "让城市安静一点",
-      "words": 92,
-      "dur": 58,
+      "en": "Should We Cycle More?",
+      "zh": "我们是不是该多骑骑自行车",
+      "words": 88,
+      "dur": 56,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260521",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260709",
       "body": [
         [
-          "City life comes with a constant background noise: traffic, building work, and thousands of voices passing by.",
-          "城市生活自带一层持续的背景噪音：车流、施工，还有身边成千上万的人声。"
+          "Cycling is cheap, quiet and good for your heart, so why do so many bikes sit unused in the garage? For most people, the honest answer is traffic.",
+          "骑车便宜、安静，还对心脏好，那为什么那么多自行车就搁在车库里落灰？对大多数人来说，实话实说，是因为路上车太多。"
         ],
         [
-          "Research suggests that long exposure to loud noise can raise our anxiety levels, even when we stop noticing it.",
-          "研究显示，长期暴露在噪音里会推高焦虑水平，哪怕我们早已对它习以为常。"
+          "Cities that built protected bike lanes saw riders come back within months. Once people feel safe, cycling stops being a sport and simply becomes a way to get to work.",
+          "那些修了带隔离的自行车道的城市，几个月内骑车的人就回来了。只要感觉安全，骑车就不再是一项运动，而只是上下班的一种方式。"
         ],
         [
-          "Some cities are fighting back with quiet gardens, softer road surfaces and small green corners where people can simply breathe.",
-          "一些城市正在反击：修建静音花园、铺设更柔软的路面，留出小片绿色角落，让人能好好喘口气。"
+          "You do not need special clothes or an expensive bike. A short ride to the shops a few times a week is already enough to improve your mood, your sleep and your fitness.",
+          "你不需要专业装备，也不需要贵的车。一周骑几次、去趟超市那么短的距离，就已经足够改善心情、睡眠和体能了。"
         ]
       ],
       "tips": [
-        ["background noise", "背景噪音"],
-        ["exposure to", "暴露于……之中"],
-        ["fight back", "反击、想办法应对"]
+        ["bike lane", "自行车道"],
+        ["get to work", "上下班通勤"],
+        ["a few times a week", "一周几次"]
       ]
     },
     {
       "id": "d3",
-      "en": "How Reading Shapes Your Brain",
-      "zh": "阅读如何重塑你的大脑",
-      "words": 94,
-      "dur": 59,
+      "en": "Rude Emails",
+      "zh": "为什么你的邮件读起来像在凶人",
+      "words": 85,
+      "dur": 55,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260514",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260702",
       "body": [
         [
-          "Humans were never born to read. Unlike speaking, reading is a skill our brains had to invent from scratch.",
-          "人类天生并不会阅读。和说话不同，阅读是大脑必须从零发明出来的一项技能。"
+          "Almost everyone has opened an email that felt cold or sharp. Very often the sender never meant to be rude at all — they were simply in a hurry.",
+          "几乎每个人都收到过读着冷冰冰、甚至有点冲的邮件。可很多时候发件人压根没想凶你，他只是当时忙得很。"
         ],
         [
-          "Learning to read rewires parts of the brain, connecting vision and language in a way that non-readers do not develop.",
-          "学会阅读会重新连接大脑的某些区域，把视觉和语言接在一起，而不识字的人不会形成这种连接。"
+          "Without a face or a voice, short sentences can easily sound angry. A missing 'please', a one-word reply, or too many capital letters can change the tone completely.",
+          "邮件里没有表情也没有语气，短句子就特别容易被读成生气。少一个 please、只回一个词、大写字母用太多，语气立刻就变了。"
         ],
         [
-          "That is good news for adult learners: your brain keeps changing, so it is never too late to pick up a new language.",
-          "这对成年学习者是好消息：大脑一直在变，所以任何时候开始学一门新语言都不算晚。"
+          "A simple fix is to read your message once more before you send it. Adding a greeting, a thank you and one warm line usually solves the whole problem.",
+          "解决办法很简单：发出去之前再读一遍。加一句问候、一句谢谢、一句稍微暖一点的话，基本就没事了。"
         ]
       ],
       "tips": [
-        ["from scratch", "从零开始"],
-        ["rewire", "重新接线、重塑（神经连接）"],
-        ["pick up", "（顺带）学会、掌握"]
+        ["in a hurry", "匆匆忙忙"],
+        ["sound angry", "听起来在生气"],
+        ["change the tone", "改变语气"]
       ]
     },
     {
       "id": "d4",
-      "en": "Searching for Life on Another Planet",
-      "zh": "在别的星球上找生命",
-      "words": 90,
-      "dur": 57,
+      "en": "Why Are We All So Stressed?",
+      "zh": "为什么我们个个都这么累",
+      "words": 86,
+      "dur": 56,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260507",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260423",
       "body": [
         [
-          "For centuries people have looked at the night sky and asked the same question: is anybody else out there?",
-          "几个世纪以来，人们仰望夜空，问的都是同一个问题：那边还有别人吗？"
+          "Many people say they feel stressed almost every day. Work, money and the constant flow of news all add weight to a mind that never really switches off.",
+          "很多人说自己几乎天天都在焦虑。工作、钱、还有刷不完的新闻，都在往一个从来没真正停下来过的脑子里加码。"
         ],
         [
-          "Today scientists no longer look for spaceships. They look for tiny chemical clues in the air of distant planets.",
-          "今天的科学家不再找飞船了，他们在遥远行星的大气里寻找极其微小的化学线索。"
+          "A little stress is actually useful, because it helps us meet deadlines. The trouble starts when the body stays alert for weeks, which affects sleep, appetite and patience.",
+          "其实一点点压力是有用的，它能推着我们赶上截止期限。麻烦的是身体连着紧绷好几周——睡眠、胃口和耐心全都会受影响。"
         ],
         [
-          "Even a hint of the right gas would be huge news, though researchers warn that one clue alone proves nothing.",
-          "哪怕只测到一点点特定气体，都会是天大的新闻——但研究者提醒，单一线索什么也证明不了。"
+          "Experts suggest small, boring habits: a fixed bedtime, a walk without your phone, and saying no to one thing every week. Boring usually works better than dramatic.",
+          "专家给的建议都挺无聊：固定时间睡觉、不带手机出门走一圈、每周拒绝一件事。别小看无聊，它通常比大动作管用。"
         ]
       ],
       "tips": [
-        ["out there", "在外面、在远方（此处指宇宙中）"],
-        ["clue", "线索"],
-        ["prove nothing", "什么也说明不了"]
+        ["switch off", "放松下来、停止胡思乱想"],
+        ["meet a deadline", "赶上截止期限"],
+        ["say no to", "拒绝（某件事）"]
       ]
     },
     {
       "id": "d5",
-      "en": "Should We Eat Ultra-Processed Food?",
-      "zh": "超加工食品到底该不该吃",
-      "words": 98,
-      "dur": 62,
+      "en": "Are Saunas Good for You?",
+      "zh": "蒸桑拿到底对身体好不好",
+      "words": 84,
+      "dur": 54,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260430",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260402",
       "body": [
         [
-          "Ultra-processed food is everywhere: instant noodles, packaged bread, fizzy drinks and most things in a colourful wrapper.",
-          "超加工食品无处不在：泡面、包装面包、汽水，还有大多数装在花花绿绿包装里的东西。"
+          "In Finland, sitting in a very hot wooden room is part of everyday life. Visitors often wonder whether a sauna is really healthy, or just pleasantly uncomfortable.",
+          "在芬兰，坐在一间很热的木头小屋里是日常生活的一部分。外来的人常常搞不懂：桑拿到底是真的养生，还是只是种「舒服的难受」。"
         ],
         [
-          "It is cheap, convenient and designed to taste good, which is exactly why it is so hard to eat less of it.",
-          "它便宜、方便，而且被专门设计得很好吃——这正是我们很难少吃的原因。"
+          "Studies suggest that regular sauna use may relax blood vessels and lower blood pressure a little. Much of the benefit, however, may simply come from resting and doing nothing.",
+          "研究显示，经常蒸桑拿可能让血管放松，把血压稍微降一点。不过好处里有很大一部分，也许只是因为你终于坐下来什么都不干了。"
         ],
         [
-          "Experts are still arguing about the science, but most agree on one simple rule: cook at home when you can.",
-          "专家们对其中的科学仍有争论，但大多数人认同一条朴素的规则：能自己在家做饭就自己做。"
+          "It is not for everyone. If you have heart problems, are pregnant, or start to feel dizzy, keep the session short and drink water. Comfort matters more than endurance.",
+          "但它不适合所有人。有心脏问题、怀孕，或者一进去就头晕的，时间就别太长，记得补水。舒服比硬撑重要。"
         ]
       ],
       "tips": [
-        ["ultra-processed", "超加工的"],
-        ["convenient", "方便的"],
-        ["cut down on", "减少（摄入）"]
+        ["blood pressure", "血压"],
+        ["feel dizzy", "感到头晕"],
+        ["keep it short", "时间别拖太长"]
       ]
     }
   ]
