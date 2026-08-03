@@ -1,145 +1,145 @@
 {
-  "date": "2026-08-02",
+  "date": "2026-08-04",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "What's in a Footballer's Brain?",
-      "zh": "球员罚点球时，脑子里在想什么",
-      "words": 97,
-      "dur": 62,
+      "en": "Scared of Speaking English?",
+      "zh": "为什么一开口说英语就慌",
+      "words": 104,
+      "dur": 64,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260716",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260122",
       "body": [
         [
-          "Taking a penalty looks simple, but inside a footballer's head it is anything but simple. In those few seconds, the brain has to handle noise, pressure and the fear of failing in front of millions of people.",
-          "罚一个点球看着简单，但球员脑子里一点都不简单。就那么几秒钟，大脑要同时应付噪音、压力，还有当着几百万人失手的恐惧。"
+          "Plenty of learners can read a newspaper in English and still freeze the moment someone asks them a question out loud. The problem is rarely grammar. It is the fear of being judged while the words are still forming.",
+          "很多人能看懂英文报纸，可一被人当面问话就僵住。问题基本不在语法，而在于话还没组织好，就已经怕被人笑话了。"
         ],
         [
-          "Researchers who study top players say the best ones are not always the calmest. They are simply the fastest at shutting out distractions, so their attention narrows to the ball and nothing else.",
-          "研究顶级球员的学者说，最厉害的那批人不一定是最冷静的，他们只是屏蔽干扰的速度最快——注意力一下就缩到球上，别的什么都不看。"
+          "Teachers call this language anxiety. Your heart speeds up, your mind goes blank, and words you have known for years suddenly vanish. It is a physical reaction, not proof that you are bad at English.",
+          "老师把这叫「语言焦虑」。心跳加快、大脑空白，学了好几年的词突然就想不起来了。这是身体的应激反应，不能证明你英语差。"
         ],
         [
-          "The good news is that this skill can be trained. Breathing slowly, following a fixed routine and picturing the shot before taking it all help ordinary people stay steady under pressure too.",
-          "好消息是，这本事是能练的。慢慢呼吸、每次都走同一套固定流程、动手前先在脑子里过一遍——这几招放在普通人身上，同样能让你在压力下稳住。"
+          "The way out is not more textbooks but more low-stakes practice. Talk to yourself while cooking, record a thirty-second voice note, or speak with one patient friend. Treat mistakes as data, not disasters.",
+          "解法不是再多买几本书，而是多做「压力小」的练习：做饭时自言自语、录一段三十秒语音、或者只跟一个有耐心的朋友聊。把错误当数据，别当灾难。"
         ]
       ],
       "tips": [
-        ["under pressure", "在压力之下"],
-        ["shut out distractions", "屏蔽干扰"],
-        ["stay steady", "保持稳定发挥"]
+        ["go blank", "大脑一片空白"],
+        ["low-stakes practice", "低压力、没风险的练习"],
+        ["the way out", "出路、解决办法"]
       ]
     },
     {
       "id": "d2",
-      "en": "Should We Cycle More?",
-      "zh": "我们是不是该多骑骑自行车",
-      "words": 88,
-      "dur": 56,
+      "en": "Is Social Media Dead?",
+      "zh": "社交媒体是不是已经死了",
+      "words": 101,
+      "dur": 62,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260709",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260108",
       "body": [
         [
-          "Cycling is cheap, quiet and good for your heart, so why do so many bikes sit unused in the garage? For most people, the honest answer is traffic.",
-          "骑车便宜、安静，还对心脏好，那为什么那么多自行车就搁在车库里落灰？对大多数人来说，实话实说，是因为路上车太多。"
+          "Social media was built so that friends could see each other's lives. Open any app today and you mostly see strangers, adverts and clips chosen by an algorithm. The 'social' part has quietly shrunk.",
+          "社交媒体当初是为了让朋友之间看见彼此的生活。可今天随便打开一个软件，刷到的多半是陌生人、广告和算法挑的片段。「社交」这部分已经悄悄缩水了。"
         ],
         [
-          "Cities that built protected bike lanes saw riders come back within months. Once people feel safe, cycling stops being a sport and simply becomes a way to get to work.",
-          "那些修了带隔离的自行车道的城市，几个月内骑车的人就回来了。只要感觉安全，骑车就不再是一项运动，而只是上下班的一种方式。"
+          "AI has sped this up. Machines now write posts, generate faces and even reply in the comments, so users are less sure whether a real person is on the other side of the screen.",
+          "AI 让这个过程更快了。机器能写文案、生成人脸，甚至替人回评论，于是用户越来越不确定屏幕那头到底是不是个真人。"
         ],
         [
-          "You do not need special clothes or an expensive bike. A short ride to the shops a few times a week is already enough to improve your mood, your sleep and your fitness.",
-          "你不需要专业装备，也不需要贵的车。一周骑几次、去趟超市那么短的距离，就已经足够改善心情、睡眠和体能了。"
+          "Some people are drifting back to small group chats and newsletters, where the audience is smaller but real. Perhaps social media is not dying, only splitting into a loud public square and a quiet living room.",
+          "有些人正退回到小群聊和邮件订阅里——受众更少，但都是真人。也许社交媒体没有死，只是分裂成了一个吵闹的广场，和一个安静的客厅。"
         ]
       ],
       "tips": [
-        ["bike lane", "自行车道"],
-        ["get to work", "上下班通勤"],
-        ["a few times a week", "一周几次"]
+        ["speed something up", "加快、加速某件事"],
+        ["drift back to", "慢慢又回到（某种状态）"],
+        ["public square", "公共广场（比喻公开的舆论场）"]
       ]
     },
     {
       "id": "d3",
-      "en": "Rude Emails",
-      "zh": "为什么你的邮件读起来像在凶人",
-      "words": 85,
-      "dur": 55,
+      "en": "What English Phrases Really Mean",
+      "zh": "英国人嘴上说的，和心里想的",
+      "words": 99,
+      "dur": 61,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260702",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260115",
       "body": [
         [
-          "Almost everyone has opened an email that felt cold or sharp. Very often the sender never meant to be rude at all — they were simply in a hurry.",
-          "几乎每个人都收到过读着冷冰冰、甚至有点冲的邮件。可很多时候发件人压根没想凶你，他只是当时忙得很。"
+          "British politeness can be confusing for learners. When a colleague says 'that's an interesting idea', they may not be praising you at all. Very often they mean the opposite and are being gentle about it.",
+          "英式礼貌对学习者来说很容易看走眼。同事说「这个想法很有意思」，可能根本不是在夸你，多半是委婉地表达相反的意思。"
         ],
         [
-          "Without a face or a voice, short sentences can easily sound angry. A missing 'please', a one-word reply, or too many capital letters can change the tone completely.",
-          "邮件里没有表情也没有语气，短句子就特别容易被读成生气。少一个 please、只回一个词、大写字母用太多，语气立刻就变了。"
+          "Phrases like 'I'll bear it in mind' or 'with the greatest respect' work as soft padding. They protect the listener's feelings while still delivering a no, and everyone local understands the code.",
+          "像「我会记在心上」「恕我直言」这样的说法，其实是一层软垫子。它们既保住了对方的面子，又把「不行」说了出来，本地人都懂这套暗号。"
         ],
         [
-          "A simple fix is to read your message once more before you send it. Adding a greeting, a thank you and one warm line usually solves the whole problem.",
-          "解决办法很简单：发出去之前再读一遍。加一句问候、一句谢谢、一句稍微暖一点的话，基本就没事了。"
+          "You do not have to copy this style, but recognising it saves you from awkward misunderstandings. Listen to tone and context, not only to the dictionary meaning of each word.",
+          "你不一定要学这种说话方式，但听得懂能帮你少踩坑。多听语气和上下文，别只盯着每个词的字典意思。"
         ]
       ],
       "tips": [
-        ["in a hurry", "匆匆忙忙"],
-        ["sound angry", "听起来在生气"],
-        ["change the tone", "改变语气"]
+        ["bear something in mind", "把某事记在心上（常用于委婉推脱）"],
+        ["with the greatest respect", "恕我直言（后面往往接反对意见）"],
+        ["soft padding", "缓冲的软垫（比喻委婉说法）"]
       ]
     },
     {
       "id": "d4",
-      "en": "Why Are We All So Stressed?",
-      "zh": "为什么我们个个都这么累",
-      "words": 86,
-      "dur": 56,
+      "en": "Love the Foods You Hate",
+      "zh": "讨厌的食物，也能吃出感情",
+      "words": 98,
+      "dur": 60,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260423",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260416",
       "body": [
         [
-          "Many people say they feel stressed almost every day. Work, money and the constant flow of news all add weight to a mind that never really switches off.",
-          "很多人说自己几乎天天都在焦虑。工作、钱、还有刷不完的新闻，都在往一个从来没真正停下来过的脑子里加码。"
+          "Almost everyone has a food they refuse to touch. Coriander, blue cheese, bitter melon. Some of that dislike is written into our genes, but a surprising amount of it is simply habit.",
+          "几乎每个人都有一样打死不碰的食物：香菜、蓝纹奶酪、苦瓜。这种讨厌有一部分写在基因里，但很大一部分其实只是习惯。"
         ],
         [
-          "A little stress is actually useful, because it helps us meet deadlines. The trouble starts when the body stays alert for weeks, which affects sleep, appetite and patience.",
-          "其实一点点压力是有用的，它能推着我们赶上截止期限。麻烦的是身体连着紧绷好几周——睡眠、胃口和耐心全都会受影响。"
+          "Researchers say taste can be retrained. Trying a disliked food in tiny amounts, ten or more times, often turns disgust into tolerance and sometimes even into pleasure.",
+          "研究者说味觉是可以重新训练的。把讨厌的食物每次只吃一点点、吃上十来回，反感往往会变成能接受，有时甚至真的喜欢上了。"
         ],
         [
-          "Experts suggest small, boring habits: a fixed bedtime, a walk without your phone, and saying no to one thing every week. Boring usually works better than dramatic.",
-          "专家给的建议都挺无聊：固定时间睡觉、不带手机出门走一圈、每周拒绝一件事。别小看无聊，它通常比大动作管用。"
+          "Context matters too. The same vegetable feels different when a friend cooks it well, or when you eat it abroad on a good day. Memory seasons food as much as salt does.",
+          "环境也很关键。同一样菜，朋友做得好吃、或者你在国外心情不错时吃到，感觉就完全不同。记忆给食物调味，一点不比盐少。"
         ]
       ],
       "tips": [
-        ["switch off", "放松下来、停止胡思乱想"],
-        ["meet a deadline", "赶上截止期限"],
-        ["say no to", "拒绝（某件事）"]
+        ["refuse to touch", "碰都不愿意碰"],
+        ["turn A into B", "把 A 变成 B"],
+        ["context matters", "情境很重要"]
       ]
     },
     {
       "id": "d5",
-      "en": "Are Saunas Good for You?",
-      "zh": "蒸桑拿到底对身体好不好",
-      "words": 84,
-      "dur": 54,
+      "en": "Weight Loss Drugs",
+      "zh": "减肥药，真的一劳永逸吗",
+      "words": 103,
+      "dur": 63,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260402",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260326",
       "body": [
         [
-          "In Finland, sitting in a very hot wooden room is part of everyday life. Visitors often wonder whether a sauna is really healthy, or just pleasantly uncomfortable.",
-          "在芬兰，坐在一间很热的木头小屋里是日常生活的一部分。外来的人常常搞不懂：桑拿到底是真的养生，还是只是种「舒服的难受」。"
+          "New weight loss injections have become headline news around the world. They work mainly by slowing digestion and telling the brain that the body is already full, so people simply eat less.",
+          "新型减肥针在全世界都上了头条。它们主要靠减慢消化、并告诉大脑「已经饱了」来起作用，于是人自然就吃得少了。"
         ],
         [
-          "Studies suggest that regular sauna use may relax blood vessels and lower blood pressure a little. Much of the benefit, however, may simply come from resting and doing nothing.",
-          "研究显示，经常蒸桑拿可能让血管放松，把血压稍微降一点。不过好处里有很大一部分，也许只是因为你终于坐下来什么都不干了。"
+          "Doctors warn that they are medicine, not magic. Side effects can include nausea and loss of muscle, and for many patients the weight returns once the injections stop.",
+          "医生提醒：这是药，不是魔法。副作用可能包括恶心和肌肉流失，而且不少人一停针，体重就回来了。"
         ],
         [
-          "It is not for everyone. If you have heart problems, are pregnant, or start to feel dizzy, keep the session short and drink water. Comfort matters more than endurance.",
-          "但它不适合所有人。有心脏问题、怀孕，或者一进去就头晕的，时间就别太长，记得补水。舒服比硬撑重要。"
+          "There is also a bigger question. If a drug can quiet our appetite, what does that say about the food environment that made us so hungry in the first place?",
+          "还有一个更大的问题：如果一支药就能压住食欲，那当初把我们的胃口撑这么大的那个饮食环境，又该怎么说呢？"
         ]
       ],
       "tips": [
-        ["blood pressure", "血压"],
-        ["feel dizzy", "感到头晕"],
-        ["keep it short", "时间别拖太长"]
+        ["side effect", "副作用"],
+        ["in the first place", "一开始、本来"],
+        ["quiet one's appetite", "压住食欲"]
       ]
     }
   ]
