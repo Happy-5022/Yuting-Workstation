@@ -3443,8 +3443,11 @@
       '<div class="card" style="margin-bottom:12px">' +
         '<div class="card-title">💰 记账 · 本月</div>' +
         '<div id="ledgerSum" style="display:flex;gap:8px;margin-top:8px"></div>' +
+        '<div id="ledgerBudget" style="margin-top:10px"></div>' +
         '<button id="ledgerAdd" class="btn green block" style="margin-top:12px">➕ 记一笔</button>' +
       '</div>' +
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">📊 本月分类占比</div><div id="ledgerCat"></div></div>' +
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">📈 近 6 个月收支</div><div id="ledgerTrend"></div></div>' +
       '<div class="card"><div class="card-title">📒 明细</div><div id="ledgerList"></div></div>';
 
     $('#ledgerAdd').onclick = async () => {
@@ -3478,6 +3481,9 @@
       const bal = inc - exp;
       $('#ledgerSum').innerHTML =
         sumCard('收入', inc, '#2e9e5b') + sumCard('支出', exp, '#e2574c') + sumCard('结余', bal, '#0E9C8E');
+      await renderBudget(exp);
+      renderCat(all, mp);
+      renderTrend(all);
 
       const box = $('#ledgerList');
       if (!all.length) { box.innerHTML = emptyTip('🪙', '还没有记账，点上面「记一笔」开始吧'); return; }
@@ -3518,6 +3524,98 @@
       return '<div style="flex:1;text-align:center;background:#f7fbfa;border-radius:10px;padding:10px 4px">' +
         '<div style="font-size:12px;color:#999">' + label + '</div>' +
         '<div style="font-size:17px;font-weight:700;color:' + color + '">' + fmt(val) + '</div></div>';
+    }
+
+    const PALETTE = ['#e2574c', '#0E9C8E', '#f0a830', '#5b8def', '#a86fd6', '#e87aa8', '#6bbf59', '#d98c5f', '#7c9eb2', '#c9a227', '#8c6dce', '#5fb0a8', '#d96b6b'];
+
+    async function renderBudget(exp) {
+      const box = $('#ledgerBudget');
+      const rec = await DB.get('meta', 'ledgerBudget');
+      const budget = (rec && rec.value) ? rec.value : 0;
+      if (!budget || budget <= 0) {
+        box.innerHTML = '<button id="setBudget" class="btn ghost block" style="border:1px dashed #ccc;color:#888;background:#fafafa">⚙️ 设置每月预算</button>';
+      } else {
+        const left = budget - exp;
+        const over = left < 0;
+        box.innerHTML =
+          '<div style="display:flex;gap:8px;margin-bottom:6px">' +
+            sumCard('预算', budget, '#0E9C8E') + sumCard('已花', exp, '#e2574c') +
+            '<div style="flex:1;text-align:center;background:' + (over ? '#fdecea' : '#f7fbfa') + ';border-radius:10px;padding:10px 4px">' +
+              '<div style="font-size:12px;color:#999">剩余</div>' +
+              '<div style="font-size:17px;font-weight:700;color:' + (over ? '#e2574c' : '#2e9e5b') + '">' + fmt(left) + '</div>' +
+            '</div>' +
+          '</div>' +
+          (over ? '<div style="background:#fdecea;color:#e2574c;font-size:13px;padding:8px 10px;border-radius:8px">⚠️ 本月已超支 ' + fmt(-left) + ' 元</div>'
+                : (left / budget < 0.2 ? '<div style="background:#fff7e6;color:#f0a830;font-size:13px;padding:8px 10px;border-radius:8px">💡 预算只剩 ' + fmt(left) + ' 元，注意控制</div>' : '')) +
+          '<button id="setBudget" class="btn ghost block" style="margin-top:8px;border:1px dashed #ccc;color:#888;background:#fafafa">⚙️ 修改预算</button>';
+      }
+      $('#setBudget').onclick = async () => {
+        const r = await promptForm('设置每月预算', [
+          { name: 'budget', label: '每月预算（元）', type: 'number', placeholder: '2000', value: budget || '' },
+        ]);
+        if (!r) return;
+        const v = parseFloat(r.budget);
+        if (!(v > 0)) { toast('预算要大于 0'); return; }
+        await DB.put('meta', { id: 'ledgerBudget', value: Math.round(v * 100) / 100 });
+        toast('预算已保存 💰');
+        paint();
+      };
+    }
+
+    function renderCat(all, mp) {
+      const box = $('#ledgerCat');
+      const map = {};
+      all.forEach(rec => { if (rec.type === 'exp' && (rec.date || '').indexOf(mp) === 0) { map[rec.cat] = (map[rec.cat] || 0) + rec.amount; } });
+      const rows = Object.keys(map).map(k => ({ cat: k, amount: map[k] })).sort((a, b) => b.amount - a.amount);
+      const total = rows.reduce((s, r) => s + r.amount, 0);
+      if (!total) { box.innerHTML = emptyTip('🍰', '本月还没支出，记账后看占比'); return; }
+      box.innerHTML = rows.map((r, i) => {
+        const c = catMap[r.cat] || { e: '💡', n: r.cat };
+        const pct = (r.amount / total) * 100;
+        const color = PALETTE[i % PALETTE.length];
+        return '<div style="margin:10px 0">' +
+          '<div style="display:flex;justify-content:space-between;font-size:13px;color:#555">' +
+            '<span>' + c.e + ' ' + esc(c.n) + '</span>' +
+            '<span>' + fmt(r.amount) + ' · ' + pct.toFixed(1) + '%</span>' +
+          '</div>' +
+          '<div style="height:10px;background:#f0f0f0;border-radius:6px;margin-top:4px;overflow:hidden">' +
+            '<div style="height:100%;width:' + pct.toFixed(1) + '%;background:' + color + ';border-radius:6px"></div>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '<div style="font-size:12px;color:#999;margin-top:4px">本月支出合计 ' + fmt(total) + ' 元</div>';
+    }
+
+    function renderTrend(all) {
+      const box = $('#ledgerTrend');
+      const now = new Date();
+      const months = [];
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const ym = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        months.push({ ym: ym, inc: 0, exp: 0 });
+      }
+      const idx = {}; months.forEach((m, i) => idx[m.ym] = i);
+      all.forEach(rec => {
+        const ym = (rec.date || '').slice(0, 7);
+        if (ym in idx) { if (rec.type === 'inc') months[idx[ym]].inc += rec.amount; else months[idx[ym]].exp += rec.amount; }
+      });
+      const max = Math.max(1, ...months.map(m => Math.max(m.inc, m.exp)));
+      box.innerHTML = months.map(m => {
+        const wi = (m.inc / max) * 100, we = (m.exp / max) * 100;
+        return '<div style="margin:10px 0">' +
+          '<div style="font-size:12px;color:#999;margin-bottom:3px">' + m.ym + '</div>' +
+          '<div style="display:flex;align-items:center;gap:6px">' +
+            '<span style="font-size:11px;color:#2e9e5b;width:28px">收</span>' +
+            '<div style="flex:1;height:9px;background:#eaf6ee;border-radius:5px;overflow:hidden"><div style="height:100%;width:' + wi.toFixed(1) + '%;background:#2e9e5b;border-radius:5px"></div></div>' +
+            '<span style="font-size:11px;color:#2e9e5b;width:54px;text-align:right">' + fmt(m.inc) + '</span>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:6px;margin-top:3px">' +
+            '<span style="font-size:11px;color:#e2574c;width:28px">支</span>' +
+            '<div style="flex:1;height:9px;background:#fdecea;border-radius:5px;overflow:hidden"><div style="height:100%;width:' + we.toFixed(1) + '%;background:#e2574c;border-radius:5px"></div></div>' +
+            '<span style="font-size:11px;color:#e2574c;width:54px;text-align:right">' + fmt(m.exp) + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
     }
 
     paint();
