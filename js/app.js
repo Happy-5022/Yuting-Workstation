@@ -3420,6 +3420,262 @@
     paintHistory();
   }
 
+  // ===== 旅游攻略库（内置，离线可用）=====
+  // 每个城市含：stay 住 / eat 吃 / play 游 / shop 购 / fun 娱
+  // 库里没有的城市会自动套用通用模板，用户可随手改 / 删。
+  const TRAVEL_GUIDE = {
+    '北京': { stay: '王府井 / 前门 / 三里屯', eat: ['北京烤鸭', '炸酱面', '涮羊肉', '豆汁焦圈'], play: ['故宫', '长城', '颐和园', '天坛', '南锣鼓巷', '798艺术区'], shop: ['稻香村点心', '王府井小吃'], fun: ['德云社相声', '国家大剧院演出'] },
+    '上海': { stay: '人民广场 / 南京路 / 静安', eat: ['生煎', '小笼包', '本帮菜', '葱油拌面'], play: ['外滩', '迪士尼', '豫园', '南京路', '田子坊', '上海博物馆'], shop: ['南京路', '城隍庙'], fun: ['黄浦江夜游', '开心麻花'] },
+    '成都': { stay: '春熙路 / 宽窄巷子', eat: ['火锅', '串串香', '担担面', '龙抄手'], play: ['大熊猫基地', '宽窄巷子', '锦里', '武侯祠', '都江堰', '青城山'], shop: ['锦里特产', '蜀绣'], fun: ['川剧变脸', '茶馆'] },
+    '重庆': { stay: '解放碑 / 洪崖洞', eat: ['火锅', '小面', '酸辣粉', '毛血旺'], play: ['洪崖洞', '解放碑', '磁器口', '长江索道', '武隆', '李子坝'], shop: ['磁器口陈麻花'], fun: ['两江夜游', '8D魔幻地形打卡'] },
+    '杭州': { stay: '西湖边 / 武林广场', eat: ['西湖醋鱼', '龙井虾仁', '片儿川', '楼外楼'], play: ['西湖', '灵隐寺', '西溪湿地', '宋城', '千岛湖', '河坊街'], shop: ['龙井茶', '丝绸'], fun: ['宋城千古情', '西湖游船'] },
+    '西安': { stay: '钟楼 / 回民街', eat: ['肉夹馍', '羊肉泡馍', '凉皮', 'biangbiang面'], play: ['兵马俑', '大雁塔', '钟鼓楼', '城墙', '回民街', '华清池'], shop: ['回民街特产', '皮影'], fun: ['大唐不夜城', '长恨歌演出'] },
+    '南京': { stay: '新街口 / 夫子庙', eat: ['盐水鸭', '鸭血粉丝汤', '汤包', '皮肚面'], play: ['中山陵', '夫子庙', '总统府', '玄武湖', '明孝陵'], shop: ['盐水鸭', '云锦'], fun: ['秦淮画舫'] },
+    '苏州': { stay: '平江路 / 观前街', eat: ['松鼠桂鱼', '苏式汤面', '蟹粉小笼', '桂花糕'], play: ['拙政园', '平江路', '虎丘', '狮子林', '周庄', '寒山寺'], shop: ['苏绣', '丝绸'], fun: ['评弹', '园林夜游'] },
+    '厦门': { stay: '中山路 / 曾厝垵', eat: ['沙茶面', '海蛎煎', '姜母鸭', '土笋冻'], play: ['鼓浪屿', '厦大', '曾厝垵', '环岛路', '南普陀'], shop: ['馅饼', '凤梨酥'], fun: ['环岛骑行', '海边日落'] },
+    '丽江': { stay: '古城内客栈', eat: ['腊排骨火锅', '纳西烤鱼', '鸡豆凉粉', '酥油茶'], play: ['丽江古城', '玉龙雪山', '束河古镇', '拉市海', '泸沽湖'], shop: ['银器', '披肩'], fun: ['古城酒吧', '纳西古乐'] },
+    '大理': { stay: '洱海边民宿', eat: ['白族三道茶', '烤乳扇', '酸辣鱼', '饵块'], play: ['洱海', '大理古城', '苍山', '双廊', '喜洲', '崇圣寺三塔'], shop: ['扎染', '银饰'], fun: ['洱海骑行', '苍山徒步'] },
+    '三亚': { stay: '三亚湾 / 亚龙湾', eat: ['海鲜', '椰子鸡', '清补凉', '文昌鸡'], play: ['亚龙湾', '天涯海角', '蜈支洲岛', '南山寺', '海棠湾'], shop: ['椰子制品', '热带水果'], fun: ['潜水', '日落沙滩'] },
+    '青岛': { stay: '栈桥 / 五四广场', eat: ['啤酒+海鲜', '鲅鱼水饺', '辣炒蛤蜊', '排骨米饭'], play: ['栈桥', '八大关', '崂山', '五四广场', '啤酒博物馆'], shop: ['青岛啤酒', '海产'], fun: ['啤酒节', '海滨浴场'] },
+    '武汉': { stay: '江汉路 / 武昌', eat: ['热干面', '豆皮', '鸭脖', '莲藕汤'], play: ['黄鹤楼', '东湖', '户部巷', '武汉大学', '长江大桥'], shop: ['周黑鸭', '热干面礼盒'], fun: ['长江夜游', '知音号'] },
+    '长沙': { stay: '五一广场', eat: ['臭豆腐', '茶颜悦色', '剁椒鱼头', '糖油粑粑'], play: ['橘子洲', '岳麓山', '五一广场', '湖南省博', 'IFS', '太平老街'], shop: ['茶颜悦色', '酱板鸭'], fun: ['解放西酒吧', '湘江夜游'] },
+    '昆明': { stay: '翠湖 / 南屏街', eat: ['过桥米线', '汽锅鸡', '鲜花饼', '野生菌'], play: ['石林', '滇池', '翠湖', '大观楼', '云南民族村'], shop: ['鲜花饼', '普洱茶'], fun: ['滇池喂海鸥', '民族村'] },
+    '桂林': { stay: '阳朔西街 / 桂林市区', eat: ['桂林米粉', '啤酒鱼', '荔浦芋扣肉', '田螺酿'], play: ['漓江', '阳朔', '象鼻山', '西街', '龙脊梯田', '遇龙河'], shop: ['桂花糕', '三花酒'], fun: ['漓江竹筏', '印象刘三姐'] },
+    '广州': { stay: '天河 / 北京路', eat: ['早茶', '烧腊', '肠粉', '艇仔粥'], play: ['广州塔', '陈家祠', '沙面', '长隆', '越秀公园'], shop: ['上下九', '手信'], fun: ['珠江夜游', '长隆大马戏'] },
+    '深圳': { stay: '福田 / 南山', eat: ['潮汕牛肉火锅', '肠粉', '椰子鸡', '早茶'], play: ['世界之窗', '欢乐谷', '莲花山', '海滨栈道', '华侨城'], shop: ['华强北', '海岸城'], fun: ['海边露营', '欢乐谷'] },
+    '天津': { stay: '滨江道 / 意风区', eat: ['狗不理包子', '煎饼果子', '麻花', '耳朵眼炸糕'], play: ['五大道', '意式风情区', '古文化街', '天津之眼', '瓷房子'], shop: ['麻花', '杨柳青年画'], fun: ['海河游船'] },
+    '香港': { stay: '尖沙咀 / 铜锣湾', eat: ['茶餐厅', '烧鹅', '蛋挞', '菠萝油'], play: ['维多利亚港', '迪士尼', '太平山顶', '旺角', '海洋公园'], shop: ['铜锣湾', '海港城'], fun: ['幻彩咏香江', '兰桂坊'] },
+    '台北': { stay: '台北车站 / 西门', eat: ['牛肉面', '夜市小吃', '珍珠奶茶', '卤肉饭'], play: ['101', '士林夜市', '故宫', '西门町', '九份', '阳明山'], shop: ['凤梨酥', '伴手礼'], fun: ['夜市', '温泉'] },
+    '东京': { stay: '新宿 / 银座', eat: ['寿司', '拉面', '天妇罗', '和牛'], play: ['浅草寺', '东京塔', '迪士尼', '富士山(一日游)', '秋叶原', '上野公园'], shop: ['秋叶原电器', '药妆'], fun: ['歌舞伎', '夜景'] },
+    '曼谷': { stay: '素坤逸 / 暹罗', eat: ['冬阴功', '芒果糯米饭', '泰式炒河粉', '船面'], play: ['大皇宫', '卧佛寺', '恰图恰周末市场', '湄南河', '考山路'], shop: ['恰图恰', '夜市'], fun: ['人妖秀', '泰式按摩'] },
+    '新加坡': { stay: '乌节路 / 滨海湾', eat: ['海南鸡饭', '辣椒蟹', '叻沙', '肉骨茶'], play: ['滨海湾花园', '鱼尾狮', '圣淘沙', '环球影城', '小印度'], shop: ['乌节路'], fun: ['夜间动物园', '灯光秀'] },
+    '首尔': { stay: '明洞 / 弘大', eat: ['烤肉', '炸鸡啤酒', '部队锅', '泡菜'], play: ['景福宫', '明洞', '南山塔', '弘大', '北村韩屋'], shop: ['明洞化妆品', '东大门'], fun: ['汉江公园', '汗蒸'] },
+    '河内': { stay: '还剑湖周边', eat: ['越南粉 Pho', '烤肉米粉', '法式面包', '鸡蛋咖啡'], play: ['还剑湖', '三十六行街', '独柱寺', '文庙', '下龙湾(一日游)'], shop: ['咖啡', '奥黛'], fun: ['水上木偶戏', '夜市'] },
+    '胡志明市': { stay: '第一郡', eat: ['越南粉', '春卷', '法棍三明治', '滴漏咖啡'], play: ['中央邮局', '红教堂', '统一宫', '滨城市场', '范五老街'], shop: ['咖啡', '手工艺品'], fun: ['西贡河游船', '夜生活'] },
+    '岘港': { stay: '美溪海滩', eat: ['会安白玫瑰', '米粉', '海鲜', '法棍'], play: ['美溪海滩', '巴拿山', '会安古城', '五行山', '山茶半岛'], shop: ['会安灯笼'], fun: ['会安灯笼夜', '海滩'] },
+    '芽庄': { stay: '海滩边', eat: ['海鲜', '越南粉', '春卷'], play: ['芽庄海滩', '珍珠岛', '婆那加占婆塔', '泥浆浴'], shop: ['燕窝', '海产'], fun: ['潜水', '泥浆浴'] },
+  };
+
+  async function renderTravel(view) {
+    const CATS = [
+      { v: 'eat', e: '🍜', n: '吃' },
+      { v: 'stay', e: '🏨', n: '住' },
+      { v: 'move', e: '✈️', n: '行' },
+      { v: 'play', e: '🏞️', n: '游' },
+      { v: 'shop', e: '🛍️', n: '购' },
+      { v: 'fun', e: '🎡', n: '娱' },
+    ];
+    const catMap = {}; CATS.forEach(c => catMap[c.v] = c);
+    const STATUS = [
+      { v: 'plan', n: '计划中', color: '#999', bg: '#f2f2f2' },
+      { v: 'booked', n: '已订', color: '#5b8def', bg: '#eef4ff' },
+      { v: 'done', n: '已完成', color: '#2e9e5b', bg: '#eafaf0' },
+    ];
+    const statusMap = {}; STATUS.forEach(s => statusMap[s.v] = s);
+    function fmt(n) { return (Math.round((n || 0) * 100) / 100).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+    const cur = await DB.get('meta', 'currentTrip');
+    let trip = (cur && cur.value) || '';
+
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px">' +
+        '<div class="card-title" style="margin:0 0 8px">🧳 旅游规划' + (trip ? ' · ' + esc(trip) : '') + '</div>' +
+        '<div style="display:flex;gap:8px;margin-bottom:8px">' +
+          '<button id="tripPlan" class="btn green" style="flex:1;padding:8px">🤖 智能规划</button>' +
+          '<button id="tripSwitch" class="btn ghost" style="flex:1;padding:8px;border:1px dashed #ccc;color:#888;background:#fafafa">✏️ 切换/新建</button>' +
+        '</div>' +
+        '<div id="tripSum" style="display:flex;gap:8px;margin-top:8px"></div>' +
+        '<button id="tripAdd" class="btn ghost block" style="margin-top:12px;border:1px dashed #ccc;color:#888;background:#fafafa">➕ 手动加一项</button>' +
+      '</div>' +
+      '<div id="tripDays"></div>' +
+      '<div style="text-align:center;font-size:11px;color:#bbb;margin:6px 0 2px">规划基于内置攻略库，未知城市会生成通用模板，可随手改 / 删</div>';
+
+    $('#tripSwitch').onclick = async () => {
+      const r = await promptForm('切换 / 新建旅行', [
+        { name: 'name', label: '旅行名称（如「国庆·大理」）', type: 'text', value: trip, placeholder: '国庆·大理' },
+      ]);
+      if (!r || !r.name || !r.name.trim()) return;
+      trip = r.name.trim();
+      await DB.put('meta', { id: 'currentTrip', value: trip });
+      toast('已切到「' + trip + '」🧳');
+      paint();
+    };
+
+    $('#tripAdd').onclick = async () => {
+      const r = await promptForm('加一项', [
+        { name: 'cat', label: '分类（六要素）', type: 'select', options: CATS.map(c => ({ value: c.v, label: c.e + ' ' + c.n })) },
+        { name: 'title', label: '内容', type: 'text', placeholder: '比如：洱海骑行 / 古城美食' },
+        { name: 'day', label: '第几天（留空=不排期）', type: 'number', placeholder: '1' },
+        { name: 'cost', label: '预计花费（元，可选）', type: 'number', placeholder: '0.00' },
+        { name: 'status', label: '状态', type: 'select', options: STATUS.map(s => ({ value: s.v, label: s.n })) },
+        { name: 'note', label: '备注（可选）', type: 'text', placeholder: '地址/预订号等' },
+      ]);
+      if (!r || !r.title || !r.title.trim()) { toast('内容要填一下哦'); return; }
+      const cat = catMap[r.cat] || CATS[0];
+      const st = statusMap[r.status] || STATUS[0];
+      const cost = r.cost ? (Math.round(parseFloat(r.cost) * 100) / 100) : 0;
+      const day = r.day ? Math.max(1, parseInt(r.day, 10) || 1) : 0;
+      await DB.put('travel', {
+        trip: trip,
+        cat: cat.v, catName: cat.n, emoji: cat.e,
+        title: r.title.trim().slice(0, 80),
+        day: day,
+        cost: cost,
+        status: st.v, statusName: st.n,
+        note: (r.note || '').slice(0, 80),
+        ts: Date.now(),
+      });
+      toast('已添加 🧳');
+      paint();
+    };
+
+    $('#tripPlan').onclick = planTravel;
+
+    // 根据城市 + 天数 + 风格，自动生成按天的吃住行游购娱安排
+    function buildPlan(g, city, days, style) {
+      const eat = g ? g.eat : [city + '特色菜', city + '夜市/小吃街', city + '本地餐馆'];
+      const play = g ? g.play : [city + '博物馆', city + '市中心地标', city + '公园/自然风光', city + '老街/古镇'];
+      const stay = g ? g.stay : city + '市中心或景点附近';
+      const shop = g ? g.shop : [city + '特产/伴手礼'];
+      const fun = g ? g.fun : [city + '夜景/演出'];
+      const mk = (c, title, day, note) => ({
+        cat: c, catName: catMap[c].n, emoji: catMap[c].e,
+        title: title, day: day, cost: 0, note: note || '',
+      });
+      const items = [];
+      // 第 1 天：出发 + 入住 + 晚餐 + 轻松逛
+      items.push(mk('move', '出发前往' + city + '，抵达后前往住宿办理入住', 1, '提前订好大交通'));
+      items.push(mk('stay', '入住：' + stay, 1));
+      items.push(mk('eat', '晚餐：' + eat[0], 1));
+      items.push(mk('play', '轻松逛：' + (play[0] || city + '周边溜达'), 1, '放行李先溜达，别太累'));
+      // 中间天数
+      let pi = 1;
+      for (let d = 2; d < days; d++) {
+        items.push(mk('play', '游玩：' + play[pi % play.length], d));
+        if (eat[pi % eat.length]) items.push(mk('eat', '午餐/小吃：' + eat[pi % eat.length], d));
+        if (d % 2 === 0 && shop[0]) items.push(mk('shop', '逛：' + shop[(d / 2 - 1) % shop.length], d));
+        if (d % 3 === 0 && fun[0]) items.push(mk('fun', '体验：' + fun[0], d));
+        pi++;
+      }
+      // 最后一天
+      if (days >= 2) {
+        const last = days;
+        if (play[pi % play.length]) items.push(mk('play', '游玩：' + play[pi % play.length], last));
+        if (eat[1]) items.push(mk('eat', '午餐：' + eat[1], last));
+        if (shop[0]) items.push(mk('shop', '采购伴手礼：' + shop[0], last));
+        items.push(mk('move', '返程：前往机场/车站，结束旅程', last, '预留充足时间'));
+      }
+      // 风格微调
+      if (style === 'food') {
+        for (let d = 1; d <= days; d++) if (eat[d % eat.length]) items.push(mk('eat', '美食打卡：' + eat[d % eat.length], d, '美食优先'));
+      } else if (style === 'family') {
+        items.push(mk('fun', '亲子时光：动物园/乐园/儿童馆（按城市替换）', Math.min(2, days), '带娃友好'));
+      } else if (style === 'chill') {
+        items.push(mk('fun', '慢游：咖啡馆/茶馆发呆一下午', Math.min(2, days), '休闲不赶'));
+      } else if (style === 'checkin') {
+        items.push(mk('play', '网红地标打卡拍照', Math.min(2, days), '出片位'));
+      }
+      return items;
+    }
+
+    async function planTravel() {
+      const r = await promptForm('🤖 智能规划行程', [
+        { name: 'city', label: '旅游城市', type: 'text', placeholder: '如：大理 / 东京 / 岘港' },
+        { name: 'days', label: '天数', type: 'number', value: '3', placeholder: '3' },
+        { name: 'style', label: '旅行风格', type: 'select', options: [
+          { value: 'classic', label: '🗺️ 经典均衡（默认）' },
+          { value: 'food', label: '🍜 美食优先' },
+          { value: 'family', label: '👨‍👩‍👧 亲子友好' },
+          { value: 'chill', label: '☕ 休闲慢游' },
+          { value: 'checkin', label: '📸 网红打卡' },
+        ] },
+      ]);
+      if (!r || !r.city || !r.city.trim()) { toast('先填城市名哦'); return; }
+      const city = r.city.trim();
+      const days = Math.max(1, parseInt(r.days, 10) || 1);
+      const style = r.style || 'classic';
+      const tripName = city;
+      const existing = ((await DB.all('travel')) || []).filter(x => x.trip === tripName);
+      if (existing.length) {
+        if (!(await confirmDel('「' + tripName + '」已有 ' + existing.length + ' 项安排，重新规划会先清空它们，确定？'))) return;
+        for (const x of existing) await DB.del('travel', x.id);
+      }
+      await DB.put('meta', { id: 'currentTrip', value: tripName });
+      trip = tripName;
+      const g = TRAVEL_GUIDE[city] || null;
+      const items = buildPlan(g, city, days, style);
+      let ts = Date.now();
+      for (const it of items) {
+        await DB.put('travel', Object.assign({ trip: tripName, status: 'plan', statusName: '计划中', ts: ts++ }, it));
+      }
+      toast('已为「' + city + '」规划 ' + days + ' 天行程 🧳');
+      paint();
+    }
+
+    async function paint() {
+      if (!trip) {
+        $('#tripSum').innerHTML = '';
+        $('#tripDays').innerHTML = emptyTip('🧳', '点上方「🤖 智能规划」，输入城市+天数，工作台帮你排好行程');
+        return;
+      }
+      const all = (await DB.all('travel')) || [];
+      const list = all.filter(r => r.trip === trip);
+      if (!list.length) {
+        $('#tripSum').innerHTML = '';
+        $('#tripDays').innerHTML = emptyTip('🗺️', '点上方「🤖 智能规划」一键生成，或「➕ 手动加一项」自己补');
+        return;
+      }
+      const totalCost = list.reduce((s, r) => s + (r.cost || 0), 0);
+      const booked = list.filter(r => r.status === 'booked').reduce((s, r) => s + (r.cost || 0), 0);
+      const todo = list.filter(r => r.status !== 'done').length;
+      const maxDay = list.reduce((m, r) => Math.max(m, r.day || 0), 0);
+      $('#tripSum').innerHTML =
+        sumCard('预计总花费', fmt(totalCost), '#0E9C8E') +
+        sumCard('已订金额', fmt(booked), '#5b8def') +
+        sumCard('待办', String(todo), '#f0a830') +
+        sumCard('天数', String(maxDay), '#e2574c');
+
+      const byDay = {};
+      list.forEach(r => { const d = r.day || 0; (byDay[d] = byDay[d] || []).push(r); });
+      const days = Object.keys(byDay).map(Number).sort((a, b) => a - b);
+      const box = $('#tripDays');
+      box.innerHTML = '';
+      days.forEach(d => {
+        const head = el('<div style="margin:14px 2px 6px;font-size:14px;font-weight:700;color:#444"></div>');
+        head.textContent = d === 0 ? '📌 未排期' : ('📅 第 ' + d + ' 天');
+        box.append(head);
+        byDay[d].sort((a, b) => (a.ts || 0) - (b.ts || 0)).forEach(rec => {
+          const st = statusMap[rec.status] || STATUS[0];
+          const item = el('<div style="display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid #f0f0f0"></div>');
+          item.innerHTML =
+            '<span style="font-size:20px;width:26px;text-align:center">' + (rec.emoji || '📍') + '</span>' +
+            '<div style="flex:1;min-width:0">' +
+              '<div style="font-size:14px;color:#333">' + esc(rec.title) +
+                ' <span style="font-size:11px;background:' + st.bg + ';color:' + st.color + ';border-radius:6px;padding:1px 6px;margin-left:4px">' + esc(st.n) + '</span>' +
+              '</div>' +
+              (rec.note ? '<div style="font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(rec.note) + '</div>' : '') +
+            '</div>' +
+            (rec.cost ? '<div style="font-size:14px;font-weight:700;color:#0E9C8E">' + fmt(rec.cost) + '</div>' : '') +
+            '<button class="trip-del" style="border:none;background:none;color:#bbb;font-size:16px;padding:0 2px;cursor:pointer" aria-label="删除">🗑</button>';
+          item.querySelector('.trip-del').onclick = async () => {
+            if (await confirmDel('删除「' + esc(rec.title) + '」？')) {
+              await DB.del('travel', rec.id); paint();
+            }
+          };
+          box.append(item);
+        });
+      });
+    }
+
+    function sumCard(label, val, color) {
+      return '<div style="flex:1;text-align:center;background:#f7fbfa;border-radius:10px;padding:8px 2px">' +
+        '<div style="font-size:11px;color:#999">' + label + '</div>' +
+        '<div style="font-size:15px;font-weight:700;color:' + color + '">' + val + '</div></div>';
+    }
+
+    paint();
+  }
+
   async function renderLedger(view) {
     const CATS = [
       { v: 'food', t: 'exp', e: '🍚', n: '餐饮' },
@@ -3634,6 +3890,7 @@
     { key: 'memo', emoji: '📝', title: '备忘录', render: renderMemo },
     { key: 'review', emoji: '📊', title: '内容复盘', render: renderReview },
     { key: 'ledger', emoji: '💰', title: '记账', render: renderLedger },
+    { key: 'travel', emoji: '🧳', title: '旅游规划', render: renderTravel },
   ];
 
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
@@ -3654,7 +3911,7 @@
 
   async function exportAll() {
     const out = {};
-    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
+    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
@@ -3665,7 +3922,7 @@
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
+      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
       let count = 0;
       for (const s of stores) {
         const arr = data[s];
