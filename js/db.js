@@ -3,8 +3,8 @@
    以后想换手机或清缓存前，记得先导出备份（之后我可以加这个功能）。 */
 (function (global) {
   const DB_NAME = 'yt-workbench';
-  const DB_VERSION = 6;
-  const STORES = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong', 'quotes'];
+  const DB_VERSION = 7;
+  const STORES = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong', 'quotes'];
 
   let dbp = null;
   function open() {
