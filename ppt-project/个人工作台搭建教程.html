@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给自己搭一个「个人专属工作台」 — 零基础手把手教程</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'PingFang SC', 'Microsoft YaHei', '阿里普惠体', -apple-system, sans-serif; background: #ECEAE6; color: #3d3d3d; }
+
+/* ===== Slide Container ===== */
+.slideshow { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+
+.slide {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  padding: 48px 70px 36px;
+  opacity: 0; transform: translateX(60px);
+  transition: opacity .55s ease, transform .55s ease;
+  pointer-events: none;
+  background: #FCFBF9;
+}
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; z-index: 2; }
+.slide.prev { opacity: 0; transform: translateX(-60px); z-index: 1; }
+
+/* ===== Typography ===== */
+.title-area { flex: 0 0 auto; margin-bottom: 24px; }
+.slide-title { font-size: 34px; font-weight: bold; color: #3D3D3D; line-height: 1.3; }
+.slide-subtitle { font-size: 19px; color: #7F8C8D; margin-top: 6px; font-style: italic; }
+.content-area { flex: 1; display: flex; align-items: stretch; gap: 32px; min-height: 0; }
+.footer-bar { flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid rgba(200,180,160,.35); font-size: 13px; color: #B2BEC3; }
+.page-num {
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #D9A684 0%, #C1725A 100%);
+  padding: 6px 18px;
+  border-radius: 22px;
+  box-shadow: 0 3px 10px rgba(193,114,90,.30);
+  line-height: 1;
+}
+.brand-mark { color: #D9A684; font-weight: 600; }
+
+/* ===== Fullscreen Button ===== */
+.fs-btn {
+  position: fixed; top: 16px; right: 18px; z-index: 999;
+  font-size: 15px; color: #fff; cursor: pointer;
+  background: linear-gradient(135deg, #D9A684 0%, #C1725A 100%);
+  border: none; border-radius: 22px; padding: 8px 16px;
+  box-shadow: 0 3px 12px rgba(193,114,90,.30);
+  font-family: inherit;
+}
+.fs-btn:hover { filter: brightness(1.05); }
+
+/* ===== Cover Slide ===== */
+.slide.cover {
+  justify-content: center; align-items: center; text-align: center;
+  background: linear-gradient(135deg, #FCFBF9 0%, #F2EEE9 50%, #E9E3DB 100%);
+  position: relative; overflow: hidden;
+}
+.slide.cover::before {
+  content: ''; position: absolute; top: -10%; right: -8%;
+  width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(217,166,132,.16) 0%, transparent 70%);
+}
+.slide.cover::after {
+  content: ''; position: absolute; bottom: -12%; left: -6%;
+  width: 380px; height: 380px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(193,114,90,.10) 0%, transparent 70%);
+}
+.cover-inner { position: relative; z-index: 1; max-width: 900px; }
+.cover-title { font-size: 60px; font-weight: bold; line-height: 1.25; color: #3D3D3D; margin-bottom: 16px; }
+.cover-title span { background: linear-gradient(135deg, #D9A684 0%, #C1725A 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.cover-desc { font-size: 22px; color: #7F8C8D; line-height: 1.6; margin-bottom: 36px; }
+.cover-img { max-width: 520px; max-height: 320px; object-fit: contain; border-radius: 16px; box-shadow: 0 8px 32px rgba(120,112,104,.15); }
+.cover-footer { position: absolute; bottom: 28px; left: 70px; right: 70px; font-size: 13px; color: #B2BEC3; display: flex; justify-content: space-between; }
+
+/* ===== Transition / Section Slide ===== */
+.slide.section {
+  justify-content: center; align-items: center; text-align: center;
+  background: linear-gradient(160deg, #FCFBF9 0%, #F1ECE6 100%);
+}
+.section-big { font-size: 46px; font-weight: bold; color: #3D3D3D; margin-bottom: 20px; }
+.section-sub { font-size: 20px; color: #7F8C8D; margin-bottom: 28px; }
+.section-img { max-width: 620px; max-height: 380px; object-fit: contain; border-radius: 12px; }
+
+/* ===== Left Image + Right Text Layout ===== */
+.layout-lr { display: flex; gap: 40px; align-items: stretch; width: 100%; }
+.lr-img-wrap { flex: 0 0 52%; display: flex; align-items: center; justify-content: center; }
+.lr-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 14px; box-shadow: 0 6px 24px rgba(120,112,104,.12); }
+.lr-text { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px; min-width: 0; }
+.text-card {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F3 100%);
+  border-radius: 12px; padding: 18px 22px;
+  box-shadow: 0 3px 12px rgba(120,112,104,.08);
+  border-left: 4px solid #D9A684;
+}
+.text-card p { font-size: 20px; line-height: 1.6; color: #4A4A4A; }
+.text-card .highlight { color: #C1725A; font-weight: 600; }
+.text-card ul { list-style: none; padding: 0; margin-top: 8px; }
+.text-card li { font-size: 19px; line-height: 1.65; color: #5A5A5A; padding: 4px 0 4px 22px; position: relative; }
+.text-card li::before { content: '✦'; position: absolute; left: 0; color: #D9A684; font-size: 14px; top: 7px; }
+
+/* ===== Card Grid (2-col) ===== */
+.card-grid { display: flex; gap: 28px; width: 100%; flex: 1; align-items: stretch; }
+.grid-card {
+  flex: 1; background: linear-gradient(145deg, #FFFFFF 0%, #FCFBF9 100%);
+  border-radius: 16px; padding: 28px 26px;
+  box-shadow: 0 4px 20px rgba(120,112,104,.1);
+  display: flex; flex-direction: column; gap: 14px;
+  border-top: 5px solid #D9A684;
+}
+.grid-card .card-icon { font-size: 40px; margin-bottom: 4px; }
+.grid-card .card-title { font-size: 24px; font-weight: 700; color: #3D3D3D; }
+.grid-card .card-body { font-size: 20px; line-height: 1.6; color: #5A5A5A; flex: 1; }
+.grid-card .card-tag {
+  display: inline-block; background: #D9A684; color: #fff;
+  font-size: 14px; padding: 4px 12px; border-radius: 20px; align-self: flex-start;
+}
+
+/* ===== Top Image + Bottom Cards ===== */
+.layout-tb { display: flex; flex-direction: column; gap: 24px; width: 100%; height: 100%; }
+.tb-img-wrap { flex: 0 0 54%; display: flex; align-items: center; justify-content: center; }
+.tb-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 14px; box-shadow: 0 6px 24px rgba(120,112,104,.12); }
+.tb-cards { flex: 1; display: flex; gap: 18px; align-items: stretch; min-height: 0; }
+.tb-card {
+  flex: 1; background: linear-gradient(135deg, #fff 0%, #FAF7F3 100%);
+  border-radius: 12px; padding: 16px 20px;
+  box-shadow: 0 3px 12px rgba(120,112,104,.08);
+  font-size: 18px; line-height: 1.55; color: #4A4A4A;
+  border-left: 3px solid #C1725A;
+}
+.tb-card strong { color: #C1725A; font-size: 19px; }
+
+/* ===== Asymmetric Two Column (60:40) ===== */
+.layout-asym { display: flex; gap: 32px; width: 100%; align-items: stretch; }
+.asym-main { flex: 0 0 58%; display: flex; flex-direction: column; gap: 12px; }
+.asym-side { flex: 1; display: flex; align-items: center; justify-content: center; }
+.asym-side img { max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 14px; box-shadow: 0 6px 24px rgba(120,112,104,.12); }
+.step-list { list-style: none; counter-reset: step; }
+.step-list li {
+  counter-increment: step; font-size: 21px; line-height: 1.6; color: #4A4A4A;
+  padding: 10px 14px 10px 52px; position: relative;
+  background: linear-gradient(135deg, #fff 0%, #FAF8F5 100%);
+  border-radius: 10px; margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(120,112,104,.06);
+}
+.step-list li::before {
+  content: counter(step); position: absolute; left: 12px; top: 10px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #D9A684, #C1725A);
+  color: #fff; font-size: 16px; font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 30px; text-align: center;
+}
+
+/* ===== Feature Icon List ===== */
+.feature-list { display: flex; flex-direction: column; gap: 14px; width: 100%; flex: 1; }
+.feature-item {
+  display: flex; align-items: center; gap: 18px;
+  background: linear-gradient(135deg, #fff 0%, #FCFBF9 100%);
+  border-radius: 12px; padding: 16px 22px;
+  box-shadow: 0 3px 12px rgba(120,112,104,.08);
+  transition: transform .2s;
+}
+.feature-icon {
+  flex: 0 0 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; color: #fff;
+  background: linear-gradient(135deg, #D9A684, #C1725A);
+}
+.feature-text { flex: 1; }
+.feature-text h4 { font-size: 21px; font-weight: 700; color: #3D3D3D; margin-bottom: 2px; }
+.feature-text p { font-size: 17px; color: #7F8C8D; line-height: 1.45; }
+
+/* ===== Tips / Big Truth Cards ===== */
+.tips-cards { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.tip-card {
+  background: linear-gradient(135deg, #fff 0%, #FAF7F3 100%);
+  border-radius: 12px; padding: 16px 20px;
+  box-shadow: 0 3px 12px rgba(120,112,104,.08);
+  display: flex; align-items: flex-start; gap: 14px;
+  border-left: 4px solid #C1725A;
+}
+.tip-num {
+  flex: 0 0 32px; height: 32px; border-radius: 50%;
+  background: #C1725A; color: #fff;
+  font-size: 17px; font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
+}
+.tip-text { font-size: 19px; line-height: 1.55; color: #4A4A4A; }
+.tip-text strong { color: #C1725A; }
+
+/* ===== Ending Slide ===== */
+.slide.ending {
+  justify-content: center; align-items: center; text-align: center;
+  display: flex;
+  background: linear-gradient(135deg, #FCFBF9 0%, #F2EEE9 50%, #E9E3DB 100%);
+  position: relative; overflow: hidden;
+}
+.slide.ending::before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 560px; height: 560px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,168,124,.2) 0%, transparent 70%);
+  z-index: 0; pointer-events: none;
+}
+.ending-inner { position: relative; z-index: 1; width: 100%; max-width: 920px; margin: 0 auto; }
+.ending-badge { font-size: 64px; line-height: 1; margin-bottom: 18px; }
+.ending-quote { font-size: 42px; font-weight: bold; line-height: 1.35; color: #3D3D3D; margin-bottom: 24px; }
+.ending-quote span {
+  background: linear-gradient(135deg, #D9A684 0%, #C1725A 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.ending-sub { font-size: 20px; color: #7F8C8D; margin-bottom: 8px; }
+.ending-by { font-size: 16px; color: #B2BEC3; margin-top: 26px; }
+.ending-hero { max-height: 220px; border-radius: 16px; box-shadow: 0 6px 24px rgba(120,112,104,.18); margin-bottom: 18px; object-fit: contain; }
+
+/* ===== Navigation Controls ===== */
+.nav-controls {
+  position: fixed; bottom: 24px; right: 28px; z-index: 100;
+  display: flex; gap: 10px;
+}
+.nav-btn {
+  width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,.85); backdrop-filter: blur(8px);
+  color: #D9A684; font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 12px rgba(120,112,104,.15);
+  transition: all .2s; user-select: none;
+}
+.nav-btn:hover { background: #D9A684; color: #fff; transform: scale(1.08); }
+.nav-btn:active { transform: scale(.95); }
+
+/* ===== Progress Dots ===== */
+.progress-dots {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 100;
+}
+.dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(200,170,140,.4); transition: all .3s;
+  cursor: pointer;
+}
+.dot.active { background: #C1725A; transform: scale(1.3); }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .slide { padding: 28px 24px 20px; }
+  .cover-title { font-size: 34px; }
+  .section-big { font-size: 30px; }
+  .slide-title { font-size: 24px; }
+  .layout-lr { flex-direction: column; }
+  .lr-img-wrap { flex: 0 0 auto; max-height: 240px; }
+  .layout-asym { flex-direction: column-reverse; }
+  .asym-main { flex: 1; }
+  .asym-side { flex: 0 0 auto; }
+  .card-grid { flex-direction: column; }
+  .tb-cards { flex-direction: column; }
+  .nav-controls { bottom: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<button class="fs-btn" id="fsBtn" title="点击全屏（再点退出）">⛶ 全屏</button>
+
+<div class="slideshow" id="slides">
+
+<!-- ========== SLIDE 01: COVER ========== -->
+<div class="slide cover active" data-slide="1">
+  <div class="cover-inner">
+    <h1 class="cover-title">给自己搭一个<br><span>「个人专属工作台」</span></h1>
+    <p class="cover-desc">零基础手把手教程 · 全程大白话 · 一下午就能用上</p>
+    <img class="cover-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-26-04.png" alt="四步流程图" />
+  </div>
+  <div class="cover-footer">
+    <span class="brand-mark">Happy赖 · 分享</span>
+    <span>按 → 翻页 · <span class="page-num">1 / 12</span></span>
+  </div>
+</div>
+
+<!-- ========== SLIDE 02: OVERVIEW ========== -->
+<div class="slide section" data-slide="2">
+  <div style="position:relative;z-index:1">
+    <h2 class="section-big">四步搞定，一下午就能用上</h2>
+    <p class="section-sub">不用会写代码，全程跟 AI 聊天就行</p>
+    <img class="section-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-26-04.png" alt="四步流程总览" />
+  </div>
+  <div class="footer-bar" style="position:absolute;bottom:24px;left:70px;right:70px;width:auto;">
+    <span class="brand-mark">Happy赖</span>
+    <span class="page-num">2 / 12</span>
+  </div>
+</div>
+
+<!-- ========== SLIDE 03: WHAT IS IT ========== -->
+<div class="slide" data-slide="3">
+  <div class="title-area">
+    <h2 class="slide-title">先搞懂：这玩意儿到底是啥？</h2>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-08-50.png" alt="我的地盘" />
+    </div>
+    <div class="lr-text">
+      <div class="text-card">
+        <p><strong style="color:#C1725A;font-size:22px;">说人话：</strong></p>
+        <p>在手机和电脑上，给自己安一个<span class="highlight">「私人小管家网页」</span>。</p>
+        <p style="margin-top:10px;">每天那些零零碎碎的事——记待办、写感恩日记、存好句子、学外语、收灵感——全部塞进这一个网页里，打开就是你的地盘。</p>
+      </div>
+      <div class="text-card" style="border-left-color:#C1725A;">
+        <p style="font-size:18px;color:#7F8C8D;">💡 又叫「个人工作台」或「第二大脑」，本质就是一个<span class="highlight">只属于你、为你量身做的小网站</span>。不用给别人看，自己用着爽就行。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">3 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 04: PREPARE TWO THINGS ========== -->
+<div class="slide" data-slide="4">
+  <div class="title-area">
+    <h2 class="slide-title">你只需要准备两样东西</h2>
+    <p class="slide-subtitle">就这两样，没了。不用买服务器，不用懂域名。</p>
+  </div>
+  <div class="content-area card-grid">
+    <div class="grid-card">
+      <div class="card-icon">🤖</div>
+      <h3 class="card-title">一个会聊天的 AI 搭子</h3>
+      <div class="card-body">
+        用大白话跟它说「我要个啥样的工作台」，它帮你把网页做出来。<br><br>
+        <strong style="color:#C1725A;">全程你一行代码都不用写。</strong><br>写程序的苦活它干。
+      </div>
+      <span class="card-tag">比如 WorkBuddy</span>
+    </div>
+    <div class="grid-card" style="border-top-color:#C1725A;">
+      <div class="card-icon">🏠</div>
+      <h3 class="card-title">一个免费的「网上安家」地方</h3>
+      <div class="card-body">
+        做好的网页得放到网上，你才能用链接打开、装到手机主屏。<br><br>
+        <strong style="color:#C1725A;">两种选法：</strong><br>
+        ① 省事版：让 AI 一键发布<br>
+        ② 自己掌控版：GitHub Pages（免费）
+      </div>
+      <span class="card-tag">后面第三步细说</span>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">4 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 05: STEP 1 ========== -->
+<div class="slide" data-slide="5">
+  <div class="title-area">
+    <h2 class="slide-title">第 1 步：先想清楚「我要它帮我干啥」</h2>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-12-03.png" alt="先来3个" />
+    </div>
+    <div class="lr-text">
+      <div class="text-card">
+        <p><strong style="color:#C1725A;font-size:21px;">最重要的一步！</strong></p>
+        <p>新手最容易翻车——<span class="highlight">一上来就要一百个功能，结果半天搭不起来，直接放弃。</span></p>
+      </div>
+      <div class="text-card">
+        <p><strong style="font-size:20px;">✅ 正确姿势：从真用得上的 3–5 个开始</strong></p>
+        <ul>
+          <li>「我总忘记今天该干嘛」→ 每日待办</li>
+          <li>「我想养成写感恩日记的习惯」→ 今日感恩</li>
+          <li>「刷到好句子想存下来」→ 收藏句子</li>
+          <li>「想每天磨磨耳朵学点英语」→ 每日英语</li>
+          <li>「做自媒体没灵感」→ 灵感收集</li>
+        </ul>
+        <p style="margin-top:8px;font-size:17px;color:#7F8C8D;">先列 3 个就够。后面用顺了，随时加。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">5 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 06: STEP 2 (HERO) ========== -->
+<div class="slide" data-slide="6">
+  <div class="title-area">
+    <h2 class="slide-title">第 2 步：跟 AI 搭子说人话，让它帮你生成</h2>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-10-59.png" alt="说人话就行" />
+    </div>
+    <div class="lr-text" style="gap:14px;">
+      <div class="text-card" style="padding:14px 18px;">
+        <p><strong style="color:#C1725A;font-size:20px;">📝 直接打字，照着模板改</strong></p>
+        <p style="margin-top:6px;">帮我做一个人工作台网页，手机电脑都能用。要有这几个功能：①每日计划 ②感恩日记 ③收藏句子 ④学越南语</p>
+      </div>
+      <div class="text-card" style="padding:14px 18px;border-left-color:#D9A684;">
+        <p><strong style="color:#D9A684;font-size:20px;">🔧 看着不对？继续说就行</strong></p>
+        <p style="margin-top:6px;">「颜色太冷了调暖一点」「待办加个已完成勾选」「词库太少了再加点」</p>
+      </div>
+      <div class="text-card" style="padding:14px 18px;border-left-color:#7F8C8D;">
+        <p><strong style="font-size:20px;">💡 记住</strong></p>
+        <p style="margin-top:6px;">你永远不用碰代码，所有苦活都是 AI 干。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">6 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 07: STEP 3 ========== -->
+<div class="slide" data-slide="7">
+  <div class="title-area">
+    <h2 class="slide-title">第 3 步：把网页发到网上（部署）</h2>
+    <p class="slide-subtitle">「部署」翻译过来就是：把做好的网页文件放到大家能访问的网址上</p>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-12-37.png" alt="发到网上" />
+    </div>
+    <div class="lr-text">
+      <div class="text-card" style="border-left-color:#D9A684;">
+        <p><strong style="color:#D9A684;font-size:22px;">🅰️ 选法 A：省事版（推荐零基础）</strong></p>
+        <p>直接跟 AI 搭子说：「帮我把这个发布到网上，给我一个能打开的链接。」<br><br>
+        它帮你处理好，回头丢给你一个网址。<strong>手机点开就能用。</strong></p>
+      </div>
+      <div class="text-card" style="border-left-color:#C1725A;">
+        <p><strong style="color:#C1725A;font-size:22px;">🅱️ 选法 B：自己掌控版（GitHub Pages）</strong></p>
+        <p>想要网页文件完全归自己管、有自己的网址？用 GitHub Pages，免费。<br><br>
+        具体步骤见教程附录，<span class="highlight">命令复制粘贴就能成</span>。卡住别慌，回头问 AI。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">7 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 08: STEP 4 ========== -->
+<div class="slide" data-slide="8">
+  <div class="title-area">
+    <h2 class="slide-title">第 4 步：装到手机主屏，离线也能用</h2>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-13-08.png" alt="装到主屏" />
+    </div>
+    <div class="lr-text" style="gap:14px;">
+      <div class="text-card" style="padding:14px 18px;">
+        <p><strong style="color:#C1725A;font-size:20px;">📱 三步装到主屏</strong></p>
+        <p style="margin-top:6px;">① 手机浏览器打开那个网址<br>② 点右上角「分享」→「添加到主屏幕」<br>③ 桌面多了一个图标，点开就是你的工作台 ✨</p>
+      </div>
+      <div class="text-card" style="padding:14px 18px;border-left-color:#D9A684;">
+        <p><strong style="color:#D9A684;font-size:20px;">📴 没网也能用</strong></p>
+        <p style="margin-top:6px;">数据存在你手机里，不依赖网络，随时能打开。</p>
+      </div>
+      <div class="text-card" style="padding:14px 18px;border-left-color:#7F8C8D;">
+        <p><strong style="font-size:20px;">⚠️ 更新别删图标</strong></p>
+        <p style="margin-top:6px;">iPhone 更新版本：划掉后台网页重新打开。<strong>别删主屏图标</strong>，删了数据一起没。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">8 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 09: EXAMPLES ========== -->
+<div class="slide" data-slide="9">
+  <div class="title-area">
+    <h2 class="slide-title">搭好了能长啥样？（我的工作台举例）</h2>
+    <p class="slide-subtitle">从 3 个功能一点点长出来的，不是一天全有的</p>
+  </div>
+  <div class="content-area feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">📝</div>
+      <div class="feature-text">
+        <h4>今日感恩 + 月历统计</h4>
+        <p>每天写三件开心小事，月底看热力图，哪天记了哪天没记一目了然。坚持下来特别治愈。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💡</div>
+      <div class="feature-text">
+        <h4>选题灵感</h4>
+        <p>做自媒体的朋友懂的痛——每天想发啥。让它每天自动给一波灵感，还能一键跳去搜。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🎧</div>
+      <div class="feature-text">
+        <h4>BBC 随身听 / 越南语</h4>
+        <p>想磨耳朵就听，想学语言就学，都带真人发音，通勤路上随手来。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🖼️</div>
+      <div class="feature-text">
+        <h4>金句卡</h4>
+        <p>收藏的好句子一键生成竖屏美图，发朋友圈、做短视频素材都行，不用露脸也能出内容。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">9 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 10: 3 TIPS ========== -->
+<div class="slide" data-slide="10">
+  <div class="title-area">
+    <h2 class="slide-title">给零基础朋友的 3 句大实话</h2>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Redraw_the_character_from_the__2026-08-01T10-13-39.png" alt="问AI记得备份" />
+    </div>
+    <div class="lr-text tips-cards">
+      <div class="tip-card">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>别贪多。</strong>先搭 3 个你真用得上的，用顺了再加。功能少不可耻，用不起来才可耻。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>卡住了就问 AI。</strong>「这一步我搞不懂，用大白话告诉我咋办。」它比任何教程都有耐心，而且 24 小时在线。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>记得备份你的宝贝。</strong>定期让它导出一个备份文件存好。手机换了也不怕。</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">10 / 12</span></div>
+</div>
+
+<!-- ========== SLIDE 11: ENDING ========== -->
+<div class="slide" data-slide="11">
+  <div class="title-area">
+    <h2 class="slide-title">说干就干，去搭你的工作台吧 🚀</h2>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-img-wrap">
+      <img class="lr-img" src="../images/tutorial/Image_to_image_reproduction__k_2026-08-01T12-30-09.png" alt="Happy赖 · 我的小人" />
+    </div>
+    <div class="lr-text">
+      <p style="font-size:23px;line-height:1.7;color:#3D3D3D;font-weight:600;">现在，去跟你的 AI 搭子说第一句话吧。</p>
+      <p style="font-size:20px;line-height:1.75;color:#7F8C8D;margin-top:16px;">从「我也想要个自己的小天地」到真的每天用它，其实就一个下午的事。</p>
+      <div class="text-card" style="margin-top:20px;border-left-color:#D9A684;background:linear-gradient(135deg,#FAF8F5,#fff);">
+        <p style="font-size:17px;color:#B2BEC3;">— Happy赖 · 分享给想偷懒但想要顺手工具的朋友 —</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">11 / 12 · 感谢观看 ❤️</span></div>
+</div>
+
+<!-- ========== SLIDE 12: APPENDIX · GITHUB PAGES 简易版 ========== -->
+<div class="slide" data-slide="12">
+  <div class="title-area">
+    <h2 class="slide-title">附录 · 想自己掌控？用 GitHub Pages 部署（简易版）</h2>
+    <p class="slide-subtitle">让网页真正属于你：免费、网址干净、还能离线装进手机主屏</p>
+  </div>
+  <div class="content-area layout-lr">
+    <div class="lr-text">
+      <div class="text-card" style="border-left-color:#C1725A;">
+        <p style="font-size:19px;font-weight:600;color:#C1725A;margin-bottom:8px;">📋 5 步走完（用 Git Bash）</p>
+        <p style="font-size:17px;line-height:1.7;">① 注册 GitHub，新建仓库，名字用 <b>你的用户名.github.io</b><br>
+        ② 在网页文件夹上右键 →「Git Bash Here」<br>
+        ③ 依次输入下面几行（每行一回车）：<br>
+        <span style="display:inline-block;background:#F4F1EE;padding:7px 11px;border-radius:8px;font-family:monospace;font-size:14px;margin:8px 0;color:#3D3D3D;line-height:1.7;">git init<br>git add .<br>git commit -m "我的工作台"<br>git branch -M main<br>git remote add origin 仓库地址<br>git push -u origin main</span><br>
+        ④ 密码栏填「个人访问令牌 PAT」（一串字符，不是登录密码；粘贴时不显示属正常）<br>
+        ⑤ 等几分钟，打开 https://你的用户名.github.io 就看到啦</p>
+      </div>
+    </div>
+    <div class="lr-img-wrap" style="flex:0 0 42%;">
+      <div class="text-card" style="border-left-color:#D9A684;">
+        <p style="font-size:18px;font-weight:600;color:#C1725A;margin-bottom:8px;">💡 两个坑别踩</p>
+        <p style="font-size:16px;line-height:1.65;margin-bottom:10px;">① <b>别用 GitHub 网页「Upload files」传文件夹</b>——会丢子文件，页面变白板。用 Git Bash 整目录推。</p>
+        <p style="font-size:16px;line-height:1.65;">② 改完重新 <b>git add . / commit / push</b>，手机把网页<b>划掉重开</b>就更新（别删主屏图标，会丢数据）。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span class="brand-mark">Happy赖</span><span class="page-num">12 / 12 · 附录</span></div>
+</div>
+
+</div><!-- end .slideshow -->
+
+<!-- ===== Navigation Buttons ===== -->
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" title="上一页">◀</button>
+  <button class="nav-btn" id="nextBtn" title="下一页">▶</button>
+</div>
+
+<!-- ===== Progress Dots ===== -->
+<div class="progress-dots" id="dots"></div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  // Build dots
+  const dotsContainer = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function updateDots() {
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  function goTo(idx) {
+    if (idx === current || idx < 0 || idx >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('prev');
+    // Clean up prev class after transition
+    setTimeout(() => {
+      slides.forEach(s => s.classList.remove('prev'));
+    }, 580);
+    current = idx;
+    slides[current].classList.add('active');
+    updateDots();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  const fsBtn = document.getElementById('fsBtn');
+  fsBtn.addEventListener('click', () => {
+    const el = document.documentElement;
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fsEl) {
+      const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+      if (req) { req.call(el).catch(() => { alert('当前环境不支持一键全屏。请双击本 html 文件用浏览器（Chrome/Edge）打开，再按 F11（笔记本按 Fn+F11）'); }); }
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
+    }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 50) { dx > 0 ? prev() : next(); }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
