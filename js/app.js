@@ -3891,6 +3891,7 @@
     { key: 'review', emoji: '📊', title: '内容复盘', render: renderReview },
     { key: 'ledger', emoji: '💰', title: '记账', render: renderLedger },
     { key: 'travel', emoji: '🧳', title: '旅游规划', render: renderTravel },
+    { key: 'kids', emoji: '👧', title: '亲子', render: renderKids },
   ];
 
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
@@ -3911,7 +3912,7 @@
 
   async function exportAll() {
     const out = {};
-    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
+    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
@@ -3922,7 +3923,7 @@
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
+      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
       let count = 0;
       for (const s of stores) {
         const arr = data[s];
@@ -3937,6 +3938,331 @@
       console.error(e);
       toast('导入失败：这好像不是备份文件');
     }
+  }
+
+  async function renderKids(view) {
+    const CATS = [
+      { v: 'learn', e: '📚', n: '学习' },
+      { v: 'life', e: '🧹', n: '生活' },
+      { v: 'sport', e: '🏃', n: '运动' },
+      { v: 'screen', e: '📺', n: '屏幕' },
+    ];
+    const catMap = {}; CATS.forEach(c => catMap[c.v] = c);
+    const TASK_ICON = { '早睡': '😴', '跳绳': '🤾', '骑车': '🚴', '散步': '🚶', '打球': '🏀' };
+    function sumCard(label, val, color) {
+      return '<div style="flex:1;text-align:center;background:#f7fbfa;border-radius:10px;padding:8px 2px">' +
+        '<div style="font-size:11px;color:#999">' + label + '</div>' +
+        '<div style="font-size:15px;font-weight:500;color:' + color + '">' + val + '</div></div>';
+    }
+    function startOfWeekStr() {
+      const x = new Date(); const day = x.getDay();
+      x.setDate(x.getDate() - day); x.setHours(0, 0, 0, 0);
+      return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
+    }
+    async function getAll() { return (await DB.all('kids')) || []; }
+    async function ensureSeed() {
+      const all = await getAll();
+      const have = new Set(all.filter(r => r.type === 'task').map(r => r.name));
+      const seeds = [
+        { type: 'task', name: '语文作业', cat: 'learn', stars: 2, mins: 0, freq: 'daily', note: '', order: 1, active: true },
+        { type: 'task', name: '数学作业', cat: 'learn', stars: 2, mins: 0, freq: 'daily', note: '', order: 2, active: true },
+        { type: 'task', name: '阅读15分钟', cat: 'learn', stars: 1, mins: 0, freq: 'daily', note: '', order: 3, active: true },
+        { type: 'task', name: '英语听读', cat: 'learn', stars: 1, mins: 0, freq: 'daily', note: '', order: 4, active: true },
+        { type: 'task', name: '收拾书桌', cat: 'life', stars: 1, mins: 0, freq: 'daily', note: '', order: 5, active: true },
+        { type: 'task', name: '打扫卫生', cat: 'life', stars: 1, mins: 0, freq: 'daily', note: '', order: 6, active: true },
+        { type: 'task', name: '早睡', cat: 'life', stars: 1, mins: 0, freq: 'daily', note: '', order: 7, active: true },
+        { type: 'task', name: '练字', cat: 'learn', stars: 1, mins: 0, freq: 'daily', note: '', order: 9, active: true },
+        { type: 'task', name: '跳绳', cat: 'sport', stars: 1, mins: 0, freq: 'daily', note: '', order: 10, active: true },
+        { type: 'task', name: '骑车', cat: 'sport', stars: 1, mins: 0, freq: 'daily', note: '', order: 11, active: true },
+        { type: 'task', name: '散步', cat: 'sport', stars: 1, mins: 0, freq: 'daily', note: '', order: 12, active: true },
+        { type: 'task', name: '打球', cat: 'sport', stars: 1, mins: 0, freq: 'daily', note: '', order: 13, active: true },
+        { type: 'task', name: '赚屏幕时间30分', cat: 'screen', stars: 0, mins: 30, freq: 'daily', note: '完成以上再赚看电视/平板时间', order: 14, active: true },
+      ];
+      for (const s of seeds) {
+        if (!have.has(s.name)) await DB.put('kids', s);
+      }
+    }
+
+    const PET_STAGES = [{ e: '🥚', n: '蛋宝宝' }, { e: '🐣', n: '破壳宝宝' }, { e: '🐤', n: '成长中' }, { e: '🦊', n: '成年伙伴' }];
+    async function loadPet(all) {
+      let p = all.find(r => r.type === 'pet');
+      if (!p) {
+        p = { type: 'pet', id: 'petState', name: '小芽', feed: 80, mood: 80, clean: 80, energy: 80, care: 0, born: Date.now(), lastCare: Date.now() };
+        await DB.put('kids', p);
+        return p;
+      }
+      const hrs = Math.min(72, (Date.now() - (p.lastCare || Date.now())) / 3600000);
+      const drop = Math.floor(hrs * 2);
+      if (drop > 0) {
+        p.feed = Math.max(0, (p.feed || 80) - drop);
+        p.mood = Math.max(0, (p.mood || 80) - drop);
+        p.clean = Math.max(0, (p.clean || 80) - drop);
+        p.energy = Math.max(0, (p.energy || 80) - drop);
+        p.lastCare = Date.now();
+        await DB.put('kids', p);
+      }
+      return p;
+    }
+    function petBar(label, val) {
+      val = Math.max(0, Math.min(100, val || 0));
+      const color = val > 60 ? '#2e9e5b' : val > 30 ? '#f0a830' : '#e2574c';
+      return '<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#666"><span>' + label + '</span><span>' + val + '%</span></div>' +
+        '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden"><div style="height:100%;width:' + val + '%;background:' + color + ';border-radius:6px"></div></div></div>';
+    }
+    function petSay(p) {
+      if ((p.feed || 0) < 30) return '妈妈，我饿啦~ 🥺';
+      if ((p.clean || 0) < 30) return '我身上脏脏的… 🫧';
+      if ((p.energy || 0) < 30) return '困困，想睡觉 💤';
+      if ((p.mood || 0) < 30) return '陪我玩嘛~ 🎾';
+      return '今天也超开心！✨';
+    }
+
+    async function getVerify() { const r = await DB.get('meta', 'kidVerify'); return r ? !!r.value : true; }
+    async function setVerify(v) { await DB.put('meta', { id: 'kidVerify', value: v }); }
+    async function awardStars(delta, reason, date) {
+      await DB.put('kids', { type: 'starlog', delta: delta, reason: reason, date: date || todayStr(), ts: Date.now() });
+    }
+    async function balance() {
+      const all = await getAll();
+      return all.filter(r => r.type === 'starlog').reduce((s, r) => s + (r.delta || 0), 0);
+    }
+    async function screenInfo() {
+      const d = todayStr();
+      const all = await getAll();
+      const allow = all.filter(r => r.type === 'check' && r.cat === 'screen' && r.date === d && r.status === 'done')
+        .reduce((s, r) => s + (r.mins || 0), 0);
+      const rec = await DB.get('meta', 'screenUsed_' + d);
+      const used = (rec && rec.value) || 0;
+      return { allow: allow, used: used, left: Math.max(0, allow - used) };
+    }
+
+    async function paint() {
+      await ensureSeed();
+      const all = await getAll();
+      const tasks = all.filter(r => r.type === 'task' && r.active).sort((a, b) => (a.order || 0) - (b.order || 0));
+      const checks = all.filter(r => r.type === 'check');
+      const wishes = all.filter(r => r.type === 'wish');
+      const pet = await loadPet(all);
+      const d = todayStr();
+      const bal = await balance();
+      const verify = await getVerify();
+      const si = await screenInfo();
+      const sowStr = startOfWeekStr();
+      const doneToday = (taskId) => checks.find(c => c.taskId === taskId && c.date === d);
+      const weekCount = (taskId) => checks.filter(c => c.taskId === taskId && c.status === 'done' && c.date >= sowStr).length;
+      const todayEarned = checks.filter(c => c.date === d && c.status === 'done').reduce((s, c) => s + (c.stars || 0), 0);
+      const weekEarned = checks.filter(c => c.status === 'done' && c.date >= sowStr).reduce((s, c) => s + (c.stars || 0), 0);
+
+      view.innerHTML =
+        '<div class="card" style="margin-bottom:12px">' +
+          '<div class="card-title">👧 亲子 · 习惯养成</div>' +
+          '<div style="display:flex;gap:8px;margin-top:8px">' +
+            sumCard('⭐ 星星余额', String(bal), '#f0a830') +
+            sumCard('今日获得', String(todayEarned), '#2e9e5b') +
+            sumCard('本周获得', String(weekEarned), '#5b8def') +
+          '</div>' +
+          (si.allow > 0 || tasks.some(t => t.cat === 'screen') ?
+          '<div style="margin-top:10px;padding:8px 10px;background:#fff4e0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">' +
+            '<div style="font-size:13px;color:#8a5a13">📺 今日屏幕剩余 <b style="font-size:15px">' + si.left + '</b> 分钟</div>' +
+            '<div style="display:flex;gap:6px">' +
+              '<button class="scr-use btn ghost sm" data-min="10" style="padding:4px 8px">用10</button>' +
+              '<button class="scr-use btn ghost sm" data-min="20" style="padding:4px 8px">用20</button>' +
+              '<button class="scr-use btn ghost sm" data-min="30" style="padding:4px 8px">用30</button>' +
+            '</div>' +
+          '</div>' : '') +
+          '<div style="display:flex;gap:8px;margin-top:12px">' +
+            '<button id="kAdd" class="btn green" style="flex:1;padding:8px">➕ 加任务</button>' +
+            '<button id="kWish" class="btn ghost" style="flex:1;padding:8px;border:1px dashed #ccc;color:#888;background:#fafafa">🎁 加愿望</button>' +
+            '<button id="kSet" class="btn ghost" style="flex:1;padding:8px;border:1px dashed #ccc;color:#888;background:#fafafa">⚙️ 设置</button>' +
+          '</div>' +
+        '</div>';
+
+      // 待审核
+      const pending = checks.filter(c => c.status === 'pending');
+      if (verify && pending.length) {
+        const pc = el('<div class="card" style="margin-bottom:12px"></div>');
+        pc.innerHTML = '<div class="card-title">⏳ 待审核（' + pending.length + '）</div>';
+        pending.forEach(c => {
+          const t = tasks.find(x => x.id === c.taskId) || {};
+          const row = el('<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0"></div>');
+          row.innerHTML = '<span style="font-size:18px">' + (TASK_ICON[t.name] || (catMap[t.cat] ? catMap[t.cat].e : '📌')) + '</span>' +
+            '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(t.name || '任务') + '</div>' +
+            '<div style="font-size:11px;color:#999">' + c.date + (t.stars ? ' · ' + t.stars + '★' : '') + '</div></div>' +
+            '<button class="p-app btn green sm" style="padding:4px 10px">批准</button>' +
+            '<button class="p-rej btn ghost sm" style="padding:4px 10px">驳回</button>';
+          row.querySelector('.p-app').onclick = async () => {
+            c.status = 'done'; await DB.put('kids', c);
+            if (t.stars) await awardStars(t.stars, '完成·' + t.name, c.date);
+            toast('已批准 +' + (t.stars || 0) + '★'); paint();
+          };
+          row.querySelector('.p-rej').onclick = async () => { await DB.del('kids', c.id); toast('已驳回'); paint(); };
+          pc.append(row);
+        });
+        view.append(pc);
+      }
+
+      // 今日任务
+      const tc = el('<div class="card" style="margin-bottom:12px"></div>');
+      tc.innerHTML = '<div class="card-title">📋 今日任务</div>';
+      if (!tasks.length) tc.append(el('<div style="padding:10px;color:#999;font-size:13px">还没有任务，点「➕ 加任务」添加</div>'));
+      tasks.forEach(t => {
+        const rec = doneToday(t.id);
+        const c = catMap[t.cat] || CATS[0];
+        const row = el('<div style="display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid #f0f0f0"></div>');
+        row.innerHTML =
+          '<span style="font-size:22px;width:28px;text-align:center">' + (TASK_ICON[t.name] || c.e) + '</span>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div style="font-size:14px;color:#333">' + esc(t.name) +
+              ' <span style="font-size:11px;background:' + (c.v === 'screen' ? '#fff4e0' : '#eef4ff') + ';color:' + (c.v === 'screen' ? '#8a5a13' : '#5b8def') + ';border-radius:6px;padding:1px 6px">' + c.n + (t.stars ? (' · ' + t.stars + '★') : '') + (t.mins ? (' · ' + t.mins + '分') : '') + '</span>' +
+            '</div>' +
+            (t.note ? '<div style="font-size:12px;color:#999">' + esc(t.note) + '</div>' : '') +
+            '<div style="font-size:11px;color:#bbb;margin-top:2px">本周完成 ' + weekCount(t.id) + ' 次</div>' +
+          '</div>';
+        if (!rec) {
+          const btn = el('<button class="btn green sm" style="padding:5px 12px;white-space:nowrap">完成</button>');
+          btn.onclick = async () => {
+            const chk = { type: 'check', taskId: t.id, cat: t.cat, stars: t.stars || 0, mins: t.mins || 0, date: d, status: verify ? 'pending' : 'done', ts: Date.now() };
+            await DB.put('kids', chk);
+            if (!verify && t.stars) await awardStars(t.stars, '完成·' + t.name, d);
+            toast(verify ? '已提交，等妈妈审核 ✅' : '完成 +' + (t.stars || 0) + '★');
+            paint();
+          };
+          row.append(btn);
+        } else if (rec.status === 'pending') {
+          const btn = el('<button class="btn ghost sm" style="padding:5px 12px;white-space:nowrap" disabled>待审核</button>');
+          row.append(btn);
+        } else {
+          const btn = el('<button class="btn ghost sm" style="padding:5px 12px;white-space:nowrap" disabled>已完成✓</button>');
+          const undo = el('<button class="btn ghost sm" style="padding:5px 10px;margin-left:6px">撤销</button>');
+          undo.onclick = async () => {
+            if (t.stars) await awardStars(-(t.stars || 0), '撤销·' + t.name, d);
+            await DB.del('kids', rec.id); toast('已撤销'); paint();
+          };
+          row.append(btn); row.append(undo);
+        }
+        tc.append(row);
+      });
+      view.append(tc);
+
+      // 愿望清单
+      const wc = el('<div class="card"></div>');
+      wc.innerHTML = '<div class="card-title">🎁 愿望清单（' + wishes.length + '）</div>';
+      if (!wishes.length) wc.append(el('<div style="padding:10px;color:#999;font-size:13px">还没设愿望，点上方「🎁 加愿望」，比如“多看一集动画片 30★”</div>'));
+      wishes.forEach(w => {
+        const ok = bal >= w.cost && w.status !== 'done';
+        const row = el('<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid #f0f0f0"></div>');
+        row.innerHTML = '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(w.name) +
+          ' <span style="font-size:12px;color:#f0a830;font-weight:500">' + w.cost + '★</span>' +
+          (w.status === 'done' ? ' <span style="font-size:11px;color:#2e9e5b">已兑换</span>' : '') + '</div>' +
+          (w.note ? '<div style="font-size:12px;color:#999">' + esc(w.note) + '</div>' : '') + '</div>';
+        if (w.status !== 'done') {
+          const b = el('<button class="btn sm" style="padding:5px 12px;white-space:nowrap">' + (ok ? '兑换' : '星星不够') + '</button>');
+          if (ok) { b.className = 'btn green sm'; b.onclick = async () => { await awardStars(-w.cost, '兑换·' + w.name, d); w.status = 'done'; w.ts = Date.now(); await DB.put('kids', w); toast('兑换成功 🎉'); paint(); }; }
+          else { b.className = 'btn ghost sm'; b.disabled = true; }
+          row.append(b);
+        }
+        wc.append(row);
+      });
+      view.append(wc);
+
+      // 🐾 我的小宠物
+      const stage = (pet.care >= 30) ? 3 : (pet.care >= 15) ? 2 : (pet.care >= 5) ? 1 : 0;
+      const pe = PET_STAGES[stage].e, pname = PET_STAGES[stage].n;
+      const pc = el('<div class="card" style="margin-bottom:12px"></div>');
+      pc.innerHTML =
+        '<style>@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.pet-emoji{animation:petBounce 1.6s ease-in-out infinite;display:inline-block}</style>' +
+        '<div style="display:flex;align-items:center;justify-content:space-between">' +
+          '<div class="card-title" style="margin:0">🐾 我的小宠物</div>' +
+          '<button id="petName" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">改名</button>' +
+        '</div>' +
+        '<div style="text-align:center;padding:12px 0">' +
+          '<div class="pet-emoji" style="font-size:64px;line-height:1">' + pe + '</div>' +
+          '<div style="font-size:14px;color:#555;margin-top:6px">' + esc(pet.name || '小芽') + ' · ' + pname + ' <span style="font-size:11px;color:#aaa">（照顾 ' + (pet.care || 0) + ' 次）</span></div>' +
+          '<div style="font-size:12px;color:#999;margin-top:4px">' + petSay(pet) + '</div>' +
+        '</div>' +
+        petBar('🍎 饱食', pet.feed) + petBar('😊 心情', pet.mood) + petBar('🛁 清洁', pet.clean) + petBar('⚡ 精力', pet.energy) +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">' +
+          '<button id="petFeed" class="btn green">🍎 喂食 (2★)</button>' +
+          '<button id="petPlay" class="btn green">🎾 陪玩 (1★)</button>' +
+          '<button id="petBath" class="btn ghost">🛁 洗澡 (免费)</button>' +
+          '<button id="petSleep" class="btn ghost">💤 睡觉 (免费)</button>' +
+        '</div>';
+      view.append(pc);
+
+      // 屏幕用掉按钮
+      view.querySelectorAll('.scr-use').forEach(b => {
+        b.onclick = async () => {
+          const m = parseInt(b.dataset.min, 10) || 0;
+          const cur = await screenInfo();
+          if (m > cur.left) { toast('剩余不够啦'); return; }
+          const rec = await DB.get('meta', 'screenUsed_' + d);
+          const used = (rec && rec.value) || 0;
+          await DB.put('meta', { id: 'screenUsed_' + d, value: used + m });
+          toast('已用掉 ' + m + ' 分钟'); paint();
+        };
+      });
+
+      $('#kAdd').onclick = async () => {
+        const r = await promptForm('➕ 加任务', [
+          { name: 'name', label: '任务名', type: 'text', placeholder: '如：练字15分钟' },
+          { name: 'cat', label: '分类', type: 'select', options: CATS.map(c => ({ value: c.v, label: c.e + ' ' + c.n })) },
+          { name: 'stars', label: '完成得几颗星（0-9）', type: 'number', value: '1' },
+          { name: 'mins', label: '若是屏幕任务：赚几分钟（其它填0）', type: 'number', value: '0' },
+          { name: 'note', label: '备注（可选）', type: 'text', placeholder: '' },
+        ]);
+        if (!r || !r.name || !r.name.trim()) return;
+        const st = Math.max(0, Math.min(9, parseInt(r.stars, 10) || 0));
+        const mn = Math.max(0, parseInt(r.mins, 10) || 0);
+        const order = (await getAll()).filter(x => x.type === 'task').length + 1;
+        await DB.put('kids', { type: 'task', name: r.name.trim().slice(0, 40), cat: r.cat, stars: st, mins: mn, freq: 'daily', note: (r.note || '').slice(0, 40), order: order, active: true });
+        toast('已添加任务'); paint();
+      };
+
+      $('#kWish').onclick = async () => {
+        const r = await promptForm('🎁 加愿望', [
+          { name: 'name', label: '愿望名', type: 'text', placeholder: '如：多看一集动画片' },
+          { name: 'cost', label: '需要多少星', type: 'number', value: '30' },
+          { name: 'note', label: '备注（可选）', type: 'text', placeholder: '' },
+        ]);
+        if (!r || !r.name || !r.name.trim()) return;
+        const cost = Math.max(1, parseInt(r.cost, 10) || 1);
+        await DB.put('kids', { type: 'wish', name: r.name.trim().slice(0, 40), cost: cost, status: 'open', note: (r.note || '').slice(0, 40), ts: Date.now() });
+        toast('已添加愿望'); paint();
+      };
+
+      $('#kSet').onclick = async () => {
+        const r = await promptForm('⚙️ 设置', [
+          { name: 'verify', label: '孩子完成后需妈妈审核才发星', type: 'select', options: [{ value: '1', label: '开启（推荐，便于管理）' }, { value: '0', label: '关闭（自动发星）' }] },
+        ]);
+        if (!r) return;
+        await setVerify(r.verify === '1');
+        toast('设置已保存'); paint();
+      };
+
+      // 宠物互动
+      const petClick = async (act, cost, label) => {
+        if (cost > bal) { toast('星星不够，先去打卡赚星吧 ⭐'); return; }
+        const p = (await getAll()).find(r => r.type === 'pet'); if (!p) return;
+        if (cost) await awardStars(-cost, '宠物·' + label, d);
+        act(p);
+        p.care = (p.care || 0) + 1;
+        p.lastCare = Date.now();
+        await DB.put('kids', p);
+        toast(label + '成功' + (cost ? (' · 消耗' + cost + '★') : '')); paint();
+      };
+      $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 20); }, 2, '喂食 🍎');
+      $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 20); }, 1, '陪玩 🎾');
+      $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 20); }, 0, '洗澡 🛁');
+      $('#petSleep').onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 20); }, 0, '睡觉 💤');
+      $('#petName').onclick = async () => {
+        const cur = (await getAll()).find(r => r.type === 'pet'); if (!cur) return;
+        const r = await promptForm('给宠物改名', [{ name: 'name', label: '名字', type: 'text', value: cur.name || '小芽' }]);
+        if (!r || !r.name || !r.name.trim()) return;
+        cur.name = r.name.trim().slice(0, 12); await DB.put('kids', cur); toast('改名成功'); paint();
+      };
+    }
+
+    paint();
   }
 
   function init() {
