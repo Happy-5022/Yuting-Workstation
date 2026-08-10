@@ -3420,6 +3420,109 @@
     paintHistory();
   }
 
+  async function renderLedger(view) {
+    const CATS = [
+      { v: 'food', t: 'exp', e: '🍚', n: '餐饮' },
+      { v: 'trans', t: 'exp', e: '🚌', n: '交通' },
+      { v: 'shop', t: 'exp', e: '🛍️', n: '购物' },
+      { v: 'home', t: 'exp', e: '🏠', n: '居家' },
+      { v: 'fun', t: 'exp', e: '🎮', n: '娱乐' },
+      { v: 'med', t: 'exp', e: '💊', n: '医疗' },
+      { v: 'study', t: 'exp', e: '📚', n: '学习' },
+      { v: 'gift', t: 'exp', e: '🎁', n: '人情' },
+      { v: 'other_e', t: 'exp', e: '💡', n: '其他支出' },
+      { v: 'salary', t: 'inc', e: '💰', n: '工资' },
+      { v: 'side', t: 'inc', e: '📱', n: '副业收入' },
+      { v: 'red', t: 'inc', e: '🧧', n: '红包' },
+      { v: 'other_i', t: 'inc', e: '✨', n: '其他收入' },
+    ];
+    const catMap = {}; CATS.forEach(c => catMap[c.v] = c);
+    function fmt(n) { return (Math.round((n || 0) * 100) / 100).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px">' +
+        '<div class="card-title">💰 记账 · 本月</div>' +
+        '<div id="ledgerSum" style="display:flex;gap:8px;margin-top:8px"></div>' +
+        '<button id="ledgerAdd" class="btn green block" style="margin-top:12px">➕ 记一笔</button>' +
+      '</div>' +
+      '<div class="card"><div class="card-title">📒 明细</div><div id="ledgerList"></div></div>';
+
+    $('#ledgerAdd').onclick = async () => {
+      const r = await promptForm('记一笔', [
+        { name: 'cat', label: '分类', type: 'select', options: CATS.map(c => ({ value: c.v, label: c.e + ' ' + c.n })) },
+        { name: 'amount', label: '金额（元）', type: 'number', placeholder: '0.00' },
+        { name: 'note', label: '备注（可选）', type: 'text', placeholder: '比如：午餐' },
+        { name: 'date', label: '日期', type: 'date', value: todayStr() },
+      ]);
+      if (!r) return;
+      const cat = catMap[r.cat];
+      const amt = parseFloat(r.amount);
+      if (!cat || !(amt > 0)) { toast('金额要大于 0 哦'); return; }
+      await DB.put('ledger', {
+        type: cat.t, cat: cat.v, catName: cat.n, emoji: cat.e,
+        amount: Math.round(amt * 100) / 100,
+        note: (r.note || '').slice(0, 60),
+        date: r.date || todayStr(),
+        ts: Date.now(),
+      });
+      toast('已记下 💰');
+      paint();
+    };
+
+    async function paint() {
+      const all = (await DB.all('ledger')) || [];
+      const now = new Date();
+      const mp = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-';
+      let inc = 0, exp = 0;
+      all.forEach(rec => { if ((rec.date || '').indexOf(mp) === 0) { if (rec.type === 'inc') inc += rec.amount; else exp += rec.amount; } });
+      const bal = inc - exp;
+      $('#ledgerSum').innerHTML =
+        sumCard('收入', inc, '#2e9e5b') + sumCard('支出', exp, '#e2574c') + sumCard('结余', bal, '#0E9C8E');
+
+      const box = $('#ledgerList');
+      if (!all.length) { box.innerHTML = emptyTip('🪙', '还没有记账，点上面「记一笔」开始吧'); return; }
+      const sorted = all.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.ts || 0) - (a.ts || 0));
+      const byDate = {};
+      sorted.forEach(rec => { (byDate[rec.date] = byDate[rec.date] || []).push(rec); });
+      box.innerHTML = '';
+      Object.keys(byDate).forEach(date => {
+        const recs = byDate[date];
+        let dayInc = 0, dayExp = 0;
+        recs.forEach(rec => { if (rec.type === 'inc') dayInc += rec.amount; else dayExp += rec.amount; });
+        const head = el('<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 2px 6px;font-size:13px"></div>');
+        head.innerHTML = '<b style="color:#444">' + esc(date) + '</b><span style="color:#999">收 ' + fmt(dayInc) + ' · 支 ' + fmt(dayExp) + '</span>';
+        box.append(head);
+        recs.forEach(rec => {
+          const item = el('<div style="display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid #f0f0f0"></div>');
+          const color = rec.type === 'inc' ? '#2e9e5b' : '#e2574c';
+          const sign = rec.type === 'inc' ? '+' : '-';
+          item.innerHTML =
+            '<span style="font-size:20px;width:26px;text-align:center">' + rec.emoji + '</span>' +
+            '<div style="flex:1;min-width:0">' +
+              '<div style="font-size:14px;color:#333">' + esc(rec.catName) + '</div>' +
+              (rec.note ? '<div style="font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(rec.note) + '</div>' : '') +
+            '</div>' +
+            '<div style="font-size:15px;font-weight:700;color:' + color + '">' + sign + fmt(rec.amount) + '</div>' +
+            '<button class="led-del" style="border:none;background:none;color:#bbb;font-size:16px;padding:0 2px;cursor:pointer" aria-label="删除">🗑</button>';
+          item.querySelector('.led-del').onclick = async () => {
+            if (await confirmDel(esc(rec.date) + ' 的「' + esc(rec.catName) + '」' + sign + fmt(rec.amount) + '，删除？')) {
+              await DB.del('ledger', rec.id); paint();
+            }
+          };
+          box.append(item);
+        });
+      });
+    }
+
+    function sumCard(label, val, color) {
+      return '<div style="flex:1;text-align:center;background:#f7fbfa;border-radius:10px;padding:10px 4px">' +
+        '<div style="font-size:12px;color:#999">' + label + '</div>' +
+        '<div style="font-size:17px;font-weight:700;color:' + color + '">' + fmt(val) + '</div></div>';
+    }
+
+    paint();
+  }
+
   const MODULES = [
     { key: 'home', emoji: '🌿', title: '概览', render: renderHome },
     { key: 'daily', emoji: '📋', title: '每日计划', render: renderDaily },
@@ -3432,6 +3535,7 @@
     { key: 'gratitude', emoji: '🙏', title: '每日感恩', render: renderGratitude },
     { key: 'memo', emoji: '📝', title: '备忘录', render: renderMemo },
     { key: 'review', emoji: '📊', title: '内容复盘', render: renderReview },
+    { key: 'ledger', emoji: '💰', title: '记账', render: renderLedger },
   ];
 
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
@@ -3452,7 +3556,7 @@
 
   async function exportAll() {
     const out = {};
-    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
+    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
@@ -3463,7 +3567,7 @@
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
+      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
       let count = 0;
       for (const s of stores) {
         const arr = data[s];

@@ -10,3 +10,19 @@
 - 部署：本地 commit edbeae5 成功；**git push 明确失败**——`fatal: could not read Username for 'https://github.com'`，即沙箱内无凭据（fetch/ls-remote 匿名可通，说明网络没问题，纯粹是没登录）。目前积压 2 个待推 commit（4fa2b22、edbeae5）。CloudStudio 备用部署**成功**：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
 - 明日避重：以上全部主题勿复用。BBC 近期库存已基本用尽，下次可用更早期 6ME：Why are we all so stressed?、Love the foods you hate、The future of food、Are saunas good for you?、Weight loss drugs。
 - 经验：git push 用 `timeout N git push` 时若走管道会吞掉真实退出码，须重定向到文件再看 $?；且该命令会挂满超时，建议直接 run_in_background。
+
+## 2026-08-02
+- 三份数据文件已更新，JSON 校验通过。当日主题：热搜「取消午休4点下班」（教师+人事双视角）、两个AI演员比内娱待爆艺人都火（接不露脸做号）、郑钦文一轮游「状态和心气都有问题」、初代网红萨摩耶妞妞离世（接记录的意义）、外卖打包费新规、英文邮件语气、越南语点单5句、八段锦双手托天理三焦单式、双胞胎冒名顶替→学信网自查、森碟18岁开车反差（搞笑/人设）。挑战榜：#跟着八仙游蓬莱、#今夜我在德令哈、#西关清凉季、#宝藏万山我来寻、#方桃子齐刘海仿妆。
+- BBC 五篇（原创摘要）：What's in a footballer's brain? / Should we cycle more? / Rude emails / Why are we all so stressed? / Are saunas good for you?
+- 部署：本地 commit 469db7c；**推送前 remote 已与本地齐平（c9d9892），说明用户已自行推完历史积压**，当前仅 1 个待推。git push 仍失败（沙箱无凭据 could not read Username）。CloudStudio 备用部署成功，链接与昨日相同：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。BBC 剩余可用库存：Love the foods you hate、The future of food、Weight loss drugs、How do we adapt to the cold?、Should we pay more for chocolate?、Why are some animals black and white?、The power of pepper。另可关注 7/23 之后的新集（当前已知最新为 Children in warzones 07/23）。
+- 经验：GIT_TERMINAL_PROMPT=0 可让 push 快速失败（56s 内返回明确报错），比等超时好；建议固定用此写法。
+
+## 2026-08-04
+（注：08-03 未见执行记录，可能跳过一天）
+- 三份数据文件已更新，JSON 校验通过。当日主题：阿里「千问办公」8/3公测+Qwen3.8-Max（AI赛道）、豆包免费新功能使用率不足8%（信息差干货）、微博热搜「朋友圈和微博的差别belike」（思考/共鸣）、米哈游终止云南昊曦MCN合作·百余创作者讨薪（签约避坑）、显卡与小米手机集体涨价、立秋(8/7)收秋气健身操、越南语问路5句、AI把简历改成招聘启事（搞笑反转）、暑假余额不足旧衣改造、尤克里里第五阶段、失业第二个月「上班表」。
+- 挑战榜：#华山论剑姿势挑战赛（8/1启动、贯穿8月、含AI云端居家赛道，最契合她）、#朋友圈和微博的差别belike、#暑假余额不足、#立秋养生、#AI帮我打工。
+- BBC 五篇（原创摘要）：Scared of speaking English?(ep-260122) / Is social media dead?(ep-260108) / What English phrases really mean(ep-260115) / Love the foods you hate(ep-260416) / Weight loss drugs(ep-260326)。
+- 部署：commit d3cbb82；git push **失败——今天是网络超时**（`Connection timed out after 300041 ms`，非凭据问题），且该命令会挂满 5 分钟。积压待推 commit 2 个：469db7c、d3cbb82。CloudStudio 备用部署成功，链接同前：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。BBC 剩余可用库存：The future of food、How do we adapt to the cold?、Should we pay more for chocolate?、Why are some animals black and white?、The power of pepper、Dreaming of being a chef、Artistic swimming、Rethinking dyslexia、Why are billionaires building bunkers?、Is it OK to disagree?。BBC 最新集仍为 Children in warzones(07/23)，7 月底后无更新。
+- 经验：git push 失败有两种形态——①无凭据（秒失败）②网络超时（挂满 300s）。建议直接 run_in_background 起，不要占前台。
