@@ -3983,7 +3983,7 @@
       }
     }
 
-    const PET_STAGES = [{ e: '🥚', n: '蛋宝宝' }, { e: '🐣', n: '破壳宝宝' }, { e: '🐤', n: '成长中' }, { e: '🦊', n: '成年伙伴' }];
+    const PET_STAGES = [{ e: '🥚', n: '蛋宝宝' }, { e: '🐤', n: '小鸡' }, { e: '🐔', n: '大鸡' }, { e: '🦚', n: '凤凰' }];
     async function loadPet(all) {
       let p = all.find(r => r.type === 'pet');
       if (!p) {
@@ -4010,6 +4010,7 @@
         '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden"><div style="height:100%;width:' + val + '%;background:' + color + ';border-radius:6px"></div></div></div>';
     }
     function petSay(p) {
+      if ((p.feed || 0) < 15 || (p.clean || 0) < 15 || (p.mood || 0) < 15) return '呜…我生病了，好难受 🤒';
       if ((p.feed || 0) < 30) return '妈妈，我饿啦~ 🥺';
       if ((p.clean || 0) < 30) return '我身上脏脏的… 🫧';
       if ((p.energy || 0) < 30) return '困困，想睡觉 💤';
@@ -4370,24 +4371,29 @@
       if (kidsPage === 'home') {
       const stage = (pet.care >= 30) ? 3 : (pet.care >= 15) ? 2 : (pet.care >= 5) ? 1 : 0;
       const pe = PET_STAGES[stage].e, pname = PET_STAGES[stage].n;
+      const sick = (pet.feed < 15 || pet.clean < 15 || pet.mood < 15);
       const pc = el('<div class="card" style="margin-bottom:12px"></div>');
       pc.innerHTML =
         '<style>@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.pet-emoji{animation:petBounce 1.6s ease-in-out infinite;display:inline-block}</style>' +
         '<div style="display:flex;align-items:center;justify-content:space-between">' +
-          '<div class="card-title" style="margin:0">🐾 我的小宠物</div>' +
+          '<div class="card-title" style="margin:0">🐾 我的小宠物' + (sick ? ' <span style="font-size:12px;color:#e2574c;background:#fdeaea;padding:1px 8px;border-radius:8px">🤒 生病中</span>' : '') + '</div>' +
           '<button id="petName" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">改名</button>' +
         '</div>' +
         '<div style="text-align:center;padding:12px 0">' +
-          '<div class="pet-emoji" style="font-size:64px;line-height:1">' + pe + '</div>' +
+          '<div class="pet-emoji" style="font-size:64px;line-height:1">' + (sick ? '🤒' : pe) + '</div>' +
           '<div style="font-size:14px;color:#555;margin-top:6px">' + esc(pet.name || '小芽') + ' · ' + pname + ' <span style="font-size:11px;color:#aaa">（照顾 ' + (pet.care || 0) + ' 次）</span></div>' +
           '<div style="font-size:12px;color:#999;margin-top:4px">' + petSay(pet) + '</div>' +
         '</div>' +
         petBar('🍎 饱食', pet.feed) + petBar('😊 心情', pet.mood) + petBar('🛁 清洁', pet.clean) + petBar('⚡ 精力', pet.energy) +
+        (sick ?
+          '<div style="margin-top:10px;padding:8px 10px;background:#fdeaea;border-radius:10px;font-size:12px;color:#c0392b">🤒 宠物生病了！把四项都照顾到 60 以上就能好，或花 3★ 立刻治好。</div>' +
+          '<button id="petCure" class="btn" style="width:100%;margin-top:8px;background:#e2574c;color:#fff;border-color:#e2574c">💊 治病 (3★)</button>'
+        : '') +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">' +
-          '<button id="petFeed" class="btn green">🍎 喂食 (2★)</button>' +
-          '<button id="petPlay" class="btn green">🎾 陪玩 (1★)</button>' +
-          '<button id="petBath" class="btn ghost">🛁 洗澡 (免费)</button>' +
-          '<button id="petSleep" class="btn ghost">💤 睡觉 (免费)</button>' +
+          '<button id="petFeed" class="btn green">🍎 喂食 (5★)</button>' +
+          '<button id="petPlay" class="btn green">🎾 陪玩 (5★)</button>' +
+          '<button id="petBath" class="btn ghost">🛁 洗澡 (3★)</button>' +
+          '<button id="petSleep" class="btn ghost">💤 睡觉 (3★)</button>' +
         '</div>';
       view.append(pc);
       }
@@ -4445,7 +4451,16 @@
               if (t.stars) await awardStars(t.stars, '完成·' + t.name, c.date);
               toast('已批准 +' + (t.stars || 0) + '★'); paint();
             };
-            row.querySelector('.p-rej').onclick = async () => { await DB.del('kids', c.id); toast('已驳回'); paint(); };
+            row.querySelector('.p-rej').onclick = async () => {
+              await DB.del('kids', c.id);
+              let msg = '已驳回';
+              if (t.stars) {
+                const nowB = await balance();
+                const dec = Math.min(t.stars, Math.max(0, nowB));
+                if (dec > 0) { await awardStars(-dec, '驳回·' + t.name, c.date); msg += ' · 扣 ' + dec + '★'; }
+              }
+              toast(msg); paint();
+            };
             pc2.append(row);
           });
           view.append(pc2);
@@ -4490,6 +4505,8 @@
           '<div style="font-size:12px;color:#999;margin:6px 0 10px">当前：' + (verify ? '孩子完成后需妈妈审核才发星（推荐）' : '自动发星（孩子完成立即得星）') + '</div>';
         const msBtn = el('<button id="kSet" class="btn ghost block" style="border:1px dashed #ccc;color:#888;background:#fafafa">切换审核设置</button>');
         ms.append(msBtn);
+        const msDeduct = el('<button id="kDeduct" class="btn ghost block" style="margin-top:8px;border:1px dashed #e2574c;color:#e2574c;background:#fff5f5">➖ 扣星星（做不好时）</button>');
+        ms.append(msDeduct);
         view.append(ms);
       }
 
@@ -4543,6 +4560,19 @@
         await setVerify(r.verify === '1');
         toast('设置已保存'); paint();
       };
+      $('#kDeduct').onclick = async () => {
+        const r = await promptForm('➖ 扣星星', [
+          { name: 'amount', label: '扣几颗星（1-20）', type: 'number', value: '1' },
+          { name: 'reason', label: '原因（给孩子看）', type: 'text', placeholder: '如：乱发脾气' },
+        ]);
+        if (!r) return;
+        const n = Math.max(1, Math.min(20, parseInt(r.amount, 10) || 1));
+        const balNow = await balance();
+        const real = Math.min(n, Math.max(0, balNow));
+        if (real <= 0) { toast('当前星星已经是 0，没法再扣'); return; }
+        await awardStars(-real, '扣减·' + (r.reason || '做不好'), d);
+        toast('已扣 ' + real + '★' + (real < n ? '（余额不足，扣到 0）' : '')); paint();
+      };
       }
 
       if (kidsPage === 'home') {
@@ -4557,15 +4587,24 @@
         await DB.put('kids', p);
         toast(label + '成功' + (cost ? (' · 消耗' + cost + '★') : '')); paint();
       };
-      $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 20); }, 2, '喂食 🍎');
-      $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 20); }, 1, '陪玩 🎾');
-      $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 20); }, 0, '洗澡 🛁');
-      $('#petSleep').onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 20); }, 0, '睡觉 💤');
+      $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 20); }, 5, '喂食 🍎');
+      $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 20); }, 5, '陪玩 🎾');
+      $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 20); }, 3, '洗澡 🛁');
+      $('#petSleep').onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 20); }, 3, '睡觉 💤');
       $('#petName').onclick = async () => {
         const cur = (await getAll()).find(r => r.type === 'pet'); if (!cur) return;
         const r = await promptForm('给宠物改名', [{ name: 'name', label: '名字', type: 'text', value: cur.name || '小芽' }]);
         if (!r || !r.name || !r.name.trim()) return;
         cur.name = r.name.trim().slice(0, 12); await DB.put('kids', cur); toast('改名成功'); paint();
+      };
+      const cureBtn = $('#petCure');
+      if (cureBtn) cureBtn.onclick = async () => {
+        if (bal < 3) { toast('星星不够，先去赚 3★ 才能治病'); return; }
+        const cur = (await getAll()).find(r => r.type === 'pet'); if (!cur) return;
+        await awardStars(-3, '宠物治病', d);
+        cur.feed = 70; cur.mood = 70; cur.clean = 70; cur.energy = 70; cur.lastCare = Date.now();
+        await DB.put('kids', cur);
+        toast('治好啦，宠物精神多了 🎉'); paint();
       };
       $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, q: null, answered: false }; paint(); };
       }
