@@ -3992,7 +3992,7 @@
         return p;
       }
       const hrs = Math.min(72, (Date.now() - (p.lastCare || Date.now())) / 3600000);
-      const drop = Math.floor(hrs * 2);
+      const drop = Math.floor(hrs * 5);
       if (drop > 0) {
         p.feed = Math.max(0, (p.feed || 80) - drop);
         p.mood = Math.max(0, (p.mood || 80) - drop);
@@ -4010,7 +4010,7 @@
         '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden"><div style="height:100%;width:' + val + '%;background:' + color + ';border-radius:6px"></div></div></div>';
     }
     function petSay(p) {
-      if ((p.feed || 0) < 15 || (p.clean || 0) < 15 || (p.mood || 0) < 15) return '呜…我生病了，好难受 🤒';
+      if ((p.feed || 0) < 25 || (p.clean || 0) < 25 || (p.mood || 0) < 25) return '呜…我生病了，好难受 🤒';
       if ((p.feed || 0) < 30) return '妈妈，我饿啦~ 🥺';
       if ((p.clean || 0) < 30) return '我身上脏脏的… 🫧';
       if ((p.energy || 0) < 30) return '困困，想睡觉 💤';
@@ -4201,10 +4201,10 @@
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:20px;padding:14px">'+o+'</button>').join('')+'</div></div>';
       }
       view.innerHTML += '<div class="card" style="margin-bottom:12px">' +
-        '<div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px"><span>已做 '+kidsStudy.done+' 题</span><span>答对 '+kidsStudy.got+' 题 · +'+kidsStudy.got+'★</span></div>' + body + '</div>';
+        '<div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px"><span>已做 '+kidsStudy.done+' 题 · 答对 '+kidsStudy.got+'</span><span>🔥连对 '+kidsStudy.combo+'/5 · ⭐'+kidsStudy.stars+'</span></div>' + body + '</div>';
 
       $('#stBack').onclick=()=>{kidsStudy=null;paint();};
-      view.querySelectorAll('.st-sub').forEach(b=>b.onclick=()=>{kidsStudy={subject:b.dataset.sub,done:0,got:0,q:null,answered:false};paint();});
+      view.querySelectorAll('.st-sub').forEach(b=>b.onclick=()=>{kidsStudy={subject:b.dataset.sub,done:0,got:0,stars:0,combo:0,q:null,answered:false};paint();});
       if(q.type==='english'){
         $('#stSpeak').onclick=()=>speak(q.speak,'en-US'); setTimeout(()=>speak(q.speak,'en-US'),60);
         const vs=$('#stVoice');
@@ -4217,13 +4217,20 @@
           const o=b.dataset.w||b.dataset.o;
           if(o===String(q.ans)){
             kidsStudy.got++;
-            await awardStars(1,'学习·'+SUBNAME[sub],d);
+            kidsStudy.combo++;
             burst(e.clientX,e.clientY);
-            toast('答对啦 +1★');
+            if(kidsStudy.combo % 5 === 0){
+              await awardStars(5,'学习·'+SUBNAME[sub],d);
+              kidsStudy.stars += 5;
+              toast('🔥 连对5题！奖励 +5★');
+            } else {
+              toast('答对啦（🔥连对 '+kidsStudy.combo%5+'/5，连满得星）');
+            }
             b.style.background='#5cc06a';b.style.color='#fff';
           } else {
+            kidsStudy.combo = 0;
             await DB.put('kids',{type:'mistake',subject:sub,question:(q.text||q.h||q.speak||''),answer:String(q.ans),wrong:o,date:d});
-            toast('正确答案：'+q.ans+(q.ansZh?'（'+q.ansZh+'）':''));
+            toast('答错，连对清零 · 正确答案：'+q.ans+(q.ansZh?'（'+q.ansZh+'）':''));
             b.style.background='#e2574c';b.style.color='#fff';
             view.querySelectorAll('.st-opt').forEach(x=>{if((x.dataset.w||x.dataset.o)===String(q.ans)){x.style.background='#5cc06a';x.style.color='#fff';}});
           }
@@ -4369,9 +4376,9 @@
 
       // 🐾 我的小宠物
       if (kidsPage === 'home') {
-      const stage = (pet.care >= 30) ? 3 : (pet.care >= 15) ? 2 : (pet.care >= 5) ? 1 : 0;
+      const stage = (pet.care >= 72) ? 3 : (pet.care >= 36) ? 2 : (pet.care >= 12) ? 1 : 0;
       const pe = PET_STAGES[stage].e, pname = PET_STAGES[stage].n;
-      const sick = (pet.feed < 15 || pet.clean < 15 || pet.mood < 15);
+      const sick = (pet.feed < 25 || pet.clean < 25 || pet.mood < 25);
       const pc = el('<div class="card" style="margin-bottom:12px"></div>');
       pc.innerHTML =
         '<style>@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.pet-emoji{animation:petBounce 1.6s ease-in-out infinite;display:inline-block}</style>' +
@@ -4587,10 +4594,10 @@
         await DB.put('kids', p);
         toast(label + '成功' + (cost ? (' · 消耗' + cost + '★') : '')); paint();
       };
-      $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 20); }, 5, '喂食 🍎');
-      $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 20); }, 5, '陪玩 🎾');
-      $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 20); }, 3, '洗澡 🛁');
-      $('#petSleep').onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 20); }, 3, '睡觉 💤');
+      $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 10); }, 5, '喂食 🍎');
+      $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 10); }, 5, '陪玩 🎾');
+      $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 10); }, 3, '洗澡 🛁');
+      $('#petSleep').onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 10); }, 3, '睡觉 💤');
       $('#petName').onclick = async () => {
         const cur = (await getAll()).find(r => r.type === 'pet'); if (!cur) return;
         const r = await promptForm('给宠物改名', [{ name: 'name', label: '名字', type: 'text', value: cur.name || '小芽' }]);
@@ -4606,7 +4613,7 @@
         await DB.put('kids', cur);
         toast('治好啦，宠物精神多了 🎉'); paint();
       };
-      $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, q: null, answered: false }; paint(); };
+      $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, stars: 0, combo: 0, q: null, answered: false }; paint(); };
       }
     }
 
