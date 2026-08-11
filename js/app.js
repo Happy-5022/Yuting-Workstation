@@ -4248,7 +4248,8 @@
           '</select></div>';
         body='<div style="text-align:center;padding:10px 0 6px"><div style="font-size:13px;color:#999;margin-bottom:8px">🔊 听一听，点对应的图（图下方有中文意思）</div>'+
           voiceSel+
-          '<button id="stSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa;margin-bottom:10px">🔊 再听一次</button>'+
+          '<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px"><button id="stSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa">🔊 再听一次</button>'+
+          '<span style="font-size:22px;font-weight:700;color:#6b4e00;letter-spacing:.5px">'+esc(q.speak)+'</span></div>'+
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-w="'+o.w+'" style="font-size:34px;padding:14px 6px">'+o.e+'<div style="font-size:13px;color:#8a5a13;margin-top:4px">'+o.zh+'</div></button>').join('')+'</div></div>';
       } else if(q.type==='pinyin'){
         body='<div style="text-align:center;padding:10px 0"><div style="font-size:48px;line-height:1;color:#6b4e00">'+q.h+'</div><div style="font-size:12px;color:#999;margin:4px 0 12px">「'+q.w+'」的拼音是？</div>'+
@@ -4405,7 +4406,7 @@
       let body = '';
       if (q.type === 'english') {
         body = '<div style="text-align:center;padding:10px 0 6px"><div style="font-size:13px;color:#999;margin-bottom:8px">🔊 听一听，点对应的图（图下方有中文意思）</div>' +
-          '<button id="wstSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa;margin-bottom:10px">🔊 再听一次</button>' +
+          '<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px"><button id="wstSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa">🔊 再听一次</button>' + '<span style="font-size:22px;font-weight:700;color:#6b4e00;letter-spacing:.5px">' + esc(q.speak) + '</span></div>' +
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' + q.opts.map(o => '<button class="wst-opt btn" data-w="' + o.w + '" style="font-size:34px;padding:14px 6px">' + o.e + '<div style="font-size:13px;color:#8a5a13;margin-top:4px">' + o.zh + '</div></button>').join('') + '</div></div>';
       } else if (q.type === 'pinyin') {
         body = '<div style="text-align:center;padding:10px 0"><div style="font-size:48px;line-height:1;color:#6b4e00">' + q.h + '</div><div style="font-size:12px;color:#999;margin:4px 0 12px">「' + q.w + '」的拼音是？</div>' +
