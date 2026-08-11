@@ -4073,9 +4073,9 @@
     ];
     const SPARKLE_STAGES = [{ e: '🥚', n: '蛋宝宝' }, { e: '🔮', n: '光球' }, { e: '🐾', n: '小兽' }, { e: '🦊', n: '小狐狸' }, { e: '🦄', n: '独角兽' }, { e: '🌟', n: '守护神' }];
     const RECIPES = {
-      potion: { n: '清醒药水', e: '🧪', need: { fire: 1, water: 1 } },
-      broom: { n: '星光扫帚', e: '🧹', need: { leaf: 1, star: 1 } },
-      key: { n: '万能钥匙', e: '🔑', need: { fire: 1, water: 1, leaf: 1 } },
+      potion: { n: '清醒药水', e: '🧪', need: { fire: 2, water: 2 } },
+      broom: { n: '星光扫帚', e: '🧹', need: { leaf: 2, star: 2 } },
+      key: { n: '万能钥匙', e: '🔑', need: { fire: 2, water: 2, leaf: 2 } },
       mirror: { n: '回忆之镜', e: '🪞', need: { potion: 1, broom: 1, key: 1 } },
       crown: { n: '黎明之冠', e: '👑', need: { mirror: 1, key: 1 } },
     };
@@ -4096,12 +4096,35 @@
       '🕰️ 记忆归来，闪闪想起了一切。只剩塔顶的沉睡咒，需要「黎明之冠」才能破。',
       '🌟 黎明之冠升起，沉睡咒破碎！闪闪化作守护神，永远陪着你。小屋成了你们的魔法基地~',
     ];
+    const DAILY_LIMIT = 5;
+    const DECOR = [
+      { id: 'lamp', e: '🏮', n: '魔法灯笼', cost: 8 },
+      { id: 'plant', e: '🪴', n: '星光盆栽', cost: 8 },
+      { id: 'cake', e: '🎂', n: '庆生蛋糕', cost: 10 },
+      { id: 'carpet', e: '🟣', n: '魔法地毯', cost: 10 },
+      { id: 'stars', e: '🌌', n: '星空穹顶', cost: 14 },
+      { id: 'cat', e: '🐈', n: '守护小猫', cost: 16 },
+    ];
+    const BLESSINGS = [
+      '🌟 闪闪说：今天也要开开心心呀！试着自己收拾好小书包~',
+      '📚 闪闪悄悄话：读一本喜欢的书，让脑袋里装满小星星。',
+      '💧 闪闪提醒：多喝水、早点睡，才有精神施魔法！',
+      '🍎 闪闪的小任务：今天尝一种没吃过的水果吧~',
+      '🌈 闪闪祝福：对爸爸妈妈说一句“辛苦啦”，他们会超开心。',
+      '⭐ 闪闪挑战：今天跳绳 30 下，身体棒棒的！',
+    ];
     async function loadWitch() {
       let w = (await getAll()).find(r => r.type === 'witch');
       if (!w) { w = { type: 'witch', id: 'witchState', chapter: 1, cleared: [], elements: { fire: 0, water: 0, leaf: 0, star: 0 }, bag: {}, done: 0 }; await DB.put('kids', w); }
       if (!w.elements) w.elements = { fire: 0, water: 0, leaf: 0, star: 0 };
       if (!w.bag) w.bag = {};
       if (!w.cleared) w.cleared = [];
+      if (w.dailyDate === undefined) w.dailyDate = '';
+      if (w.dailyGot === undefined) w.dailyGot = 0;
+      if (w.coins === undefined) w.coins = 0;
+      if (!w.decor) w.decor = {};
+      if (w.blessDate === undefined) w.blessDate = '';
+      if (w.blessText === undefined) w.blessText = '';
       return w;
     }
     function witchHas(w, need) {
@@ -4332,6 +4355,7 @@
           '<div style="font-size:12px;color:#999;margin-top:4px;padding:0 8px;line-height:1.5">' + STORY[storyIdx] + '</div>' +
         '</div>';
       view.append(sc);
+      if (!doneAll) {
       const eb = el('<div class="card" style="margin-bottom:12px"></div>');
       eb.innerHTML = '<div class="card-title">🔮 我的魔法元素</div><div style="display:flex;gap:8px;margin-top:8px">' +
         ELEMENTS.map(e => sumCard(e.e + ' ' + e.n, String(w.elements[e.v] || 0), '#9b6dff')).join('') + '</div>';
@@ -4377,24 +4401,77 @@
         rc.append(row);
       });
       view.append(rc);
+      } else {
+      const bc = el('<div class="card" style="margin-bottom:12px"></div>');
+      bc.innerHTML = '<div class="card-title">💌 今日守护祝福</div><div style="font-size:14px;color:#555;padding:6px 4px;line-height:1.6">' + (w.blessText || BLESSINGS[0]) + '</div>';
+      view.append(bc);
+      const dec = el('<div class="card" style="margin-bottom:12px"></div>');
+      let decHtml = '<div class="card-title">🛍️ 小屋装扮（💰守护币 ' + (w.coins || 0) + '）</div><div style="font-size:12px;color:#999;margin:6px 0 8px">通关后做守护任务赚守护币，给小屋添置家具</div>';
+      DECOR.forEach(x => {
+        const owned = !!(w.decor && w.decor[x.id]);
+        const can = (w.coins || 0) >= x.cost;
+        decHtml += '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0"><span style="font-size:22px">' + x.e + '</span>' +
+          '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + x.n + ' <span style="font-size:11px;color:#9b6dff">💰' + x.cost + '</span></div></div>' +
+          (owned ? '<span style="font-size:12px;color:#2e9e5b">已拥有</span>' : '<button class="btn sm witch-buy" data-id="' + x.id + '" data-cost="' + x.cost + '" style="white-space:nowrap;' + (can ? 'background:#9b6dff;color:#fff;border-color:#9b6dff' : 'border:1px dashed #ccc;color:#999;background:#fafafa') + '">' + (can ? '购买' : '币不足') + '</button>') +
+          '</div>';
+      });
+      const ownedList = (w.decor && Object.keys(w.decor).filter(k => w.decor[k])) || [];
+      if (ownedList.length) decHtml += '<div style="margin-top:10px;font-size:12px;color:#999">🏠 小屋展示墙：' + ownedList.map(k => DECOR.find(x => x.id === k).e).join(' ') + '</div>';
+      dec.innerHTML = decHtml;
+      view.append(dec);
+      dec.querySelectorAll('.witch-buy').forEach(b => b.onclick = async () => {
+        const id = b.dataset.id, cost = parseInt(b.dataset.cost, 10);
+        const ww = await loadWitch();
+        if ((ww.coins || 0) < cost) { toast('守护币不足 💰'); return; }
+        ww.coins -= cost; ww.decor = ww.decor || {}; ww.decor[id] = true;
+        await DB.put('kids', ww);
+        toast('🎉 已添置「' + DECOR.find(x => x.id === id).n + '」');
+        paint();
+      });
+      }
       const lc = el('<div class="card" style="margin-bottom:12px"></div>');
-      lc.innerHTML = '<div class="card-title">🪄 魔法课堂</div>' +
-        '<div style="font-size:13px;color:#999;margin-bottom:8px">做对 1 题得 1 个魔法元素：口算🔥 乘法💧 识字🍃 英语✨</div>' +
-        '<button id="wStudy" class="btn block" style="background:#9b6dff;color:#fff;border-color:#9b6dff">去做魔法作业 →</button>';
+      if (!doneAll) {
+        const left = Math.max(0, DAILY_LIMIT - (w.dailyDate === d ? (w.dailyGot || 0) : 0));
+        lc.innerHTML = '<div class="card-title">🪄 魔法课堂</div>' +
+          '<div style="font-size:13px;color:#999;margin-bottom:8px">做对 1 题得 1 个魔法元素：口算🔥 乘法💧 识字🍃 英语✨<br>今日剩余魔法能量：' + left + '/' + DAILY_LIMIT + '</div>' +
+          '<button id="wStudy" class="btn block" style="background:#9b6dff;color:#fff;border-color:#9b6dff">去做魔法作业 →</button>';
+      } else {
+        lc.innerHTML = '<div class="card-title">🪄 守护任务</div>' +
+          '<div style="font-size:13px;color:#999;margin-bottom:8px">守护神已唤醒！做对 1 题得 1 💰守护币，用来装扮小屋<br>当前守护币：💰 ' + (w.coins || 0) + '</div>' +
+          '<button id="wStudy" class="btn block" style="background:#9b6dff;color:#fff;border-color:#9b6dff">去做守护任务 →</button>';
+      }
       view.append(lc);
       $('#wBack').onclick = () => { kidsWitch = null; paint(); };
       $('#wStudy').onclick = () => { kidsWitch = { mode: 'study', sub: pick(['math', 'mult', 'pinyin', 'english']), q: null, answered: false, done: 0 }; paint(); };
+      if (doneAll) {
+        const rb = el('<button class="btn block ghost sm" style="margin-top:4px;color:#c0392b;border-color:#f0c0c0">🔄 重新施法（重新开始，保留装扮）</button>');
+        rb.onclick = async () => {
+          if (!confirm('确定重新开始吗？房间进度会清空，但已买的装扮保留。')) return;
+          const ww = await loadWitch();
+          ww.cleared = []; ww.chapter = 1; ww.elements = { fire: 0, water: 0, leaf: 0, star: 0 }; ww.bag = {}; ww.dailyGot = 0; ww.dailyDate = '';
+          await DB.put('kids', ww);
+          toast('🔄 重新施法！闪闪又变回蛋宝宝啦~');
+          paint();
+        };
+        view.append(rb);
+      }
     }
     function renderWitch() {
       view.innerHTML = kidsStyle + '<div style="padding:30px;text-align:center;color:#999">🪄 正在施法…</div>';
       if ((kidsWitch.mode || 'home') === 'study') { renderWitchStudy(); return; }
-      loadWitch().then(w => paintWitchHome(w, todayStr()));
+      loadWitch().then(async w => {
+        const dd = todayStr();
+        if (w.cleared.length >= CHAPTERS.length && w.blessDate !== dd) { w.blessDate = dd; w.blessText = pick(BLESSINGS); await DB.put('kids', w); }
+        paintWitchHome(w, dd);
+      });
     }
-    function renderWitchStudy() {
+    async function renderWitchStudy() {
       const d = todayStr();
       const sub = kidsWitch.sub;
       if (!kidsWitch.q) kidsWitch.q = genQuestion(sub, kidsWitch.done);
       const q = kidsWitch.q;
+      let w0; try { w0 = await loadWitch(); } catch (e) { w0 = null; }
+      const studyDoneAll = !!(w0 && w0.cleared.length >= CHAPTERS.length);
       view.innerHTML = kidsStyle +
         '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
           '<button id="wstBack" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">← 回小屋</button>' +
@@ -4415,7 +4492,7 @@
         body = '<div style="text-align:center;padding:10px 0"><div style="font-size:30px;color:#6b4e00;margin-bottom:14px">' + q.text + '</div>' +
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' + q.opts.map(o => '<button class="wst-opt btn" data-o="' + o + '" style="font-size:20px;padding:14px">' + o + '</button>').join('') + '</div></div>';
       }
-      view.innerHTML += '<div class="card" style="margin-bottom:12px"><div style="font-size:12px;color:#888;margin-bottom:6px">已做 ' + kidsWitch.done + ' 题 · 答对得 ' + ({ math: '🔥', mult: '💧', pinyin: '🍃', english: '✨' }[sub]) + ' 元素</div>' + body + '</div>';
+      view.innerHTML += '<div class="card" style="margin-bottom:12px"><div style="font-size:12px;color:#888;margin-bottom:6px">已做 ' + kidsWitch.done + ' 题 · ' + (studyDoneAll ? '答对得 💰 守护币（当前 ' + (w0.coins || 0) + '）' : '答对得 ' + ({ math: '🔥', mult: '💧', pinyin: '🍃', english: '✨' }[sub]) + ' 元素') + '</div>' + body + '</div>';
       $('#wstBack').onclick = () => { kidsWitch = { mode: 'home' }; paint(); };
       view.querySelectorAll('.wst-sub').forEach(b => b.onclick = () => { kidsWitch = { mode: 'study', sub: b.dataset.sub, q: null, answered: false, done: 0 }; paint(); });
       if (q.type === 'english') { $('#wstSpeak').onclick = () => speak(q.speak, 'en-US'); setTimeout(() => speak(q.speak, 'en-US'), 60); }
@@ -4428,11 +4505,23 @@
           const info = ELEMENTS.find(x => x.v === ek);
           if (o === String(q.ans)) {
             const w = await loadWitch();
-            w.elements[ek] = (w.elements[ek] || 0) + 1;
+            const doneAll = w.cleared.length >= CHAPTERS.length;
             w.done = (w.done || 0) + 1;
+            if (doneAll) {
+              w.coins = (w.coins || 0) + 1;
+              toast('答对啦！获得 💰 守护币（共 ' + w.coins + '）');
+            } else {
+              if (w.dailyDate !== d) { w.dailyDate = d; w.dailyGot = 0; }
+              if ((w.dailyGot || 0) >= DAILY_LIMIT) {
+                toast('今天魔法能量用完啦 🌙 明天再来施法~');
+              } else {
+                w.elements[ek] = (w.elements[ek] || 0) + 1;
+                w.dailyGot = (w.dailyGot || 0) + 1;
+                toast('答对啦！获得 ' + info.e + ' ' + info.n + '（今日 ' + w.dailyGot + '/' + DAILY_LIMIT + '）');
+              }
+            }
             await DB.put('kids', w);
             burst(e.clientX, e.clientY);
-            toast('答对啦！获得 ' + info.e + ' ' + info.n);
             b.style.background = '#5cc06a'; b.style.color = '#fff';
           } else {
             toast('答错咯~ 正确答案：' + q.ans + (q.ansZh ? '（' + q.ansZh + '）' : ''));
