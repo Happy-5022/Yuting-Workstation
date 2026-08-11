@@ -4062,6 +4062,63 @@
 
     let kidsPage = 'home';
     let kidsStudy = null;
+    let kidsWitch = null;
+
+    // ===== 🧙 女巫魔法小屋（独立小游戏）=====
+    const ELEMENTS = [
+      { v: 'fire', e: '🔥', n: '火苗' },
+      { v: 'water', e: '💧', n: '水滴' },
+      { v: 'leaf', e: '🍃', n: '树叶' },
+      { v: 'star', e: '✨', n: '星光' },
+    ];
+    const SPARKLE_STAGES = [{ e: '🥚', n: '蛋宝宝' }, { e: '🔮', n: '光球' }, { e: '🐾', n: '小兽' }, { e: '🦊', n: '小狐狸' }, { e: '🦄', n: '独角兽' }, { e: '🌟', n: '守护神' }];
+    const RECIPES = {
+      potion: { n: '清醒药水', e: '🧪', need: { fire: 1, water: 1 } },
+      broom: { n: '星光扫帚', e: '🧹', need: { leaf: 1, star: 1 } },
+      key: { n: '万能钥匙', e: '🔑', need: { fire: 1, water: 1, leaf: 1 } },
+      mirror: { n: '回忆之镜', e: '🪞', need: { potion: 1, broom: 1, key: 1 } },
+      crown: { n: '黎明之冠', e: '👑', need: { mirror: 1, key: 1 } },
+    };
+    const CHAPTERS = [
+      { ch: 1, room: '厨房', act: '点亮炉火', item: 'potion' },
+      { ch: 2, room: '书房', act: '翻开魔典', item: 'broom' },
+      { ch: 3, room: '花园', act: '唤醒花草', item: 'key' },
+      { ch: 4, room: '阁楼', act: '找回记忆', item: 'mirror' },
+      { ch: 5, room: '塔顶', act: '破沉睡咒', item: 'crown' },
+    ];
+    const SUB2ELEM = { math: 'fire', mult: 'water', pinyin: 'leaf', english: 'star' };
+    const SUBNAME2 = { math: '口算', mult: '乘法', pinyin: '识字', english: '英语' };
+    const STORY = [
+      '🌙 夜深了，女巫小屋一片漆黑。守护精灵「闪闪」缩在角落发抖：“小主人，我好冷……炉火灭了。”',
+      '🍳 炉火亮起，小屋暖了。闪闪探出头：“谢谢你！书房的魔典在等你翻开~”',
+      '📖 魔典翻开，闪出金色字句。花园里的花草垂着头，等你去唤醒。',
+      '🌿 花草醒来，香气满屋。阁楼尘封的记忆，正等待被找回。',
+      '🕰️ 记忆归来，闪闪想起了一切。只剩塔顶的沉睡咒，需要「黎明之冠」才能破。',
+      '🌟 黎明之冠升起，沉睡咒破碎！闪闪化作守护神，永远陪着你。小屋成了你们的魔法基地~',
+    ];
+    async function loadWitch() {
+      let w = (await getAll()).find(r => r.type === 'witch');
+      if (!w) { w = { type: 'witch', id: 'witchState', chapter: 1, cleared: [], elements: { fire: 0, water: 0, leaf: 0, star: 0 }, bag: {}, done: 0 }; await DB.put('kids', w); }
+      if (!w.elements) w.elements = { fire: 0, water: 0, leaf: 0, star: 0 };
+      if (!w.bag) w.bag = {};
+      if (!w.cleared) w.cleared = [];
+      return w;
+    }
+    function witchHas(w, need) {
+      for (const k in need) {
+        const isEl = ELEMENTS.some(e => e.v === k);
+        const have = isEl ? (w.elements[k] || 0) : (w.bag[k] || 0);
+        if (have < need[k]) return false;
+      }
+      return true;
+    }
+    function witchTake(w, need) {
+      for (const k in need) {
+        if (ELEMENTS.some(e => e.v === k)) w.elements[k] = (w.elements[k] || 0) - need[k];
+        else w.bag[k] = (w.bag[k] || 0) - need[k];
+      }
+    }
+    function witchGive(w, item) { w.bag[item] = (w.bag[item] || 0) + 1; }
 
     const kidsStyle = `<style>.card{border-radius:18px!important;box-shadow:0 4px 16px rgba(240,168,48,.12)!important;border:1px solid #ffe3bf!important;background:#fffdf8!important}.card-title{font-size:16px!important;font-weight:600!important;color:#6b4e00!important}.btn.green{background:#5cc06a!important;border-color:#5cc06a!important;color:#fff!important}.kids-prog{height:12px;background:#ffe9c7;border-radius:8px;overflow:hidden}.kids-prog>div{height:100%;background:#f0a830;border-radius:8px;transition:width .4s}.kids-tabs{display:flex;gap:8px;margin-bottom:12px}.kids-tabs button{flex:1;padding:10px;border:1px solid #ffe0b0;border-radius:14px;background:#fff8ee;color:#a9781f;font-size:14px;font-weight:600}.kids-tabs button.on{background:#f0a830;border-color:#f0a830;color:#fff;box-shadow:0 3px 10px rgba(240,168,48,.3)}.kids-chart{display:flex;align-items:flex-end;gap:6px;margin-top:6px;padding:0 2px}.kids-chart .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}.kids-chart .bc .bar{width:64%;background:#f0a830;border-radius:4px 4px 0 0;min-height:3px}</style>`;
 
@@ -4240,6 +4297,152 @@
     }
 
     async function paint() {
+    async function witchLight(w, c, d) {
+      w.bag[c.item] = (w.bag[c.item] || 0) - 1;
+      if (!w.cleared.includes(c.ch)) w.cleared.push(c.ch);
+      w.chapter = c.ch + 1;
+      await DB.put('kids', w);
+      await awardStars(5, '魔法小屋·点亮' + c.room, d);
+      toast('✨ 点亮「' + c.room + '」！奖励 +5★');
+      if (kidsWitch) kidsWitch = { mode: 'home' };
+      paint();
+    }
+    async function witchCraft(w, k, d) {
+      witchTake(w, RECIPES[k].need); witchGive(w, k);
+      await DB.put('kids', w);
+      toast('🎉 合成「' + RECIPES[k].n + '」成功！');
+      paint();
+    }
+    function paintWitchHome(w, d) {
+      const spStage = Math.min(SPARKLE_STAGES.length - 1, w.cleared.length);
+      const sp = SPARKLE_STAGES[spStage];
+      const doneAll = w.cleared.length >= CHAPTERS.length;
+      view.innerHTML = kidsStyle +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<button id="wBack" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">← 回主页</button>' +
+          '<div style="font-size:15px;font-weight:600;color:#6b4e00">🧙 魔法小屋</div>' +
+        '</div>';
+      const storyIdx = Math.min(w.cleared.length, STORY.length - 1);
+      const sc = el('<div class="card" style="margin-bottom:12px"></div>');
+      sc.innerHTML = '<style>@keyframes spBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.sp-emoji{animation:spBounce 1.6s ease-in-out infinite;display:inline-block}</style>' +
+        '<div style="text-align:center;padding:6px 0">' +
+          '<div class="sp-emoji" style="font-size:60px;line-height:1">' + sp.e + '</div>' +
+          '<div style="font-size:14px;color:#555;margin-top:6px">守护精灵「闪闪」· ' + sp.n + (doneAll ? ' <span style="font-size:11px;color:#9b6dff">（已唤醒🌟）</span>' : '') + '</div>' +
+          '<div style="font-size:12px;color:#999;margin-top:4px;padding:0 8px;line-height:1.5">' + STORY[storyIdx] + '</div>' +
+        '</div>';
+      view.append(sc);
+      const eb = el('<div class="card" style="margin-bottom:12px"></div>');
+      eb.innerHTML = '<div class="card-title">🔮 我的魔法元素</div><div style="display:flex;gap:8px;margin-top:8px">' +
+        ELEMENTS.map(e => sumCard(e.e + ' ' + e.n, String(w.elements[e.v] || 0), '#9b6dff')).join('') + '</div>';
+      view.append(eb);
+      const mc = el('<div class="card" style="margin-bottom:12px"></div>');
+      mc.innerHTML = '<div class="card-title">🏰 小屋房间（' + w.cleared.length + '/' + CHAPTERS.length + ' 已点亮）</div>';
+      CHAPTERS.forEach(c => {
+        const lit = w.cleared.includes(c.ch);
+        const isCur = c.ch === w.chapter && !doneAll;
+        const row = el('<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid #f0f0f0"></div>');
+        row.innerHTML = '<span style="font-size:20px">' + (lit ? '✅' : (isCur ? '🔆' : '⬜')) + '</span>' +
+          '<div style="flex:1"><div style="font-size:14px;color:#333">' + c.ch + '. ' + c.room + ' · ' + c.act + '</div>' +
+          '<div style="font-size:11px;color:#999">需要：' + RECIPES[c.item].e + ' ' + RECIPES[c.item].n + '</div></div>';
+        if (lit) row.append(el('<div style="font-size:12px;color:#2e9e5b">已点亮</div>'));
+        else if (isCur) {
+          const has = (w.bag[c.item] || 0) > 0;
+          const b = el('<button class="btn sm" style="white-space:nowrap;' + (has ? 'background:#9b6dff;color:#fff;border-color:#9b6dff' : 'border:1px dashed #ccc;color:#999;background:#fafafa') + '">' + (has ? '点亮 ✨' : '还差道具') + '</button>');
+          if (has) b.onclick = () => witchLight(w, c, d);
+          row.append(b);
+        }
+        mc.append(row);
+      });
+      view.append(mc);
+      const rc = el('<div class="card" style="margin-bottom:12px"></div>');
+      rc.innerHTML = '<div class="card-title">🎒 道具背包 / 合成台</div><div style="font-size:12px;color:#999;margin:6px 0 8px">集齐元素即可合成道具，用来点亮房间</div>';
+      Object.keys(RECIPES).forEach(k => {
+        const r = RECIPES[k];
+        const have = w.bag[k] || 0;
+        const can = witchHas(w, r.need);
+        const needStr = Object.keys(r.need).map(k2 => {
+          const cnt = r.need[k2];
+          const isEl = ELEMENTS.some(e => e.v === k2);
+          const info = isEl ? ELEMENTS.find(e => e.v === k2) : RECIPES[k2];
+          return cnt + (isEl ? info.e : info.e);
+        }).join(' + ');
+        const row = el('<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0"></div>');
+        row.innerHTML = '<span style="font-size:22px">' + r.e + '</span>' +
+          '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + r.n + ' <span style="font-size:11px;color:#9b6dff">×' + have + '</span></div>' +
+          '<div style="font-size:11px;color:#999">配方：' + needStr + '</div></div>';
+        const b = el('<button class="btn sm" style="white-space:nowrap;' + (can ? 'background:#9b6dff;color:#fff;border-color:#9b6dff' : 'border:1px dashed #ccc;color:#999;background:#fafafa') + '">' + (can ? '合成' : '材料不足') + '</button>');
+        if (can) b.onclick = () => witchCraft(w, k, d);
+        row.append(b);
+        rc.append(row);
+      });
+      view.append(rc);
+      const lc = el('<div class="card" style="margin-bottom:12px"></div>');
+      lc.innerHTML = '<div class="card-title">🪄 魔法课堂</div>' +
+        '<div style="font-size:13px;color:#999;margin-bottom:8px">做对 1 题得 1 个魔法元素：口算🔥 乘法💧 识字🍃 英语✨</div>' +
+        '<button id="wStudy" class="btn block" style="background:#9b6dff;color:#fff;border-color:#9b6dff">去做魔法作业 →</button>';
+      view.append(lc);
+      $('#wBack').onclick = () => { kidsWitch = null; paint(); };
+      $('#wStudy').onclick = () => { kidsWitch = { mode: 'study', sub: pick(['math', 'mult', 'pinyin', 'english']), q: null, answered: false, done: 0 }; paint(); };
+    }
+    function renderWitch() {
+      view.innerHTML = kidsStyle + '<div style="padding:30px;text-align:center;color:#999">🪄 正在施法…</div>';
+      if ((kidsWitch.mode || 'home') === 'study') { renderWitchStudy(); return; }
+      loadWitch().then(w => paintWitchHome(w, todayStr()));
+    }
+    function renderWitchStudy() {
+      const d = todayStr();
+      const sub = kidsWitch.sub;
+      if (!kidsWitch.q) kidsWitch.q = genQuestion(sub, kidsWitch.done);
+      const q = kidsWitch.q;
+      view.innerHTML = kidsStyle +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<button id="wstBack" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">← 回小屋</button>' +
+          '<div style="font-size:15px;font-weight:600;color:#6b4e00">🪄 魔法课堂 · ' + SUBNAME2[sub] + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:12px">' +
+          ['math', 'mult', 'pinyin', 'english'].map(s => '<button class="wst-sub btn sm' + (s === sub ? ' green' : ' ghost') + '" data-sub="' + s + '" style="flex:1;padding:8px">' + (s === sub ? '● ' : '') + SUBNAME2[s] + '</button>').join('') +
+        '</div>';
+      let body = '';
+      if (q.type === 'english') {
+        body = '<div style="text-align:center;padding:10px 0 6px"><div style="font-size:13px;color:#999;margin-bottom:8px">🔊 听一听，点对应的图（图下方有中文意思）</div>' +
+          '<button id="wstSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa;margin-bottom:10px">🔊 再听一次</button>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' + q.opts.map(o => '<button class="wst-opt btn" data-w="' + o.w + '" style="font-size:34px;padding:14px 6px">' + o.e + '<div style="font-size:13px;color:#8a5a13;margin-top:4px">' + o.zh + '</div></button>').join('') + '</div></div>';
+      } else if (q.type === 'pinyin') {
+        body = '<div style="text-align:center;padding:10px 0"><div style="font-size:48px;line-height:1;color:#6b4e00">' + q.h + '</div><div style="font-size:12px;color:#999;margin:4px 0 12px">「' + q.w + '」的拼音是？</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' + q.opts.map(o => '<button class="wst-opt btn" data-o="' + o + '" style="font-size:16px;padding:12px">' + o + '</button>').join('') + '</div></div>';
+      } else {
+        body = '<div style="text-align:center;padding:10px 0"><div style="font-size:30px;color:#6b4e00;margin-bottom:14px">' + q.text + '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' + q.opts.map(o => '<button class="wst-opt btn" data-o="' + o + '" style="font-size:20px;padding:14px">' + o + '</button>').join('') + '</div></div>';
+      }
+      view.innerHTML += '<div class="card" style="margin-bottom:12px"><div style="font-size:12px;color:#888;margin-bottom:6px">已做 ' + kidsWitch.done + ' 题 · 答对得 ' + ({ math: '🔥', mult: '💧', pinyin: '🍃', english: '✨' }[sub]) + ' 元素</div>' + body + '</div>';
+      $('#wstBack').onclick = () => { kidsWitch = { mode: 'home' }; paint(); };
+      view.querySelectorAll('.wst-sub').forEach(b => b.onclick = () => { kidsWitch = { mode: 'study', sub: b.dataset.sub, q: null, answered: false, done: 0 }; paint(); });
+      if (q.type === 'english') { $('#wstSpeak').onclick = () => speak(q.speak, 'en-US'); setTimeout(() => speak(q.speak, 'en-US'), 60); }
+      view.querySelectorAll('.wst-opt').forEach(b => {
+        b.onclick = async (e) => {
+          if (kidsWitch.answered) return;
+          kidsWitch.answered = true;
+          const o = b.dataset.w || b.dataset.o;
+          const ek = SUB2ELEM[sub];
+          const info = ELEMENTS.find(x => x.v === ek);
+          if (o === String(q.ans)) {
+            const w = await loadWitch();
+            w.elements[ek] = (w.elements[ek] || 0) + 1;
+            w.done = (w.done || 0) + 1;
+            await DB.put('kids', w);
+            burst(e.clientX, e.clientY);
+            toast('答对啦！获得 ' + info.e + ' ' + info.n);
+            b.style.background = '#5cc06a'; b.style.color = '#fff';
+          } else {
+            toast('答错咯~ 正确答案：' + q.ans + (q.ansZh ? '（' + q.ansZh + '）' : ''));
+            b.style.background = '#e2574c'; b.style.color = '#fff';
+            view.querySelectorAll('.wst-opt').forEach(x => { if ((x.dataset.w || x.dataset.o) === String(q.ans)) { x.style.background = '#5cc06a'; x.style.color = '#fff'; } });
+          }
+          setTimeout(() => { kidsWitch.q = null; kidsWitch.done++; kidsWitch.answered = false; paint(); }, 850);
+        };
+      });
+    }
+
       await ensureSeed();
       const all = await getAll();
       const tasks = all.filter(r => r.type === 'task' && r.active).sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -4261,6 +4464,7 @@
 
       const kidsStyle = `<style>.card{border-radius:18px!important;box-shadow:0 4px 16px rgba(240,168,48,.12)!important;border:1px solid #ffe3bf!important;background:#fffdf8!important}.card-title{font-size:16px!important;font-weight:600!important;color:#6b4e00!important}.btn.green{background:#5cc06a!important;border-color:#5cc06a!important;color:#fff!important}.kids-prog{height:12px;background:#ffe9c7;border-radius:8px;overflow:hidden}.kids-prog>div{height:100%;background:#f0a830;border-radius:8px;transition:width .4s}.kids-tabs{display:flex;gap:8px;margin-bottom:12px}.kids-tabs button{flex:1;padding:10px;border:1px solid #ffe0b0;border-radius:14px;background:#fff8ee;color:#a9781f;font-size:14px;font-weight:600}.kids-tabs button.on{background:#f0a830;border-color:#f0a830;color:#fff;box-shadow:0 3px 10px rgba(240,168,48,.3)}.kids-chart{display:flex;align-items:flex-end;gap:6px;margin-top:6px;padding:0 2px}.kids-chart .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}.kids-chart .bc .bar{width:64%;background:#f0a830;border-radius:4px 4px 0 0;min-height:3px}</style>`;
       if (kidsStudy) { renderStudyView(); return; }
+      if (kidsWitch) { renderWitch(); return; }
       view.innerHTML = kidsStyle +
         '<div class="kids-tabs">' +
           '<button data-page="home" class="' + (kidsPage === 'home' ? 'on' : '') + '">👧 宝贝主页</button>' +
@@ -4304,6 +4508,13 @@
         '<div style="font-size:13px;color:#999;margin-bottom:8px">口算 · 乘法 · 识字 · 英语，答对就能赚星星 ⭐</div>' +
         '<button id="stEnter" class="btn green block">开始闯关 →</button>';
       view.append(sc);
+
+      // 🧙 魔法小屋入口
+      const wc2 = el('<div class="card" style="margin-bottom:12px"></div>');
+      wc2.innerHTML = '<div class="card-title">🧙 魔法小屋</div>' +
+        '<div style="font-size:13px;color:#999;margin-bottom:8px">做魔法作业攒元素，合成道具，唤醒守护精灵「闪闪」</div>' +
+        '<button id="witchEnter" class="btn block" style="background:#9b6dff;color:#fff;border-color:#9b6dff">进入小屋 →</button>';
+      view.append(wc2);
 
       // 今日任务
       const tc = el('<div class="card" style="margin-bottom:12px"></div>');
@@ -4614,6 +4825,7 @@
         toast('治好啦，宠物精神多了 🎉'); paint();
       };
       $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, stars: 0, combo: 0, q: null, answered: false }; paint(); };
+      $('#witchEnter').onclick = () => { kidsWitch = { mode: 'home' }; paint(); };
       }
     }
 
