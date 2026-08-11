@@ -4060,6 +4060,111 @@
     }
 
     let kidsPage = 'home';
+    let kidsStudy = null;
+
+    const kidsStyle = `<style>.card{border-radius:18px!important;box-shadow:0 4px 16px rgba(240,168,48,.12)!important;border:1px solid #ffe3bf!important;background:#fffdf8!important}.card-title{font-size:16px!important;font-weight:600!important;color:#6b4e00!important}.btn.green{background:#5cc06a!important;border-color:#5cc06a!important;color:#fff!important}.kids-prog{height:12px;background:#ffe9c7;border-radius:8px;overflow:hidden}.kids-prog>div{height:100%;background:#f0a830;border-radius:8px;transition:width .4s}.kids-tabs{display:flex;gap:8px;margin-bottom:12px}.kids-tabs button{flex:1;padding:10px;border:1px solid #ffe0b0;border-radius:14px;background:#fff8ee;color:#a9781f;font-size:14px;font-weight:600}.kids-tabs button.on{background:#f0a830;border-color:#f0a830;color:#fff;box-shadow:0 3px 10px rgba(240,168,48,.3)}.kids-chart{display:flex;align-items:flex-end;gap:6px;margin-top:6px;padding:0 2px}.kids-chart .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}.kids-chart .bc .bar{width:64%;background:#f0a830;border-radius:4px 4px 0 0;min-height:3px}</style>`;
+
+    const STUDY_HANZI = [
+      {h:'日',p:'rì',w:'日子'},{h:'月',p:'yuè',w:'月亮'},{h:'水',p:'shuǐ',w:'水壶'},{h:'火',p:'huǒ',w:'火苗'},
+      {h:'山',p:'shān',w:'大山'},{h:'木',p:'mù',w:'木头'},{h:'人',p:'rén',w:'大人'},{h:'口',p:'kǒu',w:'口水'},
+      {h:'手',p:'shǒu',w:'小手'},{h:'目',p:'mù',w:'目光'},{h:'田',p:'tián',w:'田地'},{h:'土',p:'tǔ',w:'土地'},
+      {h:'上',p:'shàng',w:'上车'},{h:'下',p:'xià',w:'下雨'},{h:'大',p:'dà',w:'大门'},{h:'小',p:'xiǎo',w:'小孩'},
+      {h:'中',p:'zhōng',w:'中国'},{h:'天',p:'tiān',w:'天空'},{h:'风',p:'fēng',w:'大风'},{h:'云',p:'yún',w:'白云'},
+      {h:'雨',p:'yǔ',w:'下雨'},{h:'花',p:'huā',w:'花朵'},{h:'鸟',p:'niǎo',w:'小鸟'},{h:'鱼',p:'yú',w:'小鱼'},
+    ];
+    const STUDY_ENG = [
+      {w:'apple',zh:'苹果',e:'🍎'},{w:'banana',zh:'香蕉',e:'🍌'},{w:'cat',zh:'猫',e:'🐱'},{w:'dog',zh:'狗',e:'🐶'},
+      {w:'sun',zh:'太阳',e:'☀️'},{w:'moon',zh:'月亮',e:'🌙'},{w:'star',zh:'星星',e:'⭐'},{w:'book',zh:'书',e:'📖'},
+      {w:'ball',zh:'球',e:'⚽'},{w:'car',zh:'汽车',e:'🚗'},{w:'tree',zh:'树',e:'🌳'},{w:'flower',zh:'花',e:'🌸'},
+      {w:'fish',zh:'鱼',e:'🐟'},{w:'bird',zh:'鸟',e:'🐦'},{w:'milk',zh:'牛奶',e:'🥛'},{w:'egg',zh:'蛋',e:'🥚'},
+      {w:'red',zh:'红色',e:'🔴'},{w:'blue',zh:'蓝色',e:'🔵'},{w:'happy',zh:'开心',e:'😊'},{w:'water',zh:'水',e:'💧'},
+      {w:'hand',zh:'手',e:'✋'},{w:'school',zh:'学校',e:'🏫'},{w:'home',zh:'家',e:'🏠'},{w:'balloon',zh:'气球',e:'🎈'},
+    ];
+    function rnd(n){return Math.floor(Math.random()*n);}
+    function pick(a){return a[Math.floor(Math.random()*a.length)];}
+    function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+    function pickN(a,n){return shuffle(a).slice(0,n);}
+    function makeOpts(ans,scale){const set=new Set([ans]);let guard=0;while(set.size<4&&guard++<50){const v=ans+(Math.floor(Math.random()*scale)-Math.floor(scale/2));if(v>=0&&v!==ans&&!set.has(v))set.add(v);}return shuffle(Array.from(set));}
+    function speak(text,lang){try{const u=new SpeechSynthesisUtterance(text);u.lang=lang||'en-US';u.rate=0.9;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+
+    function genQuestion(sub,done){
+      if(sub==='math'){
+        const lvl=done<3?10:done<6?20:100;
+        const op=['+','-','×'][rnd(3)];
+        let a,b,ans;
+        if(op==='+'){a=rnd(lvl)+1;b=rnd(lvl)+1;ans=a+b;}
+        else if(op==='-'){a=rnd(lvl)+1;b=rnd(lvl)+1;if(b>a){const t=a;a=b;b=t;}ans=a-b;}
+        else{a=rnd(9)+1;b=rnd(9)+1;ans=a*b;}
+        return {type:'calc',text:a+' '+op+' '+b+' = ?',ans:ans,opts:makeOpts(ans,lvl)};
+      }
+      if(sub==='mult'){
+        const a=rnd(9)+1,b=rnd(9)+1,ans=a*b;
+        return {type:'calc',text:a+' × '+b+' = ?',ans:ans,opts:makeOpts(ans,Math.max(10,ans))};
+      }
+      if(sub==='pinyin'){
+        const it=pick(STUDY_HANZI);
+        const opts=shuffle([it.p].concat(pickN(STUDY_HANZI.filter(x=>x.p!==it.p),3).map(x=>x.p)));
+        return {type:'pinyin',h:it.h,w:it.w,ans:it.p,opts:opts};
+      }
+      const it=pick(STUDY_ENG);
+      const opts=shuffle([it.e].concat(pickN(STUDY_ENG.filter(x=>x.e!==it.e),3).map(x=>x.e)));
+      return {type:'english',w:it.w,zh:it.zh,speak:it.w,ans:it.e,opts:opts};
+    }
+
+    function renderStudyView(){
+      const d = todayStr();
+      const sub=kidsStudy.subject;
+      const SUBNAME={math:'口算',mult:'乘法',pinyin:'识字',english:'英语'};
+      if(!kidsStudy.q) kidsStudy.q=genQuestion(sub,kidsStudy.done);
+      const q=kidsStudy.q;
+      view.innerHTML = kidsStyle +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<button id="stBack" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">← 回主页</button>' +
+          '<div style="font-size:15px;font-weight:600;color:#6b4e00">📚 学习闯关 · '+SUBNAME[sub]+'</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:12px">' +
+          ['math','mult','pinyin','english'].map(s=>'<button class="st-sub btn sm'+(s===sub?' green':' ghost')+'" data-sub="'+s+'" style="flex:1;padding:8px">'+(s===sub?'● ':'')+SUBNAME[s]+'</button>').join('') +
+        '</div>';
+      let body='';
+      if(q.type==='english'){
+        body='<div style="text-align:center;padding:10px 0 6px"><div style="font-size:13px;color:#999;margin-bottom:8px">🔊 听一听，点对应的图</div>'+
+          '<button id="stSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa;margin-bottom:10px">🔊 再听一次</button>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:34px;padding:14px">'+o+'</button>').join('')+'</div></div>';
+      } else if(q.type==='pinyin'){
+        body='<div style="text-align:center;padding:10px 0"><div style="font-size:48px;line-height:1;color:#6b4e00">'+q.h+'</div><div style="font-size:12px;color:#999;margin:4px 0 12px">「'+q.w+'」的拼音是？</div>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:16px;padding:12px">'+o+'</button>').join('')+'</div></div>';
+      } else {
+        body='<div style="text-align:center;padding:10px 0"><div style="font-size:30px;color:#6b4e00;margin-bottom:14px">'+q.text+'</div>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:20px;padding:14px">'+o+'</button>').join('')+'</div></div>';
+      }
+      view.innerHTML += '<div class="card" style="margin-bottom:12px">' +
+        '<div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px"><span>已做 '+kidsStudy.done+' 题</span><span>答对 '+kidsStudy.got+' 题 · +'+kidsStudy.got+'★</span></div>' + body + '</div>';
+
+      $('#stBack').onclick=()=>{kidsStudy=null;paint();};
+      view.querySelectorAll('.st-sub').forEach(b=>b.onclick=()=>{kidsStudy={subject:b.dataset.sub,done:0,got:0,q:null,answered:false};paint();});
+      if(q.type==='english'){ $('#stSpeak').onclick=()=>speak(q.speak,'en-US'); setTimeout(()=>speak(q.speak,'en-US'),60); }
+      view.querySelectorAll('.st-opt').forEach(b=>{
+        b.onclick=async(e)=>{
+          if(kidsStudy.answered) return;
+          kidsStudy.answered=true;
+          const o=b.dataset.o;
+          if(o===String(q.ans)){
+            kidsStudy.got++;
+            await awardStars(1,'学习·'+SUBNAME[sub],d);
+            burst(e.clientX,e.clientY);
+            toast('答对啦 +1★');
+            b.style.background='#5cc06a';b.style.color='#fff';
+          } else {
+            await DB.put('kids',{type:'mistake',subject:sub,question:(q.text||q.h||q.speak||''),answer:String(q.ans),wrong:o,date:d});
+            toast('正确答案：'+q.ans);
+            b.style.background='#e2574c';b.style.color='#fff';
+            view.querySelectorAll('.st-opt').forEach(x=>{if(x.dataset.o===String(q.ans)){x.style.background='#5cc06a';x.style.color='#fff';}});
+          }
+          setTimeout(()=>{kidsStudy.q=null;kidsStudy.done++;kidsStudy.answered=false;paint();},850);
+        };
+      });
+    }
+
     async function paint() {
       await ensureSeed();
       const all = await getAll();
@@ -4081,6 +4186,7 @@
       const progPct = tasks.length ? Math.round(doneTodayCount / tasks.length * 100) : 0;
 
       const kidsStyle = `<style>.card{border-radius:18px!important;box-shadow:0 4px 16px rgba(240,168,48,.12)!important;border:1px solid #ffe3bf!important;background:#fffdf8!important}.card-title{font-size:16px!important;font-weight:600!important;color:#6b4e00!important}.btn.green{background:#5cc06a!important;border-color:#5cc06a!important;color:#fff!important}.kids-prog{height:12px;background:#ffe9c7;border-radius:8px;overflow:hidden}.kids-prog>div{height:100%;background:#f0a830;border-radius:8px;transition:width .4s}.kids-tabs{display:flex;gap:8px;margin-bottom:12px}.kids-tabs button{flex:1;padding:10px;border:1px solid #ffe0b0;border-radius:14px;background:#fff8ee;color:#a9781f;font-size:14px;font-weight:600}.kids-tabs button.on{background:#f0a830;border-color:#f0a830;color:#fff;box-shadow:0 3px 10px rgba(240,168,48,.3)}.kids-chart{display:flex;align-items:flex-end;gap:6px;margin-top:6px;padding:0 2px}.kids-chart .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}.kids-chart .bc .bar{width:64%;background:#f0a830;border-radius:4px 4px 0 0;min-height:3px}</style>`;
+      if (kidsStudy) { renderStudyView(); return; }
       view.innerHTML = kidsStyle +
         '<div class="kids-tabs">' +
           '<button data-page="home" class="' + (kidsPage === 'home' ? 'on' : '') + '">👧 宝贝主页</button>' +
@@ -4117,6 +4223,13 @@
         '</div>' : '') +
         (pending.length ? '<div style="margin-top:8px;font-size:12px;color:#e08a00;background:#fff3df;padding:6px 10px;border-radius:8px">⏳ 已提交 ' + pending.length + ' 项，等妈妈审核哦~</div>' : '');
       view.append(htop);
+
+      // 学习闯关入口
+      const sc = el('<div class="card" style="margin-bottom:12px"></div>');
+      sc.innerHTML = '<div class="card-title">📚 学习闯关</div>' +
+        '<div style="font-size:13px;color:#999;margin-bottom:8px">口算 · 乘法 · 识字 · 英语，答对就能赚星星 ⭐</div>' +
+        '<button id="stEnter" class="btn green block">开始闯关 →</button>';
+      view.append(sc);
 
       // 今日任务
       const tc = el('<div class="card" style="margin-bottom:12px"></div>');
@@ -4240,11 +4353,13 @@
           return '<div class="bc"><div class="bar" style="height:' + h + '%"></div><div style="font-size:9px;color:#888;margin-top:1px">' + n + '</div><div style="font-size:9px;color:#bbb">' + wdArr[new Date(dt + 'T00:00:00').getDay()] + '</div></div>';
         }).join('') + '</div>';
         const dash = el('<div class="card" style="margin-bottom:12px"></div>');
+        const misCount = all.filter(r => r.type === 'mistake' && r.date >= sowStr).length;
         dash.innerHTML = '<div class="card-title">📊 本周数据</div>' +
           '<div style="display:flex;gap:8px;margin-top:8px">' +
             sumCard('打卡率', rate + '%', rate >= 70 ? '#2e9e5b' : rate >= 40 ? '#f0a830' : '#e2574c') +
             sumCard('本周打卡', weekDone + '次', '#5b8def') +
             sumCard('本周获得', weekEarned + '★', '#f0a830') +
+            sumCard('本周错题', misCount + '题', '#e2574c') +
           '</div>' + chart;
         view.append(dash);
 
@@ -4386,6 +4501,7 @@
         if (!r || !r.name || !r.name.trim()) return;
         cur.name = r.name.trim().slice(0, 12); await DB.put('kids', cur); toast('改名成功'); paint();
       };
+      $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, q: null, answered: false }; paint(); };
       }
     }
 
