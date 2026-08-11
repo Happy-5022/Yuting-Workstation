@@ -26,3 +26,13 @@
 - 部署：commit d3cbb82；git push **失败——今天是网络超时**（`Connection timed out after 300041 ms`，非凭据问题），且该命令会挂满 5 分钟。积压待推 commit 2 个：469db7c、d3cbb82。CloudStudio 备用部署成功，链接同前：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
 - 明日避重：以上全部主题勿复用。BBC 剩余可用库存：The future of food、How do we adapt to the cold?、Should we pay more for chocolate?、Why are some animals black and white?、The power of pepper、Dreaming of being a chef、Artistic swimming、Rethinking dyslexia、Why are billionaires building bunkers?、Is it OK to disagree?。BBC 最新集仍为 Children in warzones(07/23)，7 月底后无更新。
 - 经验：git push 失败有两种形态——①无凭据（秒失败）②网络超时（挂满 300s）。建议直接 run_in_background 起，不要占前台。
+
+## 2026-08-11
+（注：08-05 至 08-10 未见执行记录，数据文件上次更新停留在 08-04，等于断更 6 天）
+- 三份数据文件已更新，JSON 校验通过。当日主题：**多省高职专业分数线超本科**（她本行前高职教师，最稀缺视角）、95后AI短片《圆明园十二兽首》破1300万播放（不露脸AI做号）、九江文旅主打一个听劝（旅游管理专业提建议）、我的暑期限定solotrip+AI排一日游、王宝强百花奖0票→自嘲简历0回复、13号台风白海豚→台风天室内古法健身操、越南语住宿5句（生存句第四集）、彝族元素日常穿搭、八月要走上坡路了→失业月中复盘、《梦的翅膀受了伤》尤克里里版。
+- 热点榜取自 8/11 抖音热点榜真实条目与热度：solotrip 1109.8万 / 彝族穿搭 1026.9万 / 宇树科技申购 918.2万 / 九江文旅听劝 917.0万 / 扇风舞 824.7万。
+- 挑战榜：#不爬那叫爬山吗（云台山官方赛，7/14-8/31，播放破千万奖1万现金，封顶10万）、#我的暑期限定solotrip、#扇风舞、#梦的翅膀受了伤舞蹈教程来了、#八月要走上坡路了。另备选未用：#西关清凉季（房县，截至9/22）、#遇见新延安魅力新区行、#新螺蛳湾火把节好好逛。
+- BBC 五篇（原创摘要）：How do climate scientists make predictions?(ep-260806，当前最新集) / The Enhanced Games(ep-260730) / Dreaming of being a chef(ep-260219) / Rethinking dyslexia(ep-260205) / Artistic swimming(ep-260212)。
+- 部署：commit eae24ad；git push **失败——`Recv failure: Connection was reset`（22秒快速失败，第三种形态：连接被重置）**。积压待推 commit 仅 1 个（说明用户已自行推完 08-04 之前的）。CloudStudio 备用部署成功，链接同前：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。BBC 剩余可用库存：The future of food(260409)、How do we adapt to the cold(260319)、Should we pay more for chocolate(260312)、Why are some animals black and white(260305)、The power of pepper(260226)、Why are billionaires building bunkers?。**注意 8/13 起应有新集（周四更新），优先抓最新。**
+- 经验：`GIT_TERMINAL_PROMPT=0 git push > file 2>&1; echo $?` + run_in_background 组合最稳，22秒内拿到明确报错，不占前台。

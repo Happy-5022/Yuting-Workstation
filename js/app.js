@@ -4017,6 +4017,29 @@
       return '今天也超开心！✨';
     }
 
+    function burst(cx, cy) {
+      const em = ['⭐', '✨', '🌟', '💛', '🎉', '🌸'];
+      for (let i = 0; i < 12; i++) {
+        const s = document.createElement('div');
+        s.textContent = em[i % em.length];
+        s.style.cssText = 'position:fixed;left:' + cx + 'px;top:' + cy + 'px;font-size:20px;pointer-events:none;z-index:99999;transition:transform .9s cubic-bezier(.2,.8,.3,1),opacity .9s';
+        document.body.appendChild(s);
+        const ang = Math.random() * Math.PI * 2, dist = 50 + Math.random() * 60;
+        requestAnimationFrame(() => { s.style.transform = 'translate(' + (Math.cos(ang) * dist) + 'px,' + (Math.sin(ang) * dist - 40) + 'px) rotate(' + (Math.random() * 180 - 90) + 'deg) scale(.4)'; s.style.opacity = '0'; });
+        setTimeout(() => s.remove(), 950);
+      }
+    }
+    async function streakDays() {
+      const all = await getAll();
+      const set = new Set(all.filter(r => r.type === 'check' && r.status === 'done').map(r => r.date));
+      if (!set.size) return 0;
+      const ymd = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      let d = new Date();
+      if (!set.has(ymd(d))) d.setDate(d.getDate() - 1);
+      let s = 0;
+      for (let i = 0; i < 400; i++) { if (set.has(ymd(d))) { s++; d.setDate(d.getDate() - 1); } else break; }
+      return s;
+    }
     async function getVerify() { const r = await DB.get('meta', 'kidVerify'); return r ? !!r.value : true; }
     async function setVerify(v) { await DB.put('meta', { id: 'kidVerify', value: v }); }
     async function awardStars(delta, reason, date) {
@@ -4036,6 +4059,7 @@
       return { allow: allow, used: used, left: Math.max(0, allow - used) };
     }
 
+    let kidsPage = 'home';
     async function paint() {
       await ensureSeed();
       const all = await getAll();
@@ -4043,6 +4067,7 @@
       const checks = all.filter(r => r.type === 'check');
       const wishes = all.filter(r => r.type === 'wish');
       const pet = await loadPet(all);
+      const streak = await streakDays();
       const d = todayStr();
       const bal = await balance();
       const verify = await getVerify();
@@ -4052,54 +4077,46 @@
       const weekCount = (taskId) => checks.filter(c => c.taskId === taskId && c.status === 'done' && c.date >= sowStr).length;
       const todayEarned = checks.filter(c => c.date === d && c.status === 'done').reduce((s, c) => s + (c.stars || 0), 0);
       const weekEarned = checks.filter(c => c.status === 'done' && c.date >= sowStr).reduce((s, c) => s + (c.stars || 0), 0);
+      const doneTodayCount = tasks.filter(t => doneToday(t.id)).length;
+      const progPct = tasks.length ? Math.round(doneTodayCount / tasks.length * 100) : 0;
 
-      view.innerHTML =
-        '<div class="card" style="margin-bottom:12px">' +
-          '<div class="card-title">👧 亲子 · 习惯养成</div>' +
-          '<div style="display:flex;gap:8px;margin-top:8px">' +
-            sumCard('⭐ 星星余额', String(bal), '#f0a830') +
-            sumCard('今日获得', String(todayEarned), '#2e9e5b') +
-            sumCard('本周获得', String(weekEarned), '#5b8def') +
-          '</div>' +
-          (si.allow > 0 || tasks.some(t => t.cat === 'screen') ?
-          '<div style="margin-top:10px;padding:8px 10px;background:#fff4e0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">' +
-            '<div style="font-size:13px;color:#8a5a13">📺 今日屏幕剩余 <b style="font-size:15px">' + si.left + '</b> 分钟</div>' +
-            '<div style="display:flex;gap:6px">' +
-              '<button class="scr-use btn ghost sm" data-min="10" style="padding:4px 8px">用10</button>' +
-              '<button class="scr-use btn ghost sm" data-min="20" style="padding:4px 8px">用20</button>' +
-              '<button class="scr-use btn ghost sm" data-min="30" style="padding:4px 8px">用30</button>' +
-            '</div>' +
-          '</div>' : '') +
-          '<div style="display:flex;gap:8px;margin-top:12px">' +
-            '<button id="kAdd" class="btn green" style="flex:1;padding:8px">➕ 加任务</button>' +
-            '<button id="kWish" class="btn ghost" style="flex:1;padding:8px;border:1px dashed #ccc;color:#888;background:#fafafa">🎁 加愿望</button>' +
-            '<button id="kSet" class="btn ghost" style="flex:1;padding:8px;border:1px dashed #ccc;color:#888;background:#fafafa">⚙️ 设置</button>' +
-          '</div>' +
+      const kidsStyle = `<style>.card{border-radius:18px!important;box-shadow:0 4px 16px rgba(240,168,48,.12)!important;border:1px solid #ffe3bf!important;background:#fffdf8!important}.card-title{font-size:16px!important;font-weight:600!important;color:#6b4e00!important}.btn.green{background:#5cc06a!important;border-color:#5cc06a!important;color:#fff!important}.kids-prog{height:12px;background:#ffe9c7;border-radius:8px;overflow:hidden}.kids-prog>div{height:100%;background:#f0a830;border-radius:8px;transition:width .4s}.kids-tabs{display:flex;gap:8px;margin-bottom:12px}.kids-tabs button{flex:1;padding:10px;border:1px solid #ffe0b0;border-radius:14px;background:#fff8ee;color:#a9781f;font-size:14px;font-weight:600}.kids-tabs button.on{background:#f0a830;border-color:#f0a830;color:#fff;box-shadow:0 3px 10px rgba(240,168,48,.3)}.kids-chart{display:flex;align-items:flex-end;gap:6px;margin-top:6px;padding:0 2px}.kids-chart .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}.kids-chart .bc .bar{width:64%;background:#f0a830;border-radius:4px 4px 0 0;min-height:3px}</style>`;
+      view.innerHTML = kidsStyle +
+        '<div class="kids-tabs">' +
+          '<button data-page="home" class="' + (kidsPage === 'home' ? 'on' : '') + '">👧 宝贝主页</button>' +
+          '<button data-page="mom" class="' + (kidsPage === 'mom' ? 'on' : '') + '">👩 妈妈后台</button>' +
         '</div>';
+      view.querySelectorAll('.kids-tabs button').forEach(b => {
+        b.onclick = () => { kidsPage = b.dataset.page; paint(); };
+      });
 
-      // 待审核
       const pending = checks.filter(c => c.status === 'pending');
-      if (verify && pending.length) {
-        const pc = el('<div class="card" style="margin-bottom:12px"></div>');
-        pc.innerHTML = '<div class="card-title">⏳ 待审核（' + pending.length + '）</div>';
-        pending.forEach(c => {
-          const t = tasks.find(x => x.id === c.taskId) || {};
-          const row = el('<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0"></div>');
-          row.innerHTML = '<span style="font-size:18px">' + (TASK_ICON[t.name] || (catMap[t.cat] ? catMap[t.cat].e : '📌')) + '</span>' +
-            '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(t.name || '任务') + '</div>' +
-            '<div style="font-size:11px;color:#999">' + c.date + (t.stars ? ' · ' + t.stars + '★' : '') + '</div></div>' +
-            '<button class="p-app btn green sm" style="padding:4px 10px">批准</button>' +
-            '<button class="p-rej btn ghost sm" style="padding:4px 10px">驳回</button>';
-          row.querySelector('.p-app').onclick = async () => {
-            c.status = 'done'; await DB.put('kids', c);
-            if (t.stars) await awardStars(t.stars, '完成·' + t.name, c.date);
-            toast('已批准 +' + (t.stars || 0) + '★'); paint();
-          };
-          row.querySelector('.p-rej').onclick = async () => { await DB.del('kids', c.id); toast('已驳回'); paint(); };
-          pc.append(row);
-        });
-        view.append(pc);
-      }
+      // 待审核在妈妈后台卡片中渲染
+
+      if (kidsPage === 'home') {
+      // 宝贝主页顶部
+      const htop = el('<div class="card" style="margin-bottom:12px"></div>');
+      htop.innerHTML =
+        '<div class="card-title">👧 ' + esc(pet.name || '宝贝') + ' 的今日</div>' +
+        '<div style="display:flex;gap:8px;margin-top:8px">' +
+          sumCard('⭐ 我的星星', String(bal), '#f0a830') +
+          sumCard('今日获得', String(todayEarned), '#2e9e5b') +
+        '</div>' +
+        '<div style=\'margin-top:10px;padding:8px 10px;background:#fff3df;border-radius:12px\'>' +
+          '<div style=\'display:flex;justify-content:space-between;font-size:13px;color:#8a5a13\'><span>今日进度 ' + doneTodayCount + ' / ' + tasks.length + '</span><span>🔥 连续 ' + streak + ' 天</span></div>' +
+          '<div class=\'kids-prog\' style=\'margin-top:5px\'><div style=\'width:' + progPct + '%\'></div></div>' +
+        '</div>' +
+        (tasks.some(t => t.cat === 'screen') || si.allow > 0 ?
+        '<div style="margin-top:10px;padding:8px 10px;background:#fff4e0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">' +
+          '<div style="font-size:13px;color:#8a5a13">📺 今日屏幕剩余 <b style="font-size:15px">' + si.left + '</b> 分钟</div>' +
+          '<div style="display:flex;gap:6px">' +
+            '<button class="scr-use btn ghost sm" data-min="10" style="padding:4px 8px">用10</button>' +
+            '<button class="scr-use btn ghost sm" data-min="20" style="padding:4px 8px">用20</button>' +
+            '<button class="scr-use btn ghost sm" data-min="30" style="padding:4px 8px">用30</button>' +
+          '</div>' +
+        '</div>' : '') +
+        (pending.length ? '<div style="margin-top:8px;font-size:12px;color:#e08a00;background:#fff3df;padding:6px 10px;border-radius:8px">⏳ 已提交 ' + pending.length + ' 项，等妈妈审核哦~</div>' : '');
+      view.append(htop);
 
       // 今日任务
       const tc = el('<div class="card" style="margin-bottom:12px"></div>');
@@ -4120,11 +4137,13 @@
           '</div>';
         if (!rec) {
           const btn = el('<button class="btn green sm" style="padding:5px 12px;white-space:nowrap">完成</button>');
-          btn.onclick = async () => {
+          btn.onclick = async (e) => {
             const chk = { type: 'check', taskId: t.id, cat: t.cat, stars: t.stars || 0, mins: t.mins || 0, date: d, status: verify ? 'pending' : 'done', ts: Date.now() };
             await DB.put('kids', chk);
             if (!verify && t.stars) await awardStars(t.stars, '完成·' + t.name, d);
             toast(verify ? '已提交，等妈妈审核 ✅' : '完成 +' + (t.stars || 0) + '★');
+            const ev = e && e.clientX ? e : null;
+            if (ev) burst(ev.clientX, ev.clientY); else { const b = btn.getBoundingClientRect(); burst(b.left + b.width / 2, b.top + b.height / 2); }
             paint();
           };
           row.append(btn);
@@ -4143,10 +4162,12 @@
         tc.append(row);
       });
       view.append(tc);
+      }
 
-      // 愿望清单
-      const wc = el('<div class="card"></div>');
-      wc.innerHTML = '<div class="card-title">🎁 愿望清单（' + wishes.length + '）</div>';
+      // 愿望清单（宝贝主页：可兑换）
+      if (kidsPage === 'home') {
+      const wc = el('<div class="card" style="margin-bottom:12px"></div>');
+      wc.innerHTML = '<div class="card-title">🎁 我的愿望</div>';
       if (!wishes.length) wc.append(el('<div style="padding:10px;color:#999;font-size:13px">还没设愿望，点上方「🎁 加愿望」，比如“多看一集动画片 30★”</div>'));
       wishes.forEach(w => {
         const ok = bal >= w.cost && w.status !== 'done';
@@ -4164,8 +4185,10 @@
         wc.append(row);
       });
       view.append(wc);
+      }
 
       // 🐾 我的小宠物
+      if (kidsPage === 'home') {
       const stage = (pet.care >= 30) ? 3 : (pet.care >= 15) ? 2 : (pet.care >= 5) ? 1 : 0;
       const pe = PET_STAGES[stage].e, pname = PET_STAGES[stage].n;
       const pc = el('<div class="card" style="margin-bottom:12px"></div>');
@@ -4188,6 +4211,106 @@
           '<button id="petSleep" class="btn ghost">💤 睡觉 (免费)</button>' +
         '</div>';
       view.append(pc);
+      }
+
+      // ===== 妈妈后台 =====
+      if (kidsPage === 'mom') {
+        const mtop = el('<div class="card" style="margin-bottom:12px"></div>');
+        mtop.innerHTML =
+          '<div class="card-title">👩 妈妈后台</div>' +
+          '<div style="display:flex;gap:8px;margin-top:8px">' +
+            sumCard('⭐ 星星余额', String(bal), '#f0a830') +
+            sumCard('本周获得', String(weekEarned), '#5b8def') +
+            sumCard('🔥 连续', String(streak) + '天', '#e2574c') +
+          '</div>';
+        view.append(mtop);
+
+        const now = new Date(); const dow = now.getDay();
+        const daysThisWeek = dow + 1;
+        const weekDone = checks.filter(c => c.status === 'done' && c.date >= sowStr).length;
+        const rate = (tasks.length && daysThisWeek) ? Math.min(100, Math.round(weekDone / (tasks.length * daysThisWeek) * 100)) : 0;
+        const wdArr = ['日', '一', '二', '三', '四', '五', '六'];
+        const last7 = [];
+        for (let i = 6; i >= 0; i--) { const dt = new Date(); dt.setDate(dt.getDate() - i); last7.push(dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0')); }
+        const chkCnt = (dt) => checks.filter(c => c.status === 'done' && c.date === dt).length;
+        const maxC = Math.max(1, ...last7.map(chkCnt));
+        const chart = '<div class="kids-chart">' + last7.map(dt => {
+          const n = chkCnt(dt);
+          const h = Math.max(2, Math.round(n / maxC * 100));
+          return '<div class="bc"><div class="bar" style="height:' + h + '%"></div><div style="font-size:9px;color:#888;margin-top:1px">' + n + '</div><div style="font-size:9px;color:#bbb">' + wdArr[new Date(dt + 'T00:00:00').getDay()] + '</div></div>';
+        }).join('') + '</div>';
+        const dash = el('<div class="card" style="margin-bottom:12px"></div>');
+        dash.innerHTML = '<div class="card-title">📊 本周数据</div>' +
+          '<div style="display:flex;gap:8px;margin-top:8px">' +
+            sumCard('打卡率', rate + '%', rate >= 70 ? '#2e9e5b' : rate >= 40 ? '#f0a830' : '#e2574c') +
+            sumCard('本周打卡', weekDone + '次', '#5b8def') +
+            sumCard('本周获得', weekEarned + '★', '#f0a830') +
+          '</div>' + chart;
+        view.append(dash);
+
+        if (verify && pending.length) {
+          const pc2 = el('<div class="card" style="margin-bottom:12px"></div>');
+          pc2.innerHTML = '<div class="card-title">⏳ 待审核（' + pending.length + '）</div>';
+          pending.forEach(c => {
+            const t = tasks.find(x => x.id === c.taskId) || {};
+            const row = el('<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0"></div>');
+            row.innerHTML = '<span style="font-size:18px">' + (TASK_ICON[t.name] || (catMap[t.cat] ? catMap[t.cat].e : '📌')) + '</span>' +
+              '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(t.name || '任务') + '</div>' +
+              '<div style="font-size:11px;color:#999">' + c.date + (t.stars ? ' · ' + t.stars + '★' : '') + '</div></div>' +
+              '<button class="p-app btn green sm" style="padding:4px 10px">批准</button>' +
+              '<button class="p-rej btn ghost sm" style="padding:4px 10px">驳回</button>';
+            row.querySelector('.p-app').onclick = async () => {
+              c.status = 'done'; await DB.put('kids', c);
+              if (t.stars) await awardStars(t.stars, '完成·' + t.name, c.date);
+              toast('已批准 +' + (t.stars || 0) + '★'); paint();
+            };
+            row.querySelector('.p-rej').onclick = async () => { await DB.del('kids', c.id); toast('已驳回'); paint(); };
+            pc2.append(row);
+          });
+          view.append(pc2);
+        } else if (verify) {
+          view.append(el('<div class="card" style="margin-bottom:12px;padding:14px;color:#999;font-size:13px;text-align:center">✅ 暂无待审核，宝贝今天表现很棒~</div>'));
+        }
+
+        const mw = el('<div class="card" style="margin-bottom:12px"></div>');
+        mw.innerHTML = '<div class="card-title">🎁 愿望管理（' + wishes.length + '）</div>';
+        wishes.forEach(w => {
+          const row = el('<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid #f0f0f0"></div>');
+          row.innerHTML = '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(w.name) +
+            ' <span style="font-size:12px;color:#f0a830;font-weight:500">' + w.cost + '★</span>' +
+            (w.status === 'done' ? ' <span style="font-size:11px;color:#2e9e5b">已兑换</span>' : '') + '</div>' +
+            (w.note ? '<div style="font-size:12px;color:#999">' + esc(w.note) + '</div>' : '') + '</div>' +
+            '<button class="w-del btn ghost sm" style="padding:4px 10px">删除</button>';
+          row.querySelector('.w-del').onclick = async () => { await DB.del('kids', w.id); toast('已删除'); paint(); };
+          mw.append(row);
+        });
+        const mwAdd = el('<button id="kWish" class="btn ghost block" style="margin-top:10px;border:1px dashed #ccc;color:#888;background:#fafafa">➕ 加愿望</button>');
+        mw.append(mwAdd);
+        view.append(mw);
+
+        const mt = el('<div class="card" style="margin-bottom:12px"></div>');
+        mt.innerHTML = '<div class="card-title">📋 任务管理（' + tasks.length + '）</div>';
+        tasks.forEach(t => {
+          const c = catMap[t.cat] || CATS[0];
+          const row = el('<div style="display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid #f0f0f0"></div>');
+          row.innerHTML = '<span style="font-size:18px">' + (TASK_ICON[t.name] || c.e) + '</span>' +
+            '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(t.name) +
+            ' <span style="font-size:11px;color:#999">' + c.n + (t.stars ? (' · ' + t.stars + '★') : '') + '</span></div></div>' +
+            '<button class="t-del btn ghost sm" style="padding:4px 10px">删除</button>';
+          row.querySelector('.t-del').onclick = async () => { await DB.del('kids', t.id); toast('已删除'); paint(); };
+          mt.append(row);
+        });
+        const mtAdd = el('<button id="kAdd" class="btn green block" style="margin-top:10px">➕ 加任务</button>');
+        mt.append(mtAdd);
+        view.append(mt);
+
+        const ms = el('<div class="card"></div>');
+        ms.innerHTML = '<div class="card-title">⚙️ 设置</div>' +
+          '<div style="font-size:12px;color:#999;margin:6px 0 10px">当前：' + (verify ? '孩子完成后需妈妈审核才发星（推荐）' : '自动发星（孩子完成立即得星）') + '</div>';
+        const msBtn = el('<button id="kSet" class="btn ghost block" style="border:1px dashed #ccc;color:#888;background:#fafafa">切换审核设置</button>');
+        ms.append(msBtn);
+        view.append(ms);
+      }
 
       // 屏幕用掉按钮
       view.querySelectorAll('.scr-use').forEach(b => {
@@ -4202,6 +4325,7 @@
         };
       });
 
+      if (kidsPage === 'mom') {
       $('#kAdd').onclick = async () => {
         const r = await promptForm('➕ 加任务', [
           { name: 'name', label: '任务名', type: 'text', placeholder: '如：练字15分钟' },
@@ -4238,7 +4362,9 @@
         await setVerify(r.verify === '1');
         toast('设置已保存'); paint();
       };
+      }
 
+      if (kidsPage === 'home') {
       // 宠物互动
       const petClick = async (act, cost, label) => {
         if (cost > bal) { toast('星星不够，先去打卡赚星吧 ⭐'); return; }
@@ -4260,6 +4386,7 @@
         if (!r || !r.name || !r.name.trim()) return;
         cur.name = r.name.trim().slice(0, 12); await DB.put('kids', cur); toast('改名成功'); paint();
       };
+      }
     }
 
     paint();
