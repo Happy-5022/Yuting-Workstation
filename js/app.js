@@ -4071,6 +4071,22 @@
       {h:'上',p:'shàng',w:'上车'},{h:'下',p:'xià',w:'下雨'},{h:'大',p:'dà',w:'大门'},{h:'小',p:'xiǎo',w:'小孩'},
       {h:'中',p:'zhōng',w:'中国'},{h:'天',p:'tiān',w:'天空'},{h:'风',p:'fēng',w:'大风'},{h:'云',p:'yún',w:'白云'},
       {h:'雨',p:'yǔ',w:'下雨'},{h:'花',p:'huā',w:'花朵'},{h:'鸟',p:'niǎo',w:'小鸟'},{h:'鱼',p:'yú',w:'小鱼'},
+      {h:'石',p:'shí',w:'石头'},{h:'马',p:'mǎ',w:'马车'},{h:'牛',p:'niú',w:'牛奶'},{h:'羊',p:'yáng',w:'山羊'},
+      {h:'虫',p:'chóng',w:'虫子'},{h:'车',p:'chē',w:'火车'},{h:'门',p:'mén',w:'大门'},{h:'刀',p:'dāo',w:'小刀'},
+      {h:'力',p:'lì',w:'力气'},{h:'心',p:'xīn',w:'心情'},{h:'牙',p:'yá',w:'牙齿'},{h:'耳',p:'ěr',w:'耳朵'},
+      {h:'头',p:'tóu',w:'头发'},{h:'米',p:'mǐ',w:'大米'},{h:'来',p:'lái',w:'回来'},{h:'去',p:'qù',w:'去年'},
+      {h:'出',p:'chū',w:'出门'},{h:'入',p:'rù',w:'入口'},{h:'开',p:'kāi',w:'开门'},{h:'关',p:'guān',w:'关门'},
+      {h:'毛',p:'máo',w:'毛笔'},{h:'皮',p:'pí',w:'皮肤'},{h:'尺',p:'chǐ',w:'尺子'},{h:'笔',p:'bǐ',w:'铅笔'},
+      {h:'书',p:'shū',w:'书本'},{h:'画',p:'huà',w:'画画'},{h:'字',p:'zì',w:'写字'},{h:'文',p:'wén',w:'文化'},
+      {h:'白',p:'bái',w:'白云'},{h:'红',p:'hóng',w:'红色'},{h:'绿',p:'lǜ',w:'绿色'},{h:'黄',p:'huáng',w:'黄色'},
+      {h:'笑',p:'xiào',w:'笑容'},{h:'哭',p:'kū',w:'哭声'},{h:'坐',p:'zuò',w:'坐下'},{h:'走',p:'zǒu',w:'走路'},
+      {h:'飞',p:'fēi',w:'飞机'},{h:'见',p:'jiàn',w:'看见'},{h:'听',p:'tīng',w:'听见'},{h:'说',p:'shuō',w:'说话'},
+      {h:'读',p:'dú',w:'读书'},{h:'写',p:'xiě',w:'写字'},{h:'吃',p:'chī',w:'吃饭'},{h:'喝',p:'hē',w:'喝水'},
+      {h:'好',p:'hǎo',w:'好人'},{h:'早',p:'zǎo',w:'早上'},{h:'晚',p:'wǎn',w:'晚上'},{h:'春',p:'chūn',w:'春天'},
+      {h:'夏',p:'xià',w:'夏天'},{h:'秋',p:'qiū',w:'秋天'},{h:'冬',p:'dōng',w:'冬天'},{h:'男',p:'nán',w:'男生'},
+      {h:'女',p:'nǚ',w:'女生'},{h:'生',p:'shēng',w:'学生'},{h:'师',p:'shī',w:'老师'},{h:'校',p:'xiào',w:'学校'},
+      {h:'友',p:'yǒu',w:'朋友'},{h:'爱',p:'ài',w:'爱心'},{h:'国',p:'guó',w:'国家'},{h:'星',p:'xīng',w:'星星'},
+      {h:'光',p:'guāng',w:'月光'},
     ];
     const STUDY_ENG = [
       {w:'apple',zh:'苹果',e:'🍎'},{w:'banana',zh:'香蕉',e:'🍌'},{w:'cat',zh:'猫',e:'🐱'},{w:'dog',zh:'狗',e:'🐶'},
@@ -4079,13 +4095,53 @@
       {w:'fish',zh:'鱼',e:'🐟'},{w:'bird',zh:'鸟',e:'🐦'},{w:'milk',zh:'牛奶',e:'🥛'},{w:'egg',zh:'蛋',e:'🥚'},
       {w:'red',zh:'红色',e:'🔴'},{w:'blue',zh:'蓝色',e:'🔵'},{w:'happy',zh:'开心',e:'😊'},{w:'water',zh:'水',e:'💧'},
       {w:'hand',zh:'手',e:'✋'},{w:'school',zh:'学校',e:'🏫'},{w:'home',zh:'家',e:'🏠'},{w:'balloon',zh:'气球',e:'🎈'},
+      {w:'orange',zh:'橘子',e:'🍊'},{w:'grape',zh:'葡萄',e:'🍇'},{w:'watermelon',zh:'西瓜',e:'🍉'},{w:'pear',zh:'梨',e:'🍐'},
+      {w:'strawberry',zh:'草莓',e:'🍓'},{w:'tiger',zh:'老虎',e:'🐯'},{w:'lion',zh:'狮子',e:'🦁'},{w:'rabbit',zh:'兔子',e:'🐰'},
+      {w:'bear',zh:'熊',e:'🐻'},{w:'panda',zh:'熊猫',e:'🐼'},{w:'monkey',zh:'猴子',e:'🐵'},{w:'elephant',zh:'大象',e:'🐘'},
+      {w:'duck',zh:'鸭子',e:'🐤'},{w:'pig',zh:'猪',e:'🐷'},{w:'cow',zh:'牛',e:'🐮'},{w:'horse',zh:'马',e:'🐴'},
+      {w:'sheep',zh:'羊',e:'🐑'},{w:'frog',zh:'青蛙',e:'🐸'},{w:'bee',zh:'蜜蜂',e:'🐝'},{w:'eye',zh:'眼睛',e:'👀'},
+      {w:'ear',zh:'耳朵',e:'👂'},{w:'nose',zh:'鼻子',e:'👃'},{w:'mouth',zh:'嘴巴',e:'👄'},{w:'foot',zh:'脚',e:'🦶'},
+      {w:'leg',zh:'腿',e:'🦵'},{w:'arm',zh:'胳膊',e:'💪'},{w:'face',zh:'脸',e:'🙂'},{w:'rice',zh:'米饭',e:'🍚'},
+      {w:'bread',zh:'面包',e:'🍞'},{w:'cake',zh:'蛋糕',e:'🍰'},{w:'noodle',zh:'面条',e:'🍜'},{w:'meat',zh:'肉',e:'🍖'},
+      {w:'cookie',zh:'饼干',e:'🍪'},{w:'icecream',zh:'冰淇淋',e:'🍦'},{w:'juice',zh:'果汁',e:'🧃'},{w:'pen',zh:'钢笔',e:'🖊️'},
+      {w:'pencil',zh:'铅笔',e:'✏️'},{w:'bag',zh:'书包',e:'🎒'},{w:'ruler',zh:'尺子',e:'📏'},{w:'clock',zh:'钟',e:'⏰'},
+      {w:'bed',zh:'床',e:'🛏️'},{w:'door',zh:'门',e:'🚪'},{w:'window',zh:'窗',e:'🪟'},{w:'cup',zh:'杯子',e:'☕'},
+      {w:'bowl',zh:'碗',e:'🥣'},{w:'one',zh:'一',e:'1️⃣'},{w:'two',zh:'二',e:'2️⃣'},{w:'three',zh:'三',e:'3️⃣'},
+      {w:'four',zh:'四',e:'4️⃣'},{w:'five',zh:'五',e:'5️⃣'},{w:'green',zh:'绿色',e:'🟢'},{w:'yellow',zh:'黄色',e:'🟡'},
+      {w:'black',zh:'黑色',e:'⚫'},{w:'white',zh:'白色',e:'⚪'},{w:'pink',zh:'粉色',e:'💗'},{w:'run',zh:'跑',e:'🏃'},
+      {w:'jump',zh:'跳',e:'🦘'},{w:'swim',zh:'游泳',e:'🏊'},{w:'sleep',zh:'睡觉',e:'😴'},{w:'eat',zh:'吃',e:'🍽️'},
+      {w:'drink',zh:'喝',e:'🥤'},{w:'sing',zh:'唱歌',e:'🎤'},{w:'dance',zh:'跳舞',e:'💃'},{w:'play',zh:'玩',e:'🎮'},
+      {w:'cry',zh:'哭',e:'😭'},{w:'smile',zh:'笑',e:'😄'},{w:'rain',zh:'雨',e:'🌧️'},{w:'snow',zh:'雪',e:'❄️'},
+      {w:'cloud',zh:'云',e:'☁️'},{w:'wind',zh:'风',e:'🌬️'},{w:'mom',zh:'妈妈',e:'👩'},{w:'dad',zh:'爸爸',e:'👨'},
+      {w:'baby',zh:'宝宝',e:'👶'},{w:'grandma',zh:'奶奶',e:'👵'},{w:'grandpa',zh:'爷爷',e:'👴'},{w:'park',zh:'公园',e:'🏞️'},
+      {w:'zoo',zh:'动物园',e:'🦁'},{w:'store',zh:'商店',e:'🏪'},{w:'hospital',zh:'医院',e:'🏥'},{w:'library',zh:'图书馆',e:'📚'},
+      {w:'heart',zh:'心',e:'❤️'},
     ];
     function rnd(n){return Math.floor(Math.random()*n);}
     function pick(a){return a[Math.floor(Math.random()*a.length)];}
     function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
     function pickN(a,n){return shuffle(a).slice(0,n);}
     function makeOpts(ans,scale){const set=new Set([ans]);let guard=0;while(set.size<4&&guard++<50){const v=ans+(Math.floor(Math.random()*scale)-Math.floor(scale/2));if(v>=0&&v!==ans&&!set.has(v))set.add(v);}return shuffle(Array.from(set));}
-    function speak(text,lang){try{const u=new SpeechSynthesisUtterance(text);u.lang=lang||'en-US';u.rate=0.9;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+    let kidsVoice = (function(){ try{ return localStorage.getItem('kidVoice')||''; }catch(e){ return ''; } })();
+    function loadVoices(){ try{ return speechSynthesis.getVoices().filter(v=>/^en(-|_)/i.test(v.lang)); }catch(e){ return []; } }
+    let _voiceBound = false;
+    function refreshVoiceSelect(){
+      const sel = $('#stVoice'); if(!sel) return;
+      const ev = loadVoices(); if(!ev.length) return;
+      const cur = sel.value || kidsVoice;
+      sel.innerHTML = ev.map(v=>'<option value="'+esc(v.name)+'">'+esc(v.name)+'</option>').join('');
+      if(cur && ev.some(v=>v.name===cur)) sel.value = cur;
+      else if(kidsVoice && ev.some(v=>v.name===kidsVoice)) sel.value = kidsVoice;
+    }
+    if(!_voiceBound){ try{ speechSynthesis.onvoiceschanged = refreshVoiceSelect; _voiceBound = true; }catch(e){} }
+    function speak(text,lang){
+      try{
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = lang || 'en-US'; u.rate = 0.9;
+        if(kidsVoice){ const v = loadVoices().find(x=>x.name===kidsVoice); if(v) u.voice = v; }
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+      }catch(e){}
+    }
 
     function genQuestion(sub,done){
       if(sub==='math'){
@@ -4107,8 +4163,8 @@
         return {type:'pinyin',h:it.h,w:it.w,ans:it.p,opts:opts};
       }
       const it=pick(STUDY_ENG);
-      const opts=shuffle([it.e].concat(pickN(STUDY_ENG.filter(x=>x.e!==it.e),3).map(x=>x.e)));
-      return {type:'english',w:it.w,zh:it.zh,speak:it.w,ans:it.e,opts:opts};
+      const optsArr=shuffle([it].concat(pickN(STUDY_ENG.filter(x=>x.w!==it.w),3)));
+      return {type:'english',w:it.w,zh:it.zh,speak:it.w,ans:it.w,ansZh:it.zh,opts:optsArr};
     }
 
     function renderStudyView(){
@@ -4127,9 +4183,15 @@
         '</div>';
       let body='';
       if(q.type==='english'){
-        body='<div style="text-align:center;padding:10px 0 6px"><div style="font-size:13px;color:#999;margin-bottom:8px">🔊 听一听，点对应的图</div>'+
+        const ev=loadVoices();
+        const voiceSel='<div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:10px;font-size:13px;color:#8a5a13">🔊 发音人：'+
+          '<select id="stVoice" style="font-size:13px;padding:4px 6px;border-radius:8px;border:1px solid #ffd9a0;background:#fff8ee;color:#6b4e00;max-width:60%">'+
+          (ev.length?ev.map(v=>'<option value="'+esc(v.name)+'"'+(v.name===kidsVoice?' selected':'')+'>'+esc(v.name)+'</option>').join(''):'<option value="">（系统默认发音）</option>')+
+          '</select></div>';
+        body='<div style="text-align:center;padding:10px 0 6px"><div style="font-size:13px;color:#999;margin-bottom:8px">🔊 听一听，点对应的图（图下方有中文意思）</div>'+
+          voiceSel+
           '<button id="stSpeak" class="btn ghost" style="border:1px dashed #ccc;color:#888;background:#fafafa;margin-bottom:10px">🔊 再听一次</button>'+
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:34px;padding:14px">'+o+'</button>').join('')+'</div></div>';
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-w="'+o.w+'" style="font-size:34px;padding:14px 6px">'+o.e+'<div style="font-size:13px;color:#8a5a13;margin-top:4px">'+o.zh+'</div></button>').join('')+'</div></div>';
       } else if(q.type==='pinyin'){
         body='<div style="text-align:center;padding:10px 0"><div style="font-size:48px;line-height:1;color:#6b4e00">'+q.h+'</div><div style="font-size:12px;color:#999;margin:4px 0 12px">「'+q.w+'」的拼音是？</div>'+
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:16px;padding:12px">'+o+'</button>').join('')+'</div></div>';
@@ -4142,12 +4204,16 @@
 
       $('#stBack').onclick=()=>{kidsStudy=null;paint();};
       view.querySelectorAll('.st-sub').forEach(b=>b.onclick=()=>{kidsStudy={subject:b.dataset.sub,done:0,got:0,q:null,answered:false};paint();});
-      if(q.type==='english'){ $('#stSpeak').onclick=()=>speak(q.speak,'en-US'); setTimeout(()=>speak(q.speak,'en-US'),60); }
+      if(q.type==='english'){
+        $('#stSpeak').onclick=()=>speak(q.speak,'en-US'); setTimeout(()=>speak(q.speak,'en-US'),60);
+        const vs=$('#stVoice');
+        if(vs){ vs.onchange=(e)=>{ kidsVoice=e.target.value; try{ localStorage.setItem('kidVoice',kidsVoice); }catch(_){} speak(q.speak,'en-US'); }; }
+      }
       view.querySelectorAll('.st-opt').forEach(b=>{
         b.onclick=async(e)=>{
           if(kidsStudy.answered) return;
           kidsStudy.answered=true;
-          const o=b.dataset.o;
+          const o=b.dataset.w||b.dataset.o;
           if(o===String(q.ans)){
             kidsStudy.got++;
             await awardStars(1,'学习·'+SUBNAME[sub],d);
@@ -4156,9 +4222,9 @@
             b.style.background='#5cc06a';b.style.color='#fff';
           } else {
             await DB.put('kids',{type:'mistake',subject:sub,question:(q.text||q.h||q.speak||''),answer:String(q.ans),wrong:o,date:d});
-            toast('正确答案：'+q.ans);
+            toast('正确答案：'+q.ans+(q.ansZh?'（'+q.ansZh+'）':''));
             b.style.background='#e2574c';b.style.color='#fff';
-            view.querySelectorAll('.st-opt').forEach(x=>{if(x.dataset.o===String(q.ans)){x.style.background='#5cc06a';x.style.color='#fff';}});
+            view.querySelectorAll('.st-opt').forEach(x=>{if((x.dataset.w||x.dataset.o)===String(q.ans)){x.style.background='#5cc06a';x.style.color='#fff';}});
           }
           setTimeout(()=>{kidsStudy.q=null;kidsStudy.done++;kidsStudy.answered=false;paint();},850);
         };
