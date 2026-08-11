@@ -3984,10 +3984,22 @@
     }
 
     const PET_STAGES = [{ e: '🥚', n: '蛋宝宝' }, { e: '🐤', n: '小鸡' }, { e: '🐔', n: '大鸡' }, { e: '🦚', n: '凤凰' }];
+    const PET_FRIENDS = [
+      { id: 'rabbit', e: '🐰', n: '跳跳兔' },
+      { id: 'cat', e: '🐱', n: '喵喵猫' },
+      { id: 'dog', e: '🐶', n: '旺财狗' },
+      { id: 'bear', e: '🐻', n: '熊大' },
+      { id: 'fox', e: '🦊', n: '小狐狸' },
+      { id: 'panda', e: '🐼', n: '胖达' },
+      { id: 'penguin', e: '🐧', n: '冰冰企鹅' },
+      { id: 'tiger', e: '🐯', n: '阿虎' },
+    ];
+    const FRIEND_LOVE_MAX = 5;   // 招待几次朋友就搬来同住
+    const FRIEND_DAILY = 3;      // 每天最多拜访几次
     async function loadPet(all) {
       let p = all.find(r => r.type === 'pet');
       if (!p) {
-        p = { type: 'pet', id: 'petState', name: '小芽', feed: 80, mood: 80, clean: 80, energy: 80, care: 0, born: Date.now(), lastCare: Date.now() };
+        p = { type: 'pet', id: 'petState', name: '小芽', feed: 80, mood: 80, clean: 80, energy: 80, care: 0, born: Date.now(), lastCare: Date.now(), friends: {}, friendDate: '', friendGot: 0 };
         await DB.put('kids', p);
         return p;
       }
@@ -4001,6 +4013,11 @@
         p.lastCare = Date.now();
         await DB.put('kids', p);
       }
+      if (!p.friends) p.friends = {};
+      if (typeof p.friendGot !== 'number') p.friendGot = 0;
+      if (typeof p.friendDate !== 'string') p.friendDate = '';
+      const ftd = todayStr();
+      if (p.friendDate !== ftd) { p.friendDate = ftd; p.friendGot = 0; await DB.put('kids', p); }
       return p;
     }
     function petBar(label, val) {
@@ -4016,6 +4033,35 @@
       if ((p.energy || 0) < 30) return '困困，想睡觉 💤';
       if ((p.mood || 0) < 30) return '陪我玩嘛~ 🎾';
       return '今天也超开心！✨';
+    }
+    function paintPetFriends(pet) {
+      const fr = pet.friends || {};
+      const left = Math.max(0, FRIEND_DAILY - (pet.friendGot || 0));
+      const items = PET_FRIENDS.map(f => {
+        const st = fr[f.id] || { love: 0, moved: false };
+        const pct = Math.min(100, Math.round((st.love / FRIEND_LOVE_MAX) * 100));
+        const color = st.moved ? '#ff8fab' : (pct >= 60 ? '#2e9e5b' : pct >= 30 ? '#f0a830' : '#e2574c');
+        const bar = '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden;margin-top:4px"><div style="height:100%;width:' + pct + '%;background:' + color + ';border-radius:6px"></div></div>';
+        const action = st.moved
+          ? '<div style="font-size:12px;color:#ff8fab;margin-top:4px">🏠 已搬来同住</div>'
+          : '<button id="pfVisit-' + f.id + '" class="btn sm" style="margin-top:6px;background:#ff8fab;color:#fff;border-color:#ff8fab">去拜访 (' + st.love + '/' + FRIEND_LOVE_MAX + ')</button>';
+        return '<div style="background:#fff7fa;border:1px solid #ffe0ea;border-radius:12px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px">' +
+          '<div style="font-size:34px">' + f.e + '</div>' +
+          '<div style="flex:1">' +
+            '<div style="font-size:14px;color:#555">' + f.n + '</div>' + bar + action +
+          '</div></div>';
+      }).join('');
+      const movedList = PET_FRIENDS.filter(f => (fr[f.id] || {}).moved);
+      const wall = movedList.length ? '<div style="margin-top:10px;font-size:13px;color:#999">🏡 已同住的小伙伴：' + movedList.map(f => f.e).join(' ') + '</div>' : '';
+      const party = movedList.length >= PET_FRIENDS.length
+        ? '<div style="margin-top:12px;padding:12px;background:linear-gradient(135deg,#ffe0ea,#fff3d6);border-radius:12px;text-align:center"><div style="font-size:15px;color:#d6607f">🎉 朋友派对已解锁！</div><div style="font-size:12px;color:#a06">凤凰和小伙伴们都来啦~</div><button id="pfParty" class="btn" style="margin-top:8px;background:#ff8fab;color:#fff;border-color:#ff8fab">🎊 撒花庆祝</button></div>'
+        : '';
+      return '<div style="display:flex;align-items:center;justify-content:space-between">' +
+          '<div class="card-title" style="margin:0">👫 朋友小窝</div>' +
+          '<button id="pfBack" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">← 返回宠物</button>' +
+        '</div>' +
+        '<div style="font-size:12px;color:#999;margin:8px 0">每天最多拜访 ' + FRIEND_DAILY + ' 次，把朋友招待好它们就搬来同住啦~' + (left > 0 ? '（今天还能拜访 ' + left + ' 次）' : '（今天次数用完了，明天再来👋）') + '</div>' +
+        items + wall + party;
     }
 
     function burst(cx, cy) {
@@ -4063,6 +4109,7 @@
     let kidsPage = 'home';
     let kidsStudy = null;
     let kidsWitch = null;
+    let kidsPetFriends = false;
 
     // ===== 🧙 女巫魔法小屋（独立小游戏）=====
     const ELEMENTS = [
@@ -4677,6 +4724,11 @@
 
       // 🐾 我的小宠物
       if (kidsPage === 'home') {
+        if (kidsPetFriends) {
+          const fc = el('<div class="card" style="margin-bottom:12px"></div>');
+          fc.innerHTML = paintPetFriends(pet);
+          view.append(fc);
+        } else {
       const stage = (pet.care >= 72) ? 3 : (pet.care >= 36) ? 2 : (pet.care >= 12) ? 1 : 0;
       const pe = PET_STAGES[stage].e, pname = PET_STAGES[stage].n;
       const sick = (pet.feed < 25 || pet.clean < 25 || pet.mood < 25);
@@ -4702,8 +4754,13 @@
           '<button id="petPlay" class="btn green">🎾 陪玩 (5★)</button>' +
           '<button id="petBath" class="btn ghost">🛁 洗澡 (3★)</button>' +
           '<button id="petSleep" class="btn ghost">💤 睡觉 (3★)</button>' +
-        '</div>';
+        '</div>' +
+        (stage >= 3 ?
+          '<div style="margin-top:10px"><button id="petFriends" class="btn block" style="background:#ff8fab;color:#fff;border-color:#ff8fab">👫 朋友小窝 →</button></div>'
+        : '<div style="margin-top:10px;font-size:12px;color:#bbb;text-align:center">养到 🦚 凤凰后，解锁「朋友小窝」</div>') +
+        '';
       view.append(pc);
+        }
       }
 
       // ===== 妈妈后台 =====
@@ -4895,6 +4952,23 @@
         await DB.put('kids', p);
         toast(label + '成功' + (cost ? (' · 消耗' + cost + '★') : '')); paint();
       };
+      const petFriendVisit = async (fid) => {
+        const p = (await getAll()).find(r => r.type === 'pet'); if (!p) return;
+        if ((p.friendDate || '') !== todayStr()) { p.friendDate = todayStr(); p.friendGot = 0; }
+        if ((p.friendGot || 0) >= FRIEND_DAILY) { toast('今天的拜访次数用完啦，明天再来👋'); return; }
+        p.friends = p.friends || {};
+        const f = PET_FRIENDS.find(x => x.id === fid); if (!f) return;
+        const st = p.friends[fid] || { love: 0, moved: false };
+        st.love = (st.love || 0) + 1;
+        p.friendGot = (p.friendGot || 0) + 1;
+        let msg;
+        if (st.love >= FRIEND_LOVE_MAX && !st.moved) { st.moved = true; msg = f.n + ' 搬来同住啦！🏡'; }
+        else { msg = '和 ' + f.n + ' 玩得真开心~ (' + st.love + '/' + FRIEND_LOVE_MAX + ')'; }
+        p.friends[fid] = st;
+        await DB.put('kids', p);
+        if (st.moved) burst(window.innerWidth / 2, window.innerHeight / 2);
+        toast(msg); paint();
+      };
       $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 10); }, 5, '喂食 🍎');
       $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 10); }, 5, '陪玩 🎾');
       $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 10); }, 3, '洗澡 🛁');
@@ -4916,6 +4990,13 @@
       };
       $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, stars: 0, combo: 0, q: null, answered: false }; paint(); };
       $('#witchEnter').onclick = () => { kidsWitch = { mode: 'home' }; paint(); };
+      const pfBtn = $('#petFriends');
+      if (pfBtn) pfBtn.onclick = () => { kidsPetFriends = true; paint(); };
+      const pfBack = $('#pfBack');
+      if (pfBack) pfBack.onclick = () => { kidsPetFriends = false; paint(); };
+      const pfParty = $('#pfParty');
+      if (pfParty) pfParty.onclick = () => { burst(window.innerWidth / 2, window.innerHeight / 2); toast('🎉 朋友派对！'); };
+      PET_FRIENDS.forEach(f => { const b = $('#pfVisit-' + f.id); if (b) b.onclick = () => petFriendVisit(f.id); });
       }
     }
 
