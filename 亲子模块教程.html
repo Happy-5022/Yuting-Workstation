@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👧 Happy赖亲子模块 · 家长使用教程</title>
+<style>
+  :root{
+    --bg:#fff7f0; --card:#ffffff; --ink:#3a3340; --sub:#8a8290;
+    --pink:#ff8fab; --purple:#9b6dff; --green:#5cc06a; --orange:#ff9f43; --blue:#5aa9e6;
+    --line:#f0e6dd;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;padding:0 0 60px;}
+  .wrap{max-width:680px;margin:0 auto;padding:20px 16px;}
+  .cover{background:linear-gradient(135deg,#ffd6e7,#e3d4ff);border-radius:22px;
+    padding:34px 24px;text-align:center;margin-bottom:22px;box-shadow:0 8px 24px rgba(155,109,255,.15);}
+  .cover h1{margin:0 0 8px;font-size:24px;color:#5a3a6b;}
+  .cover p{margin:0;color:#6e5a7a;font-size:14px;}
+  .badge{display:inline-block;background:#fff;color:var(--purple);border-radius:20px;
+    padding:4px 14px;font-size:12px;margin-top:14px;font-weight:600;}
+  .card{background:var(--card);border-radius:18px;padding:20px 18px;margin-bottom:18px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);border:1px solid var(--line);}
+  .card h2{margin:0 0 4px;font-size:19px;display:flex;align-items:center;gap:8px;}
+  .card .lead{color:var(--sub);font-size:13px;margin:0 0 14px;}
+  .tag{font-size:11px;padding:2px 9px;border-radius:10px;color:#fff;font-weight:600;}
+  .tag.pink{background:var(--pink);} .tag.purple{background:var(--purple);}
+  .tag.green{background:var(--green);} .tag.orange{background:var(--orange);}
+  .tag.blue{background:var(--blue);}
+  .step{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);}
+  .step:last-child{border-bottom:none;}
+  .num{flex:0 0 26px;height:26px;border-radius:50%;background:var(--purple);color:#fff;
+    font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px;}
+  .step b{color:var(--purple);}
+  .mini{background:#faf4ef;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:13px;color:#6b6270;}
+  .mini b{color:var(--ink);}
+  .phone{background:#fff;border:3px solid #e7dccf;border-radius:26px;padding:14px 12px;
+    max-width:300px;margin:14px auto 0;box-shadow:0 6px 18px rgba(0,0,0,.08);}
+  .phone .scr{background:#fff8f2;border-radius:14px;padding:12px;}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 10px;font-size:12px;color:#5a5360;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .tip{background:#fff3df;border-left:4px solid var(--orange);border-radius:8px;
+    padding:10px 12px;font-size:13px;color:#8a5a16;margin-top:12px;}
+  .kk{background:#eef7ef;border-left:4px solid var(--green);border-radius:8px;
+    padding:10px 12px;font-size:13px;color:#2e7a45;margin-top:12px;}
+  .foot{text-align:center;color:var(--sub);font-size:12px;margin-top:10px;}
+  .emoji-big{font-size:30px;}
+  ul.clean{margin:8px 0 0;padding-left:18px;font-size:13.5px;}
+  ul.clean li{margin:5px 0;}
+  .hr{height:1px;background:var(--line);margin:6px 0 14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover">
+    <div class="emoji-big">👧🐔🧙</div>
+    <h1>Happy赖 · 亲子模块</h1>
+    <p>给我马上二年级的女儿，在工作台里手搓的「习惯养成 + 学习游戏」小角落</p>
+    <span class="badge">一份给家长的极简使用教程</span>
+  </div>
+
+  <!-- 总览 -->
+  <div class="card">
+    <h2>🧭 一句话先懂</h2>
+    <p class="lead">它不是个广告游戏，是我自己手机里的「第二大脑」工作台里的一个模块。</p>
+    <p style="margin:0;font-size:14px">分成 <b>两页</b>，各管一摊：</p>
+    <div class="grid2" style="margin-top:12px">
+      <div class="mini">
+        <b>👧 宝贝主页</b><br>孩子每天打开玩的：<br>打卡、攒星、换愿望、养宠物、玩魔法小屋。
+      </div>
+      <div class="mini">
+        <b>👩 妈妈后台</b><br>家长管的：<br>看数据、审任务、设愿望、扣星星、管任务。
+      </div>
+    </div>
+    <div class="tip">💡 顶部两个按钮来回切。孩子用「宝贝主页」，你用「妈妈后台」。</div>
+  </div>
+
+  <!-- 宝贝主页 -->
+  <div class="card">
+    <h2><span class="tag pink">孩子玩</span> 宝贝主页怎么用</h2>
+    <p class="lead">每天打开这一页，做几件事就能攒到「魔法星星 ⭐」。</p>
+
+    <div class="step"><div class="num">1</div><div>
+      <b>今日任务打卡</b><br>
+      13 个默认任务，分 4 类，点一下就算完成：
+      <div class="row">
+        <span class="chip">📚 学习：语文 数学 阅读 英语</span>
+        <span class="chip">🧹 生活：收拾书桌 打扫 早睡 练字</span>
+      </div>
+      <div class="row">
+        <span class="chip">🏃 运动：跳绳 骑车 散步 打球</span>
+        <span class="chip">📺 屏幕：赚屏幕时间30分</span>
+      </div>
+      <div class="mini">每项任务背后有「星值」（比如早睡 1★、阅读 1★）。完成后：<br>
+      · <b>默认开启审核</b> → 显示「待审核」，等你（妈妈）在后台点通过才发星；<br>
+      · 想省事可关掉审核 → 一完成立刻得星。</div>
+    </div></div>
+
+    <div class="step"><div class="num">2</div><div>
+      <b>📺 屏幕时间</b><br>
+      完成「赚屏幕时间30分」等任务会累积「可用分钟」。想看电视/平板时点「用10 / 用20 / 用30」扣掉对应分钟——比直接抢遥控器温和多了。
+    </div></div>
+
+    <div class="step"><div class="num">3</div><div>
+      <b>🎁 我的愿望</b><br>
+      攒够星星就能兑换真实奖励。比如设个「多看一集动画片 30★」，星星够了点「兑换」就到手。<br>
+      <span class="mini">⭐ 星星不是虚拟币，是真能换「多看一集」「去公园」这种你许诺的奖励。</span>
+    </div></div>
+
+    <div class="step"><div class="num">4</div><div>
+      <b>两个好玩入口（见下方彩蛋玩法）</b><br>
+      🧙 魔法小屋（用做题当魔法作业救精灵）+ 🐔 我的小宠物（养一只从蛋到凤凰的小家伙）。
+    </div></div>
+  </div>
+
+  <!-- 妈妈后台 -->
+  <div class="card">
+    <h2><span class="tag purple">家长管</span> 妈妈后台怎么用</h2>
+    <p class="lead">你在这页当「总指挥」，孩子在前台玩，你在这兜底。</p>
+
+    <div class="step"><div class="num">1</div><div>
+      <b>📊 数据看板</b><br>一眼看到：今天得几星、本周得几星、连续打卡多少天、本周完成几次。不用问娃「今天任务做了没」，看板说了算。
+    </div></div>
+
+    <div class="step"><div class="num">2</div><div>
+      <b>⏳ 待审核</b><br>孩子点了「完成」的任务会排在这里。你点 <b>通过</b> 就发星；点 <b>驳回</b> 可顺手扣 1–20 星（比如糊弄完成的）。驳回会记一笔，娃也看得到。
+    </div></div>
+
+    <div class="step"><div class="num">3</div><div>
+      <b>🎁 愿望管理</b><br>在这里「加愿望」（写名字 + 花多少星，比如「买贴纸 20★」），也能删掉不合适的小愿望。孩子攒够星才能兑换。
+    </div></div>
+
+    <div class="step"><div class="num">4</div><div>
+      <b>📋 任务管理</b><br>默认 13 个任务不合适？可删、可加（比如加「自己洗袜子」）。任务越贴合自家娃，越好用。
+    </div></div>
+
+    <div class="step"><div class="num">5</div><div>
+      <b>⚙️ 审核设置 & ➖ 扣星星</b><br>
+      · 审核设置：建议<b>开着</b>（孩子完成需你确认才发星），防止乱点刷星；想信任模式就关掉。<br>
+      · 扣星星：娃真做得不好，手动扣 1–20 星，立规矩用。
+    </div></div>
+
+    <div class="kk">✅ 小贴士：刚开始建议「审核开着 + 愿望别设太贵」，让娃先尝到「打卡→得星→换奖励」的甜头，习惯养成了再慢慢加码。</div>
+  </div>
+
+  <!-- 三个彩蛋 -->
+  <div class="card">
+    <h2><span class="tag orange">彩蛋</span> 三个让孩子上瘾的小玩法</h2>
+    <p class="lead">光打卡太干，这三个是把「学习/习惯」包进游戏里，娃是主动想玩的。</p>
+
+    <div class="step"><div class="num">🐔</div><div>
+      <b>我的小宠物（养成线）</b><br>
+      养一只电子小宠物，从 🥚蛋 → 🐤小鸡 → 🐔大鸡 → 🦚凤凰。喂食/陪玩/洗澡/睡觉都要花星星（喂食5 / 陪玩5 / 洗澡3 / 睡觉3），所以娃得先认真打卡攒星才能照顾它。照顾够了就进化。<br>
+      <span class="mini">🦚 养到凤凰后解锁 <b>👫 朋友小窝</b>：每天拜访动物朋友（兔/猫/狗/熊…）攒友谊，满 5 次就「搬来同住」，集齐 8 位触发 🎉 朋友派对。纯收集，每天来一下有奔头。</span>
+    </div></div>
+
+    <div class="step"><div class="num">🧙</div><div>
+      <b>女巫魔法小屋（闯关卡）</b><br>
+      用 <b>口算 / 乘法 / 识字 / 英语</b> 当「魔法作业」：每答对一题掉一颗元素（🔥💧🍃✨）。集元素合成道具（清醒药水、星光扫帚、万能钥匙…），拿道具点亮小屋 5 个房间，每亮一间守护精灵「闪闪」就进化一阶，从蛋一路变 🌟 守护神。<br>
+      <span class="mini">🎁 通关后不空：每天一条「守护祝福」+ 用守护币买家具装扮小屋 + 可「重新施法」重玩。做题不再像写作业，变成「我在救精灵」。</span>
+    </div></div>
+
+    <div class="step"><div class="num">⭐</div><div>
+      <b>星星闭环</b><br>三件事不打架：打卡攒星 → 喂宠物 / 换愿望；魔法小屋点亮房间也奖星 → 反过来喂宠物。所有玩法共用同一包星星，娃有持续动力。
+    </div></div>
+  </div>
+
+  <!-- 家长放心 -->
+  <div class="card">
+    <h2>💛 家长最关心的 3 件事</h2>
+    <div class="hr"></div>
+    <ul class="clean">
+      <li><b>不联网、不露脸、数据在自己手机里。</b>纯本地运行，没广告、没内购、没陌生人。</li>
+      <li><b>一键备份。</b>工作台有「导出备份 / 导入备份」，换手机也不丢娃的进度。</li>
+      <li><b>可随时调。</b>任务、愿望、星值、审核开关全在你手里，跟着娃成长慢慢改。</li>
+    </ul>
+    <div class="tip">📌 它不是「丢个平板给娃自己玩」的替代品，而是把你要盯的习惯，变成娃愿意主动做的游戏。你每天花 2 分钟在后台「通过一下」，比吼十句管用。</div>
+  </div>
+
+  <div class="foot">Happy赖 · 一个失业老师给娃手搓的「会陪她长大」的小角落 💛</div>
+
+</div>
+</body>
+</html>
