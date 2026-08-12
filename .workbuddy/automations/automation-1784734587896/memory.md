@@ -36,3 +36,11 @@
 - 部署：commit eae24ad；git push **失败——`Recv failure: Connection was reset`（22秒快速失败，第三种形态：连接被重置）**。积压待推 commit 仅 1 个（说明用户已自行推完 08-04 之前的）。CloudStudio 备用部署成功，链接同前：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
 - 明日避重：以上全部主题勿复用。BBC 剩余可用库存：The future of food(260409)、How do we adapt to the cold(260319)、Should we pay more for chocolate(260312)、Why are some animals black and white(260305)、The power of pepper(260226)、Why are billionaires building bunkers?。**注意 8/13 起应有新集（周四更新），优先抓最新。**
 - 经验：`GIT_TERMINAL_PROMPT=0 git push > file 2>&1; echo $?` + run_in_background 组合最稳，22秒内拿到明确报错，不占前台。
+
+## 2026-08-12
+- 三份数据文件已更新，JSON 校验通过。当日主题（立秋后·早秋穿搭/怀旧/AI/健身政策）：**通勤穿出松弛感**(抖音1110w，旧衣平铺不露脸)、**AI打开童年记忆百宝箱**(1052w，老照让AI动起来)、**原来爸爸也曾是少年**(938w，翻老照+画外音)、**给老外安排上ChinaCool攻略**(810w，旅游本行中英双语穷游)、**国务院全民健身计划**(百度榜一，室内古法健身操)、秋天的奶茶风穿搭/失业第二月「上工」/博山琉璃灯工配尤克里里/手搓AI工作流/夏天收尾弹唱。
+- 挑战榜：#通勤穿出松弛感、#给老外安排上ChinaCool攻略、#掉入奶油风治愈世界、#AI打开了我童年记忆的百宝箱、#原来爸爸也曾是少年。
+- BBC 五篇（原创摘要，用完最后 5 个 6ME 库存）：The future of food(260409) / How do we adapt to the cold?(260319) / Should we pay more for chocolate?(260312) / Why are some animals black and white?(260305) / The power of pepper(260226)。**至此 6ME 早期库存全部用尽。**
+- 部署：commit 8b17f30；**git push 失败**（分支领先 origin 1 commit，沙箱无凭据/连接被重置，21秒快速失败）。CloudStudio 备用部署成功，链接同前：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。**BBC 库存预警**：6 Minute English 已用尽的旧题需转向——优先等 8/13 起的新集（ep-260813，周四更新）；若新集未出，可启用 English In A Minute 系列（最新 ep-260811「note」的多种含义）或 Real Easy English / News Review 等栏目，避免重复 6ME。
+- 经验：每日自动化连续跑通，格式已稳定；BBC 选题进入「等更新」阶段，建议下次先抓最新集再补旧栏目。

@@ -4969,11 +4969,11 @@
         if (st.moved) burst(window.innerWidth / 2, window.innerHeight / 2);
         toast(msg); paint();
       };
-      $('#petFeed').onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 10); }, 5, '喂食 🍎');
-      $('#petPlay').onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 10); }, 5, '陪玩 🎾');
-      $('#petBath').onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 10); }, 3, '洗澡 🛁');
-      $('#petSleep').onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 10); }, 3, '睡觉 💤');
-      $('#petName').onclick = async () => {
+      const petFeed = $('#petFeed'); if (petFeed) petFeed.onclick = () => petClick(p => { p.feed = Math.min(100, (p.feed || 0) + 10); }, 5, '喂食 🍎');
+      const petPlay = $('#petPlay'); if (petPlay) petPlay.onclick = () => petClick(p => { p.mood = Math.min(100, (p.mood || 0) + 10); }, 5, '陪玩 🎾');
+      const petBath = $('#petBath'); if (petBath) petBath.onclick = () => petClick(p => { p.clean = Math.min(100, (p.clean || 0) + 10); }, 3, '洗澡 🛁');
+      const petSleep = $('#petSleep'); if (petSleep) petSleep.onclick = () => petClick(p => { p.energy = Math.min(100, (p.energy || 0) + 10); }, 3, '睡觉 💤');
+      const petName = $('#petName'); if (petName) petName.onclick = async () => {
         const cur = (await getAll()).find(r => r.type === 'pet'); if (!cur) return;
         const r = await promptForm('给宠物改名', [{ name: 'name', label: '名字', type: 'text', value: cur.name || '小芽' }]);
         if (!r || !r.name || !r.name.trim()) return;
@@ -4988,8 +4988,8 @@
         await DB.put('kids', cur);
         toast('治好啦，宠物精神多了 🎉'); paint();
       };
-      $('#stEnter').onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, stars: 0, combo: 0, q: null, answered: false }; paint(); };
-      $('#witchEnter').onclick = () => { kidsWitch = { mode: 'home' }; paint(); };
+      const stEnter = $('#stEnter'); if (stEnter) stEnter.onclick = () => { kidsStudy = { subject: 'math', done: 0, got: 0, stars: 0, combo: 0, q: null, answered: false }; paint(); };
+      const witchEnter = $('#witchEnter'); if (witchEnter) witchEnter.onclick = () => { kidsWitch = { mode: 'home' }; paint(); };
       const pfBtn = $('#petFriends');
       if (pfBtn) pfBtn.onclick = () => { kidsPetFriends = true; paint(); };
       const pfBack = $('#pfBack');
