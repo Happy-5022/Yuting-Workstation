@@ -1,145 +1,145 @@
 {
-  "date": "2026-08-11",
+  "date": "2026-08-12",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "How Do Climate Scientists Make Predictions?",
-      "zh": "气候科学家是怎么「算出」未来的",
+      "en": "The Future Of Food",
+      "zh": "未来的食物，会长什么样",
       "words": 108,
       "dur": 66,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260806",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260409",
       "body": [
         [
-          "When scientists talk about the climate of the future, they are careful with their words. They rarely say prediction. They say projection instead, and the difference matters more than most people realise.",
-          "科学家谈未来气候时用词很谨慎。他们很少说「预测」，而是说「推演」，这两个词的差别比大多数人以为的要大。"
+          "Walk into a supermarket in 2050 and the food on the shelf might look nothing like today's. Scientists are testing lab-grown meat, vertical farms stacked inside city buildings, and protein made from insects or fungi.",
+          "走进2050年的超市，货架上的食物可能和今天完全不同。科学家正在试验培育肉、在楼里层层叠起的立体农场，还有用昆虫或菌类做的蛋白质。"
         ],
         [
-          "A prediction claims something will happen. A projection says: if humans burn this much fuel, the planet will probably warm by this much. It is conditional. Change the human behaviour and the answer changes too.",
-          "「预测」是断言某件事一定会发生。「推演」说的是：如果人类烧掉这么多燃料，地球大概会升温这么多。它是有条件的。人的行为一变，结果也跟着变。"
+          "The big promise is resilience. If climate shocks or war disrupt normal farming, these methods could keep cities fed without needing huge tracts of farmland or long supply chains.",
+          "最大的卖点是抗风险。如果气候冲击或战争打乱了常规农业，这些方法能让城市不断粮，还不用大片耕地和漫长的供应链。"
         ],
         [
-          "To build these models, researchers track how much energy the Earth absorbs versus how much it sends back to space. When those two numbers stop matching, the system is out of whack, and that gap is what drives everything else.",
-          "为了建立这些模型，研究者会追踪地球吸收了多少能量、又向太空放回去多少。当这两个数字对不上，整个系统就失衡了，而这个缺口就是后面一切变化的推手。"
+          "But questions remain. Will people actually eat it? Who owns the technology? And is a tomato grown under lights as nutritious as one grown under the sun? The future of food is not just about science, it is about trust.",
+          "但疑问还在。人们真会吃吗？技术归谁所有？在灯下长的番茄和在太阳下长的营养一样吗？食物的未来不只有科学，还有信任。"
         ]
       ],
       "tips": [
-        ["projection", "推演、预估（有前提条件的推算）"],
-        ["out of whack", "失衡、不正常了"],
-        ["conditional", "有条件的、取决于别的因素"]
+        ["lab-grown", "在实验室培育的（如培育肉）"],
+        ["resilience", "抗风险能力、韧性"],
+        ["supply chain", "供应链"]
       ]
     },
     {
       "id": "d2",
-      "en": "The Enhanced Games",
-      "zh": "允许「吃药」的运动会，你敢看吗",
-      "words": 105,
-      "dur": 64,
+      "en": "How Do We Adapt To The Cold?",
+      "zh": "人到底是怎么「扛」过寒冷的",
+      "words": 109,
+      "dur": 67,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260730",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260319",
       "body": [
         [
-          "Imagine a sports event where doping is not banned but openly allowed. That is exactly the idea behind the Enhanced Games, and it is fair to say the reaction has been loud.",
-          "想象一场比赛，不但不禁用兴奋剂，反而公开允许。这正是「增强运动会」的想法，可以说，外界反应非常激烈。"
+          "Some people love winter; others count the days until spring. But our bodies are surprisingly built to cope with the cold, if we let them.",
+          "有人爱冬天，有人天天数着盼春天。但我们的身体其实挺能扛冷——只要你肯让它适应。"
         ],
         [
-          "Supporters argue athletes already take drugs in secret, so being honest about it is safer. Critics say it sets a bad example for young people and turns sport into a chemistry competition.",
-          "支持者说，运动员本来就在偷偷用药，公开反而更安全。反对者说，这给年轻人带了坏头，把体育变成了化学比赛。"
+          "When it is cold, the body makes brown fat that burns energy to keep us warm, and blood moves away from the skin to protect the core. Regular exposure, like cold-water swimming, seems to train this response.",
+          "天冷时，身体会产生褐色脂肪来燃烧能量取暖，血液也会从皮肤撤回保护核心。像冬泳这种经常接触冷的方式，好像能训练出这种反应。"
         ],
         [
-          "The debate is deeply divisive. Where exactly is the line between training hard and cheating? Once you normalise something, it becomes very difficult to go back.",
-          "这场争论让人严重分裂。到底哪条线之内叫刻苦训练，越过去就叫作弊？一旦一件事被当成正常，就很难再退回去了。"
+          "Still, there are limits. Extreme cold can be dangerous fast, and not everyone adapts the same way. The trick is small, repeated doses — not jumping into a frozen lake on day one.",
+          "但极限仍在。极寒能迅速致命，而且每个人适应能力不同。关键是少量、反复地来——可不是第一天就往冰湖里跳。"
         ]
       ],
       "tips": [
-        ["doping", "（体育中）使用违禁药物"],
-        ["cross the line", "越界、做了不该做的事"],
-        ["normalise", "让某件事变得理所当然"]
+        ["brown fat", "褐色脂肪（帮助身体保暖）"],
+        ["exposure", "暴露、接触（这里指挨冻）"],
+        ["doses", "剂量、分量（引申为适度、反复接触）"]
       ]
     },
     {
       "id": "d3",
-      "en": "Dreaming Of Being A Chef",
-      "zh": "那些想当厨师的人，后来怎么样了",
-      "words": 103,
-      "dur": 63,
+      "en": "Should We Pay More For Chocolate?",
+      "zh": "巧克力，该不该卖更贵",
+      "words": 110,
+      "dur": 67,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260219",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260312",
       "body": [
         [
-          "Cooking shows make professional kitchens look glamorous. In reality, most chefs work long unsocial hours in hot, noisy rooms, and the pay at the start is modest.",
-          "美食节目把专业后厨拍得光鲜。现实里，大多数厨师在又热又吵的地方长时间上班，作息还跟正常人反着，起步工资也不高。"
+          "Chocolate feels cheap at the checkout, but the price of cocoa has climbed sharply, and that bill is starting to arrive.",
+          "结账时巧克力好像不贵，但可可的价格已经猛涨，这笔账正在找上门。"
         ],
         [
-          "So why do people still do it? Many say it is the only job where they can see the result of their work in minutes, and where a bad day is forgotten by the next service.",
-          "那为什么还有人做？很多人说，这是少数几种能在几分钟内看到自己成果的工作，而且今天再糟，下一轮开餐就翻篇了。"
+          "Most cocoa is grown by small farmers in West Africa who earn very little, while weather extremes and crop disease shrink the harvest. Big brands face pressure to pay more and be honest about it.",
+          "大多数可可产自西非的小农手里，他们挣得极少；而极端天气和作物病害又在缩减收成。大品牌面临压力：要么多付钱，要么把账算清楚、说真话。"
         ],
         [
-          "The advice from those who stayed is simple: learn the basics until they are boring, find a kitchen with a decent head chef, and do not chase fame. Skill comes first; everything else follows.",
-          "坚持下来的人给的建议很朴素：把基本功练到觉得无聊为止，找一个主厨人品还行的后厨，别追名气。手艺在前，其他的自然会来。"
+          "So should a bar cost more? Paying farmers fairly might mean pricier chocolate, but it could also mean a supply that lasts. Cheap today may simply be borrowed from tomorrow.",
+          "那巧克力该涨价吗？给农民公道价钱，可能意味着更贵的巧克力，却也意味着供应能延续。今天的便宜，或许只是从明天借来的。"
         ]
       ],
       "tips": [
-        ["unsocial hours", "跟别人作息相反的上班时间"],
-        ["modest", "（收入等）不高的、有限的"],
-        ["chase fame", "追逐名气"]
+        ["cocoa", "可可（做巧克力的原料）"],
+        ["shrink", "缩小、减少"],
+        ["borrowed from tomorrow", "从明天借来的（比喻不可持续）"]
       ]
     },
     {
       "id": "d4",
-      "en": "Rethinking Dyslexia",
-      "zh": "重新认识「读写困难」",
-      "words": 110,
+      "en": "Why Are Some Animals Black And White?",
+      "zh": "为什么有些动物天生黑白配色",
+      "words": 109,
       "dur": 67,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260205",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260305",
       "body": [
         [
-          "Dyslexia is usually described as a problem: letters move around, reading is slow, spelling is unreliable. For a child at school, it can feel like being labelled lazy when you are working twice as hard.",
-          "「读写困难」通常被当成一种毛病：字会乱跑、读得慢、拼写老出错。对一个学生来说，明明比别人多花一倍力气，却被贴上懒的标签。"
+          "A zebra, a panda, a penguin — why do so many animals wear the same two colours? The answer turns out to be practical, not fashionable.",
+          "斑马、熊猫、企鹅——为什么这么多动物都穿同一身黑白？答案其实是实用，不是赶时髦。"
         ],
         [
-          "But some researchers now look at it differently. People with dyslexia often think in pictures, spot patterns quickly, and are good at seeing how a whole system fits together.",
-          "但现在有些研究者换了个看法。有读写困难的人往往用画面思考，看规律很快，也擅长看清一整个系统是怎么拼起来的。"
+          "For some, the pattern hides them: bold stripes can confuse a predator's eye, or break up the body's outline in shadow and snow. For others, the colours send a warning that says 'do not eat me'.",
+          "对有些动物，这花纹能藏身：醒目的条纹会扰乱捕食者的眼睛，或在阴影和雪地里打乱身体轮廓。对另一些，这颜色是在发警告：「别吃我」。"
         ],
         [
-          "Calling it a superpower may go too far. The point is simply that a brain wired for exploring is not a broken brain — it just needs a different way in.",
-          "说它是「超能力」也许有点过了。核心意思只是：一个天生擅长探索的大脑不是坏掉的大脑，它只是需要换一个入口。"
+          "Colour is also communication. A skunk's white stripe is a clear signal, and even humans read black-and-white as high contrast and hard to ignore. Nature uses the same simple palette for very different jobs.",
+          "颜色还是一种沟通。臭鼬的白色条纹是明明白白的信号；连人类看黑白都觉得对比强、移不开眼。大自然用同一套简单配色，干着完全不同的活。"
         ]
       ],
       "tips": [
-        ["labelled", "被贴上……标签"],
-        ["spot patterns", "看出规律"],
-        ["go too far", "说过头了、太夸张"]
+        ["predator", "捕食者"],
+        ["break up the outline", "打乱身体轮廓（便于隐蔽）"],
+        ["palette", "调色板、配色"]
       ]
     },
     {
       "id": "d5",
-      "en": "Artistic Swimming",
-      "zh": "在水里做体操，到底有多难",
-      "words": 106,
-      "dur": 65,
+      "en": "The Power Of Pepper",
+      "zh": "小小胡椒，到底有多厉害",
+      "words": 108,
+      "dur": 66,
       "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260212",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260226",
       "body": [
         [
-          "Artistic swimming looks effortless from the poolside: smiling faces, perfect lines, everyone moving as one. Underwater, it is a different story entirely.",
-          "在池边看花样游泳，一切都轻松自如：笑着的脸、完美的队形、所有人动作一致。水下则完全是另一回事。"
+          "Pepper sits on almost every table, yet most of us use just one kind without thinking. The plant family behind it is far bigger than the shaker suggests.",
+          "胡椒几乎摆在每张餐桌上，可大多数人只知用一种，从没多想。它背后的植物家族，比调味瓶里那点要大得多。"
         ],
         [
-          "Athletes hold their breath for up to a minute while upside down, kicking hard enough to lift half their body out of the water. They cannot touch the bottom, and they must stay in time with music they can barely hear.",
-          "运动员要倒立着憋气将近一分钟，同时用力打水，把半个身子撑出水面。脚不能碰池底，还得跟着几乎听不清的音乐踩点。"
+          "Black, white, green and red peppercorns are the same fruit picked and treated at different stages. The heat comes from a compound called capsaicin, which can dull pain and may help metabolism.",
+          "黑、白、绿、红胡椒粒，其实是同一种果实在不同阶段采收处理的。那种辣味来自一种叫辣椒素的化合物，它能止痛，或许还能帮着新陈代谢。"
         ],
         [
-          "Perhaps the hardest part is the face. Whatever is happening below the surface, the expression above it must never give it away. That is the whole skill in one image.",
-          "也许最难的是表情。水面下不管多狼狈，水面上的那张脸都不能露出一点破绽。这一幕，就把这项运动全说清楚了。"
+          "Beyond taste, pepper has a long history as medicine and trade. A pinch changed economies centuries ago, and today it still quietly shapes what we call flavour.",
+          "除了调味，胡椒作为药材和贸易品也有漫长历史。几百年前一撮胡椒能改变经济；今天它仍悄悄定义着我们说的「味道」。"
         ]
       ],
       "tips": [
-        ["effortless", "毫不费力的（看上去）"],
-        ["stay in time with", "跟上……的节奏"],
-        ["give it away", "露馅、泄露真相"]
+        ["peppercorn", "胡椒粒"],
+        ["capsaicin", "辣椒素（带来辣味的物质）"],
+        ["metabolism", "新陈代谢"]
       ]
     }
   ]
