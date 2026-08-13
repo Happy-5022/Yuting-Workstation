@@ -1,145 +1,100 @@
 {
-  "date": "2026-08-12",
+  "date": "2026-08-13",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "The Future Of Food",
-      "zh": "未来的食物，会长什么样",
-      "words": 108,
-      "dur": 66,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260409",
+      "en": "One word, many meanings: 'filter'",
+      "zh": "一词多义：filter（过滤／滤镜）",
+      "words": 92,
+      "dur": 75,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260807",
       "body": [
-        [
-          "Walk into a supermarket in 2050 and the food on the shelf might look nothing like today's. Scientists are testing lab-grown meat, vertical farms stacked inside city buildings, and protein made from insects or fungi.",
-          "走进2050年的超市，货架上的食物可能和今天完全不同。科学家正在试验培育肉、在楼里层层叠起的立体农场，还有用昆虫或菌类做的蛋白质。"
-        ],
-        [
-          "The big promise is resilience. If climate shocks or war disrupt normal farming, these methods could keep cities fed without needing huge tracts of farmland or long supply chains.",
-          "最大的卖点是抗风险。如果气候冲击或战争打乱了常规农业，这些方法能让城市不断粮，还不用大片耕地和漫长的供应链。"
-        ],
-        [
-          "But questions remain. Will people actually eat it? Who owns the technology? And is a tomato grown under lights as nutritious as one grown under the sun? The future of food is not just about science, it is about trust.",
-          "但疑问还在。人们真会吃吗？技术归谁所有？在灯下长的番茄和在太阳下长的营养一样吗？食物的未来不只有科学，还有信任。"
-        ]
+        ["The English word 'filter' works as both a noun and a verb, and its core idea is something that separates what you want from what you don't.", "filter 在英语里既是名词也是动词，核心意思都是'把想要的和不想要的分开'。"],
+        ["As a noun, a filter can be a physical device like a coffee filter or a camera lens filter, or a digital tool that hides unwanted messages on social media.", "作名词时，它可以是实体装置（如咖啡滤纸、相机滤镜），也可以是社交媒体上屏蔽垃圾信息的数字工具。"],
+        ["As a verb, 'to filter' means to remove or pass only certain things through, such as filtering water or filtering job applications by skill.", "作动词时，to filter 表示'过滤、筛选'，例如滤水，或按技能筛选求职简历。"]
       ],
       "tips": [
-        ["lab-grown", "在实验室培育的（如培育肉）"],
-        ["resilience", "抗风险能力、韧性"],
-        ["supply chain", "供应链"]
+        ["filter out", "过滤掉／剔除"],
+        ["coffee filter", "咖啡滤纸"],
+        ["filter bubble", "信息茧房"]
       ]
     },
     {
       "id": "d2",
-      "en": "How Do We Adapt To The Cold?",
-      "zh": "人到底是怎么「扛」过寒冷的",
-      "words": 109,
-      "dur": 67,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260319",
+      "en": "One word, many meanings: 'pop'",
+      "zh": "一词多义：pop（流行／爆开／汽水）",
+      "words": 95,
+      "dur": 80,
+      "vocab": 9,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260731",
       "body": [
-        [
-          "Some people love winter; others count the days until spring. But our bodies are surprisingly built to cope with the cold, if we let them.",
-          "有人爱冬天，有人天天数着盼春天。但我们的身体其实挺能扛冷——只要你肯让它适应。"
-        ],
-        [
-          "When it is cold, the body makes brown fat that burns energy to keep us warm, and blood moves away from the skin to protect the core. Regular exposure, like cold-water swimming, seems to train this response.",
-          "天冷时，身体会产生褐色脂肪来燃烧能量取暖，血液也会从皮肤撤回保护核心。像冬泳这种经常接触冷的方式，好像能训练出这种反应。"
-        ],
-        [
-          "Still, there are limits. Extreme cold can be dangerous fast, and not everyone adapts the same way. The trick is small, repeated doses — not jumping into a frozen lake on day one.",
-          "但极限仍在。极寒能迅速致命，而且每个人适应能力不同。关键是少量、反复地来——可不是第一天就往冰湖里跳。"
-        ]
+        ["'Pop' is a short, punchy word with several everyday meanings in English that learners often mix up.", "pop 是个短促有力的小词，在英语里有好几个日常含义，学习者常常搞混。"],
+        ["Most people know 'pop' as short for pop music, but it can also mean a sudden small explosion sound, like a balloon popping.", "多数人知道 pop 是流行音乐的简称，但它也能指'砰'的一声小爆响，比如气球炸开的声音。"],
+        ["In British English, 'pop' is casual slang for a fizzy soft drink, and as a verb it can mean to appear or go somewhere quickly, for example 'pop in'.", "在英式英语里，pop 还是汽水的口语说法；作动词表示'快速出现或顺路去一下'，比如 pop in（顺道拜访）。"]
       ],
       "tips": [
-        ["brown fat", "褐色脂肪（帮助身体保暖）"],
-        ["exposure", "暴露、接触（这里指挨冻）"],
-        ["doses", "剂量、分量（引申为适度、反复接触）"]
+        ["pop music", "流行音乐"],
+        ["pop in", "顺便拜访／快速出现"],
+        ["pop the question", "求婚"]
       ]
     },
     {
       "id": "d3",
-      "en": "Should We Pay More For Chocolate?",
-      "zh": "巧克力，该不该卖更贵",
-      "words": 110,
-      "dur": 67,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260312",
+      "en": "One word, many meanings: 'drop'",
+      "zh": "一词多义：drop（掉落／下降／放弃）",
+      "words": 92,
+      "dur": 78,
+      "vocab": 9,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260724",
       "body": [
-        [
-          "Chocolate feels cheap at the checkout, but the price of cocoa has climbed sharply, and that bill is starting to arrive.",
-          "结账时巧克力好像不贵，但可可的价格已经猛涨，这笔账正在找上门。"
-        ],
-        [
-          "Most cocoa is grown by small farmers in West Africa who earn very little, while weather extremes and crop disease shrink the harvest. Big brands face pressure to pay more and be honest about it.",
-          "大多数可可产自西非的小农手里，他们挣得极少；而极端天气和作物病害又在缩减收成。大品牌面临压力：要么多付钱，要么把账算清楚、说真话。"
-        ],
-        [
-          "So should a bar cost more? Paying farmers fairly might mean pricier chocolate, but it could also mean a supply that lasts. Cheap today may simply be borrowed from tomorrow.",
-          "那巧克力该涨价吗？给农民公道价钱，可能意味着更贵的巧克力，却也意味着供应能延续。今天的便宜，或许只是从明天借来的。"
-        ]
+        ["The verb 'drop' is one of the most useful and flexible words in daily English.", "drop 这个动词是日常英语里最实用、最灵活的词之一。"],
+        ["It can mean to let something fall, but it also describes a decrease, like 'prices dropped' or 'the temperature dropped'.", "它可表示'让某物掉落'，也用来形容下降，比如 prices dropped（降价）、the temperature dropped（降温）。"],
+        ["Beyond its physical meaning, 'drop' appears in phrases such as 'drop a habit' (give something up) or 'drop someone a message' (send one quickly).", "除了字面义，drop 还出现在短语里，如 drop a habit（戒掉习惯）、drop someone a message（很快发条信息）。"]
       ],
       "tips": [
-        ["cocoa", "可可（做巧克力的原料）"],
-        ["shrink", "缩小、减少"],
-        ["borrowed from tomorrow", "从明天借来的（比喻不可持续）"]
+        ["drop in prices", "价格下跌"],
+        ["drop a habit", "戒掉习惯"],
+        ["drop by", "顺路拜访"]
       ]
     },
     {
       "id": "d4",
-      "en": "Why Are Some Animals Black And White?",
-      "zh": "为什么有些动物天生黑白配色",
-      "words": 109,
-      "dur": 67,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260305",
+      "en": "One word, many meanings: 'note'",
+      "zh": "一词多义：note（笔记／音符／纸币）",
+      "words": 88,
+      "dur": 72,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260717",
       "body": [
-        [
-          "A zebra, a panda, a penguin — why do so many animals wear the same two colours? The answer turns out to be practical, not fashionable.",
-          "斑马、熊猫、企鹅——为什么这么多动物都穿同一身黑白？答案其实是实用，不是赶时髦。"
-        ],
-        [
-          "For some, the pattern hides them: bold stripes can confuse a predator's eye, or break up the body's outline in shadow and snow. For others, the colours send a warning that says 'do not eat me'.",
-          "对有些动物，这花纹能藏身：醒目的条纹会扰乱捕食者的眼睛，或在阴影和雪地里打乱身体轮廓。对另一些，这颜色是在发警告：「别吃我」。"
-        ],
-        [
-          "Colour is also communication. A skunk's white stripe is a clear signal, and even humans read black-and-white as high contrast and hard to ignore. Nature uses the same simple palette for very different jobs.",
-          "颜色还是一种沟通。臭鼬的白色条纹是明明白白的信号；连人类看黑白都觉得对比强、移不开眼。大自然用同一套简单配色，干着完全不同的活。"
-        ]
+        ["The small word 'note' carries at least four common meanings that English learners should know.", "note 这个小词至少有四种常见含义，英语学习者都该掌握。"],
+        ["As a verb it means both 'to notice' (note the difference) and 'to write down' (note the address); as a noun it can be a written reminder or a single musical sound.", "作动词时，它既表示'注意到'（note the difference），也表示'写下'（note the address）；作名词时可以是便条，也可以是一个音符。"],
+        ["Interestingly, in British English 'note' can also mean a banknote — a paper bill — so 'pay in notes' means paying with cash.", "有趣的是，在英式英语里 note 还能指纸币，所以 pay in notes 就是用现金付款。"]
       ],
       "tips": [
-        ["predator", "捕食者"],
-        ["break up the outline", "打乱身体轮廓（便于隐蔽）"],
-        ["palette", "调色板、配色"]
+        ["take note", "注意／留意"],
+        ["musical note", "音符"],
+        ["banknote", "纸币／钞票"]
       ]
     },
     {
       "id": "d5",
-      "en": "The Power Of Pepper",
-      "zh": "小小胡椒，到底有多厉害",
-      "words": 108,
-      "dur": 66,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260226",
+      "en": "One word, many meanings: 'tip'",
+      "zh": "一词多义：tip（小费／顶端／建议）",
+      "words": 90,
+      "dur": 75,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260710",
       "body": [
-        [
-          "Pepper sits on almost every table, yet most of us use just one kind without thinking. The plant family behind it is far bigger than the shaker suggests.",
-          "胡椒几乎摆在每张餐桌上，可大多数人只知用一种，从没多想。它背后的植物家族，比调味瓶里那点要大得多。"
-        ],
-        [
-          "Black, white, green and red peppercorns are the same fruit picked and treated at different stages. The heat comes from a compound called capsaicin, which can dull pain and may help metabolism.",
-          "黑、白、绿、红胡椒粒，其实是同一种果实在不同阶段采收处理的。那种辣味来自一种叫辣椒素的化合物，它能止痛，或许还能帮着新陈代谢。"
-        ],
-        [
-          "Beyond taste, pepper has a long history as medicine and trade. A pinch changed economies centuries ago, and today it still quietly shapes what we call flavour.",
-          "除了调味，胡椒作为药材和贸易品也有漫长历史。几百年前一撮胡椒能改变经济；今天它仍悄悄定义着我们说的「味道」。"
-        ]
+        ["'Tip' is a handy little word whose meanings go far beyond just money.", "tip 是个很顺手的小词，含义远不止'钱'这一种。"],
+        ["It can mean the pointed top of something (the tip of a pencil), a small helpful piece of advice (a travel tip), or the extra money you leave for service (a tip).", "它可以指某物的尖头（笔尖）、一条实用小建议（travel tip 旅行贴士），或是你为服务留下的额外钱（小费）。"],
+        ["As a verb, 'to tip' means to lean or tilt, and 'tip over' describes something falling because it lost its balance.", "作动词时，to tip 表示倾斜；tip over 则描述某物因失去平衡而翻倒。"]
       ],
       "tips": [
-        ["peppercorn", "胡椒粒"],
-        ["capsaicin", "辣椒素（带来辣味的物质）"],
-        ["metabolism", "新陈代谢"]
+        ["travel tip", "旅行小贴士"],
+        ["leave a tip", "给小费"],
+        ["tip over", "翻倒／倾覆"]
       ]
     }
   ]
