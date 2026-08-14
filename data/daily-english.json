@@ -1,100 +1,100 @@
 {
-  "date": "2026-08-13",
+  "date": "2026-08-14",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "One word, many meanings: 'filter'",
-      "zh": "一词多义：filter（过滤／滤镜）",
-      "words": 92,
-      "dur": 75,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260807",
+      "en": "Who does the housework?",
+      "zh": "家务到底谁来做？",
+      "words": 620,
+      "dur": 360,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260813",
       "body": [
-        ["The English word 'filter' works as both a noun and a verb, and its core idea is something that separates what you want from what you don't.", "filter 在英语里既是名词也是动词，核心意思都是'把想要的和不想要的分开'。"],
-        ["As a noun, a filter can be a physical device like a coffee filter or a camera lens filter, or a digital tool that hides unwanted messages on social media.", "作名词时，它可以是实体装置（如咖啡滤纸、相机滤镜），也可以是社交媒体上屏蔽垃圾信息的数字工具。"],
-        ["As a verb, 'to filter' means to remove or pass only certain things through, such as filtering water or filtering job applications by skill.", "作动词时，to filter 表示'过滤、筛选'，例如滤水，或按技能筛选求职简历。"]
+        ["In this programme, the hosts talk about who is responsible for housework at home and why dividing chores often leads to arguments between partners.", "在这期节目里，主持人聊了家里谁该做家务，以及为什么家务分配常常引发伴侣间的争吵。"],
+        ["They look at research showing that even when both people work, women still spend more time on unpaid housework, and discuss why old habits are so hard to break.", "他们看了一些研究：即便双方都上班，女性仍花更多时间在无酬家务上，并探讨为何旧习惯如此难改。"],
+        ["Listeners pick up useful words like 'chore', 'division of labour' and 'unpaid work', and hear a light-hearted quiz about which country's men do the most housework.", "听众能学到 chore（家务琐事）、division of labour（分工）、unpaid work（无酬劳动）等实用词，还能听到一道关于哪国男性做家务最多的趣味问答。"]
       ],
       "tips": [
-        ["filter out", "过滤掉／剔除"],
-        ["coffee filter", "咖啡滤纸"],
-        ["filter bubble", "信息茧房"]
+        ["household chores", "家务琐事"],
+        ["division of labour", "劳动分工"],
+        ["unpaid work", "无酬劳动"]
       ]
     },
     {
       "id": "d2",
-      "en": "One word, many meanings: 'pop'",
-      "zh": "一词多义：pop（流行／爆开／汽水）",
-      "words": 95,
-      "dur": 80,
-      "vocab": 9,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260731",
+      "en": "One word, many meanings: 'post'",
+      "zh": "一词多义：post（邮寄／职位／发布／战后）",
+      "words": 90,
+      "dur": 75,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260703",
       "body": [
-        ["'Pop' is a short, punchy word with several everyday meanings in English that learners often mix up.", "pop 是个短促有力的小词，在英语里有好几个日常含义，学习者常常搞混。"],
-        ["Most people know 'pop' as short for pop music, but it can also mean a sudden small explosion sound, like a balloon popping.", "多数人知道 pop 是流行音乐的简称，但它也能指'砰'的一声小爆响，比如气球炸开的声音。"],
-        ["In British English, 'pop' is casual slang for a fizzy soft drink, and as a verb it can mean to appear or go somewhere quickly, for example 'pop in'.", "在英式英语里，pop 还是汽水的口语说法；作动词表示'快速出现或顺路去一下'，比如 pop in（顺道拜访）。"]
+        ["The word 'post' can mean several different things, and this one-minute lesson shows its most common uses in daily English.", "post 这个词有好几种意思，这一分钟短课讲了它在日常英语里最常见的用法。"],
+        ["It can be a verb for sending letters, a noun for a job advertisement, or a verb meaning to publish something online.", "它可以作动词表示寄信，作名词表示招聘启事，也可以作动词表示在网上发布。"],
+        ["You also meet 'post' as a prefix meaning 'after', as in 'post-war', so one small word carries many meanings at once.", "你还会遇到 post 作前缀表示'之后'，比如 post-war（战后的），一个小词一次承载多种含义。"]
       ],
       "tips": [
-        ["pop music", "流行音乐"],
-        ["pop in", "顺便拜访／快速出现"],
-        ["pop the question", "求婚"]
+        ["job post", "招聘启事／职位贴"],
+        ["post online", "在网上发布"],
+        ["post-war", "战后的"]
       ]
     },
     {
       "id": "d3",
-      "en": "One word, many meanings: 'drop'",
-      "zh": "一词多义：drop（掉落／下降／放弃）",
+      "en": "One word, many meanings: 'service'",
+      "zh": "一词多义：service（服务／礼拜／保养）",
       "words": 92,
       "dur": 78,
-      "vocab": 9,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260724",
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260626",
       "body": [
-        ["The verb 'drop' is one of the most useful and flexible words in daily English.", "drop 这个动词是日常英语里最实用、最灵活的词之一。"],
-        ["It can mean to let something fall, but it also describes a decrease, like 'prices dropped' or 'the temperature dropped'.", "它可表示'让某物掉落'，也用来形容下降，比如 prices dropped（降价）、the temperature dropped（降温）。"],
-        ["Beyond its physical meaning, 'drop' appears in phrases such as 'drop a habit' (give something up) or 'drop someone a message' (send one quickly).", "除了字面义，drop 还出现在短语里，如 drop a habit（戒掉习惯）、drop someone a message（很快发条信息）。"]
+        ["'Service' is a common word whose meaning changes depending on the situation you are in.", "service 是个常见词，意思会随你所处的场景而改变。"],
+        ["It can mean help you pay for, such as customer service, a religious ceremony, or the act of repairing a machine like a car.", "它可以指你付费获得的帮助，比如客服；也可以指宗教仪式，或维修机器（如汽车）这件事。"],
+        ["The lesson gives clear examples so learners can use 'service' correctly in travel, work and everyday life.", "这一课给出清晰的例句，帮助学习者在旅行、工作和日常生活中正确使用 service。"]
       ],
       "tips": [
-        ["drop in prices", "价格下跌"],
-        ["drop a habit", "戒掉习惯"],
-        ["drop by", "顺路拜访"]
+        ["customer service", "客户服务"],
+        ["religious service", "宗教礼拜／仪式"],
+        ["service a car", "给汽车做保养／维修"]
       ]
     },
     {
       "id": "d4",
-      "en": "One word, many meanings: 'note'",
-      "zh": "一词多义：note（笔记／音符／纸币）",
-      "words": 88,
-      "dur": 72,
+      "en": "One word, many meanings: phrases with 'young'",
+      "zh": "一词多义：带 young 的短语",
+      "words": 95,
+      "dur": 80,
       "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260717",
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260619",
       "body": [
-        ["The small word 'note' carries at least four common meanings that English learners should know.", "note 这个小词至少有四种常见含义，英语学习者都该掌握。"],
-        ["As a verb it means both 'to notice' (note the difference) and 'to write down' (note the address); as a noun it can be a written reminder or a single musical sound.", "作动词时，它既表示'注意到'（note the difference），也表示'写下'（note the address）；作名词时可以是便条，也可以是一个音符。"],
-        ["Interestingly, in British English 'note' can also mean a banknote — a paper bill — so 'pay in notes' means paying with cash.", "有趣的是，在英式英语里 note 还能指纸币，所以 pay in notes 就是用现金付款。"]
+        ["This minute explores useful English phrases built around the word 'young'.", "这一分钟讲解了围绕 young 这个词构成的实用英语短语。"],
+        ["For example, 'young at heart' describes someone who feels youthful even in old age, and 'young offender' means a minor who breaks the law.", "比如 young at heart 形容年纪大了却心态年轻的人；young offender 指触犯法律的未成年人。"],
+        ["Learning these phrases helps you sound more natural when talking about people and age in English.", "学会这些短语，能让你在用英语聊人和年龄时表达得更地道。"]
       ],
       "tips": [
-        ["take note", "注意／留意"],
-        ["musical note", "音符"],
-        ["banknote", "纸币／钞票"]
+        ["young at heart", "心态年轻／老顽童"],
+        ["young offender", "少年犯／未成年犯"],
+        ["young and restless", "年轻气盛／躁动的年轻人"]
       ]
     },
     {
       "id": "d5",
-      "en": "One word, many meanings: 'tip'",
-      "zh": "一词多义：tip（小费／顶端／建议）",
-      "words": 90,
-      "dur": 75,
+      "en": "One word, many meanings: phrases with 'hit'",
+      "zh": "一词多义：带 hit 的短语",
+      "words": 95,
+      "dur": 80,
       "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260710",
+      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260629",
       "body": [
-        ["'Tip' is a handy little word whose meanings go far beyond just money.", "tip 是个很顺手的小词，含义远不止'钱'这一种。"],
-        ["It can mean the pointed top of something (the tip of a pencil), a small helpful piece of advice (a travel tip), or the extra money you leave for service (a tip).", "它可以指某物的尖头（笔尖）、一条实用小建议（travel tip 旅行贴士），或是你为服务留下的额外钱（小费）。"],
-        ["As a verb, 'to tip' means to lean or tilt, and 'tip over' describes something falling because it lost its balance.", "作动词时，to tip 表示倾斜；tip over 则描述某物因失去平衡而翻倒。"]
+        ["The small verb 'hit' appears in many everyday English phrases that have nothing to do with physically hitting something.", "小动词 hit 出现在很多日常英语短语里，意思和'打'毫无关系。"],
+        ["For instance, 'hit the road' means to leave, 'hit the sack' means to go to sleep, and 'hit it off' means to get along well with someone.", "比如 hit the road 是出发，hit the sack 是去睡觉，hit it off 是和某人很投缘。"],
+        ["The lesson explains each phrase with examples so you can use them confidently in conversation.", "这一课用例子讲清每个短语，让你在对话里能放心使用。"]
       ],
       "tips": [
-        ["travel tip", "旅行小贴士"],
-        ["leave a tip", "给小费"],
-        ["tip over", "翻倒／倾覆"]
+        ["hit the road", "出发／上路"],
+        ["hit the sack", "去睡觉"],
+        ["hit it off", "（与某人）一见如故／很投缘"]
       ]
     }
   ]
