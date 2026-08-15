@@ -4134,7 +4134,7 @@
       { ch: 5, room: '塔顶', act: '破沉睡咒', item: 'crown' },
     ];
     const SUB2ELEM = { math: 'fire', mult: 'water', pinyin: 'leaf', english: 'star' };
-    const SUBNAME2 = { math: '口算', mult: '乘法', pinyin: '识字', english: '英语' };
+    const SUBNAME2 = { math: '数学', mult: '乘法', pinyin: '语文', english: '英语' };
     const STORY = [
       '🌙 夜深了，女巫小屋一片漆黑。守护精灵「闪闪」缩在角落发抖：“小主人，我好冷……炉火灭了。”',
       '🍳 炉火亮起，小屋暖了。闪闪探出头：“谢谢你！书房的魔典在等你翻开~”',
@@ -4215,6 +4215,48 @@
       {h:'女',p:'nǚ',w:'女生'},{h:'生',p:'shēng',w:'学生'},{h:'师',p:'shī',w:'老师'},{h:'校',p:'xiào',w:'学校'},
       {h:'友',p:'yǒu',w:'朋友'},{h:'爱',p:'ài',w:'爱心'},{h:'国',p:'guó',w:'国家'},{h:'星',p:'xīng',w:'星星'},
       {h:'光',p:'guāng',w:'月光'},
+      {h:'爸',p:'bà',w:'爸爸'},{h:'妈',p:'mā',w:'妈妈'},{h:'哥',p:'gē',w:'哥哥'},{h:'弟',p:'dì',w:'弟弟'},
+      {h:'姐',p:'jiě',w:'姐姐'},{h:'妹',p:'mèi',w:'妹妹'},{h:'我',p:'wǒ',w:'我们'},{h:'你',p:'nǐ',w:'你们'},
+      {h:'他',p:'tā',w:'他们'},{h:'她',p:'tā',w:'她们'},{h:'们',p:'men',w:'我们'},{h:'站',p:'zhàn',w:'站立'},
+      {h:'立',p:'lì',w:'立正'},{h:'跑',p:'pǎo',w:'跑步'},{h:'看',p:'kàn',w:'看见'},{h:'拿',p:'ná',w:'拿住'},
+      {h:'放',p:'fàng',w:'放下'},{h:'找',p:'zhǎo',w:'找到'},{h:'洗',p:'xǐ',w:'洗手'},{h:'扫',p:'sǎo',w:'扫地'},
+      {h:'唱',p:'chàng',w:'唱歌'},{h:'跳',p:'tiào',w:'跳绳'},{h:'玩',p:'wán',w:'玩具'},{h:'蓝',p:'lán',w:'蓝色'},
+      {h:'黑',p:'hēi',w:'黑色'},{h:'多',p:'duō',w:'多少'},{h:'少',p:'shǎo',w:'多少'},{h:'左',p:'zuǒ',w:'左边'},
+      {h:'右',p:'yòu',w:'右边'},{h:'前',p:'qián',w:'前面'},{h:'后',p:'hòu',w:'后面'},{h:'里',p:'lǐ',w:'里面'},
+      {h:'外',p:'wài',w:'外面'},{h:'高',p:'gāo',w:'高兴'},{h:'矮',p:'ǎi',w:'矮小'},{h:'长',p:'cháng',w:'长短'},
+      {h:'短',p:'duǎn',w:'短处'},{h:'远',p:'yuǎn',w:'远近'},{h:'近',p:'jìn',w:'近处'},{h:'快',p:'kuài',w:'快乐'},
+      {h:'慢',p:'màn',w:'慢跑'},{h:'新',p:'xīn',w:'新年'},{h:'旧',p:'jiù',w:'旧书'},{h:'胖',p:'pàng',w:'胖乎乎'},
+      {h:'瘦',p:'shòu',w:'瘦小'},{h:'冷',p:'lěng',w:'冷水'},{h:'热',p:'rè',w:'热水'},{h:'明',p:'míng',w:'明白'},
+      {h:'暗',p:'àn',w:'暗处'},{h:'老',p:'lǎo',w:'老师'},{h:'对',p:'duì',w:'对的'},{h:'错',p:'cuò',w:'错误'},
+      {h:'真',p:'zhēn',w:'真的'},{h:'假',p:'jiǎ',w:'假的'},{h:'甜',p:'tián',w:'甜甜'},{h:'苦',p:'kǔ',w:'苦药'},
+      {h:'轻',p:'qīng',w:'轻轻'},{h:'重',p:'zhòng',w:'重要'},{h:'美',p:'měi',w:'美丽'},{h:'丑',p:'chǒu',w:'丑小鸭'},
+      {h:'动',p:'dòng',w:'动物'},{h:'静',p:'jìng',w:'安静'},{h:'软',p:'ruǎn',w:'软软'},{h:'硬',p:'yìng',w:'硬邦邦'},
+      {h:'干',p:'gān',w:'干净'},{h:'湿',p:'shī',w:'湿了'},{h:'咸',p:'xián',w:'咸菜'},{h:'淡',p:'dàn',w:'淡的'},
+      {h:'忙',p:'máng',w:'帮忙'},{h:'闲',p:'xián',w:'空闲'},{h:'禾',p:'hé',w:'禾苗'},{h:'瓜',p:'guā',w:'西瓜'},
+      {h:'果',p:'guǒ',w:'水果'},{h:'桃',p:'táo',w:'桃子'},{h:'梨',p:'lí',w:'梨子'},{h:'杏',p:'xìng',w:'杏子'},
+      {h:'李',p:'lǐ',w:'李子'},{h:'枣',p:'zǎo',w:'红枣'},{h:'茶',p:'chá',w:'喝茶'},{h:'糖',p:'táng',w:'糖果'},
+      {h:'盐',p:'yán',w:'盐巴'},{h:'油',p:'yóu',w:'加油'},{h:'酒',p:'jiǔ',w:'酒杯'},{h:'衣',p:'yī',w:'衣服'},
+      {h:'帽',p:'mào',w:'帽子'},{h:'鞋',p:'xié',w:'鞋子'},{h:'巾',p:'jīn',w:'毛巾'},{h:'桌',p:'zhuō',w:'桌子'},
+      {h:'椅',p:'yǐ',w:'椅子'},{h:'灯',p:'dēng',w:'电灯'},{h:'钟',p:'zhōng',w:'时钟'},{h:'镜',p:'jìng',w:'镜子'},
+      {h:'杯',p:'bēi',w:'杯子'},{h:'碗',p:'wǎn',w:'饭碗'},{h:'盘',p:'pán',w:'盘子'},{h:'锅',p:'guō',w:'锅铲'},
+      {h:'房',p:'fáng',w:'房子'},{h:'园',p:'yuán',w:'公园'},{h:'旗',p:'qí',w:'国旗'},{h:'城',p:'chéng',w:'城市'},
+      {h:'村',p:'cūn',w:'村庄'},{h:'路',p:'lù',w:'马路'},{h:'桥',p:'qiáo',w:'小桥'},{h:'河',p:'hé',w:'小河'},
+      {h:'海',p:'hǎi',w:'大海'},{h:'江',p:'jiāng',w:'长江'},{h:'湖',p:'hú',w:'湖水'},{h:'池',p:'chí',w:'池塘'},
+      {h:'井',p:'jǐng',w:'水井'},{h:'面',p:'miàn',w:'面条'},{h:'饭',p:'fàn',w:'吃饭'},{h:'菜',p:'cài',w:'青菜'},
+      {h:'肉',p:'ròu',w:'猪肉'},{h:'蛋',p:'dàn',w:'鸡蛋'},{h:'狗',p:'gǒu',w:'小狗'},{h:'猫',p:'māo',w:'小猫'},
+      {h:'鸡',p:'jī',w:'小鸡'},{h:'鸭',p:'yā',w:'鸭子'},{h:'鹅',p:'é',w:'天鹅'},{h:'猪',p:'zhū',w:'小猪'},
+      {h:'兔',p:'tù',w:'兔子'},{h:'虎',p:'hǔ',w:'老虎'},{h:'鹿',p:'lù',w:'小鹿'},{h:'象',p:'xiàng',w:'大象'},
+      {h:'鼠',p:'shǔ',w:'老鼠'},{h:'龙',p:'lóng',w:'龙王'},{h:'蛇',p:'shé',w:'小蛇'},{h:'舟',p:'zhōu',w:'小舟'},
+      {h:'船',p:'chuán',w:'小船'},{h:'窗',p:'chuāng',w:'窗户'},{h:'床',p:'chuáng',w:'床铺'},
+    ];
+    const STUDY_ANT = [
+      {a:'大',b:'小'},{a:'多',b:'少'},{a:'上',b:'下'},{a:'左',b:'右'},{a:'前',b:'后'},
+      {a:'里',b:'外'},{a:'高',b:'矮'},{a:'长',b:'短'},{a:'远',b:'近'},{a:'快',b:'慢'},
+      {a:'新',b:'旧'},{a:'胖',b:'瘦'},{a:'冷',b:'热'},{a:'黑',b:'白'},{a:'明',b:'暗'},
+      {a:'来',b:'去'},{a:'出',b:'入'},{a:'开',b:'关'},{a:'男',b:'女'},{a:'老',b:'少'},
+      {a:'早',b:'晚'},{a:'好',b:'坏'},{a:'对',b:'错'},{a:'真',b:'假'},{a:'甜',b:'苦'},
+      {a:'轻',b:'重'},{a:'美',b:'丑'},{a:'动',b:'静'},{a:'软',b:'硬'},{a:'干',b:'湿'},
+      {a:'咸',b:'淡'},{a:'忙',b:'闲'},{a:'哭',b:'笑'},
     ];
     const STUDY_ENG = [
       {w:'apple',zh:'苹果',e:'🍎'},{w:'banana',zh:'香蕉',e:'🍌'},{w:'cat',zh:'猫',e:'🐱'},{w:'dog',zh:'狗',e:'🐶'},
@@ -4273,19 +4315,50 @@
 
     function genQuestion(sub,done){
       if(sub==='math'){
-        const lvl=done<3?10:done<6?20:100;
-        const op=['+','-','×'][rnd(3)];
-        let a,b,ans;
-        if(op==='+'){a=rnd(lvl)+1;b=rnd(lvl)+1;ans=a+b;}
-        else if(op==='-'){a=rnd(lvl)+1;b=rnd(lvl)+1;if(b>a){const t=a;a=b;b=t;}ans=a-b;}
-        else{a=rnd(9)+1;b=rnd(9)+1;ans=a*b;}
-        return {type:'calc',text:a+' '+op+' '+b+' = ?',ans:ans,opts:makeOpts(ans,lvl)};
+        const kind=pick(['calc','compare','blank','word']);
+        if(kind==='calc'){
+          const lvl=done<3?10:done<6?20:100;
+          const op=['+','-','×'][rnd(3)];
+          let a,b,ans;
+          if(op==='+'){a=rnd(lvl)+1;b=rnd(lvl)+1;ans=a+b;}
+          else if(op==='-'){a=rnd(lvl)+1;b=rnd(lvl)+1;if(b>a){const t=a;a=b;b=t;}ans=a-b;}
+          else{a=rnd(9)+1;b=rnd(9)+1;ans=a*b;}
+          return {type:'calc',text:a+' '+op+' '+b+' = ?',ans:ans,opts:makeOpts(ans,lvl)};
+        }
+        if(kind==='compare'){
+          const a=rnd(99)+1,b=rnd(99)+1;
+          const ans=a>b?'>':(a<b?'<':'=');
+          return {type:'compare',text:a+' ○ '+b,ans:ans,opts:['>','<','=']};
+        }
+        if(kind==='blank'){
+          const lvl=done<3?10:done<6?20:50;
+          const a=rnd(lvl)+1,b=rnd(lvl)+1,ans=a+b,blank=rnd(3);
+          let text,qans;
+          if(blank===0){text='? + '+b+' = '+(a+b);qans=a;}
+          else if(blank===1){text=a+' + ? = '+(a+b);qans=b;}
+          else{text=a+' + '+b+' = ?';qans=ans;}
+          return {type:'calc',text:text,ans:qans,opts:makeOpts(qans,lvl)};
+        }
+        const a=rnd(9)+1,b=rnd(9)+1,ans=a+b;
+        const texts=['小明有'+a+'个苹果，妈妈又给了他'+b+'个，一共有几个？','树上有'+a+'只小鸟，又飞来'+b+'只，现在有几只？',a+'个小朋友在玩游戏，又来了'+b+'个，一共几个？','书包里原来有'+a+'本书，放进'+b+'本，现在有几本？'];
+        return {type:'calc',text:pick(texts),ans:ans,opts:makeOpts(ans,Math.max(10,ans))};
       }
       if(sub==='mult'){
         const a=rnd(9)+1,b=rnd(9)+1,ans=a*b;
         return {type:'calc',text:a+' × '+b+' = ?',ans:ans,opts:makeOpts(ans,Math.max(10,ans))};
       }
       if(sub==='pinyin'){
+        const kind=pick(['toPinyin','toChar','antonym']);
+        if(kind==='toChar'){
+          const it=pick(STUDY_HANZI);
+          const opts=shuffle([it.h].concat(pickN(STUDY_HANZI.filter(x=>x.h!==it.h),3).map(x=>x.h)));
+          return {type:'toChar',text:'拼音「'+it.p+'」是哪个汉字？',ans:it.h,opts:opts};
+        }
+        if(kind==='antonym'){
+          const it=pick(STUDY_ANT);
+          const opts=shuffle([it.b].concat(pickN(STUDY_ANT.filter(x=>x.b!==it.b),3).map(x=>x.b)));
+          return {type:'antonym',text:'「'+it.a+'」的反义词是哪个？',ans:it.b,opts:opts};
+        }
         const it=pick(STUDY_HANZI);
         const opts=shuffle([it.p].concat(pickN(STUDY_HANZI.filter(x=>x.p!==it.p),3).map(x=>x.p)));
         return {type:'pinyin',h:it.h,w:it.w,ans:it.p,opts:opts};
@@ -4298,7 +4371,7 @@
     function renderStudyView(){
       const d = todayStr();
       const sub=kidsStudy.subject;
-      const SUBNAME={math:'口算',mult:'乘法',pinyin:'识字',english:'英语'};
+      const SUBNAME={math:'数学',mult:'乘法',pinyin:'语文',english:'英语'};
       if(!kidsStudy.q) kidsStudy.q=genQuestion(sub,kidsStudy.done);
       const q=kidsStudy.q;
       view.innerHTML = kidsStyle +
@@ -4324,6 +4397,12 @@
       } else if(q.type==='pinyin'){
         body='<div style="text-align:center;padding:10px 0"><div style="font-size:48px;line-height:1;color:#6b4e00">'+q.h+'</div><div style="font-size:12px;color:#999;margin:4px 0 12px">「'+q.w+'」的拼音是？</div>'+
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:16px;padding:12px">'+o+'</button>').join('')+'</div></div>';
+      } else if(q.type==='toChar'){
+        body='<div style="text-align:center;padding:10px 0"><div style="font-size:40px;line-height:1;color:#6b4e00;letter-spacing:2px">'+q.text.replace(/[「」？]/g,'')+'</div><div style="font-size:12px;color:#999;margin:4px 0 12px">上面的拼音，对应哪个汉字？</div>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:30px;padding:14px">'+o+'</button>').join('')+'</div></div>';
+      } else if(q.type==='antonym'){
+        body='<div style="text-align:center;padding:10px 0"><div style="font-size:32px;line-height:1;color:#6b4e00">'+q.text.replace(/[「」？]/g,'')+'</div><div style="font-size:12px;color:#999;margin:4px 0 12px">选出它的反义词</div>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:20px;padding:14px">'+o+'</button>').join('')+'</div></div>';
       } else {
         body='<div style="text-align:center;padding:10px 0"><div style="font-size:30px;color:#6b4e00;margin-bottom:14px">'+q.text+'</div>'+
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+q.opts.map(o=>'<button class="st-opt btn" data-o="'+o+'" style="font-size:20px;padding:14px">'+o+'</button>').join('')+'</div></div>';
@@ -4348,9 +4427,9 @@
             kidsStudy.combo++;
             burst(e.clientX,e.clientY);
             if(kidsStudy.combo % 5 === 0){
-              await awardStars(5,'学习·'+SUBNAME[sub],d);
-              kidsStudy.stars += 5;
-              toast('🔥 连对5题！奖励 +5★');
+              await awardStars(1,'学习·'+SUBNAME[sub],d);
+              kidsStudy.stars += 1;
+              toast('🔥 连对5题！奖励 +1★');
             } else {
               toast('答对啦（🔥连对 '+kidsStudy.combo%5+'/5，连满得星）');
             }
@@ -4480,7 +4559,7 @@
       if (!doneAll) {
         const left = Math.max(0, DAILY_LIMIT - (w.dailyDate === d ? (w.dailyGot || 0) : 0));
         lc.innerHTML = '<div class="card-title">🪄 魔法课堂</div>' +
-          '<div style="font-size:13px;color:#999;margin-bottom:8px">做对 1 题得 1 个魔法元素：口算🔥 乘法💧 识字🍃 英语✨<br>今日剩余魔法能量：' + left + '/' + DAILY_LIMIT + '</div>' +
+          '<div style="font-size:13px;color:#999;margin-bottom:8px">做对 1 题得 1 个魔法元素：数学🔥 乘法💧 语文🍃 英语✨<br>今日剩余魔法能量：' + left + '/' + DAILY_LIMIT + '</div>' +
           '<button id="wStudy" class="btn block" style="background:#9b6dff;color:#fff;border-color:#9b6dff">去做魔法作业 →</button>';
       } else {
         lc.innerHTML = '<div class="card-title">🪄 守护任务</div>' +
@@ -4642,7 +4721,7 @@
       // 学习闯关入口
       const sc = el('<div class="card" style="margin-bottom:12px"></div>');
       sc.innerHTML = '<div class="card-title">📚 学习闯关</div>' +
-        '<div style="font-size:13px;color:#999;margin-bottom:8px">口算 · 乘法 · 识字 · 英语，答对就能赚星星 ⭐</div>' +
+        '<div style="font-size:13px;color:#999;margin-bottom:8px">数学 · 乘法 · 语文 · 英语，答对就能赚星星 ⭐</div>' +
         '<button id="stEnter" class="btn green block">开始闯关 →</button>';
       view.append(sc);
 
