@@ -4013,6 +4013,16 @@
         p.lastCare = Date.now();
         await DB.put('kids', p);
       }
+      // 疏忽回退：今天没照顾，等级(care)每天掉一点，一直不照顾会慢慢退回 🥚 蛋宝宝
+      if (typeof p.care !== 'number') p.care = 0;
+      if (typeof p.lastDecayDay !== 'string') p.lastDecayDay = '';
+      const dayOf = (ts) => { const d = new Date(ts); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+      const caredToday = !!(p.lastCare && dayOf(p.lastCare) === dayOf(Date.now()));
+      if (p.lastDecayDay !== dayOf(Date.now())) {
+        if (!caredToday && p.care > 0) p.care = Math.max(0, p.care - 8);
+        p.lastDecayDay = dayOf(Date.now());
+        await DB.put('kids', p);
+      }
       if (!p.friends) p.friends = {};
       if (typeof p.friendGot !== 'number') p.friendGot = 0;
       if (typeof p.friendDate !== 'string') p.friendDate = '';
@@ -4825,7 +4835,7 @@
         '</div>' +
         petBar('🍎 饱食', pet.feed) + petBar('😊 心情', pet.mood) + petBar('🛁 清洁', pet.clean) + petBar('⚡ 精力', pet.energy) +
         (sick ?
-          '<div style="margin-top:10px;padding:8px 10px;background:#fdeaea;border-radius:10px;font-size:12px;color:#c0392b">🤒 宠物生病了！把四项都照顾到 60 以上就能好，或花 3★ 立刻治好。</div>' +
+          '<div style="margin-top:10px;padding:8px 10px;background:#fdeaea;border-radius:10px;font-size:12px;color:#c0392b">🤒 宠物生病了！把四项都照顾到 60 以上就能好，或花 3★ 立刻治好。<br>⚠️ 太久不照顾，等级会每天下降，一直不管会退回 🥚 蛋宝宝。</div>' +
           '<button id="petCure" class="btn" style="width:100%;margin-top:8px;background:#e2574c;color:#fff;border-color:#e2574c">💊 治病 (3★)</button>'
         : '') +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">' +
