@@ -1,100 +1,100 @@
 {
-  "date": "2026-08-14",
+  "date": "2026-08-15",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Who does the housework?",
-      "zh": "家务到底谁来做？",
-      "words": 620,
-      "dur": 360,
+      "en": "Talking about being grumpy",
+      "zh": "聊聊「起床气」和坏心情",
+      "words": 210,
+      "dur": 180,
       "vocab": 6,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260813",
+      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
       "body": [
-        ["In this programme, the hosts talk about who is responsible for housework at home and why dividing chores often leads to arguments between partners.", "在这期节目里，主持人聊了家里谁该做家务，以及为什么家务分配常常引发伴侣间的争吵。"],
-        ["They look at research showing that even when both people work, women still spend more time on unpaid housework, and discuss why old habits are so hard to break.", "他们看了一些研究：即便双方都上班，女性仍花更多时间在无酬家务上，并探讨为何旧习惯如此难改。"],
-        ["Listeners pick up useful words like 'chore', 'division of labour' and 'unpaid work', and hear a light-hearted quiz about which country's men do the most housework.", "听众能学到 chore（家务琐事）、division of labour（分工）、unpaid work（无酬劳动）等实用词，还能听到一道关于哪国男性做家务最多的趣味问答。"]
+        ["In this easy-level conversation, two presenters talk about grumpy days - those mornings when everything feels annoying before you even leave the house.", "在这期简易对话里，两位主持人聊了「脾气差的日子」——门都还没出，什么事都让你烦。"],
+        ["They explain that being grumpy is usually short and small. You are not angry, just tired, hungry or woken up too early, so you answer people in short sentences.", "他们说「grumpy」通常是短暂的小情绪：你不是真生气，只是累了、饿了或者被叫早了，所以说话又短又没耐心。"],
+        ["Their advice is simple: name the feeling, take a break, eat something, and tell the people around you that it is not their fault.", "他们给的办法很简单：先说出这个情绪，歇一会儿，吃点东西，再告诉身边人「不是你的问题」。"]
       ],
       "tips": [
-        ["household chores", "家务琐事"],
-        ["division of labour", "劳动分工"],
-        ["unpaid work", "无酬劳动"]
+        ["grumpy", "脾气差的、爱抱怨的"],
+        ["in a bad mood", "心情不好"],
+        ["snap at someone", "对某人没耐心地吼一句"]
       ]
     },
     {
       "id": "d2",
-      "en": "One word, many meanings: 'post'",
-      "zh": "一词多义：post（邮寄／职位／发布／战后）",
-      "words": 90,
-      "dur": 75,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260703",
+      "en": "Talking about spicy food",
+      "zh": "聊聊辣到冒汗的食物",
+      "words": 205,
+      "dur": 180,
+      "vocab": 6,
+      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
       "body": [
-        ["The word 'post' can mean several different things, and this one-minute lesson shows its most common uses in daily English.", "post 这个词有好几种意思，这一分钟短课讲了它在日常英语里最常见的用法。"],
-        ["It can be a verb for sending letters, a noun for a job advertisement, or a verb meaning to publish something online.", "它可以作动词表示寄信，作名词表示招聘启事，也可以作动词表示在网上发布。"],
-        ["You also meet 'post' as a prefix meaning 'after', as in 'post-war', so one small word carries many meanings at once.", "你还会遇到 post 作前缀表示'之后'，比如 post-war（战后的），一个小词一次承载多种含义。"]
+        ["The presenters talk about food that burns your mouth, and why some people love that feeling while others avoid it completely.", "主持人聊到那些辣得嘴巴发烫的菜，以及为什么有人爱这种感觉、有人躲得远远的。"],
+        ["One of them says spicy food makes you sweat and drink a lot of water, but it also makes simple dishes much more interesting.", "其中一位说，辣的东西会让你出汗、猛喝水，但也能把很普通的菜变得有意思。"],
+        ["They also share a useful tip: milk or yoghurt helps more than water when your mouth is on fire.", "他们还给了个实用小知识：嘴里像着火的时候，牛奶或酸奶比白水管用。"]
       ],
       "tips": [
-        ["job post", "招聘启事／职位贴"],
-        ["post online", "在网上发布"],
-        ["post-war", "战后的"]
+        ["spicy", "辣的"],
+        ["my mouth is on fire", "我的嘴像着火了（形容太辣）"],
+        ["I can't take the heat", "我受不了这个辣度"]
       ]
     },
     {
       "id": "d3",
-      "en": "One word, many meanings: 'service'",
-      "zh": "一词多义：service（服务／礼拜／保养）",
-      "words": 92,
-      "dur": 78,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260626",
+      "en": "Talking about cities",
+      "zh": "聊聊住在大城市",
+      "words": 215,
+      "dur": 190,
+      "vocab": 6,
+      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
       "body": [
-        ["'Service' is a common word whose meaning changes depending on the situation you are in.", "service 是个常见词，意思会随你所处的场景而改变。"],
-        ["It can mean help you pay for, such as customer service, a religious ceremony, or the act of repairing a machine like a car.", "它可以指你付费获得的帮助，比如客服；也可以指宗教仪式，或维修机器（如汽车）这件事。"],
-        ["The lesson gives clear examples so learners can use 'service' correctly in travel, work and everyday life.", "这一课给出清晰的例句，帮助学习者在旅行、工作和日常生活中正确使用 service。"]
+        ["This conversation looks at what it is really like to live in a big city, with both the good side and the bad side.", "这期对话聊的是住在大城市到底什么感觉，好的一面和难受的一面都说了。"],
+        ["The good side: buses and trains everywhere, jobs, restaurants, and something to do at any hour. The bad side: noise, crowds and high rent.", "好处是：公交地铁到处都有，工作多、餐厅多，任何时间都有事可做。坏处是：吵、人多、房租贵。"],
+        ["They agree that many people move to a city for work when they are young, and later want somewhere quieter and cheaper.", "他们都同意：很多人年轻时为了工作去大城市，后来又想找个更安静、更便宜的地方。"]
       ],
       "tips": [
-        ["customer service", "客户服务"],
-        ["religious service", "宗教礼拜／仪式"],
-        ["service a car", "给汽车做保养／维修"]
+        ["public transport", "公共交通"],
+        ["the cost of living", "生活成本"],
+        ["hustle and bustle", "熙熙攘攘、喧闹忙碌"]
       ]
     },
     {
       "id": "d4",
-      "en": "One word, many meanings: phrases with 'young'",
-      "zh": "一词多义：带 young 的短语",
-      "words": 95,
-      "dur": 80,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260619",
+      "en": "Your life story",
+      "zh": "「你的人生故事」——没人问就别全说",
+      "words": 160,
+      "dur": 120,
+      "vocab": 5,
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["This minute explores useful English phrases built around the word 'young'.", "这一分钟讲解了围绕 young 这个词构成的实用英语短语。"],
-        ["For example, 'young at heart' describes someone who feels youthful even in old age, and 'young offender' means a minor who breaks the law.", "比如 young at heart 形容年纪大了却心态年轻的人；young offender 指触犯法律的未成年人。"],
-        ["Learning these phrases helps you sound more natural when talking about people and age in English.", "学会这些短语，能让你在用英语聊人和年龄时表达得更地道。"]
+        ["This short programme teaches the phrase \"I didn't ask for your life story\", used when someone answers a simple question with far too much detail.", "这期短节目教的是「I didn't ask for your life story」，用在别人回答一个小问题却讲了一大堆的时候。"],
+        ["It is usually said in a joking way between friends. Said to a stranger or a boss, it sounds rude.", "这句话通常是朋友之间开玩笑说的；对陌生人或上司说，就显得很不客气了。"],
+        ["A softer version is \"long story short\", which you can use yourself before giving a short answer.", "更客气的说法是自己先讲「long story short」（长话短说），然后给个简短回答。"]
       ],
       "tips": [
-        ["young at heart", "心态年轻／老顽童"],
-        ["young offender", "少年犯／未成年犯"],
-        ["young and restless", "年轻气盛／躁动的年轻人"]
+        ["life story", "长篇大论的经历、来龙去脉"],
+        ["long story short", "长话短说"],
+        ["get to the point", "说重点"]
       ]
     },
     {
       "id": "d5",
-      "en": "One word, many meanings: phrases with 'hit'",
-      "zh": "一词多义：带 hit 的短语",
-      "words": 95,
-      "dur": 80,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/chinese/features/english-in-a-minute/ep-260629",
+      "en": "Keep yourself to yourself",
+      "zh": "「不太跟人来往」怎么说",
+      "words": 165,
+      "dur": 120,
+      "vocab": 5,
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["The small verb 'hit' appears in many everyday English phrases that have nothing to do with physically hitting something.", "小动词 hit 出现在很多日常英语短语里，意思和'打'毫无关系。"],
-        ["For instance, 'hit the road' means to leave, 'hit the sack' means to go to sleep, and 'hit it off' means to get along well with someone.", "比如 hit the road 是出发，hit the sack 是去睡觉，hit it off 是和某人很投缘。"],
-        ["The lesson explains each phrase with examples so you can use them confidently in conversation.", "这一课用例子讲清每个短语，让你在对话里能放心使用。"]
+        ["The phrase \"keep yourself to yourself\" describes someone who stays private and does not mix much with neighbours or workmates.", "「keep yourself to yourself」用来说一个人比较私密、不太跟邻居或同事打交道。"],
+        ["It is not an insult. Sometimes it is a choice: you are busy, you are tired, or you simply enjoy your own company.", "这不是骂人的话。有时候这就是一种选择：你忙、你累，或者你就是喜欢独处。"],
+        ["But the programme reminds us that too much of it can feel lonely, so a short chat with a neighbour still helps.", "但节目也提醒：过头了会孤单，所以跟邻居聊两句还是有好处的。"]
       ],
       "tips": [
-        ["hit the road", "出发／上路"],
-        ["hit the sack", "去睡觉"],
-        ["hit it off", "（与某人）一见如故／很投缘"]
+        ["keep yourself to yourself", "不爱与人来往、比较私密"],
+        ["enjoy your own company", "享受独处"],
+        ["make small talk", "闲聊几句"]
       ]
     }
   ]
