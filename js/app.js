@@ -4379,6 +4379,7 @@
     }
 
     function renderStudyView(){
+      if (kidsStudy && kidsStudy.mode === 'review') { renderReviewView(); return; }
       const d = todayStr();
       const sub=kidsStudy.subject;
       const SUBNAME={math:'数学',mult:'乘法',pinyin:'语文',english:'英语'};
@@ -4391,7 +4392,8 @@
         '</div>' +
         '<div style="display:flex;gap:6px;margin-bottom:12px">' +
           ['math','mult','pinyin','english'].map(s=>'<button class="st-sub btn sm'+(s===sub?' green':' ghost')+'" data-sub="'+s+'" style="flex:1;padding:8px">'+(s===sub?'● ':'')+SUBNAME[s]+'</button>').join('') +
-        '</div>';
+        '</div>' +
+        '<button id="stReview" class="btn ghost sm" style="width:100%;margin-top:6px;border:1px dashed #e2574c;color:#e2574c;background:#fff5f5">📕 复习错题</button>';
       let body='';
       if(q.type==='english'){
         const ev=loadVoices();
@@ -4421,6 +4423,7 @@
         '<div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px"><span>已做 '+kidsStudy.done+' 题 · 答对 '+kidsStudy.got+'</span><span>🔥连对 '+kidsStudy.combo+'/5 · ⭐'+kidsStudy.stars+'</span></div>' + body + '</div>';
 
       $('#stBack').onclick=()=>{kidsStudy=null;paint();};
+      $('#stReview').onclick=()=>{kidsStudy={mode:'review'};paint();};
       view.querySelectorAll('.st-sub').forEach(b=>b.onclick=()=>{kidsStudy={subject:b.dataset.sub,done:0,got:0,stars:0,combo:0,q:null,answered:false};paint();});
       if(q.type==='english'){
         $('#stSpeak').onclick=()=>speak(q.speak,'en-US'); setTimeout(()=>speak(q.speak,'en-US'),60);
@@ -4453,6 +4456,28 @@
           }
           setTimeout(()=>{kidsStudy.q=null;kidsStudy.done++;kidsStudy.answered=false;paint();},850);
         };
+      });
+    }
+
+    async function renderReviewView(){
+      const d = todayStr();
+      view.innerHTML = kidsStyle +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+          '<button id="rvBack" class="btn ghost sm" style="border:1px dashed #ccc;color:#888;background:#fafafa">← 回主页</button>' +
+          '<div style="font-size:15px;font-weight:600;color:#6b4e00">📕 复习错题</div>' +
+        '</div>';
+      const all = await getAll();
+      const ms = all.filter(r => r.type === 'mistake').sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+      if (!ms.length) {
+        view.innerHTML += '<div class="card" style="text-align:center;color:#999;padding:30px;font-size:14px">🎉 错题本空空的，闯关全对啦！</div>';
+      } else {
+        view.innerHTML += '<div class="card"><div style="font-size:13px;color:#888;margin-bottom:10px">共有 ' + ms.length + ' 道错题，复习后点「✓ 已掌握」移除</div>' +
+          ms.map(m => '<div style="display:flex;align-items:center;gap:8px;padding:10px 2px;border-bottom:1px solid #f0f0f0"><div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">'+esc(m.question)+'</div><div style="font-size:12px;color:#2e9e5b;margin-top:2px">正确答案：'+esc(m.answer)+'</div></div><button class="rv-del btn sm green" data-id="'+m.id+'" style="white-space:nowrap;padding:5px 12px">✓ 已掌握</button></div>').join('') +
+          '</div>';
+      }
+      $('#rvBack').onclick = () => { kidsStudy = null; paint(); };
+      view.querySelectorAll('.rv-del').forEach(b => b.onclick = async () => {
+        await DB.del('kids', b.dataset.id); toast('已移除'); paint();
       });
     }
 
@@ -4691,10 +4716,11 @@
       const kidsStyle = `<style>.card{border-radius:18px!important;box-shadow:0 4px 16px rgba(240,168,48,.12)!important;border:1px solid #ffe3bf!important;background:#fffdf8!important}.card-title{font-size:16px!important;font-weight:600!important;color:#6b4e00!important}.btn.green{background:#5cc06a!important;border-color:#5cc06a!important;color:#fff!important}.kids-prog{height:12px;background:#ffe9c7;border-radius:8px;overflow:hidden}.kids-prog>div{height:100%;background:#f0a830;border-radius:8px;transition:width .4s}.kids-tabs{display:flex;gap:8px;margin-bottom:12px}.kids-tabs button{flex:1;padding:10px;border:1px solid #ffe0b0;border-radius:14px;background:#fff8ee;color:#a9781f;font-size:14px;font-weight:600}.kids-tabs button.on{background:#f0a830;border-color:#f0a830;color:#fff;box-shadow:0 3px 10px rgba(240,168,48,.3)}.kids-chart{display:flex;align-items:flex-end;gap:6px;margin-top:6px;padding:0 2px}.kids-chart .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}.kids-chart .bc .bar{width:64%;background:#f0a830;border-radius:4px 4px 0 0;min-height:3px}</style>`;
       if (kidsStudy) { renderStudyView(); return; }
       if (kidsWitch) { renderWitch(); return; }
+      const pd = checks.filter(c => c.status === 'pending').length;
       view.innerHTML = kidsStyle +
         '<div class="kids-tabs">' +
           '<button data-page="home" class="' + (kidsPage === 'home' ? 'on' : '') + '">👧 宝贝主页</button>' +
-          '<button data-page="mom" class="' + (kidsPage === 'mom' ? 'on' : '') + '">👩 妈妈后台</button>' +
+          '<button data-page="mom" class="' + (kidsPage === 'mom' ? 'on' : '') + '">👩 妈妈后台' + (pd ? ' ⏳' + pd : '') + '</button>' +
         '</div>';
       view.querySelectorAll('.kids-tabs button').forEach(b => {
         b.onclick = () => { kidsPage = b.dataset.page; paint(); };
@@ -4718,7 +4744,7 @@
         '</div>' +
         (tasks.some(t => t.cat === 'screen') || si.allow > 0 ?
         '<div style="margin-top:10px;padding:8px 10px;background:#fff4e0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">' +
-          '<div style="font-size:13px;color:#8a5a13">📺 今日屏幕剩余 <b style="font-size:15px">' + si.left + '</b> 分钟</div>' +
+          '<div style="font-size:13px;color:#8a5a13">📺 今日屏幕剩余 <b style="font-size:15px">' + si.left + '</b> 分钟 · 已用 <b>' + si.used + '</b> 分</div>' +
           '<div style="display:flex;gap:6px">' +
             '<button class="scr-use btn ghost sm" data-min="10" style="padding:4px 8px">用10</button>' +
             '<button class="scr-use btn ghost sm" data-min="20" style="padding:4px 8px">用20</button>' +
@@ -4798,11 +4824,11 @@
         const row = el('<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid #f0f0f0"></div>');
         row.innerHTML = '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(w.name) +
           ' <span style="font-size:12px;color:#f0a830;font-weight:500">' + w.cost + '★</span>' +
-          (w.status === 'done' ? ' <span style="font-size:11px;color:#2e9e5b">已兑换</span>' : '') + '</div>' +
+          (w.status === 'done' ? ' <span style="font-size:11px;color:#2e9e5b">已兑换' + (w.redeemedAt ? (' · ' + w.redeemedAt) : '') + '</span>' : '') + '</div>' +
           (w.note ? '<div style="font-size:12px;color:#999">' + esc(w.note) + '</div>' : '') + '</div>';
         if (w.status !== 'done') {
           const b = el('<button class="btn sm" style="padding:5px 12px;white-space:nowrap">' + (ok ? '兑换' : '星星不够') + '</button>');
-          if (ok) { b.className = 'btn green sm'; b.onclick = async () => { await awardStars(-w.cost, '兑换·' + w.name, d); w.status = 'done'; w.ts = Date.now(); await DB.put('kids', w); toast('兑换成功 🎉'); paint(); }; }
+          if (ok) { b.className = 'btn green sm'; b.onclick = async () => { await awardStars(-w.cost, '兑换·' + w.name, d); w.status = 'done'; w.redeemedAt = d; w.ts = Date.now(); await DB.put('kids', w); toast('兑换成功 🎉'); paint(); }; }
           else { b.className = 'btn ghost sm'; b.disabled = true; }
           row.append(b);
         }
@@ -4847,6 +4873,7 @@
         (stage >= 3 ?
           '<div style="margin-top:10px"><button id="petFriends" class="btn block" style="background:#ff8fab;color:#fff;border-color:#ff8fab">👫 朋友小窝 →</button></div>'
         : '<div style="margin-top:10px;font-size:12px;color:#bbb;text-align:center">养到 🦚 凤凰后，解锁「朋友小窝」</div>') +
+        (function(){ const fr=(pet.friends||{}); const mv=PET_FRIENDS.filter(f=>(fr[f.id]||{}).moved); return mv.length?'<div style="margin-top:10px;padding:8px 10px;background:#fff7fa;border:1px solid #ffe0ea;border-radius:10px;font-size:13px;color:#a06">🏡 已同住的小伙伴：'+mv.map(f=>f.e+' '+f.n).join('  ')+'</div>':''; })() +
         '';
       view.append(pc);
         }
@@ -4928,7 +4955,7 @@
           const row = el('<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid #f0f0f0"></div>');
           row.innerHTML = '<div style="flex:1;min-width:0"><div style="font-size:14px;color:#333">' + esc(w.name) +
             ' <span style="font-size:12px;color:#f0a830;font-weight:500">' + w.cost + '★</span>' +
-            (w.status === 'done' ? ' <span style="font-size:11px;color:#2e9e5b">已兑换</span>' : '') + '</div>' +
+            (w.status === 'done' ? ' <span style="font-size:11px;color:#2e9e5b">已兑换' + (w.redeemedAt ? (' · ' + w.redeemedAt) : '') + '</span>' : '') + '</div>' +
             (w.note ? '<div style="font-size:12px;color:#999">' + esc(w.note) + '</div>' : '') + '</div>' +
             '<button class="w-del btn ghost sm" style="padding:4px 10px">删除</button>';
           row.querySelector('.w-del').onclick = async () => { await DB.del('kids', w.id); toast('已删除'); paint(); };
@@ -4970,6 +4997,7 @@
           const m = parseInt(b.dataset.min, 10) || 0;
           const cur = await screenInfo();
           if (m > cur.left) { toast('剩余不够啦'); return; }
+          if (!confirm('确定用掉 ' + m + ' 分钟屏幕时间吗？')) return;
           const rec = await DB.get('meta', 'screenUsed_' + d);
           const used = (rec && rec.value) || 0;
           await DB.put('meta', { id: 'screenUsed_' + d, value: used + m });
