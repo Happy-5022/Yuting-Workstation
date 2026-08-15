@@ -805,7 +805,7 @@
       ];
       let qcBg = { type: 'color', idx: 0 };
       function loadImg(src) {
-        return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+        return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('图片加载失败: ' + src)); im.src = src; });
       }
       function wrapText(ctx, text, maxW) {
         const lines = []; let line = '';
@@ -822,13 +822,22 @@
         const ctx = canvas.getContext('2d');
         let th, textColor, subColor;
         if (bg.type === 'image') {
-          const img = await loadImg(QUOTE_BG_IMAGES[bg.idx].src);
-          const r = Math.max(W / img.width, H / img.height);
-          const dw = img.width * r, dh = img.height * r;
-          ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
-          ctx.fillStyle = 'rgba(12,18,30,.42)'; ctx.fillRect(0, 0, W, H);
-          textColor = '#ffffff'; subColor = 'rgba(255,255,255,.88)';
-          th = { sub: subColor, text: textColor };
+          try {
+            const img = await loadImg(QUOTE_BG_IMAGES[bg.idx].src);
+            const r = Math.max(W / img.width, H / img.height);
+            const dw = img.width * r, dh = img.height * r;
+            ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+            ctx.fillStyle = 'rgba(12,18,30,.42)'; ctx.fillRect(0, 0, W, H);
+            textColor = '#ffffff'; subColor = 'rgba(255,255,255,.88)';
+            th = { sub: subColor, text: textColor };
+          } catch (e) {
+            toast('背景图加载失败，已自动换成纯色背景 🎨');
+            bg = { type: 'color', idx: 0 };
+            th = QUOTE_THEMES[bg.idx];
+            const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, th.g[0]); g.addColorStop(1, th.g[1]);
+            ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+            textColor = th.text; subColor = th.sub;
+          }
         } else {
           th = QUOTE_THEMES[bg.idx];
           const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, th.g[0]); g.addColorStop(1, th.g[1]);
@@ -868,7 +877,10 @@
         const canvas = ov.querySelector('#qcCanvas');
         const tb = ov.querySelector('#qcThemes');
         const bb = ov.querySelector('#qcBgs');
-        async function redraw() { await drawQuoteCard(canvas, f.text, f.author || '', qcBg); }
+        async function redraw() {
+          try { await drawQuoteCard(canvas, f.text, f.author || '', qcBg); }
+          catch (err) { console.error('drawQuoteCard', err); toast('生成卡片出错了，换个背景试试 🎨'); }
+        }
         function clearOn() { [...tb.children].forEach(c => c.classList.remove('on')); [...bb.children].forEach(c => c.classList.remove('on')); }
         QUOTE_THEMES.forEach((t, i) => {
           const b = el('<button class="qc-theme' + (qcBg.type === 'color' && qcBg.idx === i ? ' on' : '') + '">' + t.name + '</button>');
@@ -5123,7 +5135,17 @@
   function init() {
     window.addEventListener('unhandledrejection', function(e) {
       console.error('[UNHANDLED]', e.reason);
-      alert('⚠️ 未捕获错误：' + String(e.reason && (e.reason.stack || e.reason.message || e.reason)));
+      let msg;
+      if (e.reason instanceof Event) {
+        msg = '图片或资源加载失败，请检查网络或刷新页面';
+      } else if (e.reason && e.reason.stack) {
+        msg = e.reason.stack;
+      } else if (e.reason && e.reason.message) {
+        msg = e.reason.message;
+      } else {
+        msg = String(e.reason || '未知错误');
+      }
+      alert('⚠️ 未捕获错误：' + msg);
     });
     const nav = $('#nav');
     MODULES.forEach(m => {
