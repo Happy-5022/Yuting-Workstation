@@ -1,100 +1,190 @@
 {
-  "date": "2026-08-16",
+  "date": "2026-08-17",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Talking about family trees",
-      "zh": "聊聊家谱与家人",
-      "words": 90,
-      "dur": 75,
-      "vocab": 12,
-      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
+      "en": "Why are billionaires building bunkers?",
+      "zh": "为什么富豪都在建地下堡垒？",
+      "words": 85,
+      "dur": 360,
+      "vocab": 120,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["In this relaxed conversation, the hosts explain what a 'family tree' is and why many people enjoy mapping out relatives across generations.", "在这段轻松对话里，主持人讲解了什么是『家谱』，以及为什么很多人喜欢把几代亲戚的关系画成一张图。"],
-        ["They share simple everyday words for family members, such as grandparents, cousins and in-laws, and show how to introduce them naturally in speech.", "他们分享了一些称呼家人的日常用词，比如祖父母、表亲、姻亲，并示范怎么在聊天里自然地介绍他们。"],
-        ["The episode is a gentle way to practise listening, because the language stays slow and the vocabulary is useful for real-life family chats.", "这集语速慢、用词实用，是练习听力的好素材，特别适合想在家庭聚会里开口说英语的人。"]
+        [
+          "In this episode, BBC hosts discuss why some of the world's richest people are spending large sums on private underground shelters.",
+          "在这一期里，BBC主持人探讨了为什么一些全球最富有的人，正花大价钱修建私人地下避难所。"
+        ],
+        [
+          "They look at fears about climate change, political instability and even possible future pandemics as reasons behind the trend.",
+          "他们分析了背后的动因：对气候变化、政局不稳、甚至未来可能再来一波疫情的担忧。"
+        ],
+        [
+          "The programme also questions whether such extreme preparations really bring safety, or mostly reveal how anxious the wealthy feel.",
+          "节目还提出质疑：这种极端的准备真的能带来安全吗，还是更多暴露了富人们的焦虑？"
+        ]
       ],
       "tips": [
-        ["family tree", "家谱，记录家族成员关系的图"],
-        ["cousin", "堂表兄弟姐妹"],
-        ["in-laws", "姻亲，配偶一方的家人"]
+        [
+          "bunker",
+          "地堡、避难所"
+        ],
+        [
+          "instability",
+          "不稳定、动荡"
+        ],
+        [
+          "preparation",
+          "准备、筹备"
+        ]
       ]
     },
     {
       "id": "d2",
-      "en": "Everyday conversations about hair",
-      "zh": "关于头发的日常对话",
-      "words": 95,
-      "dur": 80,
-      "vocab": 13,
-      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
+      "en": "Are we becoming a divided society?",
+      "zh": "我们是否正走向一个分裂的社会？",
+      "words": 82,
+      "dur": 350,
+      "vocab": 115,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["The speakers chat about hair in daily life, from getting a haircut to describing different styles and colours people choose.", "两位主持人聊起生活里和头发有关的话题，从剪发到人们选择的发型和发色。"],
-        ["You hear easy phrases for saying someone has long, curly or grey hair, and polite ways to comment on a new look.", "你能听到描述长发、卷发、白发等发型的简单表达，以及得体的夸赞新造型的说法。"],
-        ["Because the talk is slow and friendly, it helps beginners join similar small talk without feeling nervous.", "对话慢而亲切，能帮初学者在闲聊发型时不紧张、敢开口。"]
+        [
+          "This 6 Minute English asks whether modern life is pulling people apart along lines of wealth, opinion and geography.",
+          "这期六分钟英语探讨：现代生活是否正沿着财富、观点和地域的界线，把人们越拉越散。"
+        ],
+        [
+          "The speakers mention social media, unequal access to education and rising living costs as forces that widen the gaps.",
+          "主持人提到社交媒体、教育资源不均、以及生活成本上涨，都是拉大差距的力量。"
+        ],
+        [
+          "They finish by suggesting small daily habits — like talking to neighbours — that can quietly rebuild community trust.",
+          "他们最后建议：从日常小事（比如和邻居聊两句）做起，能悄悄把社区信任补回来。"
+        ]
       ],
       "tips": [
-        ["get a haircut", "去剪头发"],
-        ["curly hair", "卷发"],
-        ["go grey", "头发变白／花白"]
+        [
+          "divided",
+          "分裂的、分开的"
+        ],
+        [
+          "inequality",
+          "不平等"
+        ],
+        [
+          "community",
+          "社区、社群"
+        ]
       ]
     },
     {
       "id": "d3",
-      "en": "Chatting about climate change",
-      "zh": "闲聊气候变化",
-      "words": 100,
-      "dur": 85,
-      "vocab": 14,
+      "en": "Phone habits",
+      "zh": "我们的手机使用习惯",
+      "words": 70,
+      "dur": 300,
+      "vocab": 90,
       "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
       "body": [
-        ["This episode uses plain language to talk about climate change and what ordinary people notice in their own towns.", "这集用大白话聊气候变化，以及普通人在自己城市里能感受到的变化。"],
-        ["The hosts mention hotter summers, strange weather and small habits that can lower our impact, keeping the words simple and clear.", "主持人提到更热的夏天、反常天气，以及能减轻影响的小习惯，用词简单清楚。"],
-        ["It is a useful clip for learners who want to discuss the environment in English without difficult science terms.", "想用英文聊环保又怕术语太难的人，这集是很实用的素材。"]
+        [
+          "In Real Easy English, the hosts have a slow, simple chat about how often they check their phones each day.",
+          "在《轻松英语》里，主持人用慢速简单的英语，聊了聊自己一天会看多少次手机。"
+        ],
+        [
+          "They share the moments they reach for the screen — first thing in the morning, on the bus, before sleep — and how it feels.",
+          "他们分享了自己忍不住拿手机的时刻：早起第一件事、坐公交时、睡前，以及那种感觉。"
+        ],
+        [
+          "The episode is a gentle reminder that noticing our habits is the first step to changing them, all in clear everyday language.",
+          "这期像温柔的提醒：先察觉习惯，才是改变的第一步，全程都是清晰的大白话。"
+        ]
       ],
       "tips": [
-        ["climate change", "气候变化"],
-        ["carbon footprint", "碳足迹，个人造成的温室气体排放量"],
-        ["extreme weather", "极端天气"]
+        [
+          "reach for",
+          "伸手去拿"
+        ],
+        [
+          "screen",
+          "屏幕"
+        ],
+        [
+          "habit",
+          "习惯"
+        ]
       ]
     },
     {
       "id": "d4",
-      "en": "One size fits all",
-      "zh": "『均码』还能这么用",
-      "words": 85,
-      "dur": 70,
-      "vocab": 10,
+      "en": "Passing ships",
+      "zh": "像擦肩而过的船：忙到只见一面的朋友",
+      "words": 65,
+      "dur": 280,
+      "vocab": 85,
       "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["The phrase 'one size fits all' first described clothes made to fit every body shape, but now it is used more loosely.", "『one size fits all』原本指均码衣服能适合各种身材，现在用法更宽泛了。"],
-        ["People say it about a single plan or answer that is meant to work for everyone, even when that is not really true.", "人们也用它形容一个想让所有人都适用的方案或答案，哪怕其实并非如此。"],
-        ["The programme shows how to use it humorously, for example when a boss thinks one rule suits the whole team.", "节目示范了它的幽默用法，比如老板以为一条规矩能管住全组人时。"]
+        [
+          "The English We Speak teaches 'passing ships', a phrase from the older idiom 'like ships that pass in the night'.",
+          "《英语口语怎么说》教了 passing ships 这个说法，它来自更老的一句俚语「像夜里擦肩而过的船」。"
+        ],
+        [
+          "It describes two busy people whose schedules barely overlap, so they only meet for a brief hello before parting again.",
+          "它形容两个大忙人行程几乎不重叠，只能匆匆打声招呼就又分开。"
+        ],
+        [
+          "You can say 'we're like passing ships' or simply 'we're passing ships' to stress how little you see each other lately.",
+          "你可以说 we're like passing ships，或者省略 like 说 we're passing ships，来强调最近很少碰面。"
+        ]
       ],
       "tips": [
-        ["one size fits all", "（本义）均码；（引申）一刀切适用于所有人"],
-        ["fit", "合适，合身"],
-        ["loosely", "宽泛地，不严格地"]
+        [
+          "passing ships",
+          "擦肩而过的人（忙到难相聚）"
+        ],
+        [
+          "schedule",
+          "日程安排"
+        ],
+        [
+          "cross paths",
+          "邂逅、人生交集"
+        ]
       ]
     },
     {
       "id": "d5",
-      "en": "Side quest",
-      "zh": "Side quest：生活里的支线任务",
-      "words": 90,
-      "dur": 75,
-      "vocab": 11,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Phrases with 'look'",
+      "zh": "和 look 有关的英语短语",
+      "words": 60,
+      "dur": 260,
+      "vocab": 80,
+      "link": "https://www.bbc.com/learningenglish/english/features/s5english_in_a_minute",
       "body": [
-        ["'Side quest' comes from video games, where players leave the main story to do smaller optional missions.", "『side quest』来自电子游戏，指玩家离开主线去做的小支线任务。"],
-        ["Now people use it for little off-topic activities in real life, like a sudden trip to buy snacks during a busy day.", "现在大家用它形容生活里脱离主线的小插曲，比如忙碌一天中突然跑去买零食。"],
-        ["The hosts explain why calling boring errands a 'side quest' can make daily life feel more like a game.", "主持人解释了为什么把琐事叫『side quest』，会让平淡日常变得像在玩游戏。"]
+        [
+          "English in a Minute introduces four common phrases built around the word 'look', such as 'look on the bright side'.",
+          "《一分钟英语》介绍了四个围绕 look 的常用短语，比如 look on the bright side（往好处想）。"
+        ],
+        [
+          "Others include 'look the part', 'look forward to' and 'look into', each shown with a short, clear example sentence.",
+          "另外还有 look the part（看起来像那么回事）、look forward to（期待）、look into（调查），都配了简短例句。"
+        ],
+        [
+          "Because the clip is only one minute, it is a quick, repeat-after-me way to pick up natural everyday expressions.",
+          "因为视频只有一分钟，它非常适合跟读模仿，快速记住地道的日常表达。"
+        ]
       ],
       "tips": [
-        ["side quest", "支线任务，引申为生活里的小插曲"],
-        ["main story", "主线剧情"],
-        ["optional", "可选的，非必须的"]
+        [
+          "look on the bright side",
+          "往好处想、看开点"
+        ],
+        [
+          "look forward to",
+          "期待、盼望"
+        ],
+        [
+          "look into",
+          "调查、研究"
+        ]
       ]
     }
   ]
