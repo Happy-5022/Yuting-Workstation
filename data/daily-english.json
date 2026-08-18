@@ -1,190 +1,100 @@
 {
-  "date": "2026-08-17",
+  "date": "2026-08-18",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Why are billionaires building bunkers?",
-      "zh": "为什么富豪都在建地下堡垒？",
-      "words": 85,
-      "dur": 360,
-      "vocab": 120,
+      "en": "Children in warzones",
+      "zh": "战区里的孩子们",
+      "words": 180,
+      "dur": 95,
+      "vocab": 22,
       "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        [
-          "In this episode, BBC hosts discuss why some of the world's richest people are spending large sums on private underground shelters.",
-          "在这一期里，BBC主持人探讨了为什么一些全球最富有的人，正花大价钱修建私人地下避难所。"
-        ],
-        [
-          "They look at fears about climate change, political instability and even possible future pandemics as reasons behind the trend.",
-          "他们分析了背后的动因：对气候变化、政局不稳、甚至未来可能再来一波疫情的担忧。"
-        ],
-        [
-          "The programme also questions whether such extreme preparations really bring safety, or mostly reveal how anxious the wealthy feel.",
-          "节目还提出质疑：这种极端的准备真的能带来安全吗，还是更多暴露了富人们的焦虑？"
-        ]
+        ["Around 520 million children — roughly one in five worldwide — now live in areas affected by conflict.", "全球约有5.2亿儿童（差不多每五个孩子就有一个）生活在受冲突影响的地区。"],
+        ["In this episode, a journalist describes meeting young people whose schooling, family life and sense of safety have been torn apart by war.", "本期节目里，一位记者讲述了她见过的年轻人——他们的学业、家庭和安危都被战争摧毁了。"],
+        ["The hosts discuss how listening to children's own stories can help us understand trauma and the long road to recovery.", "主持人探讨了：倾听孩子自己的经历，能帮我们理解创伤，以及漫长的重建之路。"]
       ],
       "tips": [
-        [
-          "bunker",
-          "地堡、避难所"
-        ],
-        [
-          "instability",
-          "不稳定、动荡"
-        ],
-        [
-          "preparation",
-          "准备、筹备"
-        ]
+        ["conflict zone", "冲突地区"],
+        ["trauma", "（心理）创伤"],
+        ["resilience", "韧性，恢复力"]
       ]
     },
     {
       "id": "d2",
-      "en": "Are we becoming a divided society?",
-      "zh": "我们是否正走向一个分裂的社会？",
-      "words": 82,
-      "dur": 350,
-      "vocab": 115,
+      "en": "What's in a footballer's brain?",
+      "zh": "足球运动员的大脑里装着什么？",
+      "words": 175,
+      "dur": 92,
+      "vocab": 20,
       "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        [
-          "This 6 Minute English asks whether modern life is pulling people apart along lines of wealth, opinion and geography.",
-          "这期六分钟英语探讨：现代生活是否正沿着财富、观点和地域的界线，把人们越拉越散。"
-        ],
-        [
-          "The speakers mention social media, unequal access to education and rising living costs as forces that widen the gaps.",
-          "主持人提到社交媒体、教育资源不均、以及生活成本上涨，都是拉大差距的力量。"
-        ],
-        [
-          "They finish by suggesting small daily habits — like talking to neighbours — that can quietly rebuild community trust.",
-          "他们最后建议：从日常小事（比如和邻居聊两句）做起，能悄悄把社区信任补回来。"
-        ]
+        ["Modern football is faster than ever, so top clubs now study neuroscience to understand how players think and decide in a split second.", "现代足球比以往更快，顶尖俱乐部开始研究神经科学，想弄懂球员如何在瞬间思考、做决定。"],
+        ["The episode looks at how training the brain — not just the body — may give athletes an edge under pressure.", "本期关注：训练大脑（而不只是身体），或许能让运动员在压力下占得先机。"],
+        ["Listeners learn vocabulary about decision-making, reaction time and the mental side of sport.", "听众能学到关于决策、反应速度和竞技心理侧的词汇。"]
       ],
       "tips": [
-        [
-          "divided",
-          "分裂的、分开的"
-        ],
-        [
-          "inequality",
-          "不平等"
-        ],
-        [
-          "community",
-          "社区、社群"
-        ]
+        ["split second", "一瞬间，刹那间"],
+        ["reaction time", "反应时间"],
+        ["an edge", "（竞争中的）优势"]
       ]
     },
     {
       "id": "d3",
-      "en": "Phone habits",
-      "zh": "我们的手机使用习惯",
-      "words": 70,
-      "dur": 300,
-      "vocab": 90,
-      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
+      "en": "Stress-free family meals",
+      "zh": "不紧绷的家庭餐桌",
+      "words": 170,
+      "dur": 90,
+      "vocab": 21,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        [
-          "In Real Easy English, the hosts have a slow, simple chat about how often they check their phones each day.",
-          "在《轻松英语》里，主持人用慢速简单的英语，聊了聊自己一天会看多少次手机。"
-        ],
-        [
-          "They share the moments they reach for the screen — first thing in the morning, on the bus, before sleep — and how it feels.",
-          "他们分享了自己忍不住拿手机的时刻：早起第一件事、坐公交时、睡前，以及那种感觉。"
-        ],
-        [
-          "The episode is a gentle reminder that noticing our habits is the first step to changing them, all in clear everyday language.",
-          "这期像温柔的提醒：先察觉习惯，才是改变的第一步，全程都是清晰的大白话。"
-        ]
+        ["For many families, cooking and eating together feels like one more chore instead of a joy.", "对很多家庭来说，一起做饭吃饭不再是享受，反而像又一项家务。"],
+        ["This episode shares simple ideas for lowering the pressure — like sharing tasks and dropping the need for a perfect plate.", "本期分享了一些减压小点子：比如分摊任务、别追求'完美的一餐'。"],
+        ["The hosts suggest that relaxed mealtimes can be better for family relationships than fancy food.", "主持人认为，轻松的用餐氛围比精致大餐更利于家庭关系。"]
       ],
       "tips": [
-        [
-          "reach for",
-          "伸手去拿"
-        ],
-        [
-          "screen",
-          "屏幕"
-        ],
-        [
-          "habit",
-          "习惯"
-        ]
+        ["chore", "家务，杂活"],
+        ["to lower the pressure", "减轻压力"],
+        ["a perfect plate", "完美的一餐（摆盘）"]
       ]
     },
     {
       "id": "d4",
-      "en": "Passing ships",
-      "zh": "像擦肩而过的船：忙到只见一面的朋友",
-      "words": 65,
-      "dur": 280,
-      "vocab": 85,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Limiting screen time for children",
+      "zh": "给孩子限量屏幕时间",
+      "words": 185,
+      "dur": 98,
+      "vocab": 23,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        [
-          "The English We Speak teaches 'passing ships', a phrase from the older idiom 'like ships that pass in the night'.",
-          "《英语口语怎么说》教了 passing ships 这个说法，它来自更老的一句俚语「像夜里擦肩而过的船」。"
-        ],
-        [
-          "It describes two busy people whose schedules barely overlap, so they only meet for a brief hello before parting again.",
-          "它形容两个大忙人行程几乎不重叠，只能匆匆打声招呼就又分开。"
-        ],
-        [
-          "You can say 'we're like passing ships' or simply 'we're passing ships' to stress how little you see each other lately.",
-          "你可以说 we're like passing ships，或者省略 like 说 we're passing ships，来强调最近很少碰面。"
-        ]
+        ["Children today spend more hours than ever in front of screens, and many parents worry about the effects.", "如今的孩子花在屏幕前的时间比以往都多，许多家长为此担忧。"],
+        ["The episode explores practical ways families set boundaries — such as device-free dinners and agreed time limits.", "本期探讨了家庭设定边界的实用方法，比如吃饭不碰设备、约定使用时长。"],
+        ["It also asks whether screens are all bad, since some can support learning and connection.", "节目也发问：屏幕是否全无好处？有些确实能辅助学习与联结。"]
       ],
       "tips": [
-        [
-          "passing ships",
-          "擦肩而过的人（忙到难相聚）"
-        ],
-        [
-          "schedule",
-          "日程安排"
-        ],
-        [
-          "cross paths",
-          "邂逅、人生交集"
-        ]
+        ["screen time", "屏幕使用时间"],
+        ["boundaries", "边界，界限"],
+        ["device-free", "不用电子设备的"]
       ]
     },
     {
       "id": "d5",
-      "en": "Phrases with 'look'",
-      "zh": "和 look 有关的英语短语",
-      "words": 60,
-      "dur": 260,
-      "vocab": 80,
-      "link": "https://www.bbc.com/learningenglish/english/features/s5english_in_a_minute",
+      "en": "How advertisers make us spend money",
+      "zh": "广告是怎么让我们掏钱的",
+      "words": 178,
+      "dur": 94,
+      "vocab": 22,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        [
-          "English in a Minute introduces four common phrases built around the word 'look', such as 'look on the bright side'.",
-          "《一分钟英语》介绍了四个围绕 look 的常用短语，比如 look on the bright side（往好处想）。"
-        ],
-        [
-          "Others include 'look the part', 'look forward to' and 'look into', each shown with a short, clear example sentence.",
-          "另外还有 look the part（看起来像那么回事）、look forward to（期待）、look into（调查），都配了简短例句。"
-        ],
-        [
-          "Because the clip is only one minute, it is a quick, repeat-after-me way to pick up natural everyday expressions.",
-          "因为视频只有一分钟，它非常适合跟读模仿，快速记住地道的日常表达。"
-        ]
+        ["Advertising is everywhere, and much of it is designed to make us want things we never planned to buy.", "广告无处不在，很多设计的初衷就是让我们想要原本没打算买的东西。"],
+        ["The episode explains tricks like limited offers, social proof and emotional storytelling used to trigger spending.", "本期拆解了限时优惠、从众心理、情感故事等让人掏钱的套路。"],
+        ["Understanding these methods can help listeners become smarter, calmer shoppers.", "看懂这些手法，能帮听众变成更清醒、更从容的消费者。"]
       ],
       "tips": [
-        [
-          "look on the bright side",
-          "往好处想、看开点"
-        ],
-        [
-          "look forward to",
-          "期待、盼望"
-        ],
-        [
-          "look into",
-          "调查、研究"
-        ]
+        ["limited offer", "限时优惠"],
+        ["social proof", "从众证明，社会认同"],
+        ["to trigger spending", "触发消费"]
       ]
     }
   ]
