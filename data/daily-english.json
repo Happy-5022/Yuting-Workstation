@@ -1,100 +1,100 @@
 {
-  "date": "2026-08-18",
+  "date": "2026-08-21",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Children in warzones",
-      "zh": "战区里的孩子们",
-      "words": 180,
-      "dur": 95,
-      "vocab": 22,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "The many meanings of 'jam'",
+      "zh": "一词多义：jam 到底有几种意思？",
+      "words": 118,
+      "dur": 60,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/english-in-a-minute",
       "body": [
-        ["Around 520 million children — roughly one in five worldwide — now live in areas affected by conflict.", "全球约有5.2亿儿童（差不多每五个孩子就有一个）生活在受冲突影响的地区。"],
-        ["In this episode, a journalist describes meeting young people whose schooling, family life and sense of safety have been torn apart by war.", "本期节目里，一位记者讲述了她见过的年轻人——他们的学业、家庭和安危都被战争摧毁了。"],
-        ["The hosts discuss how listening to children's own stories can help us understand trauma and the long road to recovery.", "主持人探讨了：倾听孩子自己的经历，能帮我们理解创伤，以及漫长的重建之路。"]
+        ["The word 'jam' is a small but busy word in English, and it can mean very different things depending on the situation.", "英语里 jam 这个词虽短，却很\"忙\"——在不同场景下意思差别很大。"],
+        ["You might spread fruit jam on your toast, get stuck in a traffic jam on the way to work, or jam with friends when you play music together without a plan.", "你可能在吐司上抹果酱，上班路上遇到交通堵塞，也可能和朋友们随兴合奏音乐。"],
+        ["In everyday chat, people also say they are 'jammed' when they are too busy to do anything else, so the same word can be food, traffic, music or a full schedule.", "日常对话里，人们还会说自己是 jammed（忙得不可开交），所以这个词既能指食物、交通，也能指音乐或排得满满的日程。"]
       ],
       "tips": [
-        ["conflict zone", "冲突地区"],
-        ["trauma", "（心理）创伤"],
-        ["resilience", "韧性，恢复力"]
+        ["traffic jam", "交通堵塞"],
+        ["fruit jam", "果酱"],
+        ["jam with someone", "和某人即兴合奏"]
       ]
     },
     {
       "id": "d2",
-      "en": "What's in a footballer's brain?",
-      "zh": "足球运动员的大脑里装着什么？",
-      "words": 175,
-      "dur": 92,
-      "vocab": 20,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Understood the assignment",
+      "zh": "地道表达：understood the assignment（把任务完成得漂亮）",
+      "words": 112,
+      "dur": 56,
+      "vocab": 7,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["Modern football is faster than ever, so top clubs now study neuroscience to understand how players think and decide in a split second.", "现代足球比以往更快，顶尖俱乐部开始研究神经科学，想弄懂球员如何在瞬间思考、做决定。"],
-        ["The episode looks at how training the brain — not just the body — may give athletes an edge under pressure.", "本期关注：训练大脑（而不只是身体），或许能让运动员在压力下占得先机。"],
-        ["Listeners learn vocabulary about decision-making, reaction time and the mental side of sport.", "听众能学到关于决策、反应速度和竞技心理侧的词汇。"]
+        ["'Understood the assignment' is a casual way to praise someone who did exactly what was needed, and did it well.", "understood the assignment 是一句口语，用来夸某人\"完全接住了任务\"，而且完成得很出色。"],
+        ["It started in workplaces and schools, but now people use it online for anything from a great outfit to a perfect reply.", "它最早来自职场和校园，但现在网上啥都能用——从一身好穿搭到一句神回复。"],
+        ["If your friend brings the right snack to a movie night, you can joke that they really understood the assignment.", "比如朋友看电影夜带对了零食，你就能调侃说：你这回可真是 understood the assignment。"]
       ],
       "tips": [
-        ["split second", "一瞬间，刹那间"],
-        ["reaction time", "反应时间"],
-        ["an edge", "（竞争中的）优势"]
+        ["understood the assignment", "把任务完成得漂亮（口语夸人）"],
+        ["nail it", "完美搞定"],
+        ["on point", "恰到好处、很到位"]
       ]
     },
     {
       "id": "d3",
-      "en": "Stress-free family meals",
-      "zh": "不紧绷的家庭餐桌",
-      "words": 170,
-      "dur": 90,
-      "vocab": 21,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Useful phrases with 'money'",
+      "zh": "一分钟英语：含 money 的常用短语",
+      "words": 116,
+      "dur": 58,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/english-in-a-minute",
       "body": [
-        ["For many families, cooking and eating together feels like one more chore instead of a joy.", "对很多家庭来说，一起做饭吃饭不再是享受，反而像又一项家务。"],
-        ["This episode shares simple ideas for lowering the pressure — like sharing tasks and dropping the need for a perfect plate.", "本期分享了一些减压小点子：比如分摊任务、别追求'完美的一餐'。"],
-        ["The hosts suggest that relaxed mealtimes can be better for family relationships than fancy food.", "主持人认为，轻松的用餐氛围比精致大餐更利于家庭关系。"]
+        ["English has many short phrases built around the word 'money', and they often describe value, effort or attitude rather than coins.", "英语里有不少以 money 为核心的短短语，它们往往描述价值、付出或态度，而不只是硬币本身。"],
+        ["For example, 'time is money' reminds us that wasted time is wasted opportunity, while 'money doesn't grow on trees' warns us to spend carefully.", "比如 time is money 提醒我们浪费时间就是浪费机会，而 money doesn't grow on trees 则劝人花钱要谨慎。"],
+        ["You can also say 'for my money' to give your own opinion, or 'make money' when talking about earning it — small phrases with big everyday use.", "你还能用 for my money 来表达自己的看法，或用 make money 说赚钱——都是日常高频小短语。"]
       ],
       "tips": [
-        ["chore", "家务，杂活"],
-        ["to lower the pressure", "减轻压力"],
-        ["a perfect plate", "完美的一餐（摆盘）"]
+        ["time is money", "时间就是金钱"],
+        ["money doesn't grow on trees", "钱不是大风刮来的"],
+        ["for my money", "依我看／就我而言"]
       ]
     },
     {
       "id": "d4",
-      "en": "Limiting screen time for children",
-      "zh": "给孩子限量屏幕时间",
-      "words": 185,
-      "dur": 98,
-      "vocab": 23,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Don't sell yourself short",
+      "zh": "地道表达：sell yourself short（低估自己）",
+      "words": 110,
+      "dur": 55,
+      "vocab": 7,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["Children today spend more hours than ever in front of screens, and many parents worry about the effects.", "如今的孩子花在屏幕前的时间比以往都多，许多家长为此担忧。"],
-        ["The episode explores practical ways families set boundaries — such as device-free dinners and agreed time limits.", "本期探讨了家庭设定边界的实用方法，比如吃饭不碰设备、约定使用时长。"],
-        ["It also asks whether screens are all bad, since some can support learning and connection.", "节目也发问：屏幕是否全无好处？有些确实能辅助学习与联结。"]
+        ["To 'sell yourself short' means to underestimate your own ability or value, often by not aiming high enough.", "sell yourself short 意思是低估自己的能力或价值，常表现为不敢定更高的目标。"],
+        ["A friend might say this to you when you turn down a chance because you don't think you are good enough.", "当你因为觉得自己不够好而拒绝一个机会时，朋友可能就会对你说这句话。"],
+        ["It comes from the idea of selling something for less than it is worth, so the advice is simple: know your worth and ask for more.", "它源自\"把东西贱卖\"的比喻，所以核心建议很简单：认清自己的价值，敢要更多。"]
       ],
       "tips": [
-        ["screen time", "屏幕使用时间"],
-        ["boundaries", "边界，界限"],
-        ["device-free", "不用电子设备的"]
+        ["sell yourself short", "低估自己"],
+        ["undersell", "低估／贱卖"],
+        ["know your worth", "认清自身价值"]
       ]
     },
     {
       "id": "d5",
-      "en": "How advertisers make us spend money",
-      "zh": "广告是怎么让我们掏钱的",
-      "words": 178,
-      "dur": 94,
-      "vocab": 22,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Phrases with 'eye'",
+      "zh": "一分钟英语：含 eye 的常用短语",
+      "words": 115,
+      "dur": 58,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/english-in-a-minute",
       "body": [
-        ["Advertising is everywhere, and much of it is designed to make us want things we never planned to buy.", "广告无处不在，很多设计的初衷就是让我们想要原本没打算买的东西。"],
-        ["The episode explains tricks like limited offers, social proof and emotional storytelling used to trigger spending.", "本期拆解了限时优惠、从众心理、情感故事等让人掏钱的套路。"],
-        ["Understanding these methods can help listeners become smarter, calmer shoppers.", "看懂这些手法，能帮听众变成更清醒、更从容的消费者。"]
+        ["The word 'eye' appears in many English phrases that have nothing to do with actually seeing something.", "eye 这个词出现在很多英语短语里，却和\"真的用眼睛看\"没啥关系。"],
+        ["'Keep an eye on' means to watch or take care of something, while 'in the blink of an eye' describes something that happens very fast.", "keep an eye on 是\"照看、留意\"的意思，而 in the blink of an eye 形容事情发生得飞快。"],
+        ["You might also hear 'see eye to eye' when two people agree, so a single body part gives us useful ways to talk about care, speed and agreement.", "两个人意见一致时，你会听到 see eye to eye，所以这一个身体部位就帮我们表达关心、速度和共识。"]
       ],
       "tips": [
-        ["limited offer", "限时优惠"],
-        ["social proof", "从众证明，社会认同"],
-        ["to trigger spending", "触发消费"]
+        ["keep an eye on", "留意／照看"],
+        ["in the blink of an eye", "一眨眼工夫（极快）"],
+        ["see eye to eye", "意见一致"]
       ]
     }
   ]
