@@ -1,100 +1,145 @@
 {
-  "date": "2026-08-21",
+  "date": "2026-08-22",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "The many meanings of 'jam'",
-      "zh": "一词多义：jam 到底有几种意思？",
-      "words": 118,
-      "dur": 60,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/english-in-a-minute",
+      "en": "Sharing the road with driverless cars",
+      "zh": "和无人驾驶汽车共用马路",
+      "words": 180,
+      "dur": 360,
+      "vocab": 12,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["The word 'jam' is a small but busy word in English, and it can mean very different things depending on the situation.", "英语里 jam 这个词虽短，却很\"忙\"——在不同场景下意思差别很大。"],
-        ["You might spread fruit jam on your toast, get stuck in a traffic jam on the way to work, or jam with friends when you play music together without a plan.", "你可能在吐司上抹果酱，上班路上遇到交通堵塞，也可能和朋友们随兴合奏音乐。"],
-        ["In everyday chat, people also say they are 'jammed' when they are too busy to do anything else, so the same word can be food, traffic, music or a full schedule.", "日常对话里，人们还会说自己是 jammed（忙得不可开交），所以这个词既能指食物、交通，也能指音乐或排得满满的日程。"]
+        [
+          "Driverless cars are already driving safely in some cities, but experts wonder how humans will behave around them.",
+          "无人驾驶汽车已在部分城市安全行驶，但专家担心人类在它们周围会如何表现。"
+        ],
+        [
+          "The big question is communication: how do we 'talk' to a car that has no driver inside?",
+          "核心问题是沟通：我们该如何与一辆没有司机的车'对话'？"
+        ],
+        [
+          "This episode explores whether people and robotaxis can safely share the road in the future.",
+          "这一集探讨了人类与无人驾驶出租车未来能否安全共用道路。"
+        ]
       ],
       "tips": [
-        ["traffic jam", "交通堵塞"],
-        ["fruit jam", "果酱"],
-        ["jam with someone", "和某人即兴合奏"]
+        ["driverless", "无人驾驶的"],
+        ["robotaxi", "无人驾驶出租车"],
+        ["communicate", "沟通、交流"]
       ]
     },
     {
       "id": "d2",
-      "en": "Understood the assignment",
-      "zh": "地道表达：understood the assignment（把任务完成得漂亮）",
-      "words": 112,
-      "dur": 56,
-      "vocab": 7,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak",
+      "en": "Say less",
+      "zh": "俚语 'Say less'：一句话秒懂",
+      "words": 90,
+      "dur": 180,
+      "vocab": 8,
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["'Understood the assignment' is a casual way to praise someone who did exactly what was needed, and did it well.", "understood the assignment 是一句口语，用来夸某人\"完全接住了任务\"，而且完成得很出色。"],
-        ["It started in workplaces and schools, but now people use it online for anything from a great outfit to a perfect reply.", "它最早来自职场和校园，但现在网上啥都能用——从一身好穿搭到一句神回复。"],
-        ["If your friend brings the right snack to a movie night, you can joke that they really understood the assignment.", "比如朋友看电影夜带对了零食，你就能调侃说：你这回可真是 understood the assignment。"]
+        [
+          "'Say less' is a modern slang phrase used to show you agree enthusiastically with a suggestion.",
+          "'Say less' 是现代俚语，表示你非常赞同某个提议。"
+        ],
+        [
+          "It means something similar to 'say no more' — you are ready to act without more talk.",
+          "意思类似'不用多说'，你已经准备好行动，无需多言。"
+        ],
+        [
+          "You might say it when a friend invites you to do something you already wanted to do.",
+          "当朋友邀你做一件你正想做的事时，你可以用这个词回应。"
+        ]
       ],
       "tips": [
-        ["understood the assignment", "把任务完成得漂亮（口语夸人）"],
-        ["nail it", "完美搞定"],
-        ["on point", "恰到好处、很到位"]
+        ["say less", "不用多说（表强烈赞同）"],
+        ["slang", "俚语"],
+        ["enthusiastically", "热情地、积极地"]
       ]
     },
     {
       "id": "d3",
-      "en": "Useful phrases with 'money'",
-      "zh": "一分钟英语：含 money 的常用短语",
-      "words": 116,
-      "dur": 58,
+      "en": "In over my head",
+      "zh": "习语 'In over my head'：招架不住",
+      "words": 95,
+      "dur": 180,
       "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/english-in-a-minute",
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["English has many short phrases built around the word 'money', and they often describe value, effort or attitude rather than coins.", "英语里有不少以 money 为核心的短短语，它们往往描述价值、付出或态度，而不只是硬币本身。"],
-        ["For example, 'time is money' reminds us that wasted time is wasted opportunity, while 'money doesn't grow on trees' warns us to spend carefully.", "比如 time is money 提醒我们浪费时间就是浪费机会，而 money doesn't grow on trees 则劝人花钱要谨慎。"],
-        ["You can also say 'for my money' to give your own opinion, or 'make money' when talking about earning it — small phrases with big everyday use.", "你还能用 for my money 来表达自己的看法，或用 make money 说赚钱——都是日常高频小短语。"]
+        [
+          "'In over my head' describes a situation that is too difficult to handle.",
+          "'In over my head' 形容处境太难、让人招架不住。"
+        ],
+        [
+          "People use it when they feel overwhelmed by work, study, or a complex problem.",
+          "当人们被工作、学业或难题压得喘不过气时，就会用这个词。"
+        ],
+        [
+          "It comes from the image of water rising above your head and you cannot breathe easily.",
+          "它源自水深没过头顶、难以呼吸的画面。"
+        ]
       ],
       "tips": [
-        ["time is money", "时间就是金钱"],
-        ["money doesn't grow on trees", "钱不是大风刮来的"],
-        ["for my money", "依我看／就我而言"]
+        ["in over one's head", "陷入难以应付的境地"],
+        ["overwhelmed", "不堪重负的"],
+        ["cope", "应付、应对"]
       ]
     },
     {
       "id": "d4",
-      "en": "Don't sell yourself short",
-      "zh": "地道表达：sell yourself short（低估自己）",
-      "words": 110,
-      "dur": 55,
+      "en": "Phrases with 'game'",
+      "zh": "一分钟英语：'game' 的那些用法",
+      "words": 85,
+      "dur": 60,
       "vocab": 7,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak",
+      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
       "body": [
-        ["To 'sell yourself short' means to underestimate your own ability or value, often by not aiming high enough.", "sell yourself short 意思是低估自己的能力或价值，常表现为不敢定更高的目标。"],
-        ["A friend might say this to you when you turn down a chance because you don't think you are good enough.", "当你因为觉得自己不够好而拒绝一个机会时，朋友可能就会对你说这句话。"],
-        ["It comes from the idea of selling something for less than it is worth, so the advice is simple: know your worth and ask for more.", "它源自\"把东西贱卖\"的比喻，所以核心建议很简单：认清自己的价值，敢要更多。"]
+        [
+          "The word 'game' can mean a fun activity, but it also appears in many everyday phrases.",
+          "'game' 可以指有趣的游戏，也常出现在日常短语中。"
+        ],
+        [
+          "For example, 'the game is up' means a secret plan has been discovered.",
+          "比如 'the game is up' 表示秘密计划已被发现。"
+        ],
+        [
+          "Learning these short phrases helps you sound more natural in quick conversations.",
+          "掌握这些短短语，能让你在日常对话里更自然。"
+        ]
       ],
       "tips": [
-        ["sell yourself short", "低估自己"],
-        ["undersell", "低估／贱卖"],
-        ["know your worth", "认清自身价值"]
+        ["the game is up", "事情败露了、完了"],
+        ["fair game", "公平的目标（可被批评或追求的人/物）"],
+        ["phrase", "短语、词组"]
       ]
     },
     {
       "id": "d5",
-      "en": "Phrases with 'eye'",
-      "zh": "一分钟英语：含 eye 的常用短语",
-      "words": 115,
-      "dur": 58,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/english-in-a-minute",
+      "en": "Phrases with 'class'",
+      "zh": "一分钟英语：'class' 的那些用法",
+      "words": 85,
+      "dur": 60,
+      "vocab": 7,
+      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
       "body": [
-        ["The word 'eye' appears in many English phrases that have nothing to do with actually seeing something.", "eye 这个词出现在很多英语短语里，却和\"真的用眼睛看\"没啥关系。"],
-        ["'Keep an eye on' means to watch or take care of something, while 'in the blink of an eye' describes something that happens very fast.", "keep an eye on 是\"照看、留意\"的意思，而 in the blink of an eye 形容事情发生得飞快。"],
-        ["You might also hear 'see eye to eye' when two people agree, so a single body part gives us useful ways to talk about care, speed and agreement.", "两个人意见一致时，你会听到 see eye to eye，所以这一个身体部位就帮我们表达关心、速度和共识。"]
+        [
+          "Besides 'a school class', the word 'class' is used in several useful English expressions.",
+          "除了'一堂课'，'class' 还出现在多个实用英语表达里。"
+        ],
+        [
+          "For instance, 'first class' can describe something of the highest quality, not just a flight seat.",
+          "例如 'first class' 可形容最高品质的事物，不只是飞机头等舱。"
+        ],
+        [
+          "These small words carry big meaning, so it is worth noticing how native speakers use them.",
+          "这些小词含义丰富，值得留意母语者怎么用。"
+        ]
       ],
       "tips": [
-        ["keep an eye on", "留意／照看"],
-        ["in the blink of an eye", "一眨眼工夫（极快）"],
-        ["see eye to eye", "意见一致"]
+        ["first class", "一流的、最高级的"],
+        ["class act", "举止优雅、令人钦佩的人"],
+        ["expression", "表达、说法"]
       ]
     }
   ]
