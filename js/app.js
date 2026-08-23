@@ -912,6 +912,14 @@
     const reviews = await DB.all('reviews');
     const en = await DB.all('english');
     const enStreak = streak(en.map(e => e.date));
+    const pubAll = await DB.all('publish');
+    const pubCount = pubAll.length;
+    const habAll = await DB.all('habits');
+    let maxHab = 0;
+    habAll.forEach(h => { const s = streak(Object.keys(h.checks || {})); if (s > maxHab) maxHab = s; });
+    const assetAll = await DB.all('assets');
+    let netA = 0;
+    assetAll.forEach(r => { const v = Number(r.value) || 0; netA += (r.type === 'debt' ? -v : v); });
 
     const card = el('<div class="card"></div>');
     card.innerHTML =
@@ -931,6 +939,9 @@
       '<div class="stat"><b>' + enStreak + '</b><span>英语连续天</span></div>' +
       '<div class="stat"><b>' + distinctDays(en.map(e => e.date)) + '</b><span>英语学习天</span></div>' +
       '<div class="stat"><b>' + MODULES.length + '</b><span>模块</span></div>' +
+      '<div class="stat"><b>' + pubCount + '</b><span>发布条数</span></div>' +
+      '<div class="stat"><b>' + maxHab + '</b><span>习惯最长连续</span></div>' +
+      '<div class="stat"><b>' + (netA >= 0 ? '' : '-') + Math.round(Math.abs(netA)).toLocaleString('zh-CN') + '</b><span>净资产</span></div>' +
       '</div>';
     view.append(grid);
 
@@ -3904,6 +3915,16 @@
     { key: 'ledger', emoji: '💰', title: '记账', render: renderLedger },
     { key: 'travel', emoji: '🧳', title: '旅游规划', render: renderTravel },
     { key: 'kids', emoji: '👧', title: '亲子', render: renderKids },
+    { key: 'publish', emoji: '📺', title: '发布台账', render: renderPublish },
+    { key: 'habits', emoji: '🔥', title: '我的习惯墙', render: renderHabits },
+    { key: 'report', emoji: '📅', title: '月度复盘', render: renderReport },
+    { key: 'assets', emoji: '💎', title: '资产总览', render: renderAssets },
+    { key: 'goals', emoji: '🎯', title: '我的目标墙', render: renderGoals },
+    { key: 'books', emoji: '📚', title: '读书书摘', render: renderBooks },
+    { key: 'comp', emoji: '🕵️', title: '对标拆解', render: renderComp },
+    { key: 'prompts', emoji: '🪄', title: 'Prompt宝盒', render: renderPrompts },
+    { key: 'period', emoji: '🩸', title: '经期记录', render: renderPeriod },
+    { key: 'links', emoji: '🔗', title: '常用链接', render: renderLinks },
   ];
 
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
@@ -3935,7 +3956,7 @@
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong'];
+      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong', 'publish', 'habits', 'assets', 'goals', 'books', 'comp', 'prompts', 'period', 'links'];
       let count = 0;
       for (const s of stores) {
         const arr = data[s];
@@ -5129,6 +5150,582 @@
       }
     }
 
+    paint();
+  }
+
+  // 通用小卡片（多个模块共用）
+  function sumCard(label, val, color) {
+    return '<div style="flex:1;text-align:center;background:#f7fbfa;border-radius:10px;padding:8px 2px">' +
+      '<div style="font-size:11px;color:#999">' + label + '</div>' +
+      '<div style="font-size:15px;font-weight:500;color:' + (color || '#333') + '">' + val + '</div></div>';
+  }
+
+  // ===== 📺 发布台账 =====
+  async function renderPublish(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">📺 发布台账</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">每发一条内容记一笔：发在哪个平台、播放/阅读、赞、评、涨粉。月底一眼看出哪种选题、哪个平台最能跑。</p>' +
+      '<div id="pubSum" style="display:flex;gap:8px;margin-top:10px"></div>' +
+      '<button id="pubAdd" class="btn green block" style="margin-top:12px">➕ 记录一条发布</button></div>' +
+      '<div id="pubList"></div>';
+
+    function stat(label, v) {
+      return '<div style="background:#f7fbfa;border-radius:8px;padding:6px 10px;font-size:12px;color:#666">' + label + ' <b style="color:#333">' + (v || 0) + '</b></div>';
+    }
+    async function paint() {
+      const list = (await DB.all('publish')) || [];
+      list.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || 0) - (a.id || 0));
+      const total = list.length;
+      const views = list.reduce((s, r) => s + (Number(r.views) || 0), 0);
+      const fans = list.reduce((s, r) => s + (Number(r.fans) || 0), 0);
+      $('#pubSum').innerHTML = sumCard('已发布', total, '#0E9C8E') + sumCard('总播放/阅读', views, '#378ADD') + sumCard('总涨粉', fans, '#2e9e5b');
+      const box = $('#pubList');
+      if (!total) { box.innerHTML = emptyTip('📺', '还没有记录，发完内容顺手记一笔吧'); return; }
+      box.innerHTML = '';
+      list.forEach(r => {
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><b>' + esc(r.title || '未命名') + '</b><span class="chip on">' + esc(r.platform || '其他') + '</span></div>' +
+          '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(r.date || '') + (r.url ? ' · <a href="' + esc(r.url) + '" target="_blank" style="color:#0E9C8E">查看</a>' : '') + '</div>' +
+          '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">' + stat('▶ 播放/阅读', r.views) + stat('❤ 赞', r.likes) + stat('💬 评', r.comments) + stat('➕ 涨粉', r.fans) + '</div>' +
+          (r.note ? '<p class="muted" style="margin:8px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
+          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="edit">✏ 编辑</button><button class="del" data-act="del">🗑</button></div>';
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(r);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这条发布记录？')) { await DB.del('publish', r.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(r) {
+      const f = await promptForm('编辑发布记录', [
+        { name: 'title', label: '标题', type: 'text', value: r.title || '' },
+        { name: 'platform', label: '平台', type: 'select', options: [{ value: '抖音', label: '抖音' }, { value: '视频号', label: '视频号' }, { value: '公众号', label: '公众号' }, { value: '小红书', label: '小红书' }, { value: '其他', label: '其他' }] },
+        { name: 'date', label: '日期', type: 'date', value: r.date || todayStr() },
+        { name: 'url', label: '链接（可选）', type: 'text', value: r.url || '' },
+        { name: 'views', label: '播放/阅读数', type: 'number', value: r.views != null ? r.views : '' },
+        { name: 'likes', label: '点赞数', type: 'number', value: r.likes != null ? r.likes : '' },
+        { name: 'comments', label: '评论数', type: 'number', value: r.comments != null ? r.comments : '' },
+        { name: 'fans', label: '涨粉数（可为负）', type: 'number', value: r.fans != null ? r.fans : '' },
+        { name: 'note', label: '备注（可选）', type: 'text', value: r.note || '' },
+      ]);
+      if (!f) return;
+      Object.assign(r, { title: f.title, platform: f.platform, date: f.date || todayStr(), url: f.url || '', views: Number(f.views) || 0, likes: Number(f.likes) || 0, comments: Number(f.comments) || 0, fans: Number(f.fans) || 0, note: f.note || '' });
+      await DB.put('publish', r); paint();
+    }
+    $('#pubAdd').onclick = async () => {
+      const f = await promptForm('记录一条发布', [
+        { name: 'title', label: '标题', type: 'text', placeholder: '这条内容叫什么' },
+        { name: 'platform', label: '平台', type: 'select', options: [{ value: '抖音', label: '抖音' }, { value: '视频号', label: '视频号' }, { value: '公众号', label: '公众号' }, { value: '小红书', label: '小红书' }, { value: '其他', label: '其他' }] },
+        { name: 'date', label: '日期', type: 'date', value: todayStr() },
+        { name: 'url', label: '链接（可选）', type: 'text', placeholder: 'https://...' },
+        { name: 'views', label: '播放/阅读数', type: 'number', placeholder: '0' },
+        { name: 'likes', label: '点赞数', type: 'number', placeholder: '0' },
+        { name: 'comments', label: '评论数', type: 'number', placeholder: '0' },
+        { name: 'fans', label: '涨粉数（可为负）', type: 'number', placeholder: '0' },
+        { name: 'note', label: '备注（可选）', type: 'text', placeholder: '比如：这期为什么火' },
+      ]);
+      if (!f || !f.title) return;
+      await DB.put('publish', { title: f.title, platform: f.platform, date: f.date || todayStr(), url: f.url || '', views: Number(f.views) || 0, likes: Number(f.likes) || 0, comments: Number(f.comments) || 0, fans: Number(f.fans) || 0, note: f.note || '' });
+      toast('已记录 📺'); paint();
+    };
+    paint();
+  }
+
+  // ===== 🔥 我的习惯墙 =====
+  async function renderHabits(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">🔥 我的习惯墙</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">这是给你自己用的打卡，和娃的打卡分开。每天点一下「完成」，连续天数会一直涨——成年人最怕断，攒着的连续天数会推着你坚持。</p>' +
+      '<button id="habAdd" class="btn green block" style="margin-top:12px">➕ 新建一个习惯</button></div>' +
+      '<div id="habList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('habits')) || [];
+      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const box = $('#habList');
+      if (!list.length) { box.innerHTML = emptyTip('🔥', '还没有习惯，先建一个吧（比如：每天读书30分）'); return; }
+      box.innerHTML = '';
+      list.forEach(h => {
+        const checks = h.checks || {};
+        const dates = Object.keys(checks);
+        const st = streak(dates);
+        const done = !!checks[todayStr()];
+        let dots = '';
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const k = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+          const on = !!checks[k];
+          dots += '<span style="width:14px;height:14px;border-radius:50%;display:inline-block;background:' + (on ? (h.color || '#0E9C8E') : '#eee') + ';margin-right:5px"></span>';
+        }
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div style="font-size:16px"><span style="font-size:20px">' + (h.emoji || '✅') + '</span> <b>' + esc(h.name) + '</b></div>' +
+          '<button class="del" data-act="del">🗑</button></div>' +
+          '<div class="row" style="margin-top:6px;gap:12px;align-items:center"><div>🔥 连续 <b style="font-size:18px;color:' + (h.color || '#0E9C8E') + '">' + st + '</b> 天</div><div style="color:#999;font-size:12px">累计 ' + dates.length + ' 天</div></div>' +
+          '<div style="margin-top:8px">' + dots + '</div>' +
+          '<button class="btn block ' + (done ? 'ghost' : 'green') + '" data-act="tick" style="margin-top:10px">' + (done ? '✅ 今天已完成' : '☑ 今天完成一下') + '</button>';
+        card.querySelector('[data-act="tick"]').onclick = async () => {
+          h.checks = h.checks || {};
+          const t = todayStr();
+          if (h.checks[t]) delete h.checks[t]; else h.checks[t] = 1;
+          await DB.put('habits', h); paint();
+        };
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这个习惯？（打卡记录也会没）')) { await DB.del('habits', h.id); paint(); } };
+        box.append(card);
+      });
+    }
+    $('#habAdd').onclick = async () => {
+      const f = await promptForm('新建习惯', [
+        { name: 'name', label: '习惯名称', type: 'text', placeholder: '如：每天读书30分钟' },
+        { name: 'emoji', label: '图标（emoji）', type: 'text', value: '✅', placeholder: '🔥 ✅ 📚 💧' },
+        { name: 'color', label: '主题色', type: 'select', options: [{ value: '#0E9C8E', label: '青绿' }, { value: '#e2574c', label: '红' }, { value: '#f0a830', label: '橙' }, { value: '#378ADD', label: '蓝' }, { value: '#7F77DD', label: '紫' }, { value: '#2e9e5b', label: '绿' }] },
+      ]);
+      if (!f || !f.name) return;
+      await DB.put('habits', { name: f.name, emoji: (f.emoji || '✅').slice(0, 4), color: f.color || '#0E9C8E', checks: {}, created: Date.now() });
+      toast('习惯已建 🔥'); paint();
+    };
+    paint();
+  }
+
+  // ===== 📅 月度复盘（只读聚合）=====
+  async function renderReport(view) {
+    view.innerHTML = '<div id="repBody"></div>';
+    async function paint() {
+      const now = new Date();
+      const mp = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-';
+      const data = await Promise.all([DB.all('publish'), DB.all('ledger'), DB.all('english'), DB.all('viet'), DB.all('kids'), DB.all('habits'), DB.all('goals')]);
+      const publish = data[0] || [], ledger = data[1] || [], english = data[2] || [], viet = data[3] || [], kids = data[4] || [], habits = data[5] || [], goals = data[6] || [];
+      const pubMonth = publish.filter(r => (r.date || '').indexOf(mp) === 0);
+      const pubCount = pubMonth.length;
+      const pubViews = pubMonth.reduce((s, r) => s + (Number(r.views) || 0), 0);
+      const pubFans = pubMonth.reduce((s, r) => s + (Number(r.fans) || 0), 0);
+      let inc = 0, exp = 0;
+      ledger.forEach(r => { if ((r.date || '').indexOf(mp) === 0) { if (r.type === 'inc') inc += r.amount; else exp += r.amount; } });
+      const enMonth = english.filter(r => (r.date || '').indexOf(mp) === 0).length;
+      const viMonth = viet.filter(r => (r.date || '').indexOf(mp) === 0).length;
+      let kidStars = 0, kidCheck = 0;
+      kids.forEach(r => {
+        if (r.type === 'check' && (r.date || '').indexOf(mp) === 0) kidCheck += 1;
+        if (r.type === 'starlog' && (r.date || '').indexOf(mp) === 0 && (r.delta || 0) > 0) kidStars += (r.delta || 0);
+      });
+      let maxStreak = 0;
+      habits.forEach(h => { const s = streak(Object.keys(h.checks || {})); if (s > maxStreak) maxStreak = s; });
+      const box = $('#repBody');
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">📅 ' + now.getFullYear() + '年' + (now.getMonth() + 1) + '月 · 月度复盘</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">下面这些数字，是工作台自动从你平时的记录里汇出来的。看得见「这个月没白过」。</p></div>' +
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">📺 副业</div><div class="stat-grid">' +
+        '<div class="stat"><b>' + pubCount + '</b><span>本月发布</span></div>' +
+        '<div class="stat"><b>' + pubViews + '</b><span>总播放/阅读</span></div>' +
+        '<div class="stat"><b>' + pubFans + '</b><span>总涨粉</span></div></div></div>' +
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">💰 收支</div><div class="stat-grid">' +
+        '<div class="stat"><b style="color:#2e9e5b">+' + Math.round(inc) + '</b><span>收入</span></div>' +
+        '<div class="stat"><b style="color:#e2574c">-' + Math.round(exp) + '</b><span>支出</span></div>' +
+        '<div class="stat"><b style="color:#0E9C8E">' + Math.round(inc - exp) + '</b><span>结余</span></div></div></div>' +
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">📚 学习</div><div class="stat-grid">' +
+        '<div class="stat"><b>' + enMonth + '</b><span>英语打卡天</span></div>' +
+        '<div class="stat"><b>' + viMonth + '</b><span>越南语打卡天</span></div>' +
+        '<div class="stat"><b>' + maxStreak + '</b><span>习惯最长连续</span></div></div></div>' +
+        '<div class="card"><div class="card-title">👧 亲子</div><div class="stat-grid">' +
+        '<div class="stat"><b>' + kidCheck + '</b><span>本月打卡次</span></div>' +
+        '<div class="stat"><b>' + kidStars + '</b><span>孩子得星</span></div>' +
+        '<div class="stat"><b>' + goals.length + '</b><span>进行中目标</span></div></div></div>';
+    }
+    paint();
+  }
+
+  // ===== 💎 资产总览 =====
+  async function renderAssets(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">💎 资产总览</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">手头有什么、欠了什么，记下来。净资产 = 资产 − 负债，比看流水更让人安心。</p>' +
+      '<div id="assetSum" style="text-align:center;margin-top:8px"></div>' +
+      '<button id="assetAdd" class="btn green block" style="margin-top:12px">➕ 添加一项</button></div>' +
+      '<div id="assetList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('assets')) || [];
+      let totalA = 0, totalD = 0;
+      list.forEach(r => { const v = Number(r.value) || 0; if (r.type === 'debt') totalD += v; else totalA += v; });
+      const net = totalA - totalD;
+      $('#assetSum').innerHTML =
+        '<div style="font-size:13px;color:#999">净资产</div>' +
+        '<div style="font-size:30px;font-weight:700;color:' + (net >= 0 ? '#2e9e5b' : '#e2574c') + '">' + net.toLocaleString('zh-CN', { maximumFractionDigits: 0 }) + ' 元</div>' +
+        '<div style="font-size:12px;color:#999;margin-top:4px">资产 ' + Math.round(totalA).toLocaleString('zh-CN') + ' · 负债 ' + Math.round(totalD).toLocaleString('zh-CN') + '</div>';
+      const box = $('#assetList');
+      if (!list.length) { box.innerHTML = emptyTip('💎', '还没有记录，先加一项资产或负债'); return; }
+      box.innerHTML = '';
+      list.forEach(r => {
+        const isDebt = r.type === 'debt';
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div><b>' + esc(r.name) + '</b> <span class="chip ' + (isDebt ? '' : 'on') + '">' + (isDebt ? '负债' : '资产') + '</span></div>' +
+          '<div style="font-weight:700;color:' + (isDebt ? '#e2574c' : '#2e9e5b') + '">' + (isDebt ? '-' : '') + Math.round(Number(r.value) || 0).toLocaleString('zh-CN') + ' 元</div></div>' +
+          (r.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
+          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="edit">✏ 编辑</button><button class="del" data-act="del">🗑</button></div>';
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(r);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这项？')) { await DB.del('assets', r.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(r) {
+      const f = await promptForm('编辑', [
+        { name: 'name', label: '名称', type: 'text', value: r.name || '' },
+        { name: 'type', label: '类型', type: 'select', options: [{ value: 'asset', label: '资产' }, { value: 'debt', label: '负债' }] },
+        { name: 'value', label: '金额（元）', type: 'number', value: r.value != null ? r.value : '' },
+        { name: 'note', label: '备注', type: 'text', value: r.note || '' },
+      ]);
+      if (!f) return;
+      Object.assign(r, { name: f.name, type: f.type, value: Number(f.value) || 0, note: f.note || '' });
+      await DB.put('assets', r); paint();
+    }
+    $('#assetAdd').onclick = async () => {
+      const f = await promptForm('添加一项', [
+        { name: 'name', label: '名称', type: 'text', placeholder: '如：银行卡余额 / 花呗欠款' },
+        { name: 'type', label: '类型', type: 'select', options: [{ value: 'asset', label: '资产' }, { value: 'debt', label: '负债' }] },
+        { name: 'value', label: '金额（元）', type: 'number', placeholder: '0' },
+        { name: 'note', label: '备注', type: 'text', placeholder: '可选' },
+      ]);
+      if (!f || !f.name) return;
+      await DB.put('assets', { name: f.name, type: f.type, value: Number(f.value) || 0, note: f.note || '' });
+      toast('已添加 💎'); paint();
+    };
+    paint();
+  }
+
+  // ===== 🎯 我的目标墙 =====
+  async function renderGoals(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">🎯 我的目标墙</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">给你自己的年度微目标，加个进度条，慢慢填。和娃的愿望墙分开。</p>' +
+      '<button id="goalAdd" class="btn green block" style="margin-top:12px">➕ 新建目标</button></div>' +
+      '<div id="goalList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('goals')) || [];
+      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const box = $('#goalList');
+      if (!list.length) { box.innerHTML = emptyTip('🎯', '还没有目标，定一个吧'); return; }
+      box.innerHTML = '';
+      list.forEach(g => {
+        const target = Number(g.target) || 0;
+        const cur = Math.min(target, Number(g.current) || 0);
+        const pct = target > 0 ? Math.round(cur / target * 100) : 0;
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><b>' + esc(g.title) + '</b><button class="del" data-act="del">🗑</button></div>' +
+          (g.deadline ? '<div class="muted" style="font-size:12px;margin-top:2px">截止 ' + esc(g.deadline) + '</div>' : '') +
+          '<div class="row spread" style="margin-top:8px;font-size:13px;color:#666"><span>' + cur + ' / ' + target + ' ' + esc(g.unit || '') + '</span><span>' + pct + '%</span></div>' +
+          '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden;margin-top:4px"><div style="height:100%;width:' + pct + '%;background:#0E9C8E;border-radius:6px"></div></div>' +
+          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="add">＋ 进度</button><button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
+        card.querySelector('[data-act="add"]').onclick = async () => {
+          const f = await promptForm('更新进度', [{ name: 'n', label: '本次增加多少（' + (g.unit || '') + '）', type: 'number', value: '1' }]);
+          if (!f) return;
+          g.current = (Number(g.current) || 0) + (Number(f.n) || 0);
+          await DB.put('goals', g); paint();
+        };
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(g);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这个目标？')) { await DB.del('goals', g.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(g) {
+      const f = await promptForm('编辑目标', [
+        { name: 'title', label: '目标', type: 'text', value: g.title || '' },
+        { name: 'target', label: '目标值', type: 'number', value: g.target != null ? g.target : '' },
+        { name: 'unit', label: '单位', type: 'text', value: g.unit || '' },
+        { name: 'current', label: '当前进度', type: 'number', value: g.current != null ? g.current : '' },
+        { name: 'deadline', label: '截止日期（可选）', type: 'date', value: g.deadline || '' },
+      ]);
+      if (!f || !f.title) return;
+      Object.assign(g, { title: f.title, target: Number(f.target) || 0, unit: f.unit || '', current: Number(f.current) || 0, deadline: f.deadline || '' });
+      await DB.put('goals', g); paint();
+    }
+    $('#goalAdd').onclick = async () => {
+      const f = await promptForm('新建目标', [
+        { name: 'title', label: '目标', type: 'text', placeholder: '如：存够1万块旅游基金' },
+        { name: 'target', label: '目标值', type: 'number', placeholder: '10000' },
+        { name: 'unit', label: '单位', type: 'text', value: '元' },
+        { name: 'current', label: '当前进度', type: 'number', value: '0' },
+        { name: 'deadline', label: '截止日期（可选）', type: 'date' },
+      ]);
+      if (!f || !f.title) return;
+      await DB.put('goals', { title: f.title, target: Number(f.target) || 0, unit: f.unit || '', current: Number(f.current) || 0, deadline: f.deadline || '', created: Date.now() });
+      toast('目标已建 🎯'); paint();
+    };
+    paint();
+  }
+
+  // ===== 📚 读书书摘 =====
+  async function renderBooks(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">📚 读书书摘</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">在读什么、摘了什么好句子，存这里。写稿没灵感时翻一翻，都是现成素材。</p>' +
+      '<button id="bookAdd" class="btn green block" style="margin-top:12px">➕ 添加一本书</button></div>' +
+      '<div id="bookList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('books')) || [];
+      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const box = $('#bookList');
+      if (!list.length) { box.innerHTML = emptyTip('📚', '还没有书，先加一本'); return; }
+      box.innerHTML = '';
+      list.forEach(b => {
+        const quotes = b.quotes || [];
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div><b>' + esc(b.title) + '</b> <span class="chip ' + (b.status === '读完' ? 'on' : '') + '">' + esc(b.status || '想读') + '</span></div>' +
+          '<button class="del" data-act="del">🗑</button></div>' +
+          (b.author ? '<div class="muted" style="font-size:12px;margin-top:2px">作者：' + esc(b.author) + '</div>' : '') +
+          (quotes.length ? '<div style="margin-top:8px">' + quotes.slice(0, 3).map(q => '<div class="g-home-line">“' + esc(q.text) + '”' + (q.note ? ' <span class="muted">— ' + esc(q.note) + '</span>' : '') + '</div>').join('') + (quotes.length > 3 ? '<div class="muted">…还有 ' + (quotes.length - 3) + ' 条书摘</div>' : '') + '</div>' : '') +
+          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="quote">＋ 书摘</button><button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
+        card.querySelector('[data-act="quote"]').onclick = async () => {
+          const f = await promptForm('加一条书摘', [
+            { name: 'text', label: '好句子', type: 'textarea', placeholder: '抄下喜欢的那句' },
+            { name: 'note', label: '我的想法（可选）', type: 'text', placeholder: '为什么喜欢 / 怎么用' },
+            { name: 'page', label: '页码（可选）', type: 'text', value: '' },
+          ]);
+          if (!f || !f.text) return;
+          b.quotes = b.quotes || [];
+          b.quotes.push({ text: f.text, note: f.note || '', page: f.page || '' });
+          await DB.put('books', b); paint();
+        };
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(b);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这本书和书摘？')) { await DB.del('books', b.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(b) {
+      const f = await promptForm('编辑书', [
+        { name: 'title', label: '书名', type: 'text', value: b.title || '' },
+        { name: 'author', label: '作者', type: 'text', value: b.author || '' },
+        { name: 'status', label: '状态', type: 'select', options: [{ value: '想读', label: '想读' }, { value: '在读', label: '在读' }, { value: '读完', label: '读完' }] },
+      ]);
+      if (!f || !f.title) return;
+      Object.assign(b, { title: f.title, author: f.author || '', status: f.status || '想读' });
+      await DB.put('books', b); paint();
+    }
+    $('#bookAdd').onclick = async () => {
+      const f = await promptForm('添加一本书', [
+        { name: 'title', label: '书名', type: 'text', placeholder: '书名' },
+        { name: 'author', label: '作者', type: 'text', placeholder: '作者' },
+        { name: 'status', label: '状态', type: 'select', options: [{ value: '想读', label: '想读' }, { value: '在读', label: '在读' }, { value: '读完', label: '读完' }] },
+      ]);
+      if (!f || !f.title) return;
+      await DB.put('books', { title: f.title, author: f.author || '', status: f.status || '想读', quotes: [], created: Date.now() });
+      toast('已添加 📚'); paint();
+    };
+    paint();
+  }
+
+  // ===== 🕵️ 对标拆解 =====
+  async function renderComp(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">🕵️ 对标拆解</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">看到跑得好的账号，记下来：为什么火、能学什么。比「爆款二创」更往前一步——研究人，不光学活。</p>' +
+      '<button id="compAdd" class="btn green block" style="margin-top:12px">➕ 拆解一个账号</button></div>' +
+      '<div id="compList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('comp')) || [];
+      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const box = $('#compList');
+      if (!list.length) { box.innerHTML = emptyTip('🕵️', '还没有拆解对象'); return; }
+      box.innerHTML = '';
+      list.forEach(c => {
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div><b>' + esc(c.account) + '</b> <span class="chip">' + esc(c.platform || '') + '</span></div>' +
+          '<button class="del" data-act="del">🗑</button></div>' +
+          (c.url ? '<div style="margin-top:2px"><a href="' + esc(c.url) + '" target="_blank" style="color:#0E9C8E;font-size:13px">查看主页 ↗</a></div>' : '') +
+          (c.why ? '<p style="margin:8px 0 0;font-size:14px">' + esc(c.why) + '</p>' : '') +
+          (c.tags ? '<div class="muted" style="font-size:12px;margin-top:6px">标签：' + esc(c.tags) + '</div>' : '') +
+          '<button class="btn sm ghost" data-act="edit" style="margin-top:8px">✏ 编辑</button>';
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(c);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这条拆解？')) { await DB.del('comp', c.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(c) {
+      const f = await promptForm('编辑拆解', [
+        { name: 'account', label: '账号名', type: 'text', value: c.account || '' },
+        { name: 'platform', label: '平台', type: 'text', value: c.platform || '' },
+        { name: 'url', label: '主页链接', type: 'text', value: c.url || '' },
+        { name: 'why', label: '为什么火 / 能学什么', type: 'textarea', value: c.why || '' },
+        { name: 'tags', label: '标签', type: 'text', value: c.tags || '' },
+      ]);
+      if (!f || !f.account) return;
+      Object.assign(c, { account: f.account, platform: f.platform || '', url: f.url || '', why: f.why || '', tags: f.tags || '' });
+      await DB.put('comp', c); paint();
+    }
+    $('#compAdd').onclick = async () => {
+      const f = await promptForm('拆解一个账号', [
+        { name: 'account', label: '账号名', type: 'text', placeholder: '如：某某读书博主' },
+        { name: 'platform', label: '平台', type: 'text', placeholder: '抖音 / 视频号 / 公众号' },
+        { name: 'url', label: '主页链接', type: 'text', placeholder: 'https://...' },
+        { name: 'why', label: '为什么火 / 能学什么', type: 'textarea', placeholder: '它的内容有什么特别、我能借鉴哪点' },
+        { name: 'tags', label: '标签', type: 'text', placeholder: '知识博主 / 治愈系' },
+      ]);
+      if (!f || !f.account) return;
+      await DB.put('comp', { account: f.account, platform: f.platform || '', url: f.url || '', why: f.why || '', tags: f.tags || '', created: Date.now() });
+      toast('已记录 🕵️'); paint();
+    };
+    paint();
+  }
+
+  // ===== 🪄 Prompt 宝盒 =====
+  async function renderPrompts(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">🪄 Prompt 宝盒</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">你常用的 AI 咒语存这里，随时复制。写稿、做图、剪视频都能用，不用每次重写。</p>' +
+      '<button id="prAdd" class="btn green block" style="margin-top:12px">➕ 收藏一条咒语</button></div>' +
+      '<div id="prList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('prompts')) || [];
+      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const box = $('#prList');
+      if (!list.length) { box.innerHTML = emptyTip('🪄', '还没有收藏的咒语'); return; }
+      box.innerHTML = '';
+      list.forEach(p => {
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><b>' + esc(p.title) + '</b><button class="del" data-act="del">🗑</button></div>' +
+          (p.tag ? '<span class="chip" style="margin-top:4px;display:inline-block">' + esc(p.tag) + '</span>' : '') +
+          '<div style="margin-top:8px;white-space:pre-wrap;word-break:break-word;background:#f7fbfa;border-radius:8px;padding:10px;font-size:13px;color:#333;max-height:200px;overflow:auto">' + esc(p.body || '') + '</div>' +
+          '<button class="btn sm ghost" data-act="copy" style="margin-top:8px">📋 复制咒语</button>';
+        card.querySelector('[data-act="copy"]').onclick = async () => {
+          const text = p.body || '';
+          try { await navigator.clipboard.writeText(text); toast('已复制 📋'); }
+          catch (e) {
+            const ta = document.createElement('textarea'); ta.value = text; document.body.append(ta); ta.select();
+            try { document.execCommand('copy'); toast('已复制 📋'); } catch (_) { toast('复制失败，长按选文本'); }
+            ta.remove();
+          }
+        };
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这条咒语？')) { await DB.del('prompts', p.id); paint(); } };
+        box.append(card);
+      });
+    }
+    $('#prAdd').onclick = async () => {
+      const f = await promptForm('收藏一条咒语', [
+        { name: 'title', label: '标题', type: 'text', placeholder: '如：爆款标题生成' },
+        { name: 'tag', label: '分类标签', type: 'text', placeholder: '写稿 / 做图 / 剪辑' },
+        { name: 'body', label: '咒语内容', type: 'textarea', placeholder: '把 prompt 全文贴进来' },
+      ]);
+      if (!f || !f.title) return;
+      await DB.put('prompts', { title: f.title, tag: f.tag || '', body: f.body || '', created: Date.now() });
+      toast('已收藏 🪄'); paint();
+    };
+    paint();
+  }
+
+  // ===== 🩸 经期记录 =====
+  async function renderPeriod(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">🩸 经期记录</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">记下每次开始日，自动按 28 天周期推算下次大概时间。只存在你手机里。</p>' +
+      '<div id="perInfo" style="text-align:center;margin-top:8px"></div>' +
+      '<button id="perAdd" class="btn green block" style="margin-top:12px">➕ 记一次开始</button></div>' +
+      '<div id="perList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('period')) || [];
+      list.sort((a, b) => (b.start || '').localeCompare(a.start || ''));
+      const info = $('#perInfo');
+      if (list.length) {
+        const last = list[0];
+        const parts = (last.start || '').split('-');
+        const d = new Date(+parts[0], (+parts[1] || 1) - 1, +parts[2] || 1);
+        const next = new Date(d); next.setDate(next.getDate() + 28);
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        const diff = Math.round((next - today) / 86400000);
+        const tip = diff > 0 ? ('预计下次约 ' + diff + ' 天后（' + (next.getMonth() + 1) + '月' + next.getDate() + '日）') : (diff === 0 ? '预计就是今天' : ('已超过预计日 ' + (-diff) + ' 天'));
+        info.innerHTML = '<div style="font-size:13px;color:#999">最近一次</div><div style="font-size:20px;font-weight:700;color:#e2574c">' + esc(last.start) + '</div><div style="font-size:12px;color:#999;margin-top:4px">' + tip + '</div>';
+      } else {
+        info.innerHTML = '<div class="muted">还没有记录</div>';
+      }
+      const box = $('#perList');
+      if (!list.length) { box.innerHTML = emptyTip('🩸', '记一次开始日，以后自动提醒'); return; }
+      box.innerHTML = '';
+      list.forEach(r => {
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div><b>' + esc(r.start) + '</b> 开始</div><button class="del" data-act="del">🗑</button></div>' +
+          (r.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
+          '<button class="btn sm ghost" data-act="edit" style="margin-top:8px">✏ 编辑</button>';
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(r);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这条记录？')) { await DB.del('period', r.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(r) {
+      const f = await promptForm('编辑', [
+        { name: 'start', label: '开始日期', type: 'date', value: r.start || todayStr() },
+        { name: 'note', label: '备注', type: 'text', value: r.note || '' },
+      ]);
+      if (!f) return;
+      Object.assign(r, { start: f.start || todayStr(), note: f.note || '' });
+      await DB.put('period', r); paint();
+    }
+    $('#perAdd').onclick = async () => {
+      const f = await promptForm('记一次开始', [
+        { name: 'start', label: '开始日期', type: 'date', value: todayStr() },
+        { name: 'note', label: '备注（可选）', type: 'text', placeholder: '如：量正常 / 痛经' },
+      ]);
+      if (!f) return;
+      await DB.put('period', { start: f.start || todayStr(), note: f.note || '' });
+      toast('已记录 🩸'); paint();
+    };
+    paint();
+  }
+
+  // ===== 🔗 常用链接 =====
+  async function renderLinks(view) {
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">🔗 常用链接</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">各平台后台、素材网站、常用工具，存这里随手点。相当于你的私人书签。</p>' +
+      '<button id="linkAdd" class="btn green block" style="margin-top:12px">➕ 加一个链接</button></div>' +
+      '<div id="linkList"></div>';
+
+    async function paint() {
+      const list = (await DB.all('links')) || [];
+      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const box = $('#linkList');
+      if (!list.length) { box.innerHTML = emptyTip('🔗', '还没有链接'); return; }
+      box.innerHTML = '';
+      list.forEach(l => {
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div><b>' + esc(l.name) + '</b></div><button class="del" data-act="del">🗑</button></div>' +
+          (l.url ? '<div class="muted" style="font-size:12px;margin-top:2px;word-break:break-all">' + esc(l.url) + '</div>' : '') +
+          (l.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(l.note) + '</p>' : '') +
+          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="open">↗ 打开</button><button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
+        card.querySelector('[data-act="open"]').onclick = () => { if (l.url) openLink(l.url); };
+        card.querySelector('[data-act="edit"]').onclick = () => editOne(l);
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这个链接？')) { await DB.del('links', l.id); paint(); } };
+        box.append(card);
+      });
+    }
+    async function editOne(l) {
+      const f = await promptForm('编辑链接', [
+        { name: 'name', label: '名称', type: 'text', value: l.name || '' },
+        { name: 'url', label: '链接', type: 'text', value: l.url || '' },
+        { name: 'note', label: '备注', type: 'text', value: l.note || '' },
+      ]);
+      if (!f || !f.name) return;
+      Object.assign(l, { name: f.name, url: f.url || '', note: f.note || '' });
+      await DB.put('links', l); paint();
+    }
+    $('#linkAdd').onclick = async () => {
+      const f = await promptForm('加一个链接', [
+        { name: 'name', label: '名称', type: 'text', placeholder: '如：抖音创作者后台' },
+        { name: 'url', label: '链接', type: 'text', placeholder: 'https://...' },
+        { name: 'note', label: '备注', type: 'text', placeholder: '可选' },
+      ]);
+      if (!f || !f.name) return;
+      await DB.put('links', { name: f.name, url: f.url || '', note: f.note || '' , created: Date.now()});
+      toast('已添加 🔗'); paint();
+    };
     paint();
   }
 

@@ -65,3 +65,42 @@
 - **重要链接经验**：bbc.co.uk 旧式单集路径（/english/features/xxx/ep-2608xx）现已全部 404（站点迁移），real-easy-english_2026 同样 404。改用已验证可访问的 bbc.com 栏目页：https://www.bbc.com/learningenglish/features/real-easy-english、.../the-english-we-speak、.../6-minute-english。
 - 部署：本地 commit 44ab00c 成功；git push **两次均失败**（`Recv failure: Connection was reset`，沙箱无网络到 GitHub）。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.workbuddy.link
 - 明日避重：以上全部主题勿复用。BBC 下次优先抓 6ME 8/20 新集；未出则用 Real Easy English 剩余集（ep-260724 family trees / ep-260717 hair / ep-260710 climate change / ep-260703 phone habits）或 TEWS（ep-260727 one size fits all / ep-260720 side quest / ep-260713 passing ships）。
+
+## 2026-08-16
+- 三份数据文件已更新，JSON 校验通过。当日真实热点切入（抖音8/16榜）：童年动画三巨头集体在抖音写信(1158.7万)/豆包进化到能学我唱歌了(1050.6万)/秋冬上衣裤子搭配公式(904.3万)/我们为什么总是容易相信谣言(887.5万)/早八人必备的韩系上镜妆(763.2万)；小红书早秋针织衫+半身裙霸榜27天、#舒服才是真体面8.3亿；8/16国家体育总局体彩#肌不可失挑战赛上线。选题10条：不露脸动画《牛来》逆袭/Happy赖IP、越南语买螃蟹(生存句第5课)、古法操×肌不可失、童年动画写信回忆杀、豆包翻唱尤克里里、早秋针织衫半裙平替、信谣言3套路、生态环境法典禁居民楼开饭店、失业舒适穿搭、早八上镜妆三步。挑战榜：#肌不可失/#早秋氛围感穿搭/#舒服才是真体面/#熊出没收到了00后们的回信/#豆包能学我唱歌了。
+- BBC 五篇（均原创摘要、用 bbc.com 栏目页链接）：Real Easy English — family trees(ep-260724)/hair(ep-260717)/climate change(ep-260710)；The English We Speak — one size fits all(ep-260727)/side quest(ep-260720)。
+- 部署：本地 commit 842e313；**git push 本次成功**（`c6e4d31..842e313 main -> main`，仅有「remote: This repository moved」提示不影响，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
+- 明日避重：以上全部主题勿复用。BBC 下次优先抓 6ME 8/20 新集；未出则用 Real Easy English 剩余集（ep-260703 phone habits）或 TEWS 剩余集（ep-260713 passing ships）。
+
+## 2026-08-17
+- 三份数据文件已更新，JSON 校验通过。当日真实热点切入（抖音8/17榜）：17日24时起国内油价上调(1210.82万)/当30年前的中专生写高考作文(1203.61万)/就业新风口来了(1177.15万)/第一眼直觉点评穿搭(1170.22万)/复刻煎蟹女王翡翠炒蟹肉(1048.49万)；人民日报「义乌父亲带14岁儿送外卖治厌学」；小红书「果冻核美学」；文博日历定窑古画。选题10条：前职校老师评中专生作文/AI副业新风口/不露脸点评穿搭/失业精算过日子/AI慢旅行/古画端上桌动画/劳动教育不是吃苦教育/果冻核配饰/对抗遗忘曲线/前老师晚自习反转。挑战榜：#果冻核美学/#慢充才是旅行最佳打开方式/#人生要多一些支点/#把千年古画端上桌/#第一眼直觉点评穿搭。
+- BBC 五篇（均原创摘要、用 bbc.com 栏目页链接）：6ME — billionaires bunkers(260129)/divided society(260101)；Real Easy English — phone habits(ep-260703)；The English We Speak — passing ships(ep-260713)；English In A Minute S5 — Phrases with 'look'(ep-260317)。
+- 部署：本地 commit 0aec7f7；**git push 成功**（`842e313..0aec7f7 main -> main`，「remote: This repository moved」提示不影响，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
+- 明日避重：以上全部主题勿复用。BBC 库存：6ME 早期题已几乎用尽，下一新集约 8/20 周四；EIAM S5 已启用（'look'），剩余可挖 'day'/'end'/'money'/'thing'/'hand'/'eye'/'water' 等；REE/TEWS 早期集已用尽。
+
+## 2026-08-18
+- 三份数据文件已更新，JSON 校验通过。当日真实热点切入（抖音8/18榜+微博/小红书/B站）：榴莲价格崩了(猫山王148→14.8/kg)、所长有人送来个大冰箱(新梗刷屏)、急性子小姐和慢吞吞先生、DeepSeek调价、广东最低工资9/1上调、用AI给小时候的自己做头像(817.4万)、耗时三年拍下古诗词里的中国(小红书911.2万)、女生总觉得没衣服穿、末伏、Bye bye baby blue翻译错了(B站热梗)。选题10条覆盖：AI童年头像/榴莲自由/职校老师版大冰箱梗/快慢夫妻日常/末伏古法操/断舍离衣橱/初秋韩系毛衣/AI博主停更思考/越南语榴莲砍价/尤克里里跟唱学英语。挑战榜：#用AI给小时候的自己做头像/#所长有人送来个大冰箱/#急性子小姐和慢吞吞先生/#智性韩系毛衣开启初秋穿搭/#耗时三年拍下古诗词里的中国。
+- BBC 五篇（均原创摘要、用 bbc.com 栏目页链接）：6ME 早期未用集 — Children in warzones(260723)/What's in a footballer's brain(260716)/Stress-free family meals(260625)/Limiting screen time for children(260618)/How advertisers make us spend money(260611)。**注意 6ME 下一新集仍约 8/20 周四，未出则用 EIAM S5 剩余（'day'/'end'/'money'/'thing' 等）或 News Review。**
+- 部署：本地 commit 667fec2 成功；**git push 失败**（`Recv failure: Connection was reset`，沙箱无网络到 GitHub，EXIT=128），仍 1 commit 待推。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。
+
+## 2026-08-21
+- 三份数据文件已更新，JSON 校验通过。当日真实热点切入：8月美食黑马（水泥麻辣烫/芋泥拉丝麻薯/贴秋膘红烧肉）、抖音热榜「这个秋天我要做个帅女(942万)」「60岁AI动画赛道新人(928万)」、小红书「永乐未央」中式美学（话题2850万+）、「头皮护理」浏览破13亿（精细护理新风）。选题10条：一人公司日课表/不露脸Happy赖IP动画/秋日帅女穿搭/水泥麻辣烫开箱/中式美学/越南语维权/处暑古法操/AI通关地图/一人副业反差/头皮清洁repo。挑战榜（均为历史未用新鲜话题）：#万能旅行拍照姿势/#永乐未央/#帕斯蒂尔风/#全国吃辣天花板/#头皮护理。
+- BBC 五篇（均原创摘要、用 bbc.co.uk 栏目页链接，避开此前所有用过的 6ME/EIAM/REE/TEWS 主题）：English In A Minute — jam(ep-260814,最新)/money短语(ep-260123)/eye短语；The English We Speak — understood the assignment(ep-260707)/sell yourself short(ep-260623)。
+- 部署：本地 commit 9f01bc3；**git push 成功**（`0aec7f7..9f01bc3 main -> main`，「remote: This repository moved」仅为提示，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
+- 明日避重：以上全部主题勿复用。BBC 下次可用：EIAM 未用集（'game'260403/'friend'260327/'class'260424/'speak'260417/'keep'260410/'day'260206/'end'260130）、TEWS 未用集（onto something/like a moth to a flame/gatekeep/wrap it up/throw ideas at the wall）、6ME 若 8/27 前后出新集优先用。
+
+## 2026-08-22
+- 三份数据文件已更新，JSON 校验通过。当日真实热点切入（抖音/微博/百度 8/22）：服装博主秋天第一件自留款(917万)/开渔第一顿海鲜(1035万)/童年动漫照见00后青春底色(1108万)/微信新功能丑丑(百度#4)/机器人服务一老一小(百度#12)/10后给00后的一封信(1139万榜首)/厄尔尼诺闷热/雨天防触电。选题10条覆盖：微信新功能实测/秋日基础针织自留/厄尔尼诺室内古法操/开渔一人食海鲜vlog/越南语第6课点海鲜/机器人照顾老小/长文记录生活/高智感韩女妆/尤克里里《城里的月光》/雨天防触电。挑战榜：#10后给00后的一封信/#服装博主的秋天第一件自留款/#开渔第一顿海鲜/#童年动漫照见青春底色/#戴眼镜秒变高智感韩女。
+- BBC 五篇（均原创摘要、用 bbc.com 栏目页链接）：6ME 最新集 Sharing the road with driverless cars(ep-260820，8/20新出，首用)/TEWS Say less(ep-260817，最新，首用)/TEWS in over my head(ep-260518)/EIAM game(ep-260403)/EIAM class(ep-260424)。
+- 部署：本地 commit 150a0bd 成功；**git push 失败**（`Connection timed out after 300038 ms`，沙箱连不上 github.com，EXIT=128），仍 1 commit 待推（origin 停在 9f01bc3）。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。BBC 下次优先抓 6ME 新集（约 8/27 周四，若出 ep-260827 等）；未出则用 EIAM 未用集（'friend'/'speak'/'keep'/'day'/'end'）或 TEWS 未用集（onto something/like a moth to a flame/gatekeep/wrap it up/throw ideas at the wall）。
+- 经验：git push 本次挂满 300s 才返回超时（第四种形态：纯网络超时，与 8/4 类似），确认沙箱完全无法访问 GitHub，提交只能等用户电脑登录后自行 `git push`。
+
+## 2026-08-23
+- 三份数据文件已更新，JSON 校验通过。当日真实热点切入（抖音/微博/百度 8/23）：世界人形机器人运动会(天工Ultra百米9.39秒超博尔特，释小龙旋风踢干翻自己)、三台风并存(紫檀/沙德尔/简拉维)、浙江男子20年攒800万6天被骗、桃酥无一滴水、亚朵卖枕头收入快赶上酒店主业、戴上耳机逃离城市喧嚣(906万)、我的童年记忆同框啦(769万)、原来我也适合美式男孩风(790万)、新的故事会在秋风中慢慢开始(1022万)、兰州拉面改青海拉面。
+- 选题10条：机器人替代饭碗(前职校老师视角)/台风宅家古法操/防骗3坑/秋风重启信/老字号招牌(旅游本行)/桃酥冷知识/亚朵副业选品/白噪音vlog/美式男孩风平替/尤克里里秋天弹唱。
+- 挑战榜：#戴上耳机逃离城市喧嚣/#我的童年记忆同框啦/#原来我也适合美式男孩风/#世界人形机器人运动会/#我的中山旅行日记(小红书官方征集中，有奖励)。
+- BBC 五篇（均原创摘要、用 bbc.com 栏目页链接，避开此前所有用过主题）：EIAM friend(260327)/speak(260417)/keep(260410)；TEWS onto something/like a moth to a flame。
+- 部署：本地 commit a4da456 成功；git push **失败**（`Recv failure: Connection was reset`，沙箱无网络到 GitHub，EXIT=128），仍 1 commit 待推（origin 停在 9f01bc3）。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。BBC 下次优先抓 6ME 新集（约 8/27 周四，若出 ep-260827 等）；未出则用 EIAM 剩余未用集（'day'260206/'end'260130）或 TEWS 剩余未用集（gatekeep/wrap it up/throw ideas at the wall）。
