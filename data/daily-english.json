@@ -1,145 +1,145 @@
 {
-  "date": "2026-08-22",
+  "date": "2026-08-23",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Sharing the road with driverless cars",
-      "zh": "和无人驾驶汽车共用马路",
-      "words": 180,
-      "dur": 360,
-      "vocab": 12,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Phrases with 'friend'",
+      "zh": "一分钟英语：和 friend 有关的短语",
+      "words": 230,
+      "dur": 110,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
       "body": [
         [
-          "Driverless cars are already driving safely in some cities, but experts wonder how humans will behave around them.",
-          "无人驾驶汽车已在部分城市安全行驶，但专家担心人类在它们周围会如何表现。"
+          "In this short BBC clip, the presenter looks at common English expressions built around the word 'friend'.",
+          "在这段BBC短视频里，主讲人讲解了以'friend'这个词构成的常见英语表达。"
         ],
         [
-          "The big question is communication: how do we 'talk' to a car that has no driver inside?",
-          "核心问题是沟通：我们该如何与一辆没有司机的车'对话'？"
+          "One example is 'fair-weather friend', which describes someone who is only there for you when life is going well.",
+          "例如'fair-weather friend'（酒肉朋友），指的是只在顺境时才陪着你的人。"
         ],
         [
-          "This episode explores whether people and robotaxis can safely share the road in the future.",
-          "这一集探讨了人类与无人驾驶出租车未来能否安全共用道路。"
+          "The clip also covers 'be more than friends' and the old saying 'a friend in need is a friend indeed', showing how one word can carry very different meanings.",
+          "视频还讲到'be more than friends'（不止朋友关系）以及老话'a friend in need is a friend indeed'（患难见真情），展现同一个词能承载截然不同的意思。"
         ]
       ],
       "tips": [
-        ["driverless", "无人驾驶的"],
-        ["robotaxi", "无人驾驶出租车"],
-        ["communicate", "沟通、交流"]
+        ["fair-weather friend", "酒肉朋友（只在顺境出现的人）"],
+        ["be more than friends", "不止是朋友（暗指暧昧或恋爱）"],
+        ["a friend in need is a friend indeed", "患难见真情"]
       ]
     },
     {
       "id": "d2",
-      "en": "Say less",
-      "zh": "俚语 'Say less'：一句话秒懂",
-      "words": 90,
-      "dur": 180,
-      "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Phrases with 'speak'",
+      "zh": "一分钟英语：和 speak 有关的短语",
+      "words": 230,
+      "dur": 110,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
       "body": [
         [
-          "'Say less' is a modern slang phrase used to show you agree enthusiastically with a suggestion.",
-          "'Say less' 是现代俚语，表示你非常赞同某个提议。"
+          "This English In A Minute episode focuses on everyday phrases that use the verb 'speak'.",
+          "这期《English In A Minute》聚焦日常生活中用到动词'speak'的短语。"
         ],
         [
-          "It means something similar to 'say no more' — you are ready to act without more talk.",
-          "意思类似'不用多说'，你已经准备好行动，无需多言。"
+          "Expressions such as 'speak for itself' (the result is so clear no words are needed) and 'generally speaking' (when talking about a rule that is usually true) are explained with simple examples.",
+          "比如'speak for itself'（不言而喻）和'generally speaking'（一般来说），都用简单例子做了讲解。"
         ],
         [
-          "You might say it when a friend invites you to do something you already wanted to do.",
-          "当朋友邀你做一件你正想做的事时，你可以用这个词回应。"
+          "By the end, learners see that 'speak' is not only about talking, but also about showing or representing something without saying a word.",
+          "学完这期，你会发现'speak'不光是'说话'，还能表示'不言自明'或'代表某事物'。"
         ]
       ],
       "tips": [
-        ["say less", "不用多说（表强烈赞同）"],
-        ["slang", "俚语"],
-        ["enthusiastically", "热情地、积极地"]
+        ["speak for itself", "不言而喻，事实本身说明一切"],
+        ["generally speaking", "一般来说，总体而言"],
+        ["speak volumes", "充分说明，很有说服力"]
       ]
     },
     {
       "id": "d3",
-      "en": "In over my head",
-      "zh": "习语 'In over my head'：招架不住",
-      "words": 95,
-      "dur": 180,
-      "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Phrases with 'keep'",
+      "zh": "一分钟英语：和 keep 有关的短语",
+      "words": 230,
+      "dur": 110,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
       "body": [
         [
-          "'In over my head' describes a situation that is too difficult to handle.",
-          "'In over my head' 形容处境太难、让人招架不住。"
+          "The clip introduces several useful phrases built with the word 'keep'.",
+          "这段视频介绍了几个由'keep'构成的实用短语。"
         ],
         [
-          "People use it when they feel overwhelmed by work, study, or a complex problem.",
-          "当人们被工作、学业或难题压得喘不过气时，就会用这个词。"
+          "For instance, 'keep something at bay' means to stop a problem from getting closer or worse, while 'keep an eye on' means to watch or look after something.",
+          "比如'keep something at bay'指'阻止问题靠近或恶化'，而'keep an eye on'是'留意、照看'的意思。"
         ],
         [
-          "It comes from the image of water rising above your head and you cannot breathe easily.",
-          "它源自水深没过头顶、难以呼吸的画面。"
+          "These short expressions are common in both spoken and written English, and learning them helps you sound more natural in daily conversation.",
+          "这些短短语在口语和书面英语里都很常见，掌握它们能让日常对话更地道。"
         ]
       ],
       "tips": [
-        ["in over one's head", "陷入难以应付的境地"],
-        ["overwhelmed", "不堪重负的"],
-        ["cope", "应付、应对"]
+        ["keep something at bay", "阻止…靠近/恶化"],
+        ["keep an eye on", "留意，照看"],
+        ["keep your cool", "保持冷静"]
       ]
     },
     {
       "id": "d4",
-      "en": "Phrases with 'game'",
-      "zh": "一分钟英语：'game' 的那些用法",
-      "words": 85,
-      "dur": 60,
+      "en": "Onto something",
+      "zh": "口语惯用语：onto something（有了好点子）",
+      "words": 210,
+      "dur": 95,
       "vocab": 7,
-      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
         [
-          "The word 'game' can mean a fun activity, but it also appears in many everyday phrases.",
-          "'game' 可以指有趣的游戏，也常出现在日常短语中。"
+          "In this The English We Speak episode, Feifei and Roy explain the idiom 'onto something'.",
+          "在这期《The English We Speak》里，Feifei 和 Roy 讲解了习语'onto something'。"
         ],
         [
-          "For example, 'the game is up' means a secret plan has been discovered.",
-          "比如 'the game is up' 表示秘密计划已被发现。"
+          "If you are 'onto something', it means you have found or realised an idea that could be important or correct, often before others see it.",
+          "如果你'onto something'，意思是你发现或意识到一个可能很重要、很正确的点子，往往别人还没看出来。"
         ],
         [
-          "Learning these short phrases helps you sound more natural in quick conversations.",
-          "掌握这些短短语，能让你在日常对话里更自然。"
+          "The hosts give examples from daily life, showing how the phrase is used when someone's hunch turns out to be right.",
+          "主持人举了生活里的例子，说明当一个人的预感被证实是对的时候，就可以用这个短语。"
         ]
       ],
       "tips": [
-        ["the game is up", "事情败露了、完了"],
-        ["fair game", "公平的目标（可被批评或追求的人/物）"],
-        ["phrase", "短语、词组"]
+        ["be onto something", "有了重要发现，猜中了"],
+        ["a hunch", "直觉，预感"],
+        ["turn out", "结果是，证明是"]
       ]
     },
     {
       "id": "d5",
-      "en": "Phrases with 'class'",
-      "zh": "一分钟英语：'class' 的那些用法",
-      "words": 85,
-      "dur": 60,
+      "en": "Like a moth to a flame",
+      "zh": "俚语：like a moth to a flame（飞蛾扑火）",
+      "words": 210,
+      "dur": 95,
       "vocab": 7,
-      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
         [
-          "Besides 'a school class', the word 'class' is used in several useful English expressions.",
-          "除了'一堂课'，'class' 还出现在多个实用英语表达里。"
+          "This episode looks at the idiom 'like a moth to a flame', a vivid way to describe being strongly and often blindly attracted to something.",
+          "这期讲习语'like a moth to a flame'（像飞蛾扑火），形象地描述被某事物强烈、甚至盲目地吸引。"
         ],
         [
-          "For instance, 'first class' can describe something of the highest quality, not just a flight seat.",
-          "例如 'first class' 可形容最高品质的事物，不只是飞机头等舱。"
+          "Just as a moth cannot resist flying into a bright light, a person described this way is drawn to someone or something they cannot stay away from, even if it is risky.",
+          "就像飞蛾忍不住扑向亮光，被这样形容的人会被某人或某物吸引得无法自拔，即便有风险。"
         ],
         [
-          "These small words carry big meaning, so it is worth noticing how native speakers use them.",
-          "这些小词含义丰富，值得留意母语者怎么用。"
+          "The presenters explain the phrase with fun examples, helping listeners use it to talk about love, habits, or temptation.",
+          "主讲人用有趣的例子解释这个词，帮助听众用它来谈论爱情、习惯或诱惑。"
         ]
       ],
       "tips": [
-        ["first class", "一流的、最高级的"],
-        ["class act", "举止优雅、令人钦佩的人"],
-        ["expression", "表达、说法"]
+        ["like a moth to a flame", "像飞蛾扑火般无法抗拒地被吸引"],
+        ["be drawn to", "被…吸引"],
+        ["temptation", "诱惑"]
       ]
     }
   ]
