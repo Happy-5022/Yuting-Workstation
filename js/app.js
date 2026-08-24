@@ -5159,13 +5159,37 @@
       '<div style="font-size:11px;color:#999">' + label + '</div>' +
       '<div style="font-size:15px;font-weight:500;color:' + (color || '#333') + '">' + val + '</div></div>';
   }
+  // 历史最长连续天数（best ever）
+  function bestStreak(dates) {
+    const set = new Set(dates);
+    const key = (x) => x.getFullYear() + '-' + pad(x.getMonth() + 1) + '-' + pad(x.getDate());
+    let best = 0, cur = 0, prev = null;
+    [...set].sort().forEach(d => {
+      if (prev && (new Date(d) - new Date(prev)) === 86400000) cur++; else cur = 1;
+      if (cur > best) best = cur;
+      prev = d;
+    });
+    return best;
+  }
+  // 近 N 天完成率（%）
+  function completionRate(dates, days) {
+    const set = new Set(dates);
+    const key = (x) => x.getFullYear() + '-' + pad(x.getMonth() + 1) + '-' + pad(x.getDate());
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    let n = 0;
+    for (let i = 0; i < days; i++) { const d = new Date(today); d.setDate(d.getDate() - i); if (set.has(key(d))) n++; }
+    return Math.round(n / days * 100);
+  }
 
   // ===== 📺 发布台账 =====
   async function renderPublish(view) {
+    let onlyMonth = false;
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">📺 发布台账</div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">每发一条内容记一笔：发在哪个平台、播放/阅读、赞、评、涨粉。月底一眼看出哪种选题、哪个平台最能跑。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">每发一条记一笔：平台、播放/阅读、赞、评、涨粉。下面按平台帮你对比——这是副业最该有的"数据眼睛"，一眼看出哪个平台最能跑。</p>' +
       '<div id="pubSum" style="display:flex;gap:8px;margin-top:10px"></div>' +
+      '<div class="row" style="margin-top:10px;gap:8px"><button id="pubAll" class="btn sm">全部</button><button id="pubMon" class="btn sm ghost">仅本月</button></div>' +
+      '<div id="pubPlat" style="margin-top:10px"></div>' +
       '<button id="pubAdd" class="btn green block" style="margin-top:12px">➕ 记录一条发布</button></div>' +
       '<div id="pubList"></div>';
 
@@ -5173,16 +5197,45 @@
       return '<div style="background:#f7fbfa;border-radius:8px;padding:6px 10px;font-size:12px;color:#666">' + label + ' <b style="color:#333">' + (v || 0) + '</b></div>';
     }
     async function paint() {
-      const list = (await DB.all('publish')) || [];
+      const all = (await DB.all('publish')) || [];
+      const mp = new Date().getFullYear() + '-' + pad(new Date().getMonth() + 1) + '-';
+      const list = onlyMonth ? all.filter(r => (r.date || '').indexOf(mp) === 0) : all;
       list.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || 0) - (a.id || 0));
       const total = list.length;
       const views = list.reduce((s, r) => s + (Number(r.views) || 0), 0);
       const fans = list.reduce((s, r) => s + (Number(r.fans) || 0), 0);
       $('#pubSum').innerHTML = sumCard('已发布', total, '#0E9C8E') + sumCard('总播放/阅读', views, '#378ADD') + sumCard('总涨粉', fans, '#2e9e5b');
+      // 按平台分组对比
+      const groups = {};
+      list.forEach(r => { const p = r.platform || '其他'; groups[p] = groups[p] || { n: 0, v: 0, f: 0 }; groups[p].n++; groups[p].v += Number(r.views) || 0; groups[p].f += Number(r.fans) || 0; });
+      const names = Object.keys(groups);
+      const maxV = Math.max(1, ...names.map(p => groups[p].v));
+      let plat = '';
+      if (names.length) {
+        plat = '<div style="font-size:12px;color:#999;margin-bottom:6px">按平台对比（条数 · 播放阅读 · 涨粉）</div>';
+        names.sort((a, b) => groups[b].f - groups[a].f).forEach(p => {
+          const g = groups[p];
+          plat += '<div style="margin-bottom:8px"><div class="row spread" style="font-size:13px"><span>' + esc(p) + ' · ' + g.n + '条</span><span style="color:#666">▶' + g.v + ' · ➕' + g.f + '</span></div>' +
+            '<div style="height:6px;background:#eee;border-radius:4px;margin-top:3px;overflow:hidden"><div style="height:100%;width:' + Math.round(g.v / maxV * 100) + '%;background:#378ADD;border-radius:4px"></div></div></div>';
+        });
+      }
+      $('#pubPlat').innerHTML = plat;
       const box = $('#pubList');
       if (!total) { box.innerHTML = emptyTip('📺', '还没有记录，发完内容顺手记一笔吧'); return; }
       box.innerHTML = '';
+      // 最佳一条（按涨粉，其次播放）
+      let best = null;
+      list.forEach(r => { const score = (Number(r.fans) || 0) * 10 + (Number(r.views) || 0); if (!best || score > best._s) { best = r; best._s = score; } });
+      if (best) {
+        const b = el('<div class="card" style="margin-bottom:10px;background:linear-gradient(135deg,#fff7e6,#fff);border:1px solid #ffe2a8"></div>');
+        b.innerHTML = '<div class="card-title" style="font-size:14px">🏆 最佳一条（按涨粉）</div>' +
+          '<div style="font-size:14px"><b>' + esc(best.title || '未命名') + '</b> <span class="chip on">' + esc(best.platform || '其他') + '</span></div>' +
+          '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(best.date || '') + '</div>' +
+          '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' + stat('▶ 播放/阅读', best.views) + stat('❤ 赞', best.likes) + stat('💬 评', best.comments) + stat('➕ 涨粉', best.fans) + '</div>';
+        box.append(b);
+      }
       list.forEach(r => {
+        if (r === best) return;
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
           '<div class="row spread"><b>' + esc(r.title || '未命名') + '</b><span class="chip on">' + esc(r.platform || '其他') + '</span></div>' +
@@ -5211,6 +5264,8 @@
       Object.assign(r, { title: f.title, platform: f.platform, date: f.date || todayStr(), url: f.url || '', views: Number(f.views) || 0, likes: Number(f.likes) || 0, comments: Number(f.comments) || 0, fans: Number(f.fans) || 0, note: f.note || '' });
       await DB.put('publish', r); paint();
     }
+    $('#pubAll').onclick = () => { onlyMonth = false; $('#pubAll').className = 'btn sm'; $('#pubMon').className = 'btn sm ghost'; paint(); };
+    $('#pubMon').onclick = () => { onlyMonth = true; $('#pubMon').className = 'btn sm'; $('#pubAll').className = 'btn sm ghost'; paint(); };
     $('#pubAdd').onclick = async () => {
       const f = await promptForm('记录一条发布', [
         { name: 'title', label: '标题', type: 'text', placeholder: '这条内容叫什么' },
@@ -5234,10 +5289,23 @@
   async function renderHabits(view) {
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🔥 我的习惯墙</div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">这是给你自己用的打卡，和娃的打卡分开。每天点一下「完成」，连续天数会一直涨——成年人最怕断，攒着的连续天数会推着你坚持。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">给你自己用的打卡，和娃的打卡分开。每天点「完成」，下面这张色块图就是你的坚持——颜色越满，这段时间越稳。主流习惯 App（Loop / Habitify）都用这种图。</p>' +
       '<button id="habAdd" class="btn green block" style="margin-top:12px">➕ 新建一个习惯</button></div>' +
       '<div id="habList"></div>';
 
+    function buildHeat(checks, color) {
+      const set = new Set(Object.keys(checks));
+      const key = (x) => x.getFullYear() + '-' + pad(x.getMonth() + 1) + '-' + pad(x.getDate());
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      let cells = '';
+      const N = 70;
+      for (let i = N - 1; i >= 0; i--) {
+        const dt = new Date(today); dt.setDate(dt.getDate() - i);
+        const on = set.has(key(dt));
+        cells += '<span style="width:11px;height:11px;border-radius:3px;display:inline-block;margin:1px;background:' + (on ? color : '#eef2f4') + '"></span>';
+      }
+      return '<div style="display:grid;grid-template-columns:repeat(10,13px);width:max-content">' + cells + '</div>';
+    }
     async function paint() {
       const list = (await DB.all('habits')) || [];
       list.sort((a, b) => (b.created || 0) - (a.created || 0));
@@ -5245,23 +5313,22 @@
       if (!list.length) { box.innerHTML = emptyTip('🔥', '还没有习惯，先建一个吧（比如：每天读书30分）'); return; }
       box.innerHTML = '';
       list.forEach(h => {
+        const color = h.color || '#0E9C8E';
         const checks = h.checks || {};
         const dates = Object.keys(checks);
         const st = streak(dates);
+        const bs = bestStreak(dates);
+        const rate = completionRate(dates, 30);
         const done = !!checks[todayStr()];
-        let dots = '';
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date(); d.setDate(d.getDate() - i);
-          const k = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-          const on = !!checks[k];
-          dots += '<span style="width:14px;height:14px;border-radius:50%;display:inline-block;background:' + (on ? (h.color || '#0E9C8E') : '#eee') + ';margin-right:5px"></span>';
-        }
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
           '<div class="row spread"><div style="font-size:16px"><span style="font-size:20px">' + (h.emoji || '✅') + '</span> <b>' + esc(h.name) + '</b></div>' +
           '<button class="del" data-act="del">🗑</button></div>' +
-          '<div class="row" style="margin-top:6px;gap:12px;align-items:center"><div>🔥 连续 <b style="font-size:18px;color:' + (h.color || '#0E9C8E') + '">' + st + '</b> 天</div><div style="color:#999;font-size:12px">累计 ' + dates.length + ' 天</div></div>' +
-          '<div style="margin-top:8px">' + dots + '</div>' +
+          '<div class="row" style="margin-top:6px;gap:14px;align-items:center;flex-wrap:wrap">' +
+          '<div>🔥 连续 <b style="font-size:18px;color:' + color + '">' + st + '</b> 天</div>' +
+          '<div style="font-size:12px;color:#999">最长 ' + bs + ' 天 · 近30天完成 ' + rate + '%</div></div>' +
+          '<div style="margin-top:8px;overflow-x:auto">' + buildHeat(checks, color) + '</div>' +
+          '<div style="font-size:11px;color:#bbb;margin-top:2px">↑ 最近 70 天（每格一天）</div>' +
           '<button class="btn block ' + (done ? 'ghost' : 'green') + '" data-act="tick" style="margin-top:10px">' + (done ? '✅ 今天已完成' : '☑ 今天完成一下') + '</button>';
         card.querySelector('[data-act="tick"]').onclick = async () => {
           h.checks = h.checks || {};
@@ -5288,77 +5355,107 @@
 
   // ===== 📅 月度复盘（只读聚合）=====
   async function renderReport(view) {
+    const now = new Date();
+    let cursor = new Date(now.getFullYear(), now.getMonth(), 1);
     view.innerHTML = '<div id="repBody"></div>';
-    async function paint() {
-      const now = new Date();
-      const mp = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-';
-      const data = await Promise.all([DB.all('publish'), DB.all('ledger'), DB.all('english'), DB.all('viet'), DB.all('kids'), DB.all('habits'), DB.all('goals')]);
-      const publish = data[0] || [], ledger = data[1] || [], english = data[2] || [], viet = data[3] || [], kids = data[4] || [], habits = data[5] || [], goals = data[6] || [];
-      const pubMonth = publish.filter(r => (r.date || '').indexOf(mp) === 0);
-      const pubCount = pubMonth.length;
-      const pubViews = pubMonth.reduce((s, r) => s + (Number(r.views) || 0), 0);
-      const pubFans = pubMonth.reduce((s, r) => s + (Number(r.fans) || 0), 0);
+    function ym(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-'; }
+    function lab(d) { return d.getFullYear() + '年' + (d.getMonth() + 1) + '月'; }
+    function repStat(label, val, prev, goodUp) {
+      let d = '';
+      if (prev != null && prev !== val) {
+        const diff = val - prev;
+        const col = (diff > 0) === goodUp ? '#2e9e5b' : '#e2574c';
+        d = ' <span style="font-size:11px;color:' + col + '">' + (diff > 0 ? '▲' : '▼') + Math.abs(diff) + '</span>';
+      }
+      return '<div class="stat"><b>' + val + d + '</b><span>' + label + '</span></div>';
+    }
+    function plainStat(label, val) { return '<div class="stat"><b>' + val + '</b><span>' + label + '</span></div>'; }
+    async function copyText(t) {
+      try { await navigator.clipboard.writeText(t); }
+      catch (e) { const ta = document.createElement('textarea'); ta.value = t; document.body.append(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove(); }
+    }
+    async function agg(prefix) {
+      const data = await Promise.all([DB.all('publish'), DB.all('ledger'), DB.all('english'), DB.all('viet'), DB.all('kids')]);
+      const publish = data[0] || [], ledger = data[1] || [], english = data[2] || [], viet = data[3] || [], kids = data[4] || [];
+      const pm = publish.filter(r => (r.date || '').indexOf(prefix) === 0);
       let inc = 0, exp = 0;
-      ledger.forEach(r => { if ((r.date || '').indexOf(mp) === 0) { if (r.type === 'inc') inc += r.amount; else exp += r.amount; } });
-      const enMonth = english.filter(r => (r.date || '').indexOf(mp) === 0).length;
-      const viMonth = viet.filter(r => (r.date || '').indexOf(mp) === 0).length;
+      ledger.forEach(r => { if ((r.date || '').indexOf(prefix) === 0) { if (r.type === 'inc') inc += r.amount; else exp += r.amount; } });
+      const enMonth = english.filter(r => (r.date || '').indexOf(prefix) === 0).length;
+      const viMonth = viet.filter(r => (r.date || '').indexOf(prefix) === 0).length;
       let kidStars = 0, kidCheck = 0;
       kids.forEach(r => {
-        if (r.type === 'check' && (r.date || '').indexOf(mp) === 0) kidCheck += 1;
-        if (r.type === 'starlog' && (r.date || '').indexOf(mp) === 0 && (r.delta || 0) > 0) kidStars += (r.delta || 0);
+        if (r.type === 'check' && (r.date || '').indexOf(prefix) === 0) kidCheck += 1;
+        if (r.type === 'starlog' && (r.date || '').indexOf(prefix) === 0 && (r.delta || 0) > 0) kidStars += (r.delta || 0);
       });
+      return { pubCount: pm.length, pubViews: pm.reduce((s, r) => s + (Number(r.views) || 0), 0), pubFans: pm.reduce((s, r) => s + (Number(r.fans) || 0), 0), inc: Math.round(inc), exp: Math.round(exp), enMonth, viMonth, kidCheck, kidStars };
+    }
+    async function paint() {
+      const cur = ym(cursor), prev = ym(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1));
+      const a = await agg(cur), p = await agg(prev);
+      const habits = (await DB.all('habits')) || [], goals = (await DB.all('goals')) || [];
       let maxStreak = 0;
-      habits.forEach(h => { const s = streak(Object.keys(h.checks || {})); if (s > maxStreak) maxStreak = s; });
+      habits.forEach(h => { const s = bestStreak(Object.keys(h.checks || {})); if (s > maxStreak) maxStreak = s; });
+      const canNext = cursor < new Date(now.getFullYear(), now.getMonth(), 1);
       const box = $('#repBody');
       box.innerHTML =
-        '<div class="card" style="margin-bottom:12px"><div class="card-title">📅 ' + now.getFullYear() + '年' + (now.getMonth() + 1) + '月 · 月度复盘</div>' +
-        '<p class="muted" style="margin:6px 0 0;font-size:13px">下面这些数字，是工作台自动从你平时的记录里汇出来的。看得见「这个月没白过」。</p></div>' +
+        '<div class="card" style="margin-bottom:12px"><div class="row spread" style="align-items:center"><div class="card-title" style="margin:0">' + lab(cursor) + ' · 月度复盘</div>' +
+        '<div class="row" style="gap:6px"><button id="repPrev" class="btn sm ghost">‹</button><button id="repNext" class="btn sm ghost"' + (canNext ? '' : ' disabled style="opacity:.4"') + '>›</button></div></div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">数字自动从你平时的记录汇出来。▲/▼ 是和上个月比。看得见「这个月没白过」。</p>' +
+        '<button id="repCopy" class="btn ghost sm block" style="margin-top:10px">📋 复制本月月报</button></div>' +
         '<div class="card" style="margin-bottom:12px"><div class="card-title">📺 副业</div><div class="stat-grid">' +
-        '<div class="stat"><b>' + pubCount + '</b><span>本月发布</span></div>' +
-        '<div class="stat"><b>' + pubViews + '</b><span>总播放/阅读</span></div>' +
-        '<div class="stat"><b>' + pubFans + '</b><span>总涨粉</span></div></div></div>' +
+        repStat('本月发布', a.pubCount, p.pubCount, true) + repStat('总播放/阅读', a.pubViews, p.pubViews, true) + repStat('总涨粉', a.pubFans, p.pubFans, true) + '</div></div>' +
         '<div class="card" style="margin-bottom:12px"><div class="card-title">💰 收支</div><div class="stat-grid">' +
-        '<div class="stat"><b style="color:#2e9e5b">+' + Math.round(inc) + '</b><span>收入</span></div>' +
-        '<div class="stat"><b style="color:#e2574c">-' + Math.round(exp) + '</b><span>支出</span></div>' +
-        '<div class="stat"><b style="color:#0E9C8E">' + Math.round(inc - exp) + '</b><span>结余</span></div></div></div>' +
+        repStat('收入', a.inc, p.inc, true) + repStat('支出', a.exp, p.exp, false) + repStat('结余', a.inc - a.exp, p.inc - p.exp, true) + '</div></div>' +
         '<div class="card" style="margin-bottom:12px"><div class="card-title">📚 学习</div><div class="stat-grid">' +
-        '<div class="stat"><b>' + enMonth + '</b><span>英语打卡天</span></div>' +
-        '<div class="stat"><b>' + viMonth + '</b><span>越南语打卡天</span></div>' +
-        '<div class="stat"><b>' + maxStreak + '</b><span>习惯最长连续</span></div></div></div>' +
+        repStat('英语打卡天', a.enMonth, p.enMonth, true) + repStat('越南语打卡天', a.viMonth, p.viMonth, true) + plainStat('习惯最长连续', maxStreak) + '</div></div>' +
         '<div class="card"><div class="card-title">👧 亲子</div><div class="stat-grid">' +
-        '<div class="stat"><b>' + kidCheck + '</b><span>本月打卡次</span></div>' +
-        '<div class="stat"><b>' + kidStars + '</b><span>孩子得星</span></div>' +
-        '<div class="stat"><b>' + goals.length + '</b><span>进行中目标</span></div></div></div>';
+        repStat('本月打卡次', a.kidCheck, p.kidCheck, true) + repStat('孩子得星', a.kidStars, p.kidStars, true) + plainStat('进行中目标', goals.length) + '</div></div>';
+      $('#repPrev').onclick = () => { cursor = new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1); paint(); };
+      $('#repNext').onclick = () => { if (!canNext) return; cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1); paint(); };
+      $('#repCopy').onclick = async () => { await copyText('【' + lab(cursor) + ' 月度复盘】\n📺 副业：发布 ' + a.pubCount + ' 条 · 播放阅读 ' + a.pubViews + ' · 涨粉 ' + a.pubFans + '\n💰 收支：收入 ' + a.inc + ' · 支出 ' + a.exp + ' · 结余 ' + (a.inc - a.exp) + '\n📚 学习：英语 ' + a.enMonth + ' 天 · 越南语 ' + a.viMonth + ' 天\n👧 亲子：打卡 ' + a.kidCheck + ' 次 · 孩子得星 ' + a.kidStars + '\n—— 来自「Happy赖工作台」'); toast('月报已复制 📋'); };
     }
     paint();
   }
 
   // ===== 💎 资产总览 =====
   async function renderAssets(view) {
+    const CATS = [{ value: 'cash', label: '现金' }, { value: 'bank', label: '存款' }, { value: 'invest', label: '投资' }, { value: 'debt', label: '负债' }, { value: 'other', label: '其他' }];
+    const catLabel = (v) => (CATS.find(c => c.value === v) || {}).label || '其他';
+    const isDebtOf = (r) => (r.cat === 'debt') || (r.cat == null && r.type === 'debt');
+    const catKeyOf = (r) => isDebtOf(r) ? 'debt' : (r.cat || 'other');
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">💎 资产总览</div>' +
       '<p class="muted" style="margin:6px 0 0;font-size:13px">手头有什么、欠了什么，记下来。净资产 = 资产 − 负债，比看流水更让人安心。</p>' +
       '<div id="assetSum" style="text-align:center;margin-top:8px"></div>' +
+      '<div id="assetCat" style="margin-top:10px"></div>' +
       '<button id="assetAdd" class="btn green block" style="margin-top:12px">➕ 添加一项</button></div>' +
       '<div id="assetList"></div>';
 
     async function paint() {
       const list = (await DB.all('assets')) || [];
       let totalA = 0, totalD = 0;
-      list.forEach(r => { const v = Number(r.value) || 0; if (r.type === 'debt') totalD += v; else totalA += v; });
+      list.forEach(r => { const v = Number(r.value) || 0; if (isDebtOf(r)) totalD += v; else totalA += v; });
       const net = totalA - totalD;
       $('#assetSum').innerHTML =
         '<div style="font-size:13px;color:#999">净资产</div>' +
         '<div style="font-size:30px;font-weight:700;color:' + (net >= 0 ? '#2e9e5b' : '#e2574c') + '">' + net.toLocaleString('zh-CN', { maximumFractionDigits: 0 }) + ' 元</div>' +
         '<div style="font-size:12px;color:#999;margin-top:4px">资产 ' + Math.round(totalA).toLocaleString('zh-CN') + ' · 负债 ' + Math.round(totalD).toLocaleString('zh-CN') + '</div>';
+      const groups = {};
+      list.forEach(r => { const k = catKeyOf(r); groups[k] = (groups[k] || 0) + (Number(r.value) || 0); });
+      let catHtml = '';
+      if (Object.keys(groups).length) {
+        catHtml = '<div style="font-size:12px;color:#999;margin-bottom:6px">资产构成</div>';
+        CATS.forEach(c => { if (groups[c.value] != null) { const isD = c.value === 'debt'; catHtml += '<div class="row spread" style="font-size:13px;margin-bottom:4px"><span>' + c.label + '</span><span style="color:' + (isD ? '#e2574c' : '#2e9e5b') + '">' + (isD ? '-' : '') + Math.round(groups[c.value]).toLocaleString('zh-CN') + ' 元</span></div>'; } });
+      }
+      $('#assetCat').innerHTML = catHtml;
       const box = $('#assetList');
       if (!list.length) { box.innerHTML = emptyTip('💎', '还没有记录，先加一项资产或负债'); return; }
       box.innerHTML = '';
       list.forEach(r => {
-        const isDebt = r.type === 'debt';
+        const isDebt = isDebtOf(r);
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
-          '<div class="row spread"><div><b>' + esc(r.name) + '</b> <span class="chip ' + (isDebt ? '' : 'on') + '">' + (isDebt ? '负债' : '资产') + '</span></div>' +
+          '<div class="row spread"><div><b>' + esc(r.name) + '</b> <span class="chip ' + (isDebt ? '' : 'on') + '">' + catLabel(catKeyOf(r)) + (isDebt ? '·负债' : '') + '</span></div>' +
           '<div style="font-weight:700;color:' + (isDebt ? '#e2574c' : '#2e9e5b') + '">' + (isDebt ? '-' : '') + Math.round(Number(r.value) || 0).toLocaleString('zh-CN') + ' 元</div></div>' +
           (r.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
           '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="edit">✏ 编辑</button><button class="del" data-act="del">🗑</button></div>';
@@ -5370,23 +5467,23 @@
     async function editOne(r) {
       const f = await promptForm('编辑', [
         { name: 'name', label: '名称', type: 'text', value: r.name || '' },
-        { name: 'type', label: '类型', type: 'select', options: [{ value: 'asset', label: '资产' }, { value: 'debt', label: '负债' }] },
+        { name: 'cat', label: '分类', type: 'select', options: [{ value: 'cash', label: '现金' }, { value: 'bank', label: '存款' }, { value: 'invest', label: '投资' }, { value: 'debt', label: '负债' }, { value: 'other', label: '其他' }] },
         { name: 'value', label: '金额（元）', type: 'number', value: r.value != null ? r.value : '' },
         { name: 'note', label: '备注', type: 'text', value: r.note || '' },
       ]);
       if (!f) return;
-      Object.assign(r, { name: f.name, type: f.type, value: Number(f.value) || 0, note: f.note || '' });
+      Object.assign(r, { name: f.name, cat: f.cat, type: undefined, value: Number(f.value) || 0, note: f.note || '' });
       await DB.put('assets', r); paint();
     }
     $('#assetAdd').onclick = async () => {
       const f = await promptForm('添加一项', [
         { name: 'name', label: '名称', type: 'text', placeholder: '如：银行卡余额 / 花呗欠款' },
-        { name: 'type', label: '类型', type: 'select', options: [{ value: 'asset', label: '资产' }, { value: 'debt', label: '负债' }] },
+        { name: 'cat', label: '分类', type: 'select', options: [{ value: 'cash', label: '现金' }, { value: 'bank', label: '存款' }, { value: 'invest', label: '投资' }, { value: 'debt', label: '负债' }, { value: 'other', label: '其他' }] },
         { name: 'value', label: '金额（元）', type: 'number', placeholder: '0' },
         { name: 'note', label: '备注', type: 'text', placeholder: '可选' },
       ]);
       if (!f || !f.name) return;
-      await DB.put('assets', { name: f.name, type: f.type, value: Number(f.value) || 0, note: f.note || '' });
+      await DB.put('assets', { name: f.name, cat: f.cat, value: Number(f.value) || 0, note: f.note || '' });
       toast('已添加 💎'); paint();
     };
     paint();
@@ -5402,7 +5499,8 @@
 
     async function paint() {
       const list = (await DB.all('goals')) || [];
-      list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const isDone = (g) => (Number(g.target) || 0) > 0 && (Number(g.current) || 0) >= (Number(g.target) || 0);
+      list.sort((a, b) => { const ad = isDone(a), bd = isDone(b); if (ad !== bd) return ad ? 1 : -1; return (b.created || 0) - (a.created || 0); });
       const box = $('#goalList');
       if (!list.length) { box.innerHTML = emptyTip('🎯', '还没有目标，定一个吧'); return; }
       box.innerHTML = '';
@@ -5410,13 +5508,15 @@
         const target = Number(g.target) || 0;
         const cur = Math.min(target, Number(g.current) || 0);
         const pct = target > 0 ? Math.round(cur / target * 100) : 0;
+        const done = pct >= 100;
+        const barColor = done ? '#2e9e5b' : '#0E9C8E';
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
-          '<div class="row spread"><b>' + esc(g.title) + '</b><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="row spread"><b>' + esc(g.title) + '</b>' + (done ? '<span class="chip on">✅ 已完成</span>' : '<button class="del" data-act="del">🗑</button>') + '</div>' +
           (g.deadline ? '<div class="muted" style="font-size:12px;margin-top:2px">截止 ' + esc(g.deadline) + '</div>' : '') +
           '<div class="row spread" style="margin-top:8px;font-size:13px;color:#666"><span>' + cur + ' / ' + target + ' ' + esc(g.unit || '') + '</span><span>' + pct + '%</span></div>' +
-          '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden;margin-top:4px"><div style="height:100%;width:' + pct + '%;background:#0E9C8E;border-radius:6px"></div></div>' +
-          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="add">＋ 进度</button><button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
+          '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden;margin-top:4px"><div style="height:100%;width:' + pct + '%;background:' + barColor + ';border-radius:6px"></div></div>' +
+          '<div class="row" style="margin-top:8px;gap:8px">' + (done ? '' : '<button class="btn sm ghost" data-act="add">＋ 进度</button>') + '<button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
         card.querySelector('[data-act="add"]').onclick = async () => {
           const f = await promptForm('更新进度', [{ name: 'n', label: '本次增加多少（' + (g.unit || '') + '）', type: 'number', value: '1' }]);
           if (!f) return;
@@ -5463,6 +5563,7 @@
       '<button id="bookAdd" class="btn green block" style="margin-top:12px">➕ 添加一本书</button></div>' +
       '<div id="bookList"></div>';
 
+    const expanded = new Set();
     async function paint() {
       const list = (await DB.all('books')) || [];
       list.sort((a, b) => (b.created || 0) - (a.created || 0));
@@ -5471,13 +5572,20 @@
       box.innerHTML = '';
       list.forEach(b => {
         const quotes = b.quotes || [];
+        const rating = Number(b.rating) || 0;
+        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        const showAll = expanded.has(b.id);
+        const shown = showAll ? quotes : quotes.slice(0, 3);
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
           '<div class="row spread"><div><b>' + esc(b.title) + '</b> <span class="chip ' + (b.status === '读完' ? 'on' : '') + '">' + esc(b.status || '想读') + '</span></div>' +
           '<button class="del" data-act="del">🗑</button></div>' +
           (b.author ? '<div class="muted" style="font-size:12px;margin-top:2px">作者：' + esc(b.author) + '</div>' : '') +
-          (quotes.length ? '<div style="margin-top:8px">' + quotes.slice(0, 3).map(q => '<div class="g-home-line">“' + esc(q.text) + '”' + (q.note ? ' <span class="muted">— ' + esc(q.note) + '</span>' : '') + '</div>').join('') + (quotes.length > 3 ? '<div class="muted">…还有 ' + (quotes.length - 3) + ' 条书摘</div>' : '') + '</div>' : '') +
+          (rating ? '<div style="color:#f0a830;font-size:14px;margin-top:2px">' + stars + '</div>' : '') +
+          (quotes.length ? '<div style="margin-top:8px">' + shown.map(q => '<div class="g-home-line">“' + esc(q.text) + '”' + (q.note ? ' <span class="muted">— ' + esc(q.note) + '</span>' : '') + '</div>').join('') + (quotes.length > 3 ? '<button class="btn sm ghost" data-act="toggle" style="margin-top:6px">' + (showAll ? '收起' : '查看全部 ' + quotes.length + ' 条') + '</button>' : '') + '</div>' : '') +
           '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="quote">＋ 书摘</button><button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
+        const tog = card.querySelector('[data-act="toggle"]');
+        if (tog) tog.onclick = () => { if (expanded.has(b.id)) expanded.delete(b.id); else expanded.add(b.id); paint(); };
         card.querySelector('[data-act="quote"]').onclick = async () => {
           const f = await promptForm('加一条书摘', [
             { name: 'text', label: '好句子', type: 'textarea', placeholder: '抄下喜欢的那句' },
@@ -5499,9 +5607,10 @@
         { name: 'title', label: '书名', type: 'text', value: b.title || '' },
         { name: 'author', label: '作者', type: 'text', value: b.author || '' },
         { name: 'status', label: '状态', type: 'select', options: [{ value: '想读', label: '想读' }, { value: '在读', label: '在读' }, { value: '读完', label: '读完' }] },
+        { name: 'rating', label: '我的评分（1-5，0为不评）', type: 'number', value: b.rating != null ? b.rating : '0' },
       ]);
       if (!f || !f.title) return;
-      Object.assign(b, { title: f.title, author: f.author || '', status: f.status || '想读' });
+      Object.assign(b, { title: f.title, author: f.author || '', status: f.status || '想读', rating: Math.max(0, Math.min(5, Number(f.rating) || 0)) });
       await DB.put('books', b); paint();
     }
     $('#bookAdd').onclick = async () => {
@@ -5509,9 +5618,10 @@
         { name: 'title', label: '书名', type: 'text', placeholder: '书名' },
         { name: 'author', label: '作者', type: 'text', placeholder: '作者' },
         { name: 'status', label: '状态', type: 'select', options: [{ value: '想读', label: '想读' }, { value: '在读', label: '在读' }, { value: '读完', label: '读完' }] },
+        { name: 'rating', label: '我的评分（1-5，0为不评）', type: 'number', value: '0' },
       ]);
       if (!f || !f.title) return;
-      await DB.put('books', { title: f.title, author: f.author || '', status: f.status || '想读', quotes: [], created: Date.now() });
+      await DB.put('books', { title: f.title, author: f.author || '', status: f.status || '想读', rating: Math.max(0, Math.min(5, Number(f.rating) || 0)), quotes: [], created: Date.now() });
       toast('已添加 📚'); paint();
     };
     paint();
@@ -5519,22 +5629,33 @@
 
   // ===== 🕵️ 对标拆解 =====
   async function renderComp(view) {
+    let compFilter = 'all';
+    const COMP_TYPES = [{ value: '对标账号', label: '对标账号' }, { value: '灵感来源', label: '灵感来源' }, { value: '避坑参考', label: '避坑参考' }];
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🕵️ 对标拆解</div>' +
       '<p class="muted" style="margin:6px 0 0;font-size:13px">看到跑得好的账号，记下来：为什么火、能学什么。比「爆款二创」更往前一步——研究人，不光学活。</p>' +
+      '<div id="compFilter" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>' +
       '<button id="compAdd" class="btn green block" style="margin-top:12px">➕ 拆解一个账号</button></div>' +
       '<div id="compList"></div>';
 
+    function renderCompFilter() {
+      const box = $('#compFilter'); if (!box) return;
+      const opts = [{ value: 'all', label: '全部' }].concat(COMP_TYPES);
+      box.innerHTML = opts.map(o => '<button class="chip ' + (compFilter === o.value ? 'on' : '') + '" data-f="' + o.value + '" style="cursor:pointer">' + o.label + '</button>').join('');
+      box.querySelectorAll('[data-f]').forEach(btn => { btn.onclick = () => { compFilter = btn.getAttribute('data-f'); renderCompFilter(); paint(); }; });
+    }
     async function paint() {
       const list = (await DB.all('comp')) || [];
       list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const show = compFilter === 'all' ? list : list.filter(c => (c.type || '对标账号') === compFilter);
       const box = $('#compList');
-      if (!list.length) { box.innerHTML = emptyTip('🕵️', '还没有拆解对象'); return; }
+      renderCompFilter();
+      if (!show.length) { box.innerHTML = emptyTip('🕵️', compFilter === 'all' ? '还没有拆解对象' : '这个分类下还没有'); return; }
       box.innerHTML = '';
-      list.forEach(c => {
+      show.forEach(c => {
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
-          '<div class="row spread"><div><b>' + esc(c.account) + '</b> <span class="chip">' + esc(c.platform || '') + '</span></div>' +
+          '<div class="row spread"><div><b>' + esc(c.account) + '</b> <span class="chip">' + esc(c.platform || '') + '</span> <span class="chip" style="background:#eef4f7">' + esc(c.type || '对标账号') + '</span></div>' +
           '<button class="del" data-act="del">🗑</button></div>' +
           (c.url ? '<div style="margin-top:2px"><a href="' + esc(c.url) + '" target="_blank" style="color:#0E9C8E;font-size:13px">查看主页 ↗</a></div>' : '') +
           (c.why ? '<p style="margin:8px 0 0;font-size:14px">' + esc(c.why) + '</p>' : '') +
@@ -5548,25 +5669,27 @@
     async function editOne(c) {
       const f = await promptForm('编辑拆解', [
         { name: 'account', label: '账号名', type: 'text', value: c.account || '' },
+        { name: 'type', label: '类型', type: 'select', options: [{ value: '对标账号', label: '对标账号' }, { value: '灵感来源', label: '灵感来源' }, { value: '避坑参考', label: '避坑参考' }] },
         { name: 'platform', label: '平台', type: 'text', value: c.platform || '' },
         { name: 'url', label: '主页链接', type: 'text', value: c.url || '' },
         { name: 'why', label: '为什么火 / 能学什么', type: 'textarea', value: c.why || '' },
         { name: 'tags', label: '标签', type: 'text', value: c.tags || '' },
       ]);
       if (!f || !f.account) return;
-      Object.assign(c, { account: f.account, platform: f.platform || '', url: f.url || '', why: f.why || '', tags: f.tags || '' });
+      Object.assign(c, { account: f.account, type: f.type || '对标账号', platform: f.platform || '', url: f.url || '', why: f.why || '', tags: f.tags || '' });
       await DB.put('comp', c); paint();
     }
     $('#compAdd').onclick = async () => {
       const f = await promptForm('拆解一个账号', [
         { name: 'account', label: '账号名', type: 'text', placeholder: '如：某某读书博主' },
+        { name: 'type', label: '类型', type: 'select', options: [{ value: '对标账号', label: '对标账号' }, { value: '灵感来源', label: '灵感来源' }, { value: '避坑参考', label: '避坑参考' }] },
         { name: 'platform', label: '平台', type: 'text', placeholder: '抖音 / 视频号 / 公众号' },
         { name: 'url', label: '主页链接', type: 'text', placeholder: 'https://...' },
         { name: 'why', label: '为什么火 / 能学什么', type: 'textarea', placeholder: '它的内容有什么特别、我能借鉴哪点' },
         { name: 'tags', label: '标签', type: 'text', placeholder: '知识博主 / 治愈系' },
       ]);
       if (!f || !f.account) return;
-      await DB.put('comp', { account: f.account, platform: f.platform || '', url: f.url || '', why: f.why || '', tags: f.tags || '', created: Date.now() });
+      await DB.put('comp', { account: f.account, type: f.type || '对标账号', platform: f.platform || '', url: f.url || '', why: f.why || '', tags: f.tags || '', created: Date.now() });
       toast('已记录 🕵️'); paint();
     };
     paint();
@@ -5574,19 +5697,24 @@
 
   // ===== 🪄 Prompt 宝盒 =====
   async function renderPrompts(view) {
+    let prQ = '';
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🪄 Prompt 宝盒</div>' +
       '<p class="muted" style="margin:6px 0 0;font-size:13px">你常用的 AI 咒语存这里，随时复制。写稿、做图、剪视频都能用，不用每次重写。</p>' +
+      '<input id="prSearch" placeholder="搜索标题 / 标签 / 内容…" style="width:100%;margin-top:10px;padding:8px 10px;border:1px solid #e0e6ea;border-radius:10px;font-size:14px;box-sizing:border-box" />' +
       '<button id="prAdd" class="btn green block" style="margin-top:12px">➕ 收藏一条咒语</button></div>' +
       '<div id="prList"></div>';
+    const sb = $('#prSearch'); if (sb) sb.oninput = (e) => { prQ = e.target.value; paint(); };
 
     async function paint() {
       const list = (await DB.all('prompts')) || [];
       list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const q = prQ.trim().toLowerCase();
+      const show = q ? list.filter(p => ((p.title || '') + ' ' + (p.tag || '') + ' ' + (p.body || '')).toLowerCase().indexOf(q) >= 0) : list;
       const box = $('#prList');
-      if (!list.length) { box.innerHTML = emptyTip('🪄', '还没有收藏的咒语'); return; }
+      if (!show.length) { box.innerHTML = emptyTip('🪄', q ? '没搜到匹配的咒语' : '还没有收藏的咒语'); return; }
       box.innerHTML = '';
-      list.forEach(p => {
+      show.forEach(p => {
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
           '<div class="row spread"><b>' + esc(p.title) + '</b><button class="del" data-act="del">🗑</button></div>' +
@@ -5623,24 +5751,52 @@
   async function renderPeriod(view) {
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🩸 经期记录</div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">记下每次开始日，自动按 28 天周期推算下次大概时间。只存在你手机里。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">记下每次开始日。研究说：只有约 13% 的人周期刚好 28 天，所以我会用你自己的历史算平均周期来推算，比死定 28 天准。</p>' +
       '<div id="perInfo" style="text-align:center;margin-top:8px"></div>' +
-      '<button id="perAdd" class="btn green block" style="margin-top:12px">➕ 记一次开始</button></div>' +
+      '<div class="row" style="margin-top:10px;gap:8px"><button id="perSet" class="btn sm ghost">⚙ 周期设置</button><button id="perAdd" class="btn green" style="flex:1">➕ 记一次开始</button></div></div>' +
       '<div id="perList"></div>';
 
+    async function getCfg() {
+      const m = await DB.get('meta', 'periodCfg');
+      const cfg = (m && m.value) ? m.value : null;
+      const list = (await DB.all('period')) || [];
+      list.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+      let avg = 28, hasHist = false;
+      if (list.length >= 2) {
+        let sum = 0, n = 0;
+        for (let i = 1; i < list.length; i++) {
+          const gap = Math.round((new Date(list[i].start) - new Date(list[i - 1].start)) / 86400000);
+          if (gap > 0 && gap < 120) { sum += gap; n++; }
+        }
+        if (n) { avg = Math.round(sum / n); hasHist = true; }
+      }
+      const cycle = (cfg && cfg.cycle) ? cfg.cycle : avg;
+      const duration = (cfg && cfg.duration) ? cfg.duration : 5;
+      return { cycle, duration, avg, hasHist, hasCfg: !!(cfg && cfg.cycle) };
+    }
     async function paint() {
       const list = (await DB.all('period')) || [];
       list.sort((a, b) => (b.start || '').localeCompare(a.start || ''));
+      const cfg = await getCfg();
       const info = $('#perInfo');
+      const today = new Date(); today.setHours(0, 0, 0, 0);
       if (list.length) {
         const last = list[0];
         const parts = (last.start || '').split('-');
         const d = new Date(+parts[0], (+parts[1] || 1) - 1, +parts[2] || 1);
-        const next = new Date(d); next.setDate(next.getDate() + 28);
-        const today = new Date(); today.setHours(0, 0, 0, 0);
+        const next = new Date(d); next.setDate(next.getDate() + cfg.cycle);
+        const ovl = new Date(next); ovl.setDate(ovl.getDate() - 14);
         const diff = Math.round((next - today) / 86400000);
+        const endD = new Date(d); endD.setDate(endD.getDate() + (cfg.duration - 1));
+        const inPeriod = today >= d && today <= endD;
         const tip = diff > 0 ? ('预计下次约 ' + diff + ' 天后（' + (next.getMonth() + 1) + '月' + next.getDate() + '日）') : (diff === 0 ? '预计就是今天' : ('已超过预计日 ' + (-diff) + ' 天'));
-        info.innerHTML = '<div style="font-size:13px;color:#999">最近一次</div><div style="font-size:20px;font-weight:700;color:#e2574c">' + esc(last.start) + '</div><div style="font-size:12px;color:#999;margin-top:4px">' + tip + '</div>';
+        let note = cfg.hasCfg ? '' : (cfg.hasHist ? '（按历史平均 ' + cfg.avg + ' 天自动推算）' : '（默认 28 天，多记几次会更准）');
+        info.innerHTML =
+          '<div style="font-size:13px;color:#999">最近一次</div>' +
+          '<div style="font-size:20px;font-weight:700;color:#e2574c">' + esc(last.start) + '</div>' +
+          (inPeriod ? '<div style="display:inline-block;margin-top:4px;background:#fde8e8;color:#e2574c;font-size:12px;padding:2px 10px;border-radius:10px">🔴 正在经期中</div>' : '') +
+          '<div style="font-size:12px;color:#999;margin-top:4px">' + tip + '</div>' +
+          '<div style="font-size:12px;color:#999">周期 ' + cfg.cycle + ' 天 · 排卵期约 ' + (ovl.getMonth() + 1) + '月' + ovl.getDate() + '日 ' + note + '</div>';
       } else {
         info.innerHTML = '<div class="muted">还没有记录</div>';
       }
@@ -5667,6 +5823,18 @@
       Object.assign(r, { start: f.start || todayStr(), note: f.note || '' });
       await DB.put('period', r); paint();
     }
+    $('#perSet').onclick = async () => {
+      const cfg = await getCfg();
+      const f = await promptForm('周期设置', [
+        { name: 'cycle', label: '周期长度（天）', type: 'number', value: cfg.cycle, placeholder: '如 28' },
+        { name: 'duration', label: '经期通常几天', type: 'number', value: cfg.duration, placeholder: '如 5' },
+      ]);
+      if (!f) return;
+      const cycle = Math.max(15, Math.min(60, Number(f.cycle) || 28));
+      const duration = Math.max(1, Math.min(15, Number(f.duration) || 5));
+      await DB.put('meta', { id: 'periodCfg', value: { cycle, duration } });
+      toast('已保存 ⚙'); paint();
+    };
     $('#perAdd').onclick = async () => {
       const f = await promptForm('记一次开始', [
         { name: 'start', label: '开始日期', type: 'date', value: todayStr() },
@@ -5681,22 +5849,33 @@
 
   // ===== 🔗 常用链接 =====
   async function renderLinks(view) {
+    let linkFilter = 'all';
+    const LINK_CATS = [{ value: '平台后台', label: '平台后台' }, { value: '素材网站', label: '素材网站' }, { value: '效率工具', label: '效率工具' }, { value: '其他', label: '其他' }];
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🔗 常用链接</div>' +
       '<p class="muted" style="margin:6px 0 0;font-size:13px">各平台后台、素材网站、常用工具，存这里随手点。相当于你的私人书签。</p>' +
+      '<div id="linkFilter" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>' +
       '<button id="linkAdd" class="btn green block" style="margin-top:12px">➕ 加一个链接</button></div>' +
       '<div id="linkList"></div>';
 
+    function renderLinkFilter() {
+      const box = $('#linkFilter'); if (!box) return;
+      const opts = [{ value: 'all', label: '全部' }].concat(LINK_CATS);
+      box.innerHTML = opts.map(o => '<button class="chip ' + (linkFilter === o.value ? 'on' : '') + '" data-f="' + o.value + '" style="cursor:pointer">' + o.label + '</button>').join('');
+      box.querySelectorAll('[data-f]').forEach(btn => { btn.onclick = () => { linkFilter = btn.getAttribute('data-f'); renderLinkFilter(); paint(); }; });
+    }
     async function paint() {
       const list = (await DB.all('links')) || [];
       list.sort((a, b) => (b.created || 0) - (a.created || 0));
+      const show = linkFilter === 'all' ? list : list.filter(l => (l.cat || '其他') === linkFilter);
       const box = $('#linkList');
-      if (!list.length) { box.innerHTML = emptyTip('🔗', '还没有链接'); return; }
+      renderLinkFilter();
+      if (!show.length) { box.innerHTML = emptyTip('🔗', linkFilter === 'all' ? '还没有链接' : '这个分类下还没有'); return; }
       box.innerHTML = '';
-      list.forEach(l => {
+      show.forEach(l => {
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
-          '<div class="row spread"><div><b>' + esc(l.name) + '</b></div><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="row spread"><div><b>' + esc(l.name) + '</b> <span class="chip" style="background:#eef4f7">' + esc(l.cat || '其他') + '</span></div><button class="del" data-act="del">🗑</button></div>' +
           (l.url ? '<div class="muted" style="font-size:12px;margin-top:2px;word-break:break-all">' + esc(l.url) + '</div>' : '') +
           (l.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(l.note) + '</p>' : '') +
           '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="open">↗ 打开</button><button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
@@ -5709,21 +5888,23 @@
     async function editOne(l) {
       const f = await promptForm('编辑链接', [
         { name: 'name', label: '名称', type: 'text', value: l.name || '' },
+        { name: 'cat', label: '分类', type: 'select', options: [{ value: '平台后台', label: '平台后台' }, { value: '素材网站', label: '素材网站' }, { value: '效率工具', label: '效率工具' }, { value: '其他', label: '其他' }] },
         { name: 'url', label: '链接', type: 'text', value: l.url || '' },
         { name: 'note', label: '备注', type: 'text', value: l.note || '' },
       ]);
       if (!f || !f.name) return;
-      Object.assign(l, { name: f.name, url: f.url || '', note: f.note || '' });
+      Object.assign(l, { name: f.name, cat: f.cat || '其他', url: f.url || '', note: f.note || '' });
       await DB.put('links', l); paint();
     }
     $('#linkAdd').onclick = async () => {
       const f = await promptForm('加一个链接', [
         { name: 'name', label: '名称', type: 'text', placeholder: '如：抖音创作者后台' },
+        { name: 'cat', label: '分类', type: 'select', options: [{ value: '平台后台', label: '平台后台' }, { value: '素材网站', label: '素材网站' }, { value: '效率工具', label: '效率工具' }, { value: '其他', label: '其他' }] },
         { name: 'url', label: '链接', type: 'text', placeholder: 'https://...' },
         { name: 'note', label: '备注', type: 'text', placeholder: '可选' },
       ]);
       if (!f || !f.name) return;
-      await DB.put('links', { name: f.name, url: f.url || '', note: f.note || '' , created: Date.now()});
+      await DB.put('links', { name: f.name, cat: f.cat || '其他', url: f.url || '', note: f.note || '' , created: Date.now()});
       toast('已添加 🔗'); paint();
     };
     paint();
