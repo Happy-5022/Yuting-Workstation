@@ -1,145 +1,145 @@
 {
-  "date": "2026-08-23",
+  "date": "2026-08-27",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Phrases with 'friend'",
-      "zh": "一分钟英语：和 friend 有关的短语",
-      "words": 230,
-      "dur": 110,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
+      "en": "Nostalgia: why old memories feel so warm",
+      "zh": "怀旧：为什么旧回忆总让人心里发暖",
+      "words": 110,
+      "dur": 75,
+      "vocab": 12,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
         [
-          "In this short BBC clip, the presenter looks at common English expressions built around the word 'friend'.",
-          "在这段BBC短视频里，主讲人讲解了以'friend'这个词构成的常见英语表达。"
+          "Nostalgia is the mixed feeling of happiness and sadness we get when something reminds us of the past, like a childhood song or an old photo.",
+          "怀旧，就是当一首儿时老歌或一张旧照片勾起回忆时，那种又甜又酸的感受。"
         ],
         [
-          "One example is 'fair-weather friend', which describes someone who is only there for you when life is going well.",
-          "例如'fair-weather friend'（酒肉朋友），指的是只在顺境时才陪着你的人。"
+          "In the BBC programme, the presenters explain that nostalgia was once seen as a medical problem, but today scientists view it as a healthy way to feel connected and less lonely.",
+          "在BBC这期节目里，主持人讲到：怀旧过去曾被当成一种'病'，但现在科学家认为它是让人感到联结、不那么孤单的健康方式。"
         ],
         [
-          "The clip also covers 'be more than friends' and the old saying 'a friend in need is a friend indeed', showing how one word can carry very different meanings.",
-          "视频还讲到'be more than friends'（不止朋友关系）以及老话'a friend in need is a friend indeed'（患难见真情），展现同一个词能承载截然不同的意思。"
+          "They also share simple tips, such as making a playlist of old favourites, to use nostalgia for comfort during stressful times.",
+          "他们还分享了一些小技巧，比如建一份'老歌歌单'，在压力大时用怀旧给自己一点安慰。"
         ]
       ],
       "tips": [
-        ["fair-weather friend", "酒肉朋友（只在顺境出现的人）"],
-        ["be more than friends", "不止是朋友（暗指暧昧或恋爱）"],
-        ["a friend in need is a friend indeed", "患难见真情"]
+        ["a walk down memory lane", "回想往事／重温回忆"],
+        ["bittersweet", "苦乐参半的（又甜又苦的）"],
+        ["homesick", "想家的／思乡的"]
       ]
     },
     {
       "id": "d2",
-      "en": "Phrases with 'speak'",
-      "zh": "一分钟英语：和 speak 有关的短语",
-      "words": 230,
-      "dur": 110,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
+      "en": "Could your next therapist be a horse?",
+      "zh": "你的下一位'心理医生'会是一匹马吗？",
+      "words": 115,
+      "dur": 80,
+      "vocab": 12,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
         [
-          "This English In A Minute episode focuses on everyday phrases that use the verb 'speak'.",
-          "这期《English In A Minute》聚焦日常生活中用到动词'speak'的短语。"
+          "Animal-assisted therapy uses animals such as horses, dogs and even dolphins to help people relax and open up during treatment.",
+          "动物辅助疗法会用马、狗甚至海豚等动物，帮人在治疗时放松、愿意开口。"
         ],
         [
-          "Expressions such as 'speak for itself' (the result is so clear no words are needed) and 'generally speaking' (when talking about a rule that is usually true) are explained with simple examples.",
-          "比如'speak for itself'（不言而喻）和'generally speaking'（一般来说），都用简单例子做了讲解。"
+          "In this episode, BBC Learning English looks at how spending time with horses can lower stress and build confidence, especially for people who find talking to humans difficult.",
+          "这期里，BBC Learning English 探讨了和马相处如何降低压力、建立自信，尤其适合那些跟人说话会有压力的人。"
         ],
         [
-          "By the end, learners see that 'speak' is not only about talking, but also about showing or representing something without saying a word.",
-          "学完这期，你会发现'speak'不光是'说话'，还能表示'不言自明'或'代表某事物'。"
+          "The presenters teach useful words for describing feelings and animals, reminding us that healing can come from unexpected friends.",
+          "主持人还教了描述情绪和动物的实用词，提醒我们：疗愈有时来自意想不到的朋友。"
         ]
       ],
       "tips": [
-        ["speak for itself", "不言而喻，事实本身说明一切"],
-        ["generally speaking", "一般来说，总体而言"],
-        ["speak volumes", "充分说明，很有说服力"]
+        ["equine therapy", "马术疗法／以马为伴的治疗"],
+        ["to open up", "敞开心扉／愿意倾诉"],
+        ["a sense of calm", "平静感／安心"]
       ]
     },
     {
       "id": "d3",
-      "en": "Phrases with 'keep'",
-      "zh": "一分钟英语：和 keep 有关的短语",
-      "words": 230,
-      "dur": 110,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
+      "en": "Would you know how to spot a Death Cap mushroom?",
+      "zh": "你能认出'死亡帽'毒蘑菇吗？",
+      "words": 120,
+      "dur": 85,
+      "vocab": 13,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
         [
-          "The clip introduces several useful phrases built with the word 'keep'.",
-          "这段视频介绍了几个由'keep'构成的实用短语。"
+          "The Death Cap is one of the world's most poisonous mushrooms, and it can look similar to safe kinds that people pick to eat.",
+          "'死亡帽'是全球最毒的蘑菇之一，外表却可能和人们采来吃的无毒蘑菇很像。"
         ],
         [
-          "For instance, 'keep something at bay' means to stop a problem from getting closer or worse, while 'keep an eye on' means to watch or look after something.",
-          "比如'keep something at bay'指'阻止问题靠近或恶化'，而'keep an eye on'是'留意、照看'的意思。"
+          "The BBC episode explains why mistakes happen—for example, when immigrants cook familiar dishes with local wild mushrooms they cannot identify.",
+          "BBC这期解释了误会怎么发生——比如移民用当地认不出的野蘑菇做家乡菜。"
         ],
         [
-          "These short expressions are common in both spoken and written English, and learning them helps you sound more natural in daily conversation.",
-          "这些短短语在口语和书面英语里都很常见，掌握它们能让日常对话更地道。"
+          "Listeners learn careful vocabulary about danger and food safety, with the clear message: if you are not 100% sure, do not eat it.",
+          "听众学到关于危险和食品安全的词，核心提醒就一句：拿不准，就别吃。"
         ]
       ],
       "tips": [
-        ["keep something at bay", "阻止…靠近/恶化"],
-        ["keep an eye on", "留意，照看"],
-        ["keep your cool", "保持冷静"]
+        ["poisonous", "有毒的"],
+        ["to mistake A for B", "把A错认成B"],
+        ["deadly", "致命的"]
       ]
     },
     {
       "id": "d4",
-      "en": "Onto something",
-      "zh": "口语惯用语：onto something（有了好点子）",
-      "words": 210,
-      "dur": 95,
-      "vocab": 7,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Have you ever tried a crisp sandwich?",
+      "zh": "你吃过'薯片三明治'吗？",
+      "words": 105,
+      "dur": 70,
+      "vocab": 11,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
         [
-          "In this The English We Speak episode, Feifei and Roy explain the idiom 'onto something'.",
-          "在这期《The English We Speak》里，Feifei 和 Roy 讲解了习语'onto something'。"
+          "A crisp sandwich—potato crisps between two slices of buttered bread—is a simple British snack that many people love for its crunch.",
+          "'薯片三明治'就是把薯片夹在两片涂了黄油的面包之间，是英国人很爱的一种简单零食，胜在脆。"
         ],
         [
-          "If you are 'onto something', it means you have found or realised an idea that could be important or correct, often before others see it.",
-          "如果你'onto something'，意思是你发现或意识到一个可能很重要、很正确的点子，往往别人还没看出来。"
+          "In the BBC clip, the presenters chat about why this humble food brings comfort and childhood memories, proving that tasty need not be fancy.",
+          "BBC这段里，主持人聊起为什么这种朴素食物能带来安慰和童年记忆，说明好吃不一定非得精致。"
         ],
         [
-          "The hosts give examples from daily life, showing how the phrase is used when someone's hunch turns out to be right.",
-          "主持人举了生活里的例子，说明当一个人的预感被证实是对的时候，就可以用这个短语。"
+          "It is a light topic that teaches everyday food words and shows how small pleasures connect us across cultures.",
+          "这是个轻松话题，既能学日常食物词汇，也让人看到：小小的快乐能把不同文化连起来。"
         ]
       ],
       "tips": [
-        ["be onto something", "有了重要发现，猜中了"],
-        ["a hunch", "直觉，预感"],
-        ["turn out", "结果是，证明是"]
+        ["crunchy", "脆的／有嚼劲的"],
+        ["a humble snack", "朴素的零食"],
+        ["buttered bread", "涂了黄油的面包"]
       ]
     },
     {
       "id": "d5",
-      "en": "Like a moth to a flame",
-      "zh": "俚语：like a moth to a flame（飞蛾扑火）",
-      "words": 210,
-      "dur": 95,
-      "vocab": 7,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "English In A Minute: useful phrases with 'day'",
+      "zh": "英语一分钟：带 day 的实用短语",
+      "words": 100,
+      "dur": 65,
+      "vocab": 10,
+      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
       "body": [
         [
-          "This episode looks at the idiom 'like a moth to a flame', a vivid way to describe being strongly and often blindly attracted to something.",
-          "这期讲习语'like a moth to a flame'（像飞蛾扑火），形象地描述被某事物强烈、甚至盲目地吸引。"
+          "This short BBC clip shows common English phrases built around the word 'day', such as 'make my day' and 'call it a day'.",
+          "这段BBC短视频讲了几个围绕 day 的常用英语短语，比如 make my day、call it a day。"
         ],
         [
-          "Just as a moth cannot resist flying into a bright light, a person described this way is drawn to someone or something they cannot stay away from, even if it is risky.",
-          "就像飞蛾忍不住扑向亮光，被这样形容的人会被某人或某物吸引得无法自拔，即便有风险。"
+          "The teacher explains each meaning with a clear example, helping learners use them naturally in daily conversation.",
+          "老师用清楚的例子讲清每个意思，帮学习者在日常对话里自然用出来。"
         ],
         [
-          "The presenters explain the phrase with fun examples, helping listeners use it to talk about love, habits, or temptation.",
-          "主讲人用有趣的例子解释这个词，帮助听众用它来谈论爱情、习惯或诱惑。"
+          "It is a quick way to sound more like a native speaker by learning small phrase chunks instead of single words.",
+          "这是变得更地道的小窍门：学'短语块'而不是单个词。"
         ]
       ],
       "tips": [
-        ["like a moth to a flame", "像飞蛾扑火般无法抗拒地被吸引"],
-        ["be drawn to", "被…吸引"],
-        ["temptation", "诱惑"]
+        ["make my day", "让我超开心／让我这一天都值了"],
+        ["call it a day", "收工／今天就到此为止"],
+        ["day-to-day", "日常的／每天的"]
       ]
     }
   ]
