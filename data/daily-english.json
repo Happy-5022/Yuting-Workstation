@@ -1,145 +1,100 @@
 {
-  "date": "2026-08-27",
+  "date": "2026-08-28",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Nostalgia: why old memories feel so warm",
-      "zh": "怀旧：为什么旧回忆总让人心里发暖",
+      "en": "How do we describe smells?",
+      "zh": "我们怎么形容气味？",
       "words": 110,
-      "dur": 75,
-      "vocab": 12,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "dur": 380,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260827",
       "body": [
-        [
-          "Nostalgia is the mixed feeling of happiness and sadness we get when something reminds us of the past, like a childhood song or an old photo.",
-          "怀旧，就是当一首儿时老歌或一张旧照片勾起回忆时，那种又甜又酸的感受。"
-        ],
-        [
-          "In the BBC programme, the presenters explain that nostalgia was once seen as a medical problem, but today scientists view it as a healthy way to feel connected and less lonely.",
-          "在BBC这期节目里，主持人讲到：怀旧过去曾被当成一种'病'，但现在科学家认为它是让人感到联结、不那么孤单的健康方式。"
-        ],
-        [
-          "They also share simple tips, such as making a playlist of old favourites, to use nostalgia for comfort during stressful times.",
-          "他们还分享了一些小技巧，比如建一份'老歌歌单'，在压力大时用怀旧给自己一点安慰。"
-        ]
+        ["English has many words for sights and sounds, but it is surprisingly poor at naming smells — we often borrow words from other senses, saying something \"smells sweet\" or \"smells like\" something else.", "英语里有大量形容视觉和听觉的词，却惊人地匮乏描写气味的词汇——我们常借用其他感官的说法，比如\"闻起来甜甜的\"或\"闻起来像某样东西\"。"],
+        ["In the programme, Neil and Georgie talk about why this gap exists and share their own favourite and worst smells, showing how personal and cultural smell memories can be.", "节目里 Neil 和 Georgie 聊到这种空缺为何存在，并分享了自己最喜欢和最讨厌的气味，说明气味记忆有多私人、多受文化影响。"],
+        ["They also teach useful vocabulary for discussing scents, reminding learners that describing a smell well is a real skill worth practising in daily conversation.", "他们还教了描述气味的好用词汇，提醒学习者：把气味说清楚，是日常对话里值得练习的真本事。"]
       ],
       "tips": [
-        ["a walk down memory lane", "回想往事／重温回忆"],
-        ["bittersweet", "苦乐参半的（又甜又苦的）"],
-        ["homesick", "想家的／思乡的"]
+        ["smell sweet", "闻起来香甜（借味觉形容气味）"],
+        ["smells like", "闻起来像……（用他物类比气味）"],
+        ["scent memory", "气味记忆（由气味触发的回忆）"]
       ]
     },
     {
       "id": "d2",
-      "en": "Could your next therapist be a horse?",
-      "zh": "你的下一位'心理医生'会是一匹马吗？",
-      "words": 115,
-      "dur": 80,
-      "vocab": 12,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Gatekeep",
+      "zh": "Gatekeep（把信息捂着不分享）",
+      "words": 70,
+      "dur": 180,
+      "vocab": 3,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak_2026/ep-260525",
       "body": [
-        [
-          "Animal-assisted therapy uses animals such as horses, dogs and even dolphins to help people relax and open up during treatment.",
-          "动物辅助疗法会用马、狗甚至海豚等动物，帮人在治疗时放松、愿意开口。"
-        ],
-        [
-          "In this episode, BBC Learning English looks at how spending time with horses can lower stress and build confidence, especially for people who find talking to humans difficult.",
-          "这期里，BBC Learning English 探讨了和马相处如何降低压力、建立自信，尤其适合那些跟人说话会有压力的人。"
-        ],
-        [
-          "The presenters teach useful words for describing feelings and animals, reminding us that healing can come from unexpected friends.",
-          "主持人还教了描述情绪和动物的实用词，提醒我们：疗愈有时来自意想不到的朋友。"
-        ]
+        ["\"Gatekeep\" started online as a word for controlling who gets into a group or sees certain information, like a gatekeeper at a door.", "\"Gatekeep\" 最初是网络用语，指控制谁能进某个圈子、谁看得到某些信息，像门口的看门人。"],
+        ["Now people also use it to describe someone who refuses to share knowledge on purpose — for example, not telling friends about a great café so it stays quiet.", "现在也常用来形容有人故意不分享知识，比如不告诉朋友一家很棒的咖啡馆，好让它一直冷清。"],
+        ["The speakers explain that gatekeeping can be playful, but it sometimes stops others from learning or joining in.", "节目讲解道，把信息捂着有时只是开玩笑，但有时也会阻碍别人学习或参与。"]
       ],
       "tips": [
-        ["equine therapy", "马术疗法／以马为伴的治疗"],
-        ["to open up", "敞开心扉／愿意倾诉"],
-        ["a sense of calm", "平静感／安心"]
+        ["gatekeeper", "看门人；把持渠道的人"],
+        ["keep something to yourself", "把某事藏在自己心里不告诉别人"],
+        ["share the know-how", "分享诀窍/门道"]
       ]
     },
     {
       "id": "d3",
-      "en": "Would you know how to spot a Death Cap mushroom?",
-      "zh": "你能认出'死亡帽'毒蘑菇吗？",
-      "words": 120,
-      "dur": 85,
-      "vocab": 13,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Wrap it up",
+      "zh": "Wrap it up（收尾/打住）",
+      "words": 70,
+      "dur": 180,
+      "vocab": 3,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak_2026/ep-260615",
       "body": [
-        [
-          "The Death Cap is one of the world's most poisonous mushrooms, and it can look similar to safe kinds that people pick to eat.",
-          "'死亡帽'是全球最毒的蘑菇之一，外表却可能和人们采来吃的无毒蘑菇很像。"
-        ],
-        [
-          "The BBC episode explains why mistakes happen—for example, when immigrants cook familiar dishes with local wild mushrooms they cannot identify.",
-          "BBC这期解释了误会怎么发生——比如移民用当地认不出的野蘑菇做家乡菜。"
-        ],
-        [
-          "Listeners learn careful vocabulary about danger and food safety, with the clear message: if you are not 100% sure, do not eat it.",
-          "听众学到关于危险和食品安全的词，核心提醒就一句：拿不准，就别吃。"
-        ]
+        ["\"Wrap it up\" can mean to finish a task or bring a project to a close, like wrapping a gift when you are done.", "\"Wrap it up\" 可以指把任务做完、给项目收尾，就像礼物包好就完成了。"],
+        ["It is also used when someone wants others to stop talking or stop an activity that has gone on too long.", "它也用于想让别人打住、别再没完没了地说或做的时候。"],
+        ["The programme gives everyday examples so learners can use the phrase both at work and in casual chat.", "节目给出生活化例子，方便学习者在职场和闲聊里都能用上这句话。"]
       ],
       "tips": [
-        ["poisonous", "有毒的"],
-        ["to mistake A for B", "把A错认成B"],
-        ["deadly", "致命的"]
+        ["wrap up a project", "给项目收尾"],
+        ["that's enough, wrap it up", "够了，打住吧"],
+        ["call it a day", "今天就到这（收工）"]
       ]
     },
     {
       "id": "d4",
-      "en": "Have you ever tried a crisp sandwich?",
-      "zh": "你吃过'薯片三明治'吗？",
-      "words": 105,
-      "dur": 70,
-      "vocab": 11,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "en": "Throw ideas at the wall",
+      "zh": "Throw ideas at the wall（把点子往上扔，看哪个粘住）",
+      "words": 70,
+      "dur": 180,
+      "vocab": 3,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak_2026/ep-260608",
       "body": [
-        [
-          "A crisp sandwich—potato crisps between two slices of buttered bread—is a simple British snack that many people love for its crunch.",
-          "'薯片三明治'就是把薯片夹在两片涂了黄油的面包之间，是英国人很爱的一种简单零食，胜在脆。"
-        ],
-        [
-          "In the BBC clip, the presenters chat about why this humble food brings comfort and childhood memories, proving that tasty need not be fancy.",
-          "BBC这段里，主持人聊起为什么这种朴素食物能带来安慰和童年记忆，说明好吃不一定非得精致。"
-        ],
-        [
-          "It is a light topic that teaches everyday food words and shows how small pleasures connect us across cultures.",
-          "这是个轻松话题，既能学日常食物词汇，也让人看到：小小的快乐能把不同文化连起来。"
-        ]
+        ["This phrase means to suggest many ideas quickly without judging them, just to see which ones might work.", "这个短语意思是快速抛出很多点子、先不评判，看哪个能行。"],
+        ["The image is of throwing things at a wall to see what sticks — some fall, but a few stay.", "画面感就像把东西往墙上扔，看什么能粘住——有的掉下来，但总有少数留下。"],
+        ["It is common in brainstorming, where the goal is quantity first and quality later.", "这常见于头脑风暴，目标是先求数量、后求质量。"]
       ],
       "tips": [
-        ["crunchy", "脆的／有嚼劲的"],
-        ["a humble snack", "朴素的零食"],
-        ["buttered bread", "涂了黄油的面包"]
+        ["brainstorm", "头脑风暴；集思广益"],
+        ["see what sticks", "看哪个能留下/奏效"],
+        ["no bad ideas", "没有坏点子（先发散后收敛）"]
       ]
     },
     {
       "id": "d5",
-      "en": "English In A Minute: useful phrases with 'day'",
-      "zh": "英语一分钟：带 day 的实用短语",
-      "words": 100,
-      "dur": 65,
-      "vocab": 10,
-      "link": "https://www.bbc.com/learningenglish/features/english-in-a-minute",
+      "en": "Phrases with 'hand'",
+      "zh": "和 hand（手）有关的四个短语",
+      "words": 75,
+      "dur": 200,
+      "vocab": 4,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/s5english_in_a_minute",
       "body": [
-        [
-          "This short BBC clip shows common English phrases built around the word 'day', such as 'make my day' and 'call it a day'.",
-          "这段BBC短视频讲了几个围绕 day 的常用英语短语，比如 make my day、call it a day。"
-        ],
-        [
-          "The teacher explains each meaning with a clear example, helping learners use them naturally in daily conversation.",
-          "老师用清楚的例子讲清每个意思，帮学习者在日常对话里自然用出来。"
-        ],
-        [
-          "It is a quick way to sound more like a native speaker by learning small phrase chunks instead of single words.",
-          "这是变得更地道的小窍门：学'短语块'而不是单个词。"
-        ]
+        ["Georgie introduces four common English phrases built around the word \"hand\", showing how this body part shapes our language about control and help.", "Georgie 介绍了四个围绕 hand（手）的常用短语，展现这个身体部位如何塑造我们关于\"掌控\"和\"帮忙\"的表达。"],
+        ["\"In good hands\" means something is being looked after properly, while \"out of hand\" describes a situation that has lost control.", "\"In good hands\" 表示被妥善照管，而 \"out of hand\" 形容局面失控。"],
+        ["The other two — \"hands down\" (without doubt) and \"give a hand\" (to help) — are handy for daily chat and polite requests.", "另外两个——\"hands down\"（毫无疑问）和 \"give a hand\"（搭把手帮忙）——在日常闲聊和礼貌请求里都很好用。"]
       ],
       "tips": [
-        ["make my day", "让我超开心／让我这一天都值了"],
-        ["call it a day", "收工／今天就到此为止"],
-        ["day-to-day", "日常的／每天的"]
+        ["in good hands", "被妥善照管/由专业人士处理"],
+        ["out of hand", "失控"],
+        ["give someone a hand", "帮某人一把"]
       ]
     }
   ]
