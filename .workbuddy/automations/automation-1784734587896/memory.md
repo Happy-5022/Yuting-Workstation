@@ -104,3 +104,22 @@
 - BBC 五篇（均原创摘要、用 bbc.com 栏目页链接，避开此前所有用过主题）：EIAM friend(260327)/speak(260417)/keep(260410)；TEWS onto something/like a moth to a flame。
 - 部署：本地 commit a4da456 成功；git push **失败**（`Recv failure: Connection was reset`，沙箱无网络到 GitHub，EXIT=128），仍 1 commit 待推（origin 停在 9f01bc3）。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
 - 明日避重：以上全部主题勿复用。BBC 下次优先抓 6ME 新集（约 8/27 周四，若出 ep-260827 等）；未出则用 EIAM 剩余未用集（'day'260206/'end'260130）或 TEWS 剩余未用集（gatekeep/wrap it up/throw ideas at the wall）。
+
+## 2026-08-27
+- 三份数据文件已更新（date=2026-08-27），JSON 校验通过。当日真实热点切入（抖音/头条/百度 8/27 聚合）：台风白海豚登陆华东(1206万)/Chinamaxxing中式审美全球出圈(1742万)/开学三件套全线暴涨(752万)/女演员朱锐自称破产失业(2128万)/机器人跑1500米破人类纪录(451万)。选题10条覆盖：台风宅家古法操/中式审美IP动画/平价开学清单/穿搭无公式/AI抢饭碗/越南语台风求助/尤克里里小星星/一人公司日课表/回流药避坑/村级泳池vlog。挑战榜（均为历史未用新鲜话题）：#台风天宅家古法健身操/#我在草原上站了一会/#Chinamaxxing中式审美/#村级游泳池为什么全网点赞/#开学三件套平价替代。
+- BBC 五篇（均原创摘要、用 bbc.com 栏目页链接；WebFetch 被沙箱网络拦截，改用 WebSearch 抓到的真实 6ME 2026 片单，避开此前全部用过主题）：6ME 2025 未用库存 — Nostalgia(ep-251225)/Could your next therapist be a horse(ep-251211)/Death Cap mushroom(ep-251218)/crisp sandwich(ep-251204)；加 English In A Minute 'day'(ep-260206)。**6ME 2026 集已全部用尽，本次启用 2025 末班车 4 集 + EIAM 1 集；下次若出 ep-260827 新集优先用，否则挖 6ME 2025 更早集或 EIAM 'end'/'thing'/'hand'/'water'。**
+- 部署：本地 commit 953ffd6 成功；**git push 本次成功**（`c54cceb..953ffd6 main -> main`，「remote: This repository moved」仅为提示，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
+- 明日避重：以上全部主题勿复用。
+
+## 2026-08-28
+- 三份数据文件已更新（date=2026-08-28），JSON 校验通过。当日真实热点切入（抖音/微博/百度 8/28 聚合）：台风沙德尔登陆浙闽三预警齐发(约2150万)/OpenAI智能体入侵抱抱脸「AI攻AI」(约1880万)/星宇股份致歉·应届生维权连续剧(约1620万)/小天才手表判167cm女孩「偏重」(约1360万)/胖东来招人「刑期五年以上不录」(约1120万)；另含中国团队手搓AI美剧、开学录取通知被狗咬碎、成都「镜头霸凌」92岁老人、台州糯叽叽天堂。选题10条覆盖：AI攻AI权限边界/应届生维权拆信/儿童BMI算法/录取通知被狗咬碎vlog/胖东来求职避坑/中国团队AI美剧IP试水/入学填家长学历红线/处暑古法养肺操/越南语咖啡馆点单/尤克里里《晴天》扫弦。挑战榜（均为历史未用新鲜话题）：#镜头霸凌/#开学前录取通知书被狗狗咬碎/#糯叽叽天堂台州/#中国团队手搓AI美剧/#重庆以火灭火双向奔赴。
+- BBC 五篇（均原创摘要、用真实 bbc.co.uk 单集/栏目页链接，避开此前全部用过主题）：6ME 新集 **How do we describe smells?(ep-260827, 8/27首播，首用)** + TEWS 未用集 **Gatekeep(ep-260525)/Wrap it up(ep-260615)/Throw ideas at the wall(ep-260608)** + EIAM **Phrases with 'hand'(ep-260109)**。6ME 2026 全集确已用尽，本次靠新集 ep-260827 解渴。
+- 部署：本地 commit 78b5c21 成功；**git push 失败**（`Recv failure: Connection was reset`，沙箱无网络到 GitHub，EXIT=128），仍 1 commit 待推（origin 停在 953ffd6）。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上全部主题勿复用。BBC 下次优先再抓 6ME 新集（约 9/3 周四，若出 ep-260903 等）；未出则用 EIAM 剩余未用集（'end'260130/'thing'/'water'）或 TEWS 未用集（A hunch/take it as a given/think on your feet/yap/flow state/got you）或 6ME 2025 更早集。
+- 经验：git push 稳定为「Connection was reset」形态（约23秒快速失败），沙箱完全无法访问 GitHub；本地 commit 可保留，等玉婷电脑登录 GitHub 后自行 `git push` 即可，无需重复尝试。
+
+## 2026-08-29
+- 三份数据文件已更新（date=2026-08-29），JSON 校验通过。当日真实热点切入（抖音/微博/百度/运营早报 8/29 聚合）：**AI生成内容标识办法9.1强制生效**（做号人必看，蹭不露脸动画打标）、**腾讯开源 Hy4 preview 1M上下文**、**世界机器人大会开幕(1021.4万)**、**文化纳凉拉动文旅消费(1125.1万)**、**低分班教师被逼拍「耻辱合影」官方致歉(微博热搜)**、**秋天一起做燕麦系女孩(936.9万)**、**房贷延至40年**、**英国博主拆穿锯子切面包梗**、**暑假结束前清空旅行库存**、**工位养砖/富养前额叶**解压热。选题10条覆盖：AI标注打标/HY4当助理/耻辱合影(前教师视角)/旅行库存末班车/锯子切面包媒体素养/燕麦系穿搭/房贷算账/越南语第7课/秋老虎室内古法操/尤克里里弹唱英文歌。挑战榜（均为历史未用新鲜话题）：#工位养砖/#秋天一起做燕麦系女孩/#暑假结束前清空旅行库存/#富养前额叶/#安安摇手势舞挑战。
+- BBC 五篇（均原创摘要、用真实 bbc.com 栏目页链接，避开此前全部用过主题）：The English We Speak — A hunch / Take it as a given / Think on your feet；English In A Minute — Phrases with 'end' / Phrases with 'water'。
+- 部署：本地 commit 563f4c8；**git push 本次成功**（`953ffd6..563f4c8 main -> main`，「remote: This repository moved」仅为提示，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
+- 明日避重：以上全部主题勿复用。BBC 下次优先再抓 6ME 新集（约 9/3 周四，若出 ep-260903 等）；未出则用 TEWS 剩余未用集（got you / flow state / yap / wrap it up 已用其一，剩 take it as a given/think on your feet 本次已用，剩 A hunch 已用；实际 TEWS 剩余：got you / flow state / yap）或 EIAM 剩余未用集（'thing'/'water'/'end' 本次用 end/water，剩 'thing'）或 6ME 2025 更早集。

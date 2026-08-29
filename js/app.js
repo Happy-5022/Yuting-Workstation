@@ -5190,7 +5190,8 @@
       '<div id="pubSum" style="display:flex;gap:8px;margin-top:10px"></div>' +
       '<div class="row" style="margin-top:10px;gap:8px"><button id="pubAll" class="btn sm">全部</button><button id="pubMon" class="btn sm ghost">仅本月</button></div>' +
       '<div id="pubPlat" style="margin-top:10px"></div>' +
-      '<button id="pubAdd" class="btn green block" style="margin-top:12px">➕ 记录一条发布</button></div>' +
+      '<div id="pubTrend" style="margin-top:10px"></div>' +
+      '<div class="row" style="margin-top:12px;gap:8px"><button id="pubQuick" class="btn green" style="flex:1">⚡ 快速记一笔</button><button id="pubAdd" class="btn ghost" style="flex:1">📝 详细记录</button></div></div>' +
       '<div id="pubList"></div>';
 
     function stat(label, v) {
@@ -5220,6 +5221,17 @@
         });
       }
       $('#pubPlat').innerHTML = plat;
+      // 近6个月涨粉趋势
+      const now0 = new Date();
+      const months = [];
+      for (let i = 5; i >= 0; i--) months.push(new Date(now0.getFullYear(), now0.getMonth() - i, 1));
+      const fansByM = months.map(d => { const p = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-'; return all.filter(r => (r.date || '').indexOf(p) === 0).reduce((s, r) => s + (Number(r.fans) || 0), 0); });
+      const maxF = Math.max(1, ...fansByM);
+      const trendBars = months.map((d, i) => {
+        const v = fansByM[i]; const h = Math.max(3, Math.round(Math.abs(v) / maxF * 60));
+        return '<div style="flex:1;text-align:center"><div style="height:60px;display:flex;align-items:flex-end;justify-content:center"><div title="' + v + '" style="width:72%;background:' + (v >= 0 ? '#2e9e5b' : '#e2574c') + ';height:' + h + 'px;border-radius:4px 4px 0 0"></div></div><div style="font-size:11px;color:#999;margin-top:2px">' + (d.getMonth() + 1) + '月</div><div style="font-size:10px;color:#aaa">' + (v >= 0 ? '+' : '') + v + '</div></div>';
+      }).join('');
+      $('#pubTrend').innerHTML = '<div style="font-size:12px;color:#999;margin-bottom:6px">近 6 个月涨粉趋势</div><div style="display:flex;gap:6px;align-items:flex-end">' + trendBars + '</div>';
       const box = $('#pubList');
       if (!total) { box.innerHTML = emptyTip('📺', '还没有记录，发完内容顺手记一笔吧'); return; }
       box.innerHTML = '';
@@ -5231,7 +5243,7 @@
         b.innerHTML = '<div class="card-title" style="font-size:14px">🏆 最佳一条（按涨粉）</div>' +
           '<div style="font-size:14px"><b>' + esc(best.title || '未命名') + '</b> <span class="chip on">' + esc(best.platform || '其他') + '</span></div>' +
           '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(best.date || '') + '</div>' +
-          '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' + stat('▶ 播放/阅读', best.views) + stat('❤ 赞', best.likes) + stat('💬 评', best.comments) + stat('➕ 涨粉', best.fans) + '</div>';
+          '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' + stat('▶ 播放/阅读', best.views) + stat('❤ 赞', best.likes) + stat('💬 评', best.comments) + stat('➕ 涨粉', best.fans) + stat('📈 涨粉率', (best.views > 0 ? (best.fans / best.views * 100).toFixed(1) : '0') + '%') + '</div>';
         box.append(b);
       }
       list.forEach(r => {
@@ -5240,7 +5252,7 @@
         card.innerHTML =
           '<div class="row spread"><b>' + esc(r.title || '未命名') + '</b><span class="chip on">' + esc(r.platform || '其他') + '</span></div>' +
           '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(r.date || '') + (r.url ? ' · <a href="' + esc(r.url) + '" target="_blank" style="color:#0E9C8E">查看</a>' : '') + '</div>' +
-          '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">' + stat('▶ 播放/阅读', r.views) + stat('❤ 赞', r.likes) + stat('💬 评', r.comments) + stat('➕ 涨粉', r.fans) + '</div>' +
+          '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">' + stat('▶ 播放/阅读', r.views) + stat('❤ 赞', r.likes) + stat('💬 评', r.comments) + stat('➕ 涨粉', r.fans) + stat('📈 涨粉率', (r.views > 0 ? (r.fans / r.views * 100).toFixed(1) : '0') + '%') + '</div>' +
           (r.note ? '<p class="muted" style="margin:8px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
           '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="edit">✏ 编辑</button><button class="del" data-act="del">🗑</button></div>';
         card.querySelector('[data-act="edit"]').onclick = () => editOne(r);
@@ -5266,6 +5278,17 @@
     }
     $('#pubAll').onclick = () => { onlyMonth = false; $('#pubAll').className = 'btn sm'; $('#pubMon').className = 'btn sm ghost'; paint(); };
     $('#pubMon').onclick = () => { onlyMonth = true; $('#pubMon').className = 'btn sm'; $('#pubAll').className = 'btn sm ghost'; paint(); };
+    $('#pubQuick').onclick = async () => {
+      const f = await promptForm('⚡ 快速记一笔', [
+        { name: 'title', label: '标题', type: 'text', placeholder: '这条内容叫什么' },
+        { name: 'platform', label: '平台', type: 'select', options: [{ value: '抖音', label: '抖音' }, { value: '视频号', label: '视频号' }, { value: '公众号', label: '公众号' }, { value: '小红书', label: '小红书' }, { value: '其他', label: '其他' }] },
+        { name: 'views', label: '播放/阅读数', type: 'number', placeholder: '0' },
+        { name: 'fans', label: '涨粉数', type: 'number', placeholder: '0' },
+      ]);
+      if (!f || !f.title) return;
+      await DB.put('publish', { title: f.title, platform: f.platform, date: todayStr(), url: '', views: Number(f.views) || 0, likes: 0, comments: 0, fans: Number(f.fans) || 0, note: '' });
+      toast('已记一笔 ⚡'); paint();
+    };
     $('#pubAdd').onclick = async () => {
       const f = await promptForm('记录一条发布', [
         { name: 'title', label: '标题', type: 'text', placeholder: '这条内容叫什么' },
@@ -5290,6 +5313,7 @@
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🔥 我的习惯墙</div>' +
       '<p class="muted" style="margin:6px 0 0;font-size:13px">给你自己用的打卡，和娃的打卡分开。每天点「完成」，下面这张色块图就是你的坚持——颜色越满，这段时间越稳。主流习惯 App（Loop / Habitify）都用这种图。</p>' +
+      '<div id="habToday" style="margin-top:10px"></div>' +
       '<button id="habAdd" class="btn green block" style="margin-top:12px">➕ 新建一个习惯</button></div>' +
       '<div id="habList"></div>';
 
@@ -5310,7 +5334,15 @@
       const list = (await DB.all('habits')) || [];
       list.sort((a, b) => (b.created || 0) - (a.created || 0));
       const box = $('#habList');
-      if (!list.length) { box.innerHTML = emptyTip('🔥', '还没有习惯，先建一个吧（比如：每天读书30分）'); return; }
+      const ht = $('#habToday');
+      if (!list.length) { ht.innerHTML = ''; box.innerHTML = emptyTip('🔥', '还没有习惯，先建一个吧（比如：每天读书30分）'); return; }
+      const todo = list.filter(h => !(h.checks || {})[todayStr()]);
+      if (!todo.length) ht.innerHTML = '<div style="background:#eafaf1;color:#2e9e5b;font-size:13px;padding:8px 10px;border-radius:8px">✅ 今天所有习惯都打卡啦，真棒！</div>';
+      else {
+        ht.innerHTML = '<div style="font-size:12px;color:#999;margin-bottom:6px">今天待打卡</div><div class="row" style="flex-wrap:wrap;gap:8px">' +
+          todo.map(h => '<button class="btn sm" data-h="' + h.id + '" style="background:#f0f7f6;border:1px solid #cfe7e2;color:#0E9C8E">' + (h.emoji || '✅') + ' ' + esc(h.name) + '</button>').join('') + '</div>';
+        ht.querySelectorAll('[data-h]').forEach(btn => { btn.onclick = async () => { const h = list.find(x => x.id === btn.getAttribute('data-h')); if (h) { h.checks = h.checks || {}; h.checks[todayStr()] = 1; await DB.put('habits', h); paint(); } }; });
+      }
       box.innerHTML = '';
       list.forEach(h => {
         const color = h.color || '#0E9C8E';
@@ -5396,11 +5428,28 @@
       let maxStreak = 0;
       habits.forEach(h => { const s = bestStreak(Object.keys(h.checks || {})); if (s > maxStreak) maxStreak = s; });
       const canNext = cursor < new Date(now.getFullYear(), now.getMonth(), 1);
+      // 近6月涨粉趋势
+      const allPub = (await DB.all('publish')) || [];
+      const base = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+      const rMonths = [];
+      for (let i = 5; i >= 0; i--) rMonths.push(new Date(base.getFullYear(), base.getMonth() - i, 1));
+      const rfByM = rMonths.map(d => { const p = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-'; return allPub.filter(r => (r.date || '').indexOf(p) === 0).reduce((s, r) => s + (Number(r.fans) || 0), 0); });
+      const rmaxF = Math.max(1, ...rfByM);
+      const rBars = rMonths.map((d, i) => { const v = rfByM[i]; const h = Math.max(3, Math.round(Math.abs(v) / rmaxF * 50)); return '<div style="flex:1;text-align:center"><div style="height:50px;display:flex;align-items:flex-end;justify-content:center"><div style="width:70%;background:' + (v >= 0 ? '#0E9C8E' : '#e2574c') + ';height:' + h + 'px;border-radius:4px 4px 0 0"></div></div><div style="font-size:10px;color:#999;margin-top:2px">' + (d.getMonth() + 1) + '月</div></div>'; }).join('');
+      // 人话总结
+      let summary;
+      if (a.pubCount === 0) summary = '这个月还没发内容，发完记得顺手记一笔～';
+      else {
+        summary = '这个月发了 ' + a.pubCount + ' 条，涨粉 ' + a.pubFans + '，英语打卡 ' + a.enMonth + ' 天、越南语 ' + a.viMonth + ' 天。';
+        if (p.pubCount > 0) summary += (a.pubFans > p.pubFans ? ' 涨粉比上月多了 ' + (a.pubFans - p.pubFans) + '。' : (a.pubFans < p.pubFans ? ' 涨粉比上月少了 ' + (p.pubFans - a.pubFans) + '。' : ' 涨粉和上月持平。'));
+        if (a.pubCount < 8) summary += ' 发得不算多，下月可以试着多更几条看看。';
+      }
       const box = $('#repBody');
       box.innerHTML =
         '<div class="card" style="margin-bottom:12px"><div class="row spread" style="align-items:center"><div class="card-title" style="margin:0">' + lab(cursor) + ' · 月度复盘</div>' +
         '<div class="row" style="gap:6px"><button id="repPrev" class="btn sm ghost">‹</button><button id="repNext" class="btn sm ghost"' + (canNext ? '' : ' disabled style="opacity:.4"') + '>›</button></div></div>' +
-        '<p class="muted" style="margin:6px 0 0;font-size:13px">数字自动从你平时的记录汇出来。▲/▼ 是和上个月比。看得见「这个月没白过」。</p>' +
+        '<div style="background:#eafaf1;color:#1f6f4a;font-size:13px;line-height:1.6;padding:10px 12px;border-radius:8px;margin-top:8px">' + summary + '</div>' +
+        '<div style="margin-top:10px"><div style="font-size:12px;color:#999;margin-bottom:4px">近 6 个月涨粉趋势</div><div style="display:flex;gap:6px;align-items:flex-end">' + rBars + '</div></div>' +
         '<button id="repCopy" class="btn ghost sm block" style="margin-top:10px">📋 复制本月月报</button></div>' +
         '<div class="card" style="margin-bottom:12px"><div class="card-title">📺 副业</div><div class="stat-grid">' +
         repStat('本月发布', a.pubCount, p.pubCount, true) + repStat('总播放/阅读', a.pubViews, p.pubViews, true) + repStat('总涨粉', a.pubFans, p.pubFans, true) + '</div></div>' +
@@ -5510,10 +5559,12 @@
         const pct = target > 0 ? Math.round(cur / target * 100) : 0;
         const done = pct >= 100;
         const barColor = done ? '#2e9e5b' : '#0E9C8E';
+        let overDays = 0, isOver = false;
+        if (g.deadline && !done) { if (g.deadline < todayStr()) { const d1 = new Date(g.deadline), d2 = new Date(todayStr()); overDays = Math.max(0, Math.round((d2 - d1) / 86400000)); isOver = true; } }
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
         card.innerHTML =
           '<div class="row spread"><b>' + esc(g.title) + '</b>' + (done ? '<span class="chip on">✅ 已完成</span>' : '<button class="del" data-act="del">🗑</button>') + '</div>' +
-          (g.deadline ? '<div class="muted" style="font-size:12px;margin-top:2px">截止 ' + esc(g.deadline) + '</div>' : '') +
+          (g.deadline ? '<div style="font-size:12px;margin-top:2px;color:' + (isOver ? '#e2574c' : '#999') + '">' + (isOver ? '⏰ 已逾期 ' + overDays + ' 天（截止 ' + esc(g.deadline) + '）' : '截止 ' + esc(g.deadline)) + '</div>' : '') +
           '<div class="row spread" style="margin-top:8px;font-size:13px;color:#666"><span>' + cur + ' / ' + target + ' ' + esc(g.unit || '') + '</span><span>' + pct + '%</span></div>' +
           '<div style="height:8px;background:#eee;border-radius:6px;overflow:hidden;margin-top:4px"><div style="height:100%;width:' + pct + '%;background:' + barColor + ';border-radius:6px"></div></div>' +
           '<div class="row" style="margin-top:8px;gap:8px">' + (done ? '' : '<button class="btn sm ghost" data-act="add">＋ 进度</button>') + '<button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
