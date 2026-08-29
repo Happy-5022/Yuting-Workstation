@@ -1,100 +1,100 @@
 {
-  "date": "2026-08-28",
+  "date": "2026-08-29",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "How do we describe smells?",
-      "zh": "我们怎么形容气味？",
-      "words": 110,
-      "dur": 380,
-      "vocab": 6,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260827",
+      "en": "A hunch",
+      "zh": "直觉：a hunch 是什么意思",
+      "words": 120,
+      "dur": 75,
+      "vocab": 8,
+      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["English has many words for sights and sounds, but it is surprisingly poor at naming smells — we often borrow words from other senses, saying something \"smells sweet\" or \"smells like\" something else.", "英语里有大量形容视觉和听觉的词，却惊人地匮乏描写气味的词汇——我们常借用其他感官的说法，比如\"闻起来甜甜的\"或\"闻起来像某样东西\"。"],
-        ["In the programme, Neil and Georgie talk about why this gap exists and share their own favourite and worst smells, showing how personal and cultural smell memories can be.", "节目里 Neil 和 Georgie 聊到这种空缺为何存在，并分享了自己最喜欢和最讨厌的气味，说明气味记忆有多私人、多受文化影响。"],
-        ["They also teach useful vocabulary for discussing scents, reminding learners that describing a smell well is a real skill worth practising in daily conversation.", "他们还教了描述气味的好用词汇，提醒学习者：把气味说清楚，是日常对话里值得练习的真本事。"]
+        ["A \"hunch\" is a feeling that something is true even when you cannot explain why.", "hunch 指一种感觉：你觉得某事是真的，却说不出理由。"],
+        ["We often say we have a hunch before making a guess or a choice based on instinct.", "我们常在凭直觉猜测或做决定前说「我有个 hunch」。"],
+        ["In everyday talk it is close to \"a gut feeling\" and is useful when the facts are not yet clear.", "在日常对话里它接近 gut feeling（直觉），在事实还没明朗时很好用。"]
       ],
       "tips": [
-        ["smell sweet", "闻起来香甜（借味觉形容气味）"],
-        ["smells like", "闻起来像……（用他物类比气味）"],
-        ["scent memory", "气味记忆（由气味触发的回忆）"]
+        ["a hunch", "一种直觉 / 预感"],
+        ["gut feeling", "发自内心的感觉"],
+        ["go with your instincts", "跟着直觉走"]
       ]
     },
     {
       "id": "d2",
-      "en": "Gatekeep",
-      "zh": "Gatekeep（把信息捂着不分享）",
-      "words": 70,
-      "dur": 180,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak_2026/ep-260525",
+      "en": "Take it as a given",
+      "zh": "想当然：take it as a given 怎么用",
+      "words": 118,
+      "dur": 72,
+      "vocab": 8,
+      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["\"Gatekeep\" started online as a word for controlling who gets into a group or sees certain information, like a gatekeeper at a door.", "\"Gatekeep\" 最初是网络用语，指控制谁能进某个圈子、谁看得到某些信息，像门口的看门人。"],
-        ["Now people also use it to describe someone who refuses to share knowledge on purpose — for example, not telling friends about a great café so it stays quiet.", "现在也常用来形容有人故意不分享知识，比如不告诉朋友一家很棒的咖啡馆，好让它一直冷清。"],
-        ["The speakers explain that gatekeeping can be playful, but it sometimes stops others from learning or joining in.", "节目讲解道，把信息捂着有时只是开玩笑，但有时也会阻碍别人学习或参与。"]
+        ["To \"take something as a given\" means to accept it as true without questioning it.", "take it as a given 意思是不加怀疑地认为某事为真。"],
+        ["People use it when a fact seems so normal that nobody stops to check it.", "当某件事看起来太理所当然、没人去验证时，就会这么用。"],
+        ["It is handy for describing the quiet assumptions we make at work or in daily life.", "它很适合描述我们在工作或生活里默默做的那些假设。"]
       ],
       "tips": [
-        ["gatekeeper", "看门人；把持渠道的人"],
-        ["keep something to yourself", "把某事藏在自己心里不告诉别人"],
-        ["share the know-how", "分享诀窍/门道"]
+        ["take it as a given", "想当然地认为"],
+        ["an assumption", "一个假设"],
+        ["question something", "对某事提出质疑"]
       ]
     },
     {
       "id": "d3",
-      "en": "Wrap it up",
-      "zh": "Wrap it up（收尾/打住）",
-      "words": 70,
-      "dur": 180,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak_2026/ep-260615",
+      "en": "Think on your feet",
+      "zh": "临场反应：think on your feet",
+      "words": 122,
+      "dur": 76,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["\"Wrap it up\" can mean to finish a task or bring a project to a close, like wrapping a gift when you are done.", "\"Wrap it up\" 可以指把任务做完、给项目收尾，就像礼物包好就完成了。"],
-        ["It is also used when someone wants others to stop talking or stop an activity that has gone on too long.", "它也用于想让别人打住、别再没完没了地说或做的时候。"],
-        ["The programme gives everyday examples so learners can use the phrase both at work and in casual chat.", "节目给出生活化例子，方便学习者在职场和闲聊里都能用上这句话。"]
+        ["\"Think on your feet\" means to react quickly and make decisions without preparation.", "think on your feet 指不经准备就快速反应、做决定。"],
+        ["It is often used for people who stay calm and clever when plans suddenly change.", "常用来形容在计划突变时依然冷静、机灵的人。"],
+        ["Live streamers and teachers need this skill most when the plan goes wrong.", "主播和老师计划出岔子时，最需要具备这种能力。"]
       ],
       "tips": [
-        ["wrap up a project", "给项目收尾"],
-        ["that's enough, wrap it up", "够了，打住吧"],
-        ["call it a day", "今天就到这（收工）"]
+        ["think on your feet", "临场反应 / 随机应变"],
+        ["stay calm", "保持冷静"],
+        ["when the plan goes wrong", "当计划出错时"]
       ]
     },
     {
       "id": "d4",
-      "en": "Throw ideas at the wall",
-      "zh": "Throw ideas at the wall（把点子往上扔，看哪个粘住）",
-      "words": 70,
-      "dur": 180,
-      "vocab": 3,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak_2026/ep-260608",
+      "en": "Phrases with 'end'",
+      "zh": "英语里带 end 的短语",
+      "words": 115,
+      "dur": 70,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/english/features/english-in-a-minute",
       "body": [
-        ["This phrase means to suggest many ideas quickly without judging them, just to see which ones might work.", "这个短语意思是快速抛出很多点子、先不评判，看哪个能行。"],
-        ["The image is of throwing things at a wall to see what sticks — some fall, but a few stay.", "画面感就像把东西往墙上扔，看什么能粘住——有的掉下来，但总有少数留下。"],
-        ["It is common in brainstorming, where the goal is quantity first and quality later.", "这常见于头脑风暴，目标是先求数量、后求质量。"]
+        ["English has many short phrases built around the word \"end\".", "英语里有很多围绕 end 这个词构成的短语。"],
+        ["\"At the end of the day\" means finally, after everything is considered.", "at the end of the day 意思是「说到底、归根结底」。"],
+        ["\"No end\" means a lot, and \"end of story\" means the matter is finished and not open for debate.", "no end 表示「非常多」，end of story 表示「就这么定了、没得商量」。"]
       ],
       "tips": [
-        ["brainstorm", "头脑风暴；集思广益"],
-        ["see what sticks", "看哪个能留下/奏效"],
-        ["no bad ideas", "没有坏点子（先发散后收敛）"]
+        ["at the end of the day", "归根结底 / 说到底"],
+        ["no end", "非常多 / 没完没了"],
+        ["end of story", "就这么定了"]
       ]
     },
     {
       "id": "d5",
-      "en": "Phrases with 'hand'",
-      "zh": "和 hand（手）有关的四个短语",
-      "words": 75,
-      "dur": 200,
-      "vocab": 4,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/s5english_in_a_minute",
+      "en": "Phrases with 'water'",
+      "zh": "英语里带 water 的短语",
+      "words": 118,
+      "dur": 73,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/english/features/english-in-a-minute",
       "body": [
-        ["Georgie introduces four common English phrases built around the word \"hand\", showing how this body part shapes our language about control and help.", "Georgie 介绍了四个围绕 hand（手）的常用短语，展现这个身体部位如何塑造我们关于\"掌控\"和\"帮忙\"的表达。"],
-        ["\"In good hands\" means something is being looked after properly, while \"out of hand\" describes a situation that has lost control.", "\"In good hands\" 表示被妥善照管，而 \"out of hand\" 形容局面失控。"],
-        ["The other two — \"hands down\" (without doubt) and \"give a hand\" (to help) — are handy for daily chat and polite requests.", "另外两个——\"hands down\"（毫无疑问）和 \"give a hand\"（搭把手帮忙）——在日常闲聊和礼貌请求里都很好用。"]
+        ["The word \"water\" appears in many common English expressions we use every day.", "water 这个词出现在很多我们每天都会用到的英语表达里。"],
+        ["\"Water under the bridge\" describes past problems we no longer worry about.", "water under the bridge 指已经过去、不再纠结的问题。"],
+        ["\"Test the water\" means to try something carefully before taking a bigger step.", "test the water 意思是在迈大步前先小范围试试水。"]
       ],
       "tips": [
-        ["in good hands", "被妥善照管/由专业人士处理"],
-        ["out of hand", "失控"],
-        ["give someone a hand", "帮某人一把"]
+        ["water under the bridge", "过去的事 / 已成定局"],
+        ["test the water", "试探 / 试试水"],
+        ["hold water", "站得住脚 / 经得起推敲"]
       ]
     }
   ]
