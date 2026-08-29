@@ -3925,6 +3925,7 @@
     { key: 'prompts', emoji: '🪄', title: 'Prompt宝盒', render: renderPrompts },
     { key: 'period', emoji: '🩸', title: '经期记录', render: renderPeriod },
     { key: 'links', emoji: '🔗', title: '常用链接', render: renderLinks },
+    { key: 'gzh', emoji: '📝', title: '公众号助手', render: renderGzh },
   ];
 
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
@@ -3956,7 +3957,7 @@
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong', 'publish', 'habits', 'assets', 'goals', 'books', 'comp', 'prompts', 'period', 'links'];
+      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong', 'publish', 'habits', 'assets', 'goals', 'books', 'comp', 'prompts', 'period', 'links', 'gzh'];
       let count = 0;
       for (const s of stores) {
         const arr = data[s];
@@ -5960,6 +5961,334 @@
     };
     paint();
   }
+
+  // ===== 📝 公众号助手 =====
+  async function renderGzh(view) {
+    const DEFAULT_PILLARS = ['知识干货', '工具实操', '个人成长', '反差小剧场', '读者答疑'];
+    async function getPillars() {
+      const m = await DB.get('meta', 'gzhPillars');
+      if (m && Array.isArray(m.value) && m.value.length) return m.value;
+      return DEFAULT_PILLARS;
+    }
+    async function getFmt() {
+      const m = await DB.get('meta', 'gzhFmt');
+      const f = (m && m.value) || {};
+      return { accent: f.accent || '#0E9C8E', size: f.size || 16, ending: f.ending || '如果这篇对你有用，微信搜『Happy赖』关注我，更多 AI 搞钱小技巧等你～' };
+    }
+    const TEMPLATES = {
+      '干货长文': '# 标题写这里\n> 一句话钩子：这篇能帮你解决什么\n\n## 先说结论\n**核心观点**用一句话讲清。\n\n## 具体怎么做的\n第一点……\n第二点……\n第三点……\n\n## 我踩过的坑\n——\n\n## 小结\n一句话收尾。',
+      '清单体': '# 标题\n> 适合收藏的 N 条清单\n\n## 1. xxx\n## 2. xxx\n## 3. xxx\n\n---\n**你最常用哪个？评论区告诉我～**',
+      '故事体': '# 标题（带反差感）\n> 开头小剧场：正经外表下的疯癫内心\n\n## 事情是这样的\n——\n\n## 我悟了\n**金句**收尾。',
+      '答疑体': '# 读者问：xxx\n> 这个问题我也纠结过\n\n## 我的答案\n——\n\n## 补充一个小技巧\n**重点**标出来。',
+      '空白': ''
+    };
+    function mdToHtml(src, fmt) {
+      const accent = fmt.accent || '#0E9C8E';
+      const size = fmt.size || 16;
+      const lines = (src || '').split('\n');
+      let html = '', inP = false;
+      const closeP = () => { if (inP) { html += '</p>'; inP = false; } };
+      for (const raw of lines) {
+        const line = raw;
+        if (line.trim() === '') { closeP(); continue; }
+        if (line.trim() === '---') { closeP(); html += '<hr style="border:none;border-top:1px solid #e3e3e3;margin:20px 0">'; continue; }
+        if (line.indexOf('# ') === 0) { closeP(); html += '<h1 style="font-size:' + (size + 6) + 'px;font-weight:700;color:#1f2a37;margin:22px 0 10px;line-height:1.4">' + esc(line.slice(2)) + '</h1>'; continue; }
+        if (line.indexOf('## ') === 0) { closeP(); html += '<h2 style="font-size:' + (size + 2) + 'px;font-weight:700;color:' + accent + ';margin:18px 0 8px">' + esc(line.slice(3)) + '</h2>'; continue; }
+        if (line.indexOf('> ') === 0) { closeP(); html += '<blockquote style="border-left:4px solid ' + accent + ';background:#f6fbfa;margin:12px 0;padding:8px 12px;color:#555;font-style:italic">' + esc(line.slice(2)) + '</blockquote>'; continue; }
+        let t = esc(line).replace(/\*\*(.+?)\*\*/g, '<b style="color:' + accent + '">$1</b>');
+        if (!inP) { html += '<p style="margin:10px 0;line-height:1.8">'; inP = true; } else html += ' ';
+        html += t;
+      }
+      closeP();
+      const ending = fmt.ending ? '<p style="margin:18px 0 4px;color:#888;font-size:13px;text-align:center">' + esc(fmt.ending) + '</p>' : '';
+      return '<div style="font-size:' + size + 'px;color:#2b2b2b;line-height:1.8;max-width:680px;margin:0 auto;font-family:-apple-system,\'PingFang SC\',\'Microsoft YaHei\',sans-serif">' + html + ending + '</div>';
+    }
+    async function copyRich(html, plain) {
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([plain], { type: 'text/plain' }) })]);
+          return true;
+        }
+      } catch (e) {}
+      try {
+        const d = document.createElement('div'); d.innerHTML = html; d.style.position = 'fixed'; d.style.left = '-9999px'; document.body.append(d);
+        const sel = getSelection(); const r = document.createRange(); r.selectNodeContents(d); sel.removeAllRanges(); sel.addRange(r);
+        const ok = document.execCommand('copy'); sel.removeAllRanges(); d.remove(); return ok;
+      } catch (e) { return false; }
+    }
+    let tab = 'pool';
+    let curDraft = null; // 正在编辑的草稿对象（新/旧）
+    let lastHtml = '', lastPlain = '';
+    view.innerHTML =
+      '<div class="card" style="margin-bottom:12px"><div class="card-title">📝 公众号助手</div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">专门帮你搞定两件事：<b>每天写什么</b>（选题池 + 智能推荐）和<b>写完调格式</b>（模板 + 一键复制带排版，再也不用手动调）。</p>' +
+      '<div id="gzhTop" style="margin-top:10px"></div></div>' +
+      '<div class="row" style="gap:8px;margin-bottom:12px">' +
+      '<button id="tabPool" class="btn sm" style="flex:1">📋 选题池</button>' +
+      '<button id="tabCompose" class="btn sm ghost" style="flex:1">✍️ 写文章</button>' +
+      '<button id="tabSet" class="btn sm ghost" style="flex:1">⚙ 设置</button></div>' +
+      '<div id="gzhPool"></div><div id="gzhCompose" style="display:none"></div><div id="gzhSet" style="display:none"></div>';
+
+    function switchTab(t) {
+      tab = t;
+      $('#tabPool').className = 'btn sm' + (t === 'pool' ? '' : ' ghost');
+      $('#tabCompose').className = 'btn sm' + (t === 'compose' ? '' : ' ghost');
+      $('#tabSet').className = 'btn sm' + (t === 'set' ? '' : ' ghost');
+      $('#gzhPool').style.display = t === 'pool' ? '' : 'none';
+      $('#gzhCompose').style.display = t === 'compose' ? '' : 'none';
+      $('#gzhSet').style.display = t === 'set' ? '' : 'none';
+      if (t === 'pool') paintPool();
+      if (t === 'compose') paintCompose();
+      if (t === 'set') paintSet();
+    }
+    $('#tabPool').onclick = () => switchTab('pool');
+    $('#tabCompose').onclick = () => switchTab('compose');
+    $('#tabSet').onclick = () => switchTab('set');
+
+    // ===== 顶部：今天写啥 + 统计 =====
+    async function paintTop() {
+      const list = (await DB.all('gzh')) || [];
+      const ideas = list.filter(r => r.kind === 'idea');
+      const nIdea = ideas.filter(r => r.status === 'idea').length;
+      const nDraft = ideas.filter(r => r.status === 'draft').length;
+      const nDone = ideas.filter(r => r.status === 'done').length;
+      const box = $('#gzhTop');
+      box.innerHTML =
+        '<div style="display:flex;gap:8px;margin-bottom:8px">' +
+        sumCard('想写', nIdea, '#0E9C8E') + sumCard('草稿中', nDraft, '#f0a830') + sumCard('已发布', nDone, '#2e9e5b') + '</div>' +
+        '<button id="gzhRecBtn" class="btn green block">🎲 帮我挑一个今天写</button>' +
+        '<div id="gzhRec" style="font-size:13px;color:#555;margin-top:8px;min-height:18px"></div>' +
+        '<div id="gzhSched" style="margin-top:8px"></div>';
+      $('#gzhRecBtn').onclick = () => doRecommend();
+      paintSched();
+    }
+    async function paintSched() {
+      const list = (await DB.all('gzh')) || [];
+      const up = list.filter(r => r.kind === 'idea' && r.planDate && r.planDate >= todayStr()).sort((a, b) => a.planDate.localeCompare(b.planDate)).slice(0, 5);
+      const box = $('#gzhSched');
+      if (!box) return;
+      if (!up.length) { box.innerHTML = '<div class="muted" style="font-size:12px">近期排期：还没排，给选题设个「预计发布日」就会出现在这里。</div>'; return; }
+      box.innerHTML = '<div style="font-size:12px;color:#999;margin-bottom:4px">近期排期</div>' + up.map(r =>
+        '<div class="row spread" style="font-size:13px;padding:4px 0;border-bottom:1px dashed #eee"><span>' + esc(r.title) + ' <span class="chip" style="background:#eef4f7">' + esc(r.pillar || '') + '</span></span><span class="muted">' + esc(r.planDate) + '</span></div>').join('');
+    }
+    async function doRecommend() {
+      const list = (await DB.all('gzh')) || [];
+      const ideas = list.filter(r => r.kind === 'idea' && r.status === 'idea');
+      const rec = $('#gzhRec');
+      if (ideas.length) {
+        ideas.sort((a, b) => (a.planDate || '9999').localeCompare(b.planDate || '9999'));
+        const pick = ideas[0];
+        rec.innerHTML = '今天可以写：<b>《' + esc(pick.title) + '》</b> <span class="chip" style="background:#eef4f7">' + esc(pick.pillar || '') + '</span> —— 已帮你打开写文章，套好骨架了 ↓';
+        openCompose(pick);
+      } else {
+        const pillars = await getPillars();
+        const drafts = list.filter(r => r.kind === 'draft');
+        const cnt = {}; pillars.forEach(p => cnt[p] = 0);
+        const since = new Date(); since.setDate(since.getDate() - 30);
+        drafts.forEach(d => { const t = d.updated || d.created || 0; if (d.pillar && cnt[d.pillar] != null && t >= since.getTime()) cnt[d.pillar]++; });
+        let best = pillars[0], min = Infinity;
+        pillars.forEach(p => { if (cnt[p] < min) { min = cnt[p]; best = p; } });
+        rec.innerHTML = '选题池空了～今天试试写【<b>' + best + '</b>】方向：翻翻「💡选题灵感」或「🕵️对标拆解」找个角度，再点「✍️写文章」。';
+      }
+    }
+
+    // ===== 选题池 =====
+    async function paintPool() {
+      const box = $('#gzhPool');
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">📋 选题池</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">想到的选题先丢进来，标好状态。每天打开看一眼，就知道自己该写哪个，不用再对着空白页发呆。</p>' +
+        '<button id="ideaAdd" class="btn green block" style="margin-top:12px">➕ 加个选题</button></div>' +
+        '<div id="ideaList"></div>';
+      $('#ideaAdd').onclick = () => addIdea();
+      const list = (await DB.all('gzh')) || [];
+      const ideas = list.filter(r => r.kind === 'idea').sort((a, b) => (b.created || 0) - (a.created || 0));
+      const lb = $('#ideaList');
+      if (!ideas.length) { lb.innerHTML = emptyTip('📋', '还没有选题，先把脑子里的点子记下来'); return; }
+      const STAT = { idea: { n: '💡想写', c: '#0E9C8E' }, draft: { n: '✏草稿', c: '#f0a830' }, done: { n: '✅已发布', c: '#2e9e5b' } };
+      lb.innerHTML = '';
+      ideas.forEach(r => {
+        const st = STAT[r.status] || STAT.idea;
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div style="font-size:15px"><b>' + esc(r.title) + '</b></div><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="row" style="margin-top:4px;gap:8px;align-items:center;flex-wrap:wrap"><span class="chip" style="background:#eef4f7">' + esc(r.pillar || '') + '</span>' +
+          '<span class="chip on" style="background:' + st.c + '22;color:' + st.c + ';border:1px solid ' + st.c + '55">' + st.n + '</span>' +
+          (r.planDate ? '<span class="muted" style="font-size:12px">📅' + esc(r.planDate) + '</span>' : '') + '</div>' +
+          (r.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
+          '<div class="row" style="margin-top:8px;gap:8px;flex-wrap:wrap">' +
+          (r.status !== 'done' ? '<button class="btn sm ghost" data-act="write">✍ 去写</button>' : '') +
+          (r.status === 'idea' ? '<button class="btn sm ghost" data-act="toDraft">→ 转草稿</button>' : '') +
+          (r.status !== 'done' ? '<button class="btn sm ghost" data-act="toDone">✅ 标已发</button>' : '') +
+          '<button class="btn sm ghost" data-act="edit">✏ 编辑</button></div>';
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这个选题？')) { await DB.del('gzh', r.id); paintPool(); paintTop(); } };
+        card.querySelector('[data-act="edit"]').onclick = () => addIdea(r);
+        const w = card.querySelector('[data-act="write"]'); if (w) w.onclick = () => openCompose(r);
+        const td = card.querySelector('[data-act="toDraft"]'); if (td) td.onclick = async () => { r.status = 'draft'; await DB.put('gzh', r); paintPool(); paintTop(); };
+        const dd = card.querySelector('[data-act="toDone"]'); if (dd) dd.onclick = async () => { r.status = 'done'; await DB.put('gzh', r); paintPool(); paintTop(); };
+        lb.append(card);
+      });
+    }
+    async function addIdea(r) {
+      const pillars = await getPillars();
+      const f = await promptForm(r ? '编辑选题' : '加个选题', [
+        { name: 'title', label: '选题（标题/角度）', type: 'text', value: r ? r.title : '', placeholder: '如：用AI做一张公众号封面' },
+        { name: 'pillar', label: '内容支柱', type: 'select', options: pillars.map(p => ({ value: p, label: p })), value: r ? r.pillar : '' },
+        { name: 'planDate', label: '预计发布日（可选）', type: 'date', value: r ? r.planDate : '' },
+        { name: 'note', label: '备注（可选）', type: 'textarea', value: r ? r.note : '' },
+      ]);
+      if (!f || !f.title) return;
+      if (r) { Object.assign(r, { title: f.title, pillar: f.pillar || '', planDate: f.planDate || '', note: f.note || '' }); await DB.put('gzh', r); }
+      else { await DB.put('gzh', { kind: 'idea', title: f.title, pillar: f.pillar || '', planDate: f.planDate || '', note: f.note || '', status: 'idea', created: Date.now() }); }
+      toast('已记录 📋'); paintPool(); paintTop();
+    }
+
+    // ===== 写文章 =====
+    async function paintCompose() {
+      const pillars = await getPillars();
+      const fmt = await getFmt();
+      const box = $('#gzhCompose');
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">✍️ 写文章</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">选个模板就有骨架，写完点「复制带格式」直接粘进公众号后台，排版自动套好。</p>' +
+        '<div class="row" style="margin-top:10px;gap:8px"><input id="gzhTitle" class="input" style="flex:2" placeholder="文章标题">' +
+        '<select id="gzhPillar" class="input" style="flex:1">' + pillars.map(p => '<option value="' + esc(p) + '">' + esc(p) + '</option>').join('') + '</select></div>' +
+        '<div class="row" style="margin-top:8px;gap:8px"><select id="gzhTpl" class="input" style="flex:1">' + Object.keys(TEMPLATES).map(t => '<option value="' + t + '">' + t + '</option>').join('') + '</select>' +
+        '<button id="gzhUseTpl" class="btn ghost" style="flex:1">📐 套用模板骨架</button></div>' +
+        '<textarea id="gzhBody" class="input" style="width:100%;min-height:180px;margin-top:8px;font-family:monospace;font-size:13px;line-height:1.5" placeholder="在这里写正文，支持：\n# 大标题  ## 小标题  **加粗**  > 引用金句  --- 分隔线"></textarea>' +
+        '<div class="row" style="margin-top:8px;gap:8px;flex-wrap:wrap">' +
+        '<button id="gzhCopy" class="btn green" style="flex:1">📋 复制带格式</button>' +
+        '<button id="gzhCopyTxt" class="btn ghost" style="flex:1">📋 复制纯文本</button>' +
+        '<button id="gzhSave" class="btn ghost" style="flex:1">💾 存草稿</button></div>' +
+        '<div id="gzhCopyTip" class="muted" style="font-size:12px;margin-top:6px;min-height:16px"></div></div>' +
+        '<div class="card"><div class="card-title">👀 实时预览（就是读者看到的样子）</div><div id="gzhPreview" style="padding:8px 0;max-height:420px;overflow:auto"></div></div>' +
+        '<div id="gzhDrafts" style="margin-top:12px"></div>';
+      if (curDraft) {
+        $('#gzhTitle').value = curDraft.title || '';
+        if (curDraft.pillar) $('#gzhPillar').value = curDraft.pillar;
+        $('#gzhBody').value = curDraft.body || '';
+      }
+      const body = $('#gzhBody');
+      body.oninput = () => renderPreview();
+      $('#gzhUseTpl').onclick = async () => {
+        const t = $('#gzhTpl').value;
+        const sk = TEMPLATES[t] || '';
+        if (body.value && !(await confirmDel('用模板骨架会覆盖当前正文，确定？'))) return;
+        body.value = sk; renderPreview();
+      };
+      $('#gzhCopy').onclick = async () => { await doCopy(true); };
+      $('#gzhCopyTxt').onclick = async () => { await doCopy(false); };
+      $('#gzhSave').onclick = async () => { await saveDraft(); };
+      await renderPreview();
+      paintDrafts();
+    }
+    async function renderPreview() {
+      const fmt = await getFmt();
+      const title = $('#gzhTitle').value;
+      let src = $('#gzhBody').value;
+      if (title) src = '# ' + title + (src ? '\n\n' + src : '');
+      lastHtml = mdToHtml(src, fmt);
+      lastPlain = src + (fmt.ending ? '\n\n' + fmt.ending : '');
+      $('#gzhPreview').innerHTML = lastHtml;
+    }
+    async function doCopy(rich) {
+      const tip = $('#gzhCopyTip');
+      let ok = false;
+      if (rich) ok = await copyRich(lastHtml, lastPlain); else { try { await navigator.clipboard.writeText(lastPlain); ok = true; } catch (e) { const ta = document.createElement('textarea'); ta.value = lastPlain; document.body.append(ta); ta.select(); try { ok = document.execCommand('copy'); } catch (_) {} ta.remove(); } }
+      tip.textContent = ok ? (rich ? '✅ 已复制带格式，直接粘进公众号后台即可' : '✅ 已复制纯文本') : '❌ 复制失败，请手动长按选择复制';
+    }
+    async function saveDraft() {
+      const pillars = await getPillars();
+      const title = $('#gzhTitle').value || '未命名草稿';
+      const pillar = $('#gzhPillar').value || (pillars[0] || '');
+      const body = $('#gzhBody').value;
+      if (curDraft && curDraft.id) {
+        Object.assign(curDraft, { title, pillar, body, updated: Date.now() });
+        await DB.put('gzh', curDraft);
+      } else {
+        curDraft = { kind: 'draft', title, pillar, body, status: 'draft', created: Date.now(), updated: Date.now() };
+        curDraft.id = await DB.put('gzh', curDraft);
+      }
+      toast('草稿已存 💾'); paintDrafts();
+    }
+    async function paintDrafts() {
+      const list = (await DB.all('gzh')) || [];
+      const ds = list.filter(r => r.kind === 'draft').sort((a, b) => (b.updated || 0) - (a.updated || 0));
+      const box = $('#gzhDrafts');
+      if (!box) return;
+      if (!ds.length) { box.innerHTML = ''; return; }
+      box.innerHTML = '<div class="card"><div class="card-title">📂 我的草稿</div><div id="draftList"></div></div>';
+      const lb = $('#draftList'); lb.innerHTML = '';
+      ds.forEach(d => {
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML = '<div class="row spread"><b>' + esc(d.title) + '</b><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(d.pillar || '') + ' · ' + (d.updated ? new Date(d.updated).toLocaleDateString('zh-CN') : '') + '</div>' +
+          '<div class="row" style="margin-top:8px;gap:8px"><button class="btn sm ghost" data-act="open">✎ 打开编辑</button></div>';
+        card.querySelector('[data-act="open"]').onclick = () => { curDraft = d; switchTab('compose'); };
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这篇草稿？')) { await DB.del('gzh', d.id); paintDrafts(); } };
+        lb.append(card);
+      });
+    }
+    async function openCompose(idea) {
+      curDraft = null;
+      await paintCompose();
+      tab = 'compose';
+      $('#tabPool').className = 'btn sm ghost';
+      $('#tabCompose').className = 'btn sm';
+      $('#tabSet').className = 'btn sm ghost';
+      $('#gzhPool').style.display = 'none';
+      $('#gzhCompose').style.display = '';
+      $('#gzhSet').style.display = 'none';
+      $('#gzhTitle').value = idea.title || '';
+      if (idea.pillar && [...$('#gzhPillar').options].some(o => o.value === idea.pillar)) $('#gzhPillar').value = idea.pillar;
+      $('#gzhBody').value = TEMPLATES['干货长文'] || '';
+      if (idea.id) { idea.status = 'draft'; await DB.put('gzh', idea); paintPool(); paintTop(); }
+      renderPreview();
+    }
+
+    // ===== 设置 =====
+    async function paintSet() {
+      const fmt = await getFmt();
+      const pillars = await getPillars();
+      const box = $('#gzhSet');
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">⚙ 格式预设</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">设一次，以后每篇文章自动套用，再也不用手动调字号、加结尾语。</p>' +
+        '<div class="row" style="margin-top:10px;gap:8px">' +
+        '<div style="flex:1">强调色：<span id="fmtAccent" style="display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:middle;background:' + fmt.accent + '"></span></div>' +
+        '<div style="flex:1">字号：' + fmt.size + 'px</div></div>' +
+        '<div class="muted" style="font-size:12px;margin-top:6px">结尾固定语：' + esc(fmt.ending) + '</div>' +
+        '<button id="fmtEdit" class="btn green block" style="margin-top:10px">✏ 修改格式预设</button></div>' +
+        '<div class="card"><div class="card-title">🏷 内容支柱</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">你公众号主要写哪几类？智能推荐会按这个轮着给你出主意。</p>' +
+        '<div class="muted" style="font-size:12px;margin-top:6px">当前：' + pillars.map(p => '<span class="chip" style="background:#eef4f7">' + esc(p) + '</span>').join(' ') + '</div>' +
+        '<button id="pillarEdit" class="btn ghost block" style="margin-top:10px">✏ 修改内容支柱</button></div>';
+      $('#fmtEdit').onclick = async () => {
+        const f = await promptForm('格式预设', [
+          { name: 'accent', label: '强调色', type: 'select', options: [{ value: '#0E9C8E', label: '青绿（默认）' }, { value: '#e2574c', label: '红' }, { value: '#f0a830', label: '橙' }, { value: '#378ADD', label: '蓝' }, { value: '#7F77DD', label: '紫' }, { value: '#2e9e5b', label: '绿' }], value: fmt.accent },
+          { name: 'size', label: '正文字号', type: 'select', options: [{ value: '15', label: '15px' }, { value: '16', label: '16px（默认）' }, { value: '17', label: '17px' }, { value: '18', label: '18px' }], value: String(fmt.size) },
+          { name: 'ending', label: '结尾固定语', type: 'textarea', value: fmt.ending },
+        ]);
+        if (!f) return;
+        await DB.put('meta', { id: 'gzhFmt', value: { accent: f.accent || '#0E9C8E', size: Number(f.size) || 16, ending: f.ending || '' } });
+        toast('格式已保存 ⚙'); paintSet();
+      };
+      $('#pillarEdit').onclick = async () => {
+        const f = await promptForm('内容支柱', [
+          { name: 'pillars', label: '用逗号分隔', type: 'text', value: pillars.join('，'), placeholder: '知识干货，工具实操，个人成长' },
+        ]);
+        if (!f || !f.pillars) return;
+        const arr = f.pillars.split(/[，,]/).map(s => s.trim()).filter(Boolean);
+        await DB.put('meta', { id: 'gzhPillars', value: arr });
+        toast('内容支柱已保存 🏷'); paintSet();
+      };
+    }
+
+    // 启动
+    paintTop();
+    paintPool();
+  }
+
 
   function init() {
     window.addEventListener('unhandledrejection', function(e) {
