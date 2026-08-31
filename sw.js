@@ -1,5 +1,5 @@
 /* Service Worker：有网优先拿最新，离线才用缓存 —— 避免改了代码还显示旧版 */
-const CACHE = 'yt-wb-v14';
+const CACHE = 'yt-wb-v15';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './css/style.css', './js/db.js', './js/app.js',
@@ -28,9 +28,10 @@ async function netFirst(req) {
     }
     return res;
   } catch (e) {
-    const cached = await caches.match(req);
+    let cached = await caches.match(req);
+    if (!cached) cached = await caches.match(req, { ignoreSearch: true });
     if (cached) return cached;
-    if (req.mode === 'navigate') return caches.match('./index.html');
+    if (req.mode === 'navigate') return (await caches.match('./index.html')) || (await caches.match('./index.html', { ignoreSearch: true }));
     throw e;
   }
 }

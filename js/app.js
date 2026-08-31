@@ -744,11 +744,32 @@
 
   // ---------- 各模块渲染 ----------
   async function renderHome(view) {
-    view.innerHTML = '<div class="card" id="quoteCard"><div class="card-title">💬 每日一言</div>' +
+    view.innerHTML = '<div id="backupTip"></div>' +
+      '<div class="card" id="quoteCard"><div class="card-title">💬 每日一言</div>' +
       '<p id="quoteText" class="q-text"></p>' +
       '<div class="row" style="gap:8px;margin-top:10px">' +
       '<button id="quoteSwitch" class="btn sm ghost">🔄 换一条</button>' +
       '<button id="quoteFav" class="btn sm ghost">⭐ 收藏</button></div></div>';
+
+    function paintBackupTip() {
+      const box = $('#backupTip'); if (!box) return;
+      let last = '';
+      try { last = localStorage.getItem('ytLastBackup') || ''; } catch (e) { last = ''; }
+      const card = el('<div class="card" style="margin-bottom:12px"></div>');
+      if (!last) {
+        card.innerHTML = '<div class="card-title" style="color:#b26a00">💾 还没备份过</div>' +
+          '<p class="muted" style="margin:6px 0 0;font-size:13px">你的数据只存在这台手机里，清缓存或换手机就没了。花 3 秒导出一份放着安心。</p>' +
+          '<button id="bkNow" class="btn sm green block" style="margin-top:10px">⬇ 现在导出备份</button>';
+      } else {
+        const days = Math.max(0, Math.round((new Date(todayStr()) - new Date(last)) / 86400000));
+        const warn = days > 7;
+        card.innerHTML = '<div class="card-title" style="color:' + (warn ? '#b26a00' : '#2e9e5b') + '">💾 ' + (warn ? '该备份了' : '备份正常') + '</div>' +
+          '<p class="muted" style="margin:6px 0 0;font-size:13px">上次备份：' + esc(last) + '（' + (days === 0 ? '就是今天' : days + ' 天前') + '）</p>' +
+          (warn ? '<button id="bkNow" class="btn sm green block" style="margin-top:10px">⬇ 现在导出备份</button>' : '');
+      }
+      box.innerHTML = ''; box.append(card);
+      const b = $('#bkNow'); if (b) b.onclick = exportAll;
+    }
 
     async function paintQuote() {
       const idx = await getQuoteIdx();
@@ -902,6 +923,7 @@
         };
       }
     }
+    paintBackupTip();
     await paintQuote();
 
     const tasks = await DB.byDate('tasks', todayStr());
@@ -3929,9 +3951,29 @@
   ];
 
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
+  // 侧边栏分组：25 个模块按用途归类，不再一条条平铺
+  const MOD_GROUP = {
+    ideas: '副业', hot: '副业', review: '副业', publish: '副业', gzh: '副业', comp: '副业', prompts: '副业',
+    english: '自学', viet: '自学', uke: '自学', books: '自学',
+    daily: '生活', fitness: '生活', gratitude: '生活', memo: '生活', habits: '生活', period: '生活', goals: '生活', travel: '生活',
+    ledger: '账务', assets: '账务',
+    kids: '亲子',
+    report: '工具', links: '工具',
+  };
+  const GROUP_ORDER = ['副业', '自学', '生活', '账务', '亲子', '工具'];
+  function bumpVisit(key) {
+    try { const raw = JSON.parse(localStorage.getItem('ytVisits') || '{}'); raw[key] = (raw[key] || 0) + 1; localStorage.setItem('ytVisits', JSON.stringify(raw)); } catch (e) {}
+  }
+  function topVisited(n) {
+    try {
+      const raw = JSON.parse(localStorage.getItem('ytVisits') || '{}');
+      return Object.keys(raw).filter(k => k !== 'home' && MODULES.some(m => m.key === k)).sort((a, b) => raw[b] - raw[a]).slice(0, n);
+    } catch (e) { return []; }
+  }
   function route() {
     const key = (location.hash.replace('#/', '') || 'home');
     const m = MODULES.find(x => x.key === key) || MODULES[0];
+    bumpVisit(m.key);
     $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.key === m.key));
     $('#pageTitle').textContent = m.title;
     const view = $('#view'); view.scrollTop = 0; view.innerHTML = '';
@@ -3944,12 +3986,17 @@
   function openDrawer() { $('#drawer').classList.add('open'); $('#backdrop').classList.add('show'); $('#drawer').setAttribute('aria-hidden', 'false'); }
   function closeDrawer() { $('#drawer').classList.remove('open'); $('#backdrop').classList.remove('show'); $('#drawer').setAttribute('aria-hidden', 'true'); }
 
+  // 备份涉及的全部数据表：导出/导入共用同一份，以后新增模块只在这里补，不会再漏备份
+  const BACKUP_STORES = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong',
+    'publish', 'habits', 'assets', 'goals', 'books', 'comp', 'prompts', 'period', 'links', 'gzh'];
+
   async function exportAll() {
     const out = {};
-    for (const s of ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong']) out[s] = await DB.all(s);
+    for (const s of BACKUP_STORES) out[s] = await DB.all(s);
     const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
+    try { localStorage.setItem('ytLastBackup', todayStr()); } catch (e) {}
     toast('已导出备份到下载文件夹');
   }
 
@@ -3957,7 +4004,7 @@
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      const stores = ['tasks', 'ideas', 'hot', 'reviews', 'memos', 'uke', 'english', 'viet', 'fitness', 'gratitude', 'ledger', 'travel', 'kids', 'quotes', 'meta', 'vnFav', 'vnWrong', 'enFav', 'enWrong', 'publish', 'habits', 'assets', 'goals', 'books', 'comp', 'prompts', 'period', 'links', 'gzh'];
+      const stores = BACKUP_STORES;
       let count = 0;
       for (const s of stores) {
         const arr = data[s];
@@ -6461,12 +6508,26 @@
       alert('⚠️ 未捕获错误：' + msg);
     });
     const nav = $('#nav');
-    MODULES.forEach(m => {
+    function navTitle(text) { const t = el('<div class="nav-group"></div>'); t.textContent = text; return t; }
+    function navItem(m) {
       const icon = m.flag ? vnFlag('vn-flag nav-flag') : '<span class="emoji">' + m.emoji + '</span>';
       const it = el('<div class="nav-item" data-key="' + m.key + '">' + icon + '<span>' + m.title + '</span></div>');
       it.onclick = () => go(m.key);
-      nav.append(it);
+      return it;
+    }
+    const tops = topVisited(5);
+    if (tops.length) {
+      nav.append(navTitle('⭐ 常用'));
+      tops.forEach(k => { const m = MODULES.find(x => x.key === k); if (m) nav.append(navItem(m)); });
+    }
+    GROUP_ORDER.forEach(g => {
+      const ms = MODULES.filter(m => MOD_GROUP[m.key] === g);
+      if (!ms.length) return;
+      nav.append(navTitle(g));
+      ms.forEach(m => nav.append(navItem(m)));
     });
+    const rest = MODULES.filter(m => !MOD_GROUP[m.key]);
+    if (rest.length) { nav.append(navTitle('其他')); rest.forEach(m => nav.append(navItem(m))); }
     // 数据备份：默认收起，点「💾 数据备份」才展开导出/导入
     const backupBox = el('<div class="backup-box"></div>');
     backupBox.innerHTML =
