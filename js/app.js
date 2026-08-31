@@ -745,6 +745,7 @@
   // ---------- 各模块渲染 ----------
   async function renderHome(view) {
     view.innerHTML = '<div id="backupTip"></div>' +
+      '<div id="todayBox"></div>' +
       '<div class="card" id="quoteCard"><div class="card-title">💬 每日一言</div>' +
       '<p id="quoteText" class="q-text"></p>' +
       '<div class="row" style="gap:8px;margin-top:10px">' +
@@ -769,6 +770,33 @@
       }
       box.innerHTML = ''; box.append(card);
       const b = $('#bkNow'); if (b) b.onclick = exportAll;
+    }
+
+    async function paintToday() {
+      const box = $('#todayBox'); if (!box) return;
+      const t = todayStr();
+      const tasks = (await DB.byDate('tasks', t)) || [];
+      const undone = tasks.filter(x => !x.done);
+      const habAll = (await DB.all('habits')) || [];
+      const habUndo = habAll.filter(h => !(h.checks && h.checks[t]));
+      const grat = await DB.get('gratitude', t);
+      const hasGrat = !!(grat && grat.items && grat.items.length);
+      const rows = [];
+      if (undone.length) rows.push({ k: 'daily', t: '还有 ' + undone.length + ' 件事没做完', b: '去看看' });
+      if (habUndo.length) rows.push({ k: 'habits', t: habUndo.length + ' 个习惯今天还没打卡', b: '去打卡' });
+      if (!hasGrat) rows.push({ k: 'gratitude', t: '今天的感恩还没写', b: '去写' });
+      const card = el('<div class="card" style="margin-bottom:12px"></div>');
+      if (!rows.length) {
+        card.innerHTML = '<div class="card-title">✅ 今天该做的都做完了</div>' +
+          '<p class="muted" style="margin:6px 0 0;font-size:13px">待办清了、习惯打了卡、感恩也写了。安心收工吧 🌙</p>';
+      } else {
+        card.innerHTML = '<div class="card-title">👉 今天该做的事</div>' +
+          rows.map(r => '<div class="row spread" style="padding:9px 0;border-bottom:1px solid #f0f0f0">' +
+            '<span style="font-size:14px">' + r.t + '</span>' +
+            '<button class="btn sm ghost" data-go="' + r.k + '">' + r.b + ' ›</button></div>').join('');
+        card.querySelectorAll('[data-go]').forEach(b => { b.onclick = () => go(b.getAttribute('data-go')); });
+      }
+      box.innerHTML = ''; box.append(card);
     }
 
     async function paintQuote() {
@@ -924,6 +952,7 @@
       }
     }
     paintBackupTip();
+    await paintToday();
     await paintQuote();
 
     const tasks = await DB.byDate('tasks', todayStr());
@@ -1088,8 +1117,9 @@
       '<p class="muted" style="margin:6px 0 0;font-size:13px">每天按日期自动从题库轮换一批新选题；若你当天推送了云端新文件则优先显示。每条附跳转链接——点开即跳去搜相关视频 / 文章。「🔄 立即刷新」拉取云端最新一批；「🎲 换一批」从手机本地题库随机洗牌（无需联网）。</p>' +
       '<div class="row" style="margin-top:10px;gap:8px"><button id="refreshIdea" class="btn sm ghost">🔄 立即刷新</button><button id="shuffleIdea" class="btn sm ghost">🎲 换一批(本地)</button></div></div>' +
       '<div id="ideaList"></div>' +
-      '<div class="section-label" style="margin-top:18px">➕ 我的灵感（收藏 / 手动添加）</div>' +
-      '<div class="row wrap" style="margin-bottom:10px;gap:8px"><button id="manual" class="btn">➕ 添加灵感</button></div>' +
+      '<div class="section-label" style="margin-top:18px">📋 我的选题</div>' +
+      '<div class="card" style="margin-bottom:10px"><p class="muted" style="margin:0;font-size:13px">想到要写的选题，统一存到「📝 公众号助手」的选题池——那边能标「想写 → 草稿 → 已发布」，还能排期、直接开写。这一页只管每天发现新灵感。</p>' +
+      '<div class="row" style="margin-top:10px;gap:8px"><button id="manual" class="btn green" style="flex:1">➕ 加个选题</button><button id="goPool" class="btn ghost">📝 去选题池</button></div></div>' +
       '<div id="myList"></div>';
 
     // 取自动化每天推过来的选题；取不到（离线）就用本地按日期生成的兜底版
@@ -1162,12 +1192,34 @@
       });
     }
 
+    async function moveToPool(it) {
+      await DB.put('gzh', {
+        kind: 'idea',
+        title: it.text || '',
+        pillar: '',
+        planDate: '',
+        note: (it.desc || '') + (it.potential ? ('\n【爆款潜力】' + it.potential) : '') + (it.tag ? ('\n【标签】' + it.tag) : ''),
+        status: 'idea',
+        created: it.createdAt || Date.now(),
+      });
+    }
+
     async function renderMine() {
       const list = await DB.all('ideas');
       list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
       const box = $('#myList');
-      if (!list.length) { box.innerHTML = emptyTip('📥', '收藏或添加的灵感会在这里'); return; }
-      box.innerHTML = '';
+      if (!list.length) { box.innerHTML = ''; return; }
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:10px;border:1px dashed #f0a830;background:#fffbf0">' +
+        '<div class="card-title" style="color:#b26a00">📦 这里有 ' + list.length + ' 条旧灵感</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">它们是以前存在老地方的，公众号选题池里看不到。搬过去之后就能统一标状态、排期、直接开写。</p>' +
+        '<button id="moveAll" class="btn sm green block" style="margin-top:10px">📦 全部搬到选题池</button></div>';
+      $('#moveAll').onclick = async () => {
+        if (!await confirmDel('把这 ' + list.length + ' 条灵感搬到公众号选题池？（原来的会保留，搬完你可以回来删掉）')) return;
+        for (const it of list) await moveToPool(it);
+        toast('已搬 ' + list.length + ' 条到选题池 📦');
+        renderMine();
+      };
       list.forEach((it) => {
         const card = el('<div class="idea-card"></div>');
         const tag = it.tag || '思考';
@@ -1179,8 +1231,10 @@
           (it.collected ? '<span class="chip on">⭐ 已收藏</span>' : '') + '</div>' +
           (it.desc ? '<p class="muted" style="margin:6px 0 0;font-size:14px">' + esc(it.desc) + '</p>' : '') +
           '<div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap">' + searchBtns(it) +
+          '<button class="btn sm ghost" data-act="move">→ 搬到选题池</button>' +
           '<button class="del" style="padding:0 4px">🗑</button></div></div>';
         bindSearch(card);
+        card.querySelector('[data-act="move"]').onclick = async () => { await moveToPool(it); toast('已搬到选题池 📦'); renderMine(); };
         card.querySelector('.del').onclick = async () => { if (await confirmDel('删除这条灵感？')) { await DB.del('ideas', it.id); renderMine(); } };
         box.append(card);
       });
@@ -1189,14 +1243,15 @@
     $('#refreshIdea').onclick = async () => { await renderDaily('cloud'); toast('已拉取云端最新一批 🔄'); };
     $('#shuffleIdea').onclick = async () => { await renderDaily('local'); toast('已换一批本地灵感 🎲'); };
     $('#manual').onclick = async () => {
-      const f = await promptForm('添加灵感', [
-        { name: 'text', label: '灵感内容', type: 'textarea', placeholder: '想做点什么内容？' },
-        { name: 'desc', label: '详细说明（可选）', type: 'textarea', placeholder: '为什么这个选题好、怎么做…' },
-        { name: 'tag', label: '分类标签', type: 'select', options: IDEA_TAGS.map(t => ({ value: t, label: t })) },
-        { name: 'potential', label: '爆款潜力', type: 'select', options: [{ value: '', label: '未评' }, { value: '高', label: '高' }, { value: '中', label: '中' }, { value: '低', label: '低' }] },
+      const f = await promptForm('加个选题', [
+        { name: 'title', label: '选题（想写什么）', type: 'textarea', placeholder: '如：用 AI 做一张公众号封面' },
+        { name: 'note', label: '备注（可选）', type: 'textarea', placeholder: '为什么想写、打算怎么写…' },
       ]);
-      if (f && f.text) { await DB.put('ideas', { text: f.text, auto: false, collected: false, potential: f.potential, tag: f.tag, desc: f.desc || '', createdAt: Date.now() }); renderMine(); }
+      if (!f || !f.title) return;
+      await DB.put('gzh', { kind: 'idea', title: f.title, pillar: '', planDate: '', note: f.note || '', status: 'idea', created: Date.now() });
+      toast('已存进公众号选题池 📋');
     };
+    const gp = $('#goPool'); if (gp) gp.onclick = () => go('gzh');
     renderDaily();
     renderMine();
   }
@@ -3998,6 +4053,7 @@
     a.download = 'Happy赖工作台备份_' + todayStr() + '.json'; a.click();
     try { localStorage.setItem('ytLastBackup', todayStr()); } catch (e) {}
     toast('已导出备份到下载文件夹');
+    if (location.hash === '#/home' || location.hash === '') route();
   }
 
   async function importAll(file) {
