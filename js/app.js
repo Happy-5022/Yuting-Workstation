@@ -5801,11 +5801,24 @@
 
   // ===== 🩸 经期记录 =====
   async function renderPeriod(view) {
+    const FLOWS = ['轻', '中', '重'];
+    const PAINS = ['无', '轻', '中', '重'];
+    const SYMPTOMS = ['腹痛', '腰酸', '胸胀', '情绪波动', '头痛', '疲劳', '其他'];
+    const WD = ['日', '一', '二', '三', '四', '五', '六'];
+    const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+    const parseYMD = s => { const p = (s || '').split('-'); return new Date(+p[0], (+p[1] || 1) - 1, +p[2] || 1); };
+    const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🩸 经期记录</div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">记下每次开始日。研究说：只有约 13% 的人周期刚好 28 天，所以我会用你自己的历史算平均周期来推算，比死定 28 天准。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">参照美柚做的：日历彩色标注经期/排卵期，每次还能记流量、痛经、症状，自动算平均周期和规律度。</p>' +
       '<div id="perInfo" style="text-align:center;margin-top:8px"></div>' +
       '<div class="row" style="margin-top:10px;gap:8px"><button id="perSet" class="btn sm ghost">⚙ 周期设置</button><button id="perAdd" class="btn green" style="flex:1">➕ 记一次开始</button></div></div>' +
+      '<div class="card" style="margin-bottom:12px"><div class="row spread" style="align-items:center"><div class="card-title" style="margin:0">📅 周期日历</div><div class="row" style="gap:6px"><button id="calPrev" class="btn sm ghost">‹</button><button id="calNext" class="btn sm ghost">›</button></div></div>' +
+      '<div id="calLegend" style="display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#666;margin:8px 0"></div>' +
+      '<div id="perCal" style="margin-top:4px"></div></div>' +
+      '<div id="perReport"></div>' +
+      '<div id="perPred" style="margin-bottom:12px"></div>' +
       '<div id="perList"></div>';
 
     async function getCfg() {
@@ -5813,73 +5826,223 @@
       const cfg = (m && m.value) ? m.value : null;
       const list = (await DB.all('period')) || [];
       list.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
-      let avg = 28, hasHist = false;
+      let avg = 28, hasHist = false, avgDur = 5;
       if (list.length >= 2) {
         let sum = 0, n = 0;
         for (let i = 1; i < list.length; i++) {
-          const gap = Math.round((new Date(list[i].start) - new Date(list[i - 1].start)) / 86400000);
+          const gap = Math.round((parseYMD(list[i].start) - parseYMD(list[i - 1].start)) / 86400000);
           if (gap > 0 && gap < 120) { sum += gap; n++; }
         }
         if (n) { avg = Math.round(sum / n); hasHist = true; }
       }
+      if (list.length) {
+        const durs = list.map(r => Number(r.duration) || 0).filter(x => x > 0);
+        if (durs.length) avgDur = Math.round(durs.reduce((s, x) => s + x, 0) / durs.length);
+      }
       const cycle = (cfg && cfg.cycle) ? cfg.cycle : avg;
-      const duration = (cfg && cfg.duration) ? cfg.duration : 5;
-      return { cycle, duration, avg, hasHist, hasCfg: !!(cfg && cfg.cycle) };
+      const duration = (cfg && cfg.duration) ? cfg.duration : avgDur;
+      return { cycle, duration, avg, avgDur, hasHist, hasCfg: !!(cfg && cfg.cycle) };
     }
-    async function paint() {
+
+    let viewDate = new Date(); viewDate.setDate(1);
+
+    async function buildAnchors(cfg) {
       const list = (await DB.all('period')) || [];
-      list.sort((a, b) => (b.start || '').localeCompare(a.start || ''));
+      list.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+      const anchors = list.map(r => ({ start: parseYMD(r.start), dur: Number(r.duration) || cfg.duration, rec: r }));
+      const dayToRec = {};
+      list.forEach(r => { const s = parseYMD(r.start); const dlen = Number(r.duration) || cfg.duration; for (let i = 0; i < dlen; i++) dayToRec[ymd(addDays(s, i))] = r; });
+      if (list.length) {
+        const last = parseYMD(list[list.length - 1].start);
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        for (let i = 1; i <= 10; i++) {
+          const ps = addDays(last, cfg.cycle * i);
+          if (ps > addDays(today, 210)) break;
+          anchors.push({ start: ps, dur: cfg.duration, predicted: true });
+        }
+      }
+      return { anchors, dayToRec, list };
+    }
+
+    function dayInfo(anchors, ymdStr) {
+      for (const a of anchors) {
+        const w0 = ymd(a.start), w1 = ymd(addDays(a.start, a.dur - 1));
+        if (ymdStr >= w0 && ymdStr <= w1) return a.predicted ? { type: 'periodPred' } : { type: 'period' };
+      }
+      for (const a of anchors) if (ymd(addDays(a.start, -14)) === ymdStr) return { type: 'ovulation' };
+      for (const a of anchors) { const ov = addDays(a.start, -14); if (ymdStr >= ymd(ov) && ymdStr <= ymd(addDays(ov, 1))) return { type: 'fertile' }; }
+      return { type: 'safe' };
+    }
+
+    async function buildCalendar() {
       const cfg = await getCfg();
+      const { anchors } = await buildAnchors(cfg);
+      const cal = $('#perCal'); if (!cal) return;
+      const y = viewDate.getFullYear(), mo = viewDate.getMonth();
+      const lead = new Date(y, mo, 1).getDay();
+      const days = new Date(y, mo + 1, 0).getDate();
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      let html = '<div style="text-align:center;font-size:13px;color:#333;margin-bottom:6px">' + y + '年' + (mo + 1) + '月</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">';
+      WD.forEach(w => { html += '<div style="font-size:11px;color:#999;padding:4px 0">' + w + '</div>'; });
+      for (let i = 0; i < lead; i++) html += '<div></div>';
+      for (let d = 1; d <= days; d++) {
+        const date = new Date(y, mo, d);
+        const ys = ymd(date);
+        const info = dayInfo(anchors, ys);
+        let bg = '#fff', color = '#333', bd = '1px solid #eee', label = '';
+        if (info.type === 'period') { bg = '#fde0e0'; color = '#e2574c'; bd = '1px solid #f6c5c5'; label = '●'; }
+        else if (info.type === 'periodPred') { bg = '#fdeaea'; color = '#e2574c'; bd = '1px dashed #f0b4b4'; label = '○'; }
+        else if (info.type === 'ovulation') { bg = '#f3e8ff'; color = '#8b5cf6'; bd = '1px solid #e3d2fb'; label = '✦'; }
+        else if (info.type === 'fertile') { bg = '#fff3e0'; color = '#e08a00'; bd = '1px solid #f6e2bf'; }
+        const ring = (ymd(date) === ymd(today)) ? 'box-shadow:0 0 0 2px #0E9C8E inset;' : '';
+        html += '<div data-day="' + ys + '" style="' + ring + 'background:' + bg + ';color:' + color + ';border:' + bd + ';border-radius:8px;padding:6px 0;font-size:12px;cursor:pointer;min-height:34px">' +
+          '<div>' + d + '</div>' + (label ? '<div style="font-size:9px;line-height:1">' + label + '</div>' : '') + '</div>';
+      }
+      html += '</div>';
+      cal.innerHTML = html;
+      cal.querySelectorAll('[data-day]').forEach(c => { c.onclick = () => openDay(c.getAttribute('data-day')); });
+    }
+
+    async function openDay(ys) {
+      const cfg = await getCfg();
+      const { dayToRec } = await buildAnchors(cfg);
+      openPeriodModal(dayToRec[ys] ? dayToRec[ys].start : ys, dayToRec[ys] || null);
+    }
+
+    function openPeriodModal(dateStr, existing) {
+      const mask = el('<div class="modal-mask"><div class="modal"><h3></h3></div></div>');
+      mask.querySelector('h3').textContent = existing ? '编辑这次记录' : '记一次经期';
+      const body = el('<div></div>');
+      body.innerHTML =
+        '<div class="field"><label>开始日期</label><input id="plStart" type="date" value="' + (dateStr || todayStr()) + '"></div>' +
+        '<div class="field"><label>流量</label><div id="plFlow" style="display:flex;gap:6px;flex-wrap:wrap">' +
+        FLOWS.map(v => '<button type="button" class="chip ' + (existing && existing.flow === v ? 'on' : '') + '" data-v="' + v + '">' + v + '</button>').join('') + '</div></div>' +
+        '<div class="field"><label>痛经程度</label><div id="plPain" style="display:flex;gap:6px;flex-wrap:wrap">' +
+        PAINS.map(v => '<button type="button" class="chip ' + (existing && existing.pain === v ? 'on' : '') + '" data-v="' + v + '">' + v + '</button>').join('') + '</div></div>' +
+        '<div class="field"><label>症状（可多选）</label><div id="plSym" style="display:flex;gap:6px;flex-wrap:wrap">' +
+        SYMPTOMS.map(v => '<button type="button" class="chip ' + (existing && (existing.symptoms || []).indexOf(v) >= 0 ? 'on' : '') + '" data-v="' + v + '">' + v + '</button>').join('') + '</div></div>' +
+        '<div class="field"><label>备注</label><textarea id="plNote" placeholder="如：量正常 / 睡不好">' + (existing ? esc(existing.note || '') : '') + '</textarea></div>';
+      mask.querySelector('.modal').append(body);
+      const actions = el('<div class="modal-actions"></div>');
+      function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+      if (existing) { const del = el('<button class="btn danger grow">删除</button>'); del.onclick = async () => { if (await confirmDel('删除这条记录？')) { await DB.del('period', existing.id); close(); paint(); } }; actions.append(del); }
+      const cancel = el('<button class="btn ghost grow">取消</button>');
+      const ok = el('<button class="btn grow">保存</button>');
+      actions.append(cancel, ok);
+      mask.querySelector('.modal').append(actions);
+      document.body.append(mask);
+      requestAnimationFrame(() => mask.classList.add('show'));
+      cancel.onclick = () => close();
+      mask.onclick = (e) => { if (e.target === mask) close(); };
+      function bindGroup(sel, multi) {
+        body.querySelector(sel).querySelectorAll('.chip').forEach(b => {
+          b.onclick = () => { if (multi) b.classList.toggle('on'); else { body.querySelector(sel).querySelectorAll('.chip').forEach(x => x.classList.remove('on')); b.classList.add('on'); } };
+        });
+      }
+      bindGroup('#plFlow', false); bindGroup('#plPain', false); bindGroup('#plSym', true);
+      ok.onclick = async () => {
+        const start = body.querySelector('#plStart').value || todayStr();
+        const fl = body.querySelector('#plFlow .on'); const flow = fl ? fl.getAttribute('data-v') : '';
+        const pn = body.querySelector('#plPain .on'); const pain = pn ? pn.getAttribute('data-v') : '';
+        const symptoms = Array.from(body.querySelectorAll('#plSym .on')).map(b => b.getAttribute('data-v'));
+        const note = body.querySelector('#plNote').value.trim();
+        const dur = (existing && existing.duration) ? existing.duration : (await getCfg()).duration;
+        if (existing) { Object.assign(existing, { start, flow, pain, symptoms, note, duration: dur }); await DB.put('period', existing); }
+        else { await DB.put('period', { start, flow, pain, symptoms, note, duration: dur, created: Date.now() }); }
+        close(); paint();
+      };
+    }
+
+    async function paint() {
+      const cfg = await getCfg();
+      const { list, anchors } = await buildAnchors(cfg);
       const info = $('#perInfo');
       const today = new Date(); today.setHours(0, 0, 0, 0);
       if (list.length) {
-        const last = list[0];
-        const parts = (last.start || '').split('-');
-        const d = new Date(+parts[0], (+parts[1] || 1) - 1, +parts[2] || 1);
-        const next = new Date(d); next.setDate(next.getDate() + cfg.cycle);
-        const ovl = new Date(next); ovl.setDate(ovl.getDate() - 14);
+        const last = list[list.length - 1];
+        const d = parseYMD(last.start);
+        const next = addDays(d, cfg.cycle);
+        const ovl = addDays(next, -14);
         const diff = Math.round((next - today) / 86400000);
-        const endD = new Date(d); endD.setDate(endD.getDate() + (cfg.duration - 1));
+        const endD = addDays(d, cfg.duration - 1);
         const inPeriod = today >= d && today <= endD;
+        const dayOf = inPeriod ? Math.round((today - d) / 86400000) + 1 : 0;
         const tip = diff > 0 ? ('预计下次约 ' + diff + ' 天后（' + (next.getMonth() + 1) + '月' + next.getDate() + '日）') : (diff === 0 ? '预计就是今天' : ('已超过预计日 ' + (-diff) + ' 天'));
-        let note = cfg.hasCfg ? '' : (cfg.hasHist ? '（按历史平均 ' + cfg.avg + ' 天自动推算）' : '（默认 28 天，多记几次会更准）');
+        const note = cfg.hasCfg ? '' : (cfg.hasHist ? '（按历史平均 ' + cfg.avg + ' 天推算）' : '（默认 28 天，多记几次更准）');
         info.innerHTML =
-          '<div style="font-size:13px;color:#999">最近一次</div>' +
-          '<div style="font-size:20px;font-weight:700;color:#e2574c">' + esc(last.start) + '</div>' +
-          (inPeriod ? '<div style="display:inline-block;margin-top:4px;background:#fde8e8;color:#e2574c;font-size:12px;padding:2px 10px;border-radius:10px">🔴 正在经期中</div>' : '') +
+          (inPeriod ? '<div style="display:inline-block;background:#fde8e8;color:#e2574c;font-size:13px;padding:3px 12px;border-radius:12px;margin-bottom:6px">🔴 正在经期中（第 ' + dayOf + ' / ' + cfg.duration + ' 天）</div><br>' : '') +
+          '<div style="font-size:13px;color:#999">最近一次 ' + esc(last.start) + '</div>' +
           '<div style="font-size:12px;color:#999;margin-top:4px">' + tip + '</div>' +
           '<div style="font-size:12px;color:#999">周期 ' + cfg.cycle + ' 天 · 排卵期约 ' + (ovl.getMonth() + 1) + '月' + ovl.getDate() + '日 ' + note + '</div>';
       } else {
-        info.innerHTML = '<div class="muted">还没有记录</div>';
+        info.innerHTML = '<div class="muted">还没有记录，点「➕ 记一次开始」</div>';
+      }
+      const lg = $('#calLegend');
+      if (lg) lg.innerHTML = [
+        ['#fde0e0', '#e2574c', '经期'], ['#fdeaea', '#e2574c', '预测经期'],
+        ['#f3e8ff', '#8b5cf6', '排卵日'], ['#fff3e0', '#e08a00', '易孕期'],
+      ].map(x => '<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:3px;background:' + x[0] + ';border:1px solid ' + x[1] + '"></span>' + x[2] + '</span>').join('');
+      await buildCalendar();
+      const rep = $('#perReport');
+      if (rep) {
+        const gaps = [];
+        for (let i = 1; i < list.length; i++) { const g = Math.round((parseYMD(list[i].start) - parseYMD(list[i - 1].start)) / 86400000); if (g > 0 && g < 120) gaps.push(g); }
+        let reg = '—', regPct = 0;
+        if (gaps.length >= 2) {
+          const mean = gaps.reduce((s, x) => s + x, 0) / gaps.length;
+          const avgVar = gaps.map(g => Math.abs(g - mean)).reduce((s, x) => s + x, 0) / gaps.length;
+          regPct = Math.max(0, Math.round(100 - avgVar * 12));
+          reg = regPct >= 85 ? '很规律' : (regPct >= 65 ? '较规律' : '不规律');
+        }
+        const minG = gaps.length ? Math.min.apply(null, gaps) : 0;
+        const maxG = gaps.length ? Math.max.apply(null, gaps) : 0;
+        let alert = '';
+        if (gaps.length >= 2) {
+          const a = gaps[gaps.length - 2], b = gaps[gaps.length - 1];
+          if (b - a >= 7) alert = '最近一次周期比上一次长了 ' + (b - a) + ' 天，留意下压力/作息；若连续异常建议看医生。';
+          else if (a - b >= 7) alert = '最近一次周期比上一次短了 ' + (a - b) + ' 天，偶尔波动正常，连续变短可留意黄体功能。';
+        }
+        rep.innerHTML =
+          '<div class="card" style="margin-bottom:12px"><div class="card-title">📊 周期健康报告</div><div class="stat-grid">' +
+          '<div class="stat"><b>' + cfg.avg + '</b><span>平均周期(天)</span></div>' +
+          '<div class="stat"><b>' + cfg.avgDur + '</b><span>平均经期(天)</span></div>' +
+          '<div class="stat"><b style="color:' + (regPct >= 85 ? '#2e9e5b' : regPct >= 65 ? '#e08a00' : '#e2574c') + '">' + reg + '</b><span>规律度</span></div></div>' +
+          (gaps.length ? '<div class="muted" style="font-size:12px;margin-top:6px">周期范围：最短 ' + minG + ' 天 ~ 最长 ' + maxG + ' 天 · 已记录 ' + list.length + ' 次</div>' : '') +
+          (alert ? '<div style="margin-top:8px;background:#fff7e6;color:#b26a00;font-size:12px;padding:8px 10px;border-radius:8px">⚠️ ' + alert + '</div>' : '') + '</div>';
+      }
+      const pred = $('#perPred');
+      if (pred) {
+        const future = anchors.filter(a => a.predicted);
+        pred.innerHTML = future.length ? ('<div class="card"><div class="card-title">🔮 未来预测</div>' +
+          future.slice(0, 3).map(a => { const s = a.start, e = addDays(s, a.dur - 1), ov = addDays(s, -14); return '<div class="row spread" style="padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px"><span>📅 ' + ymd(s).slice(5) + ' ~ ' + ymd(e).slice(5) + '</span><span class="muted">排卵期 ' + ymd(ov).slice(5) + '</span></div>'; }).join('') + '</div>') : '';
       }
       const box = $('#perList');
-      if (!list.length) { box.innerHTML = emptyTip('🩸', '记一次开始日，以后自动提醒'); return; }
-      box.innerHTML = '';
-      list.forEach(r => {
+      if (!list.length) { box.innerHTML = emptyTip('🩸', '记一次开始日，以后自动预测'); return; }
+      box.innerHTML = '<div class="card-title" style="margin-bottom:8px">📜 历史记录</div>';
+      list.slice().reverse().forEach(r => {
         const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        let chips = '';
+        if (r.flow) chips += '<span class="chip" style="background:#fde0e0;color:#e2574c">' + r.flow + '流量</span> ';
+        if (r.pain && r.pain !== '无') chips += '<span class="chip" style="background:#fdeaea;color:#e2574c">' + r.pain + '痛经</span> ';
+        (r.symptoms || []).forEach(s => chips += '<span class="chip" style="background:#eef4f7">' + s + '</span> ');
         card.innerHTML =
-          '<div class="row spread"><div><b>' + esc(r.start) + '</b> 开始</div><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="row spread"><div><b>' + esc(r.start) + '</b> 开始 · 共 ' + (Number(r.duration) || cfg.duration) + ' 天</div></div>' +
+          (chips ? '<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">' + chips + '</div>' : '') +
           (r.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(r.note) + '</p>' : '') +
           '<button class="btn sm ghost" data-act="edit" style="margin-top:8px">✏ 编辑</button>';
-        card.querySelector('[data-act="edit"]').onclick = () => editOne(r);
-        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这条记录？')) { await DB.del('period', r.id); paint(); } };
+        card.querySelector('[data-act="edit"]').onclick = () => openPeriodModal(r.start, r);
         box.append(card);
       });
     }
-    async function editOne(r) {
-      const f = await promptForm('编辑', [
-        { name: 'start', label: '开始日期', type: 'date', value: r.start || todayStr() },
-        { name: 'note', label: '备注', type: 'text', value: r.note || '' },
-      ]);
-      if (!f) return;
-      Object.assign(r, { start: f.start || todayStr(), note: f.note || '' });
-      await DB.put('period', r); paint();
-    }
+
+    $('#calPrev').onclick = () => { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1); buildCalendar(); };
+    $('#calNext').onclick = () => { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1); buildCalendar(); };
     $('#perSet').onclick = async () => {
       const cfg = await getCfg();
       const f = await promptForm('周期设置', [
-        { name: 'cycle', label: '周期长度（天）', type: 'number', value: cfg.cycle, placeholder: '如 28' },
-        { name: 'duration', label: '经期通常几天', type: 'number', value: cfg.duration, placeholder: '如 5' },
+        { name: 'cycle', label: '周期长度（天）', type: 'number', value: cfg.avg, placeholder: '如 28' },
+        { name: 'duration', label: '经期通常几天', type: 'number', value: cfg.avgDur, placeholder: '如 5' },
       ]);
       if (!f) return;
       const cycle = Math.max(15, Math.min(60, Number(f.cycle) || 28));
@@ -5887,15 +6050,7 @@
       await DB.put('meta', { id: 'periodCfg', value: { cycle, duration } });
       toast('已保存 ⚙'); paint();
     };
-    $('#perAdd').onclick = async () => {
-      const f = await promptForm('记一次开始', [
-        { name: 'start', label: '开始日期', type: 'date', value: todayStr() },
-        { name: 'note', label: '备注（可选）', type: 'text', placeholder: '如：量正常 / 痛经' },
-      ]);
-      if (!f) return;
-      await DB.put('period', { start: f.start || todayStr(), note: f.note || '' });
-      toast('已记录 🩸'); paint();
-    };
+    $('#perAdd').onclick = () => openPeriodModal(todayStr(), null);
     paint();
   }
 
