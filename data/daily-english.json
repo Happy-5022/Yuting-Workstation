@@ -1,100 +1,100 @@
 {
-  "date": "2026-08-29",
+  "date": "2026-09-01",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "A hunch",
-      "zh": "直觉：a hunch 是什么意思",
+      "en": "Got you",
+      "zh": "稳住，我罩着你：got you 怎么用",
       "words": 120,
       "dur": 75,
       "vocab": 8,
       "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["A \"hunch\" is a feeling that something is true even when you cannot explain why.", "hunch 指一种感觉：你觉得某事是真的，却说不出理由。"],
-        ["We often say we have a hunch before making a guess or a choice based on instinct.", "我们常在凭直觉猜测或做决定前说「我有个 hunch」。"],
-        ["In everyday talk it is close to \"a gut feeling\" and is useful when the facts are not yet clear.", "在日常对话里它接近 gut feeling（直觉），在事实还没明朗时很好用。"]
+        ["When someone says \"I've got you\", they mean they will support or protect you.", "当有人说「I've got you」，意思是他/她会支持或保护你。"],
+        ["It is common in moments of worry, when a friend wants to show they will not let you fall.", "常出现在让人担心的时刻，朋友想表达「我不会让你掉下去」。"],
+        ["You can use it to comfort someone, or to say you have a situation under control.", "你可以用它来安慰别人，或表示某件事你稳稳hold住了。"]
       ],
       "tips": [
-        ["a hunch", "一种直觉 / 预感"],
-        ["gut feeling", "发自内心的感觉"],
-        ["go with your instincts", "跟着直觉走"]
+        ["I've got you", "我罩着你 / 别怕，有我"],
+        ["under control", "在掌控之中"],
+        ["count on someone", "指望 / 依靠某人"]
       ]
     },
     {
       "id": "d2",
-      "en": "Take it as a given",
-      "zh": "想当然：take it as a given 怎么用",
-      "words": 118,
-      "dur": 72,
-      "vocab": 8,
+      "en": "Flow state",
+      "zh": "心流状态：flow state 是什么意思",
+      "words": 125,
+      "dur": 78,
+      "vocab": 9,
       "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["To \"take something as a given\" means to accept it as true without questioning it.", "take it as a given 意思是不加怀疑地认为某事为真。"],
-        ["People use it when a fact seems so normal that nobody stops to check it.", "当某件事看起来太理所当然、没人去验证时，就会这么用。"],
-        ["It is handy for describing the quiet assumptions we make at work or in daily life.", "它很适合描述我们在工作或生活里默默做的那些假设。"]
+        ["A \"flow state\" is a moment when you are so focused on a task that time seems to disappear.", "flow state 指你全神贯注做一件事，连时间都像消失了的那种状态。"],
+        ["People often reach it while doing something they enjoy, like playing music, painting, or writing.", "人常在喜欢的事里进入这种状态，比如弹琴、画画或写作。"],
+        ["Because attention is total, work feels easier and more skilful than usual.", "因为注意力完全集中，事情做起来比平时更顺、更出彩。"]
       ],
       "tips": [
-        ["take it as a given", "想当然地认为"],
-        ["an assumption", "一个假设"],
-        ["question something", "对某事提出质疑"]
+        ["enter a flow state", "进入心流状态"],
+        ["fully focused", "全神贯注"],
+        ["time flies", "时间飞逝"]
       ]
     },
     {
       "id": "d3",
-      "en": "Think on your feet",
-      "zh": "临场反应：think on your feet",
+      "en": "Yap",
+      "zh": "别一直碎碎念：yap 是什么意思",
+      "words": 118,
+      "dur": 73,
+      "vocab": 8,
+      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
+      "body": [
+        ["\"Yap\" means to talk a lot, often in a noisy or annoying way.", "yap 指说个不停，常带点吵闹或讨人烦的意味。"],
+        ["You might hear \"Stop yapping!\" when someone wants you to be quiet.", "当有人想让你闭嘴时，可能会说「Stop yapping!」（别碎碎念了！）。"],
+        ["It is a casual word, so use it with friends rather than in formal situations.", "这是个很口语的词，适合跟朋友用，正式场合别用。"]
+      ],
+      "tips": [
+        ["stop yapping", "别唠叨了 / 闭嘴碎碎念"],
+        ["talk a lot", "说个不停"],
+        ["chatty", "话多的"]
+      ]
+    },
+    {
+      "id": "d4",
+      "en": "Phrases with 'thing'",
+      "zh": "英语里带 thing 的短语",
+      "words": 120,
+      "dur": 75,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/english/features/english-in-a-minute",
+      "body": [
+        ["English has several short phrases built around the word \"thing\".", "英语里有很多围绕 thing 这个词构成的短语。"],
+        ["\"A thing of the past\" means something that no longer happens, while \"the next big thing\" means a future hit.", "a thing of the past 指已经不再发生的事，而 the next big thing 指未来的大热门。"],
+        ["\"No such thing\" denies that something exists, and \"in the thick of things\" means being at the busy centre of action.", "no such thing 表示「没这回事」，in the thick of things 则指身处事务的中心、忙得团团转。"]
+      ],
+      "tips": [
+        ["a thing of the past", "已成过去的事"],
+        ["the next big thing", "下一个大热门"],
+        ["in the thick of things", "身处事务中心 / 忙得不可开交"]
+      ]
+    },
+    {
+      "id": "d5",
+      "en": "Can't see the wood for the trees",
+      "zh": "见树不见林：这个习语怎么用",
       "words": 122,
       "dur": 76,
       "vocab": 9,
       "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
       "body": [
-        ["\"Think on your feet\" means to react quickly and make decisions without preparation.", "think on your feet 指不经准备就快速反应、做决定。"],
-        ["It is often used for people who stay calm and clever when plans suddenly change.", "常用来形容在计划突变时依然冷静、机灵的人。"],
-        ["Live streamers and teachers need this skill most when the plan goes wrong.", "主播和老师计划出岔子时，最需要具备这种能力。"]
+        ["This idiom means you focus so much on small details that you miss the bigger picture.", "这个习语指你太盯着细枝末节，反而看不见整体大局。"],
+        ["It is useful when someone is lost in minor problems and forgets the main goal.", "当有人陷在小事里、忘了主要目标时，这句话很好用。"],
+        ["In American English, people say \"can't see the forest for the trees\" with the same meaning.", "美式英语里说「can't see the forest for the trees」，意思完全一样。"]
       ],
       "tips": [
-        ["think on your feet", "临场反应 / 随机应变"],
-        ["stay calm", "保持冷静"],
-        ["when the plan goes wrong", "当计划出错时"]
-      ]
-    },
-    {
-      "id": "d4",
-      "en": "Phrases with 'end'",
-      "zh": "英语里带 end 的短语",
-      "words": 115,
-      "dur": 70,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/english/features/english-in-a-minute",
-      "body": [
-        ["English has many short phrases built around the word \"end\".", "英语里有很多围绕 end 这个词构成的短语。"],
-        ["\"At the end of the day\" means finally, after everything is considered.", "at the end of the day 意思是「说到底、归根结底」。"],
-        ["\"No end\" means a lot, and \"end of story\" means the matter is finished and not open for debate.", "no end 表示「非常多」，end of story 表示「就这么定了、没得商量」。"]
-      ],
-      "tips": [
-        ["at the end of the day", "归根结底 / 说到底"],
-        ["no end", "非常多 / 没完没了"],
-        ["end of story", "就这么定了"]
-      ]
-    },
-    {
-      "id": "d5",
-      "en": "Phrases with 'water'",
-      "zh": "英语里带 water 的短语",
-      "words": 118,
-      "dur": 73,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/english/features/english-in-a-minute",
-      "body": [
-        ["The word \"water\" appears in many common English expressions we use every day.", "water 这个词出现在很多我们每天都会用到的英语表达里。"],
-        ["\"Water under the bridge\" describes past problems we no longer worry about.", "water under the bridge 指已经过去、不再纠结的问题。"],
-        ["\"Test the water\" means to try something carefully before taking a bigger step.", "test the water 意思是在迈大步前先小范围试试水。"]
-      ],
-      "tips": [
-        ["water under the bridge", "过去的事 / 已成定局"],
-        ["test the water", "试探 / 试试水"],
-        ["hold water", "站得住脚 / 经得起推敲"]
+        ["the bigger picture", "大局 / 整体"],
+        ["get lost in details", "陷在细节里"],
+        ["lose sight of", "忽视 / 看不见"]
       ]
     }
   ]
