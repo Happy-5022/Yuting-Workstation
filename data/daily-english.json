@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-01",
+  "date": "2026-09-02",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Got you",
-      "zh": "稳住，我罩着你：got you 怎么用",
-      "words": 120,
-      "dur": 75,
-      "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
+      "en": "Is it OK to disagree?",
+      "zh": "意见不合也 OK 吗？",
+      "words": 180,
+      "dur": 360,
+      "vocab": 9,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["When someone says \"I've got you\", they mean they will support or protect you.", "当有人说「I've got you」，意思是他/她会支持或保护你。"],
-        ["It is common in moments of worry, when a friend wants to show they will not let you fall.", "常出现在让人担心的时刻，朋友想表达「我不会让你掉下去」。"],
-        ["You can use it to comfort someone, or to say you have a situation under control.", "你可以用它来安慰别人，或表示某件事你稳稳hold住了。"]
+        ["This programme asks whether disagreeing with others is always a bad thing, or whether it can actually be healthy.", "这期节目探讨：和别人意见不合是否一定是坏事，还是说它其实可能有益健康。"],
+        ["The hosts discuss how modern society often pressures people to avoid conflict, yet honest disagreement can lead to better ideas.", "主持人聊到，现代社会常给人压力去回避冲突，但坦诚的分歧反而能催生更好的点子。"],
+        ["Listeners learn vocabulary about expressing opinions politely and keeping respect during a debate.", "听众能学到在辩论中礼貌表达观点、同时保持尊重的实用词汇。"]
       ],
       "tips": [
-        ["I've got you", "我罩着你 / 别怕，有我"],
-        ["under control", "在掌控之中"],
-        ["count on someone", "指望 / 依靠某人"]
+        ["to disagree", "意见不合、持不同看法"],
+        ["a divided society", "分裂的社会"],
+        ["to avoid conflict", "避免冲突"]
       ]
     },
     {
       "id": "d2",
-      "en": "Flow state",
-      "zh": "心流状态：flow state 是什么意思",
-      "words": 125,
-      "dur": 78,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
+      "en": "Should we cycle more?",
+      "zh": "我们该多骑车吗？",
+      "words": 175,
+      "dur": 350,
+      "vocab": 8,
+      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["A \"flow state\" is a moment when you are so focused on a task that time seems to disappear.", "flow state 指你全神贯注做一件事，连时间都像消失了的那种状态。"],
-        ["People often reach it while doing something they enjoy, like playing music, painting, or writing.", "人常在喜欢的事里进入这种状态，比如弹琴、画画或写作。"],
-        ["Because attention is total, work feels easier and more skilful than usual.", "因为注意力完全集中，事情做起来比平时更顺、更出彩。"]
+        ["The episode looks at why riding a bike could be one of the simplest ways to improve both health and the environment.", "这期节目探讨：骑车为何可能是同时改善健康和环境的简单方式之一。"],
+        ["Phil and Pippa talk about city designs that make cycling safer, and the habits that stop people from riding.", "Phil 和 Pippa 聊到让骑行更安全的城市规划，以及阻碍人们骑车的一些习惯。"],
+        ["You will pick up words about transport, exercise and daily routines in English.", "你会学到与交通、运动和日常作息相关的英语表达。"]
       ],
       "tips": [
-        ["enter a flow state", "进入心流状态"],
-        ["fully focused", "全神贯注"],
-        ["time flies", "时间飞逝"]
+        ["to cycle", "骑自行车"],
+        ["carbon emissions", "碳排放"],
+        ["daily commute", "日常通勤"]
       ]
     },
     {
       "id": "d3",
-      "en": "Yap",
-      "zh": "别一直碎碎念：yap 是什么意思",
-      "words": 118,
-      "dur": 73,
-      "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
+      "en": "Kick the can down the road",
+      "zh": "习语：把问题往后拖",
+      "words": 120,
+      "dur": 240,
+      "vocab": 6,
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["\"Yap\" means to talk a lot, often in a noisy or annoying way.", "yap 指说个不停，常带点吵闹或讨人烦的意味。"],
-        ["You might hear \"Stop yapping!\" when someone wants you to be quiet.", "当有人想让你闭嘴时，可能会说「Stop yapping!」（别碎碎念了！）。"],
-        ["It is a casual word, so use it with friends rather than in formal situations.", "这是个很口语的词，适合跟朋友用，正式场合别用。"]
+        ["This idiom describes putting off a difficult problem instead of solving it now.", "这个习语形容把棘手的问题往后拖，而不是现在就解决。"],
+        ["The presenters give examples from politics and everyday life where people delay tough decisions.", "主持人举了政治和日常生活中的例子，说明人们如何推迟艰难的决定。"],
+        ["You will hear how to use this phrase naturally in conversation.", "你会听到这个短语在日常对话中如何自然地使用。"]
       ],
       "tips": [
-        ["stop yapping", "别唠叨了 / 闭嘴碎碎念"],
-        ["talk a lot", "说个不停"],
-        ["chatty", "话多的"]
+        ["to kick the can down the road", "把问题往后拖、暂缓处理"],
+        ["to delay", "推迟、拖延"],
+        ["a tough decision", "艰难的决定"]
       ]
     },
     {
       "id": "d4",
-      "en": "Phrases with 'thing'",
-      "zh": "英语里带 thing 的短语",
+      "en": "Cut corners",
+      "zh": "习语：偷工减料",
       "words": 120,
-      "dur": 75,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/english/features/english-in-a-minute",
+      "dur": 240,
+      "vocab": 6,
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["English has several short phrases built around the word \"thing\".", "英语里有很多围绕 thing 这个词构成的短语。"],
-        ["\"A thing of the past\" means something that no longer happens, while \"the next big thing\" means a future hit.", "a thing of the past 指已经不再发生的事，而 the next big thing 指未来的大热门。"],
-        ["\"No such thing\" denies that something exists, and \"in the thick of things\" means being at the busy centre of action.", "no such thing 表示「没这回事」，in the thick of things 则指身处事务的中心、忙得团团转。"]
+        ["When someone cuts corners, they do a job quickly and cheaply by missing out important steps.", "当一个人 cut corners，意思是他为了图快图省而省掉重要步骤。"],
+        ["The programme shows why this shortcut often causes bigger problems later on.", "节目说明了这种捷径为何常在日后引发更大的麻烦。"],
+        ["Learners get clear examples of how to use the phrase at work or at home.", "学习者能拿到在工作或家中使用这个短语的清晰例子。"]
       ],
       "tips": [
-        ["a thing of the past", "已成过去的事"],
-        ["the next big thing", "下一个大热门"],
-        ["in the thick of things", "身处事务中心 / 忙得不可开交"]
+        ["to cut corners", "偷工减料、走捷径"],
+        ["a shortcut", "捷径"],
+        ["to save time or money", "省时或省钱"]
       ]
     },
     {
       "id": "d5",
-      "en": "Can't see the wood for the trees",
-      "zh": "见树不见林：这个习语怎么用",
-      "words": 122,
-      "dur": 76,
-      "vocab": 9,
-      "link": "https://www.bbc.com/learningenglish/english/features/the-english-we-speak",
+      "en": "A bit of a stretch",
+      "zh": "习语：有点牵强",
+      "words": 120,
+      "dur": 240,
+      "vocab": 6,
+      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
       "body": [
-        ["This idiom means you focus so much on small details that you miss the bigger picture.", "这个习语指你太盯着细枝末节，反而看不见整体大局。"],
-        ["It is useful when someone is lost in minor problems and forgets the main goal.", "当有人陷在小事里、忘了主要目标时，这句话很好用。"],
-        ["In American English, people say \"can't see the forest for the trees\" with the same meaning.", "美式英语里说「can't see the forest for the trees」，意思完全一样。"]
+        ["This phrase means something is hard to believe or not quite true.", "这个短语表示某事难以置信、或不太站得住脚。"],
+        ["The hosts explain situations where you might say a claim is a bit of a stretch.", "主持人解释了在哪些场景下你会说某个说法有点牵强。"],
+        ["It is a handy expression for disagreeing politely without being rude.", "这是一个很有用的表达，能让你礼貌地表示不认同而不失礼。"]
       ],
       "tips": [
-        ["the bigger picture", "大局 / 整体"],
-        ["get lost in details", "陷在细节里"],
-        ["lose sight of", "忽视 / 看不见"]
+        ["a bit of a stretch", "有点牵强、难以置信"],
+        ["to claim", "声称、主张"],
+        ["hard to believe", "难以相信"]
       ]
     }
   ]
