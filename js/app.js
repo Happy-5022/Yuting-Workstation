@@ -845,12 +845,12 @@
       ];
       // 风景背景图（内置，联网用一次后离线也能用）
       const QUOTE_BG_IMAGES = [
-        { name: '晨雾青山', src: 'images/quotes/Misty_green_mountains_at_dawn__2026-07-29T14-13-17.png' },
-        { name: '极光夜空', src: 'images/quotes/Aurora_borealis_over_quiet_sno_2026-07-29T14-13-17.png' },
-        { name: '星空银河', src: 'images/quotes/Starry_night_milky_way_galaxy__2026-07-29T14-13-26.png' },
-        { name: '海面日落', src: 'images/quotes/Tranquil_ocean_at_sunset__soft_2026-07-29T14-13-16.png' },
-        { name: '樱花春山', src: 'images/quotes/Cherry_blossom_branches_with_s_2026-07-29T14-13-17.png' },
-        { name: '晨光湖面', src: 'images/quotes/Calm_lake_at_sunrise_with_thin_2026-07-29T14-13-17.png' },
+        { name: '晨雾青山', src: 'images/quotes/Misty_green_mountains_at_dawn__2026-07-29T14-13-17.jpg' },
+        { name: '极光夜空', src: 'images/quotes/Aurora_borealis_over_quiet_sno_2026-07-29T14-13-17.jpg' },
+        { name: '星空银河', src: 'images/quotes/Starry_night_milky_way_galaxy__2026-07-29T14-13-26.jpg' },
+        { name: '海面日落', src: 'images/quotes/Tranquil_ocean_at_sunset__soft_2026-07-29T14-13-16.jpg' },
+        { name: '樱花春山', src: 'images/quotes/Cherry_blossom_branches_with_s_2026-07-29T14-13-17.jpg' },
+        { name: '晨光湖面', src: 'images/quotes/Calm_lake_at_sunrise_with_thin_2026-07-29T14-13-17.jpg' },
       ];
       let qcBg = { type: 'color', idx: 0 };
       function loadImg(src) {

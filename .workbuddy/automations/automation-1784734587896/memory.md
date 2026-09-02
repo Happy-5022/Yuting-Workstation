@@ -124,6 +124,12 @@
 - 部署：本地 commit 563f4c8；**git push 本次成功**（`953ffd6..563f4c8 main -> main`，「remote: This repository moved」仅为提示，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
 - 明日避重：以上全部主题勿复用。BBC 下次优先再抓 6ME 新集（约 9/3 周四，若出 ep-260903 等）；未出则用 TEWS 剩余未用集（got you / flow state / yap / wrap it up 已用其一，剩 take it as a given/think on your feet 本次已用，剩 A hunch 已用；实际 TEWS 剩余：got you / flow state / yap）或 EIAM 剩余未用集（'thing'/'water'/'end' 本次用 end/water，剩 'thing'）或 6ME 2025 更早集。
 
+## 2026-09-02
+- 三份数据文件已更新（date=2026-09-02），JSON 校验通过。当日真实热点切入：小红书「最废技能大赛」(5000万/30天)、青岛烤羊店招牌装反神梗(3800万/抖音热榜首位)、抖音算法大规模异常#抖音误入中老年频道#(5.5亿阅读)、花少2考古「第五大名著」(微博热搜TOP3)、第一批20后小学生入学开学话题(20亿播放)、台风科罗旺华南防风预警、国内首部AI长剧登卫视+9.1微短剧新规AI须标注。选题10条覆盖：最废技能/真实感营销/台风宅家古法操/算法信息茧房/20后入学(前教师视角)/手机涨价旧机续命/AI长剧→不露脸IP动画/早秋通勤穿搭/尤克里里《花海》/越南语第9课台风求助。挑战榜：#最废技能大赛/#台风天宅家古法健身操/#花少2为什么永远吵不完/#早秋松弛感通勤穿搭/#20后入学名场面。
+- BBC 五篇（均原创摘要、用真实 bbc.com 栏目页链接，避开 9/1 全部主题）：6 Minute English — Is it OK to disagree?(ep-260101)/Should we cycle more?(ep-260709，均为 2026 未用集)；The English We Speak — Kick the can down the road / Cut corners / A bit of a stretch（9/1 备注的未用集）。
+- 部署：本地 commit 8332680 成功；**git push 本次成功**（`d32df74..8332680 main -> main`，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
+- 明日避重：以上全部主题勿复用。BBC 剩余可用：6ME 2026 未用集基本见底（仅剩零星），下次优先抓 9/3 周四新集（ep-260903 等）；未出则用 6ME 2025 更早集或 TEWS 剩余（a bit of a stretch/kick the can/cut corners 本次已用，剩 none of those；可挖 News Review 等新栏目）或 REE 剩余集。
+
 ## 2026-09-01
 - 三份数据文件已更新（date=2026-09-01），JSON 校验通过。当日真实热点切入（开学日 / AI内容标识9.1正式生效 / 世界技能大赛9.22上海倒计时 / 白露9.7 / 爱你老己·萝卜纸巾猫·我要验牌热梗 / 回血感消费）：选题10条覆盖 世赛技能改命、AI打标不丑做法、爱你老己IP动画、萝卜纸巾猫反差口播、白露古法操、开学通勤穿搭、尤克里里弹唱学英语、我要验牌反转、重新看见附近vlog、越南语第8课问路打车。挑战榜：#我的技能很来赛 / #爱你老己 / #重新看见附近 / #白露不燥养生操 / #开学通勤穿搭公式。热点榜5条均带真实来源与热度。
 - BBC 五篇（均原创摘要、用真实 bbc.com 栏目页链接，避开此前全部用过主题）：TEWS — Got you(ep-260330)/Flow state(ep-260406)/Yap(ep-260413)/Can't see the wood for the trees(ep-260414)；EIAM — Phrases with 'thing'(ep-260116)。6ME 最新集仍为 ep-260827（8/27），本次改用 TEWS+EIAM 未用集。

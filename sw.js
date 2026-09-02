@@ -1,5 +1,5 @@
 /* Service Worker：有网优先拿最新，离线才用缓存 —— 避免改了代码还显示旧版 */
-const CACHE = 'yt-wb-v15';
+const CACHE = 'yt-wb-v16';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './css/style.css', './js/db.js', './js/app.js',
@@ -36,10 +36,28 @@ async function netFirst(req) {
   }
 }
 
+// 音频（越南语发音）走「缓存优先」：听过一次就存本地，之后离线也能听、点开也更快。
+// 发音文件基本不会变，放心缓存；总量约 4.9M，不会把缓存撑爆。
+async function audioFirst(req) {
+  const cached = await caches.match(req);
+  if (cached) return cached;
+  try {
+    const res = await fetch(req);
+    if (res && res.status === 200 && res.type === 'basic') {
+      const cp = res.clone();
+      caches.open(CACHE).then(c => c.put(req, cp)).catch(() => {});
+    }
+    return res;
+  } catch (e) {
+    return new Response('', { status: 504, statusText: 'offline' });
+  }
+}
+
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return; // 跨域（百度、B站等）不拦截
+  if (url.pathname.indexOf('/audio/') === 0) { e.respondWith(audioFirst(req)); return; }
   e.respondWith(netFirst(req));
 });
