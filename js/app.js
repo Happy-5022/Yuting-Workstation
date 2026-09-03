@@ -221,6 +221,41 @@
     return '<div class="empty"><div class="big">' + emoji + '</div><div>' + esc(text) + '</div></div>';
   }
 
+  // ---------- 每日计划 ⇄ 习惯墙 双向打通 ----------
+  // 两边记的是同一件事时，勾一边另一边自动跟上，不用再纠结「到底记哪」。
+  // 名称匹配用「互相包含」：习惯叫「健身操」、任务叫「健身操 30分钟」也能对上。
+  function matchHabit(habits, text) {
+    const t = (text || '').trim();
+    if (!t) return null;
+    return habits.find(h => {
+      const n = (h.name || '').trim();
+      return n && (t === n || t.indexOf(n) >= 0 || n.indexOf(t) >= 0);
+    }) || null;
+  }
+  // 每日计划勾了日常任务 → 习惯墙同名的也打上卡
+  async function syncTaskToHabit(text) {
+    const habits = (await DB.all('habits')) || [];
+    const h = matchHabit(habits, text);
+    if (!h) return null;
+    h.checks = h.checks || {};
+    if (h.checks[todayStr()]) return h;
+    h.checks[todayStr()] = 1;
+    await DB.put('habits', h);
+    return h;
+  }
+  // 习惯墙打了卡 → 今天计划里同名的日常任务也勾上
+  async function syncHabitToTask(name, done) {
+    const tasks = (await DB.byDate('tasks', todayStr())) || [];
+    const hit = tasks.filter(t => t.category === 'routine' && matchHabit([{ name: name }], t.text));
+    if (!hit.length) return 0;
+    let n = 0;
+    for (const t of hit) {
+      if (done && !t.done) { t.done = true; t.completedAt = Date.now(); await DB.put('tasks', t); n++; }
+      else if (!done && t.done) { t.done = false; await DB.put('tasks', t); n++; }
+    }
+    return n;
+  }
+
   // ---------- 素材库 ----------
   const IDEAS_BANK = [
     '普通人也能上手的3个副业，第三个我做了半年',
@@ -1039,7 +1074,7 @@
       '<div class="card stat-card"><div class="stat-big" id="pendNum">0</div><div class="stat-label">待完成</div></div>' +
       '<div class="card stat-card"><div class="stat-big" id="ratePct">0%</div><div class="stat-label">完成率</div></div></div>' +
       /* 个人日常 */
-      '<div class="sec-block"><div class="sec-head"><h3>个人日常</h3><p class="muted">健身操 / 尤克里里 / 英语，雷打不动的日课。</p></div>' +
+      '<div class="sec-block"><div class="sec-head"><h3>个人日常</h3><p class="muted">健身操 / 尤克里里 / 英语，雷打不动的日课。每天都做的，点任务上的「＋ 设为每天习惯」，以后就能在习惯���看到连续多少天；两边会自动同步，不用记两遍。</p></div>' +
       '<div id="listRoutine"></div>' +
       '<button id="addR" class="btn ghost block" style="margin-top:8px">＋ 添加日常任务</button></div>' +
       /* 创作任务 */
@@ -1048,16 +1083,32 @@
       '<button id="addC" class="btn ghost block" style="margin-top:8px">＋ 添加创作任务</button></div>';
 
     const TAGS = { routine: '每日必做', create: '创作' };
-    const renderTask = (t) => {
+    const renderTask = (t, habits) => {
+      const h = t.category === 'routine' ? matchHabit(habits || [], t.text) : null;
+      const syncTag = h ? '<span class="chip" style="background:#e1f5ee;color:#0f6e56">🔥 已同步习惯墙</span>' : '';
+      const addBtn = (t.category === 'routine' && !h)
+        ? '<button class="chip" data-act="tohabit" style="cursor:pointer;border:1px dashed #0E9C8E;color:#0E9C8E;background:transparent">＋ 设为每天习惯</button>' : '';
       const card = el('<div class="task-card' + (t.done ? ' done' : '') + '"></div>');
       card.innerHTML =
         '<div class="tc-left"><div class="check' + (t.done ? ' done' : '') + '">' + (t.done ? '✓' : '') + '</div></div>' +
         '<div class="tc-body"><div class="tc-text">' + esc(t.text) + '</div>' +
-        '<span class="chip tc-tag">' + (TAGS[t.category] || '') + '</span></div>' +
+        '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">' +
+        '<span class="chip tc-tag">' + (TAGS[t.category] || '') + '</span>' + syncTag + addBtn + '</div></div>' +
         '<button class="tc-del">×</button>';
+      const th = card.querySelector('[data-act="tohabit"]');
+      if (th) th.onclick = async () => {
+        await DB.put('habits', { name: t.text, emoji: '✅', color: '#0E9C8E', checks: {}, created: Date.now() });
+        toast('已加进习惯墙 🔥 以后打卡能看到连续天数');
+        refresh();
+      };
       card.querySelector('.check').onclick = async () => {
         t.done = !t.done; if (t.done) t.completedAt = Date.now();
-        await DB.put('tasks', t); refresh();
+        await DB.put('tasks', t);
+        if (t.done && t.category === 'routine') {
+          const h = await syncTaskToHabit(t.text);
+          if (h) toast('🔥 习惯墙「' + h.name + '」也打上卡了');
+        }
+        refresh();
       };
       card.querySelector('.tc-del').onclick = async () => {
         if (await confirmDel('删除这个任务？')) { await DB.del('tasks', t.id); refresh(); }
@@ -1067,6 +1118,7 @@
 
     async function refresh() {
       const tasks = await DB.byDate('tasks', todayStr());
+      const habits = (await DB.all('habits')) || [];
       const total = tasks.length, done = tasks.filter(t => t.done).length;
       const rate = total ? Math.round(done / total * 100) : 0;
       $('#pendNum').textContent = total - done;
@@ -1075,7 +1127,7 @@
         const arr = tasks.filter(t => t.category === cat);
         box.innerHTML = '';
         if (!arr.length) { box.innerHTML = '<p class="empty-sm">暂无任务，下方添加 ↓</p>'; return; }
-        arr.forEach(t => box.append(renderTask(t)));
+        arr.forEach(t => box.append(renderTask(t, habits)));
       };
       fill($('#listRoutine'), 'routine');
       fill($('#listCreate'), 'create');
@@ -5416,7 +5468,7 @@
   async function renderHabits(view) {
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">🔥 我的习惯墙</div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">给你自己用的打卡，和娃的打卡分开。每天点「完成」，下面这张色块图就是你的坚持——颜色越满，这段时间越稳。主流习惯 App（Loop / Habitify）都用这种图。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">给你自己用的打卡，和娃的打卡分开。每天点「完成」，下面这张色块图就是你的坚持——颜色越满，这段时间越稳。要是在「每日计划」里勾了同名的事，这里会自动跟着打卡，不用记两遍。</p>' +
       '<div id="habToday" style="margin-top:10px"></div>' +
       '<button id="habAdd" class="btn green block" style="margin-top:12px">➕ 新建一个习惯</button></div>' +
       '<div id="habList"></div>';
@@ -5470,7 +5522,10 @@
           h.checks = h.checks || {};
           const t = todayStr();
           if (h.checks[t]) delete h.checks[t]; else h.checks[t] = 1;
-          await DB.put('habits', h); paint();
+          await DB.put('habits', h);
+          const n = await syncHabitToTask(h.name, !!h.checks[t]);
+          if (n) toast('📋 今日计划里也同步了 ' + n + ' 项');
+          paint();
         };
         card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删除这个习惯？（打卡记录也会没）')) { await DB.del('habits', h.id); paint(); } };
         box.append(card);

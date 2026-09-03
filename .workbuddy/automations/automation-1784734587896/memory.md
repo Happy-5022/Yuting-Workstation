@@ -135,3 +135,9 @@
 - BBC 五篇（均原创摘要、用真实 bbc.com 栏目页链接，避开此前全部用过主题）：TEWS — Got you(ep-260330)/Flow state(ep-260406)/Yap(ep-260413)/Can't see the wood for the trees(ep-260414)；EIAM — Phrases with 'thing'(ep-260116)。6ME 最新集仍为 ep-260827（8/27），本次改用 TEWS+EIAM 未用集。
 - **部署：本地 commit 3354aa5 成功；git push 本次成功**（`d322616..3354aa5 main -> main`，「remote: This repository moved」仅为提示，EXIT=0），GitHub Pages 自动更新，玉婷手机主屏工作台打开即最新。无需 CloudStudio 备用。
 - 明日避重：以上全部主题勿复用。BBC 剩余可用：TEWS（a bit of a stretch/kick the can down the road/cut corners 等未用）、EIAM（'thing' 本次已用，主要集基本耗尽→优先等 6ME 新集 ep-260903 或挖 6ME 2025 更早集）。
+
+## 2026-09-03
+- 三份数据文件更新（date=2026-09-03），JSON 校验通过。当日真实热点（抖音/微博/百度 9/3 聚合）：微信已读回执新功能、泰国取消60日免签、李月汝护照遗失、梅姨案审判、紧身裤回归、口袋空调、小学老师转教初中、辽宁中考历史不计分、尼尔叔叔入驻、万物皆可贴秋膘、2026秋日重启计划(8.3亿)/我的九月主旋律(抖音247万)。选题10条+挑战5条均覆盖上述热点，避开前一日全部主题。
+- BBC 五篇原创摘要（bbc.com 栏目页链接，全避重）：6ME Rude emails(260702)/The power of poetry(260604)；REE housework(260828)/coffee(260821)；Learning English from the News — AI hacking(26 Aug)。**6ME 2026 全集已彻底用尽**，后续靠周四新集或 REE/News Review 栏目。
+- 部署：本地 commit ae5e6a2；git push 失败（Connection was reset，沙箱无网，EXIT=128），1 commit 待推（origin 停在 09-02 的 8332680）。CloudStudio 备用部署成功：https://1708efd524ae4802a96182e8c05ce76c.app.codebuddy.work
+- 明日避重：以上主题勿复用；BBC 转 REE/News Review 未用集或等 9/3 后 6ME 新集。
