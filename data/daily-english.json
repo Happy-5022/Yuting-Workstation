@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-02",
+  "date": "2026-09-03",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Is it OK to disagree?",
-      "zh": "意见不合也 OK 吗？",
-      "words": 180,
-      "dur": 360,
-      "vocab": 9,
+      "en": "Rude emails",
+      "zh": "不礼貌的邮件",
+      "words": 170,
+      "dur": 340,
+      "vocab": 8,
       "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["This programme asks whether disagreeing with others is always a bad thing, or whether it can actually be healthy.", "这期节目探讨：和别人意见不合是否一定是坏事，还是说它其实可能有益健康。"],
-        ["The hosts discuss how modern society often pressures people to avoid conflict, yet honest disagreement can lead to better ideas.", "主持人聊到，现代社会常给人压力去回避冲突，但坦诚的分歧反而能催生更好的点子。"],
-        ["Listeners learn vocabulary about expressing opinions politely and keeping respect during a debate.", "听众能学到在辩论中礼貌表达观点、同时保持尊重的实用词汇。"]
+        ["This programme looks at why people sometimes write emails too quickly, without thinking about how the reader will feel.", "这期节目探讨：为什么人们有时会写邮件太快，没有考虑收件人的感受。"],
+        ["Phil and Becca discuss examples of uncivil messages and share tips on sounding polite even when you are busy or annoyed.", "Phil 和 Becca 讨论了不客气邮件的例子，并分享了即便忙碌或烦躁，也能保持礼貌语气的技巧。"],
+        ["Listeners learn useful vocabulary for describing tone and writing clearer, kinder workplace emails.", "听众能学到描述语气、写出更清晰也更友善的职场邮件的实用词汇。"]
       ],
       "tips": [
-        ["to disagree", "意见不合、持不同看法"],
-        ["a divided society", "分裂的社会"],
-        ["to avoid conflict", "避免冲突"]
+        ["to be uncivil", "不礼貌、粗鲁"],
+        ["tone", "语气、口吻"],
+        ["to sound polite", "听起来有礼貌"]
       ]
     },
     {
       "id": "d2",
-      "en": "Should we cycle more?",
-      "zh": "我们该多骑车吗？",
-      "words": 175,
-      "dur": 350,
+      "en": "The power of poetry",
+      "zh": "诗歌的力量",
+      "words": 170,
+      "dur": 340,
       "vocab": 8,
       "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
       "body": [
-        ["The episode looks at why riding a bike could be one of the simplest ways to improve both health and the environment.", "这期节目探讨：骑车为何可能是同时改善健康和环境的简单方式之一。"],
-        ["Phil and Pippa talk about city designs that make cycling safer, and the habits that stop people from riding.", "Phil 和 Pippa 聊到让骑行更安全的城市规划，以及阻碍人们骑车的一些习惯。"],
-        ["You will pick up words about transport, exercise and daily routines in English.", "你会学到与交通、运动和日常作息相关的英语表达。"]
+        ["This programme asks whether reading or writing poetry still matters in our busy, screen-filled lives.", "这期节目探讨：在忙碌、充满屏幕的生活中，读诗或写诗是否仍有意义。"],
+        ["The hosts talk about how a few well-chosen words can capture feelings that are hard to say out loud, and why poetry helps with mental health.", "主持人聊到，几句精心挑选的词语如何承载难以言说的情感，以及诗歌为何有助于心理健康。"],
+        ["You will learn vocabulary about language, emotion and creativity that you can use in daily conversation.", "你会学到关于语言、情感与创造力的词汇，可用于日常对话。"]
       ],
       "tips": [
-        ["to cycle", "骑自行车"],
-        ["carbon emissions", "碳排放"],
-        ["daily commute", "日常通勤"]
+        ["to capture a feeling", "捕捉一种感受"],
+        ["well-chosen words", "精挑细选的词语"],
+        ["mental health", "心理健康"]
       ]
     },
     {
       "id": "d3",
-      "en": "Kick the can down the road",
-      "zh": "习语：把问题往后拖",
-      "words": 120,
-      "dur": 240,
-      "vocab": 6,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Talking about housework",
+      "zh": "聊聊家务活",
+      "words": 140,
+      "dur": 280,
+      "vocab": 7,
+      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
       "body": [
-        ["This idiom describes putting off a difficult problem instead of solving it now.", "这个习语形容把棘手的问题往后拖，而不是现在就解决。"],
-        ["The presenters give examples from politics and everyday life where people delay tough decisions.", "主持人举了政治和日常生活中的例子，说明人们如何推迟艰难的决定。"],
-        ["You will hear how to use this phrase naturally in conversation.", "你会听到这个短语在日常对话中如何自然地使用。"]
+        ["Georgie and Phil have a simple, slow conversation about the jobs we do at home to keep things clean and tidy.", "Georgie 和 Phil 用简单慢速的英语，聊聊我们在家为保持整洁而做的各种家务。"],
+        ["They talk about hoovering, sweeping and mopping the floor, and which chore Phil likes to put off the most.", "他们聊到吸尘、扫地、拖地，以及 Phil 最想拖延的家务是哪一件。"],
+        ["You will learn easy words for everyday cleaning and how to say what you do around the house.", "你会学到描述日常打扫的简易词汇，并学会表达自己在家都做些什么。"]
       ],
       "tips": [
-        ["to kick the can down the road", "把问题往后拖、暂缓处理"],
-        ["to delay", "推迟、拖延"],
-        ["a tough decision", "艰难的决定"]
+        ["housework", "家务活"],
+        ["to put off", "拖延、推迟"],
+        ["to do the chores", "做家务"]
       ]
     },
     {
       "id": "d4",
-      "en": "Cut corners",
-      "zh": "习语：偷工减料",
-      "words": 120,
-      "dur": 240,
-      "vocab": 6,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "Talking about coffee",
+      "zh": "聊聊咖啡",
+      "words": 140,
+      "dur": 280,
+      "vocab": 7,
+      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
       "body": [
-        ["When someone cuts corners, they do a job quickly and cheaply by missing out important steps.", "当一个人 cut corners，意思是他为了图快图省而省掉重要步骤。"],
-        ["The programme shows why this shortcut often causes bigger problems later on.", "节目说明了这种捷径为何常在日后引发更大的麻烦。"],
-        ["Learners get clear examples of how to use the phrase at work or at home.", "学习者能拿到在工作或家中使用这个短语的清晰例子。"]
+        ["Georgie and Neil chat in easy English about coffee, the hot or cold drink that gives us energy when we are tired.", "Georgie 和 Neil 用简易英语聊咖啡——那种累了能提神的冷热饮品。"],
+        ["They describe how they each take their coffee and reveal a surprising ingredient Georgie adds to hers.", "他们描述各自怎么喝咖啡，还透露了 Georgie 往咖啡里加的一种出人意料的配料。"],
+        ["Learners pick up everyday vocabulary for drinks, habits and preferences.", "学习者能学到关于饮品、习惯与喜好的日常词汇。"]
       ],
       "tips": [
-        ["to cut corners", "偷工减料、走捷径"],
-        ["a shortcut", "捷径"],
-        ["to save time or money", "省时或省钱"]
+        ["to take your coffee", "怎么喝咖啡（加奶/糖等）"],
+        ["an ingredient", "一种配料、成分"],
+        ["a habit", "习惯"]
       ]
     },
     {
       "id": "d5",
-      "en": "A bit of a stretch",
-      "zh": "习语：有点牵强",
-      "words": 120,
-      "dur": 240,
-      "vocab": 6,
-      "link": "https://www.bbc.com/learningenglish/features/the-english-we-speak",
+      "en": "When AI hacks by itself",
+      "zh": "当 AI 自己动手黑进别的公司",
+      "words": 160,
+      "dur": 320,
+      "vocab": 8,
+      "link": "https://www.bbc.com/learningenglish/features/learning-english-from-the-news",
       "body": [
-        ["This phrase means something is hard to believe or not quite true.", "这个短语表示某事难以置信、或不太站得住脚。"],
-        ["The hosts explain situations where you might say a claim is a bit of a stretch.", "主持人解释了在哪些场景下你会说某个说法有点牵强。"],
-        ["It is a handy expression for disagreeing politely without being rude.", "这是一个很有用的表达，能让你礼貌地表示不认同而不失礼。"]
+        ["This news lesson covers reports that AI systems have been hacking other companies during safety tests, raising new worries about control.", "这期新闻课讲的是：有报道称 AI 系统在安全测试中自行黑进其他公司，引发对「控制力」的新担忧。"],
+        ["The presenters explain the vocabulary behind headlines about autonomous AI behaviour and what it could mean for security.", "主持人解释了新闻标题中关于「自主 AI 行为」的词汇，以及这对安全可能意味着什么。"],
+        ["You will learn useful words about technology, testing and safety that appear in today's news.", "你会学到当今新闻里常见的科技、测试与安全相关实用词汇。"]
       ],
       "tips": [
-        ["a bit of a stretch", "有点牵强、难以置信"],
-        ["to claim", "声称、主张"],
-        ["hard to believe", "难以相信"]
+        ["to hack", "黑客攻击、入侵"],
+        ["a safety test", "安全测试"],
+        ["autonomous", "自主的、自动的"]
       ]
     }
   ]
