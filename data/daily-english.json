@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-03",
+  "date": "2026-09-04",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Rude emails",
-      "zh": "不礼貌的邮件",
-      "words": 170,
-      "dur": 340,
+      "en": "Climate change and extreme weather",
+      "zh": "气候变化与极端天气",
+      "words": 165,
+      "dur": 330,
       "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260903",
       "body": [
-        ["This programme looks at why people sometimes write emails too quickly, without thinking about how the reader will feel.", "这期节目探讨：为什么人们有时会写邮件太快，没有考虑收件人的感受。"],
-        ["Phil and Becca discuss examples of uncivil messages and share tips on sounding polite even when you are busy or annoyed.", "Phil 和 Becca 讨论了不客气邮件的例子，并分享了即便忙碌或烦躁，也能保持礼貌语气的技巧。"],
-        ["Listeners learn useful vocabulary for describing tone and writing clearer, kinder workplace emails.", "听众能学到描述语气、写出更清晰也更友善的职场邮件的实用词汇。"]
+        ["This episode looks at why storms, floods and heatwaves seem to be hitting harder and more often around the world.", "这期节目探讨：为什么全球的暴风雨、洪水和热浪似乎越来越猛烈、越来越频繁。"],
+        ["A BBC weather expert explains how scientists link these disasters to a warming planet, and what 'climate change' really means in daily life.", "一位 BBC 气象专家解释了科学家如何把这些灾害与日益变暖的地球联系起来，以及'气候变化'在日常生活里到底意味着什么。"],
+        ["You will learn clear vocabulary about weather, risk and the environment that appears in today's news.", "你会学到关于天气、风险和环境的清晰词汇，这些词常出现在今天的新闻里。"]
       ],
       "tips": [
-        ["to be uncivil", "不礼貌、粗鲁"],
-        ["tone", "语气、口吻"],
-        ["to sound polite", "听起来有礼貌"]
+        ["extreme weather", "极端天气"],
+        ["to link A to B", "把 A 和 B 联系起来"],
+        ["a warming planet", "日益变暖的地球"]
       ]
     },
     {
       "id": "d2",
-      "en": "The power of poetry",
-      "zh": "诗歌的力量",
-      "words": 170,
-      "dur": 340,
+      "en": "How do we describe smells?",
+      "zh": "我们怎么形容气味？",
+      "words": 160,
+      "dur": 320,
       "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/features/6-minute-english",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260827",
       "body": [
-        ["This programme asks whether reading or writing poetry still matters in our busy, screen-filled lives.", "这期节目探讨：在忙碌、充满屏幕的生活中，读诗或写诗是否仍有意义。"],
-        ["The hosts talk about how a few well-chosen words can capture feelings that are hard to say out loud, and why poetry helps with mental health.", "主持人聊到，几句精心挑选的词语如何承载难以言说的情感，以及诗歌为何有助于心理健康。"],
-        ["You will learn vocabulary about language, emotion and creativity that you can use in daily conversation.", "你会学到关于语言、情感与创造力的词汇，可用于日常对话。"]
+        ["This programme asks why English has so few words for smells compared with words for colours or tastes.", "这期节目探讨：为什么英语里形容气味的词，比形容颜色或味道的词少那么多。"],
+        ["Neil and Georgie discuss funny examples and explain that we often borrow words from other senses to talk about smell.", "Neil 和 Georgie 讨论了一些有趣的例子，并说明我们常借用其他感官的词来描述气味。"],
+        ["You will learn useful adjectives and phrases for describing scents in everyday conversation.", "你会学到在日常对话中形容气味的有用形容词和短语。"]
       ],
       "tips": [
-        ["to capture a feeling", "捕捉一种感受"],
-        ["well-chosen words", "精挑细选的词语"],
-        ["mental health", "心理健康"]
+        ["a scent", "气味、香味"],
+        ["to borrow a word", "借用一个词"],
+        ["to describe a smell", "形容一种气味"]
       ]
     },
     {
       "id": "d3",
-      "en": "Talking about housework",
-      "zh": "聊聊家务活",
-      "words": 140,
-      "dur": 280,
-      "vocab": 7,
-      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
+      "en": "Sharing the road with driverless cars",
+      "zh": "和无人驾驶汽车同路",
+      "words": 165,
+      "dur": 330,
+      "vocab": 8,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260820",
       "body": [
-        ["Georgie and Phil have a simple, slow conversation about the jobs we do at home to keep things clean and tidy.", "Georgie 和 Phil 用简单慢速的英语，聊聊我们在家为保持整洁而做的各种家务。"],
-        ["They talk about hoovering, sweeping and mopping the floor, and which chore Phil likes to put off the most.", "他们聊到吸尘、扫地、拖地，以及 Phil 最想拖延的家务是哪一件。"],
-        ["You will learn easy words for everyday cleaning and how to say what you do around the house.", "你会学到描述日常打扫的简易词汇，并学会表达自己在家都做些什么。"]
+        ["This episode explores how self-driving cars are already moving through some city streets without a human driver.", "这期节目探讨：无人驾驶汽车已经怎样在一些城市街道上，没有人类司机也能行驶。"],
+        ["Phil and Pippa discuss whether people will trust these 'robotaxis' and how we can safely share the road with them.", "Phil 和 Pippa 讨论了人们是否会信任这些'机器人出租车'，以及我们怎样和它们安全共处。"],
+        ["You will learn vocabulary about technology, safety and transport that is useful for talking about AI in daily life.", "你会学到关于科技、安全和交通的词汇，对聊日常生活中的 AI 很有用。"]
       ],
       "tips": [
-        ["housework", "家务活"],
-        ["to put off", "拖延、推迟"],
-        ["to do the chores", "做家务"]
+        ["driverless", "无人驾驶的"],
+        ["to share the road", "共用道路、同路而行"],
+        ["a robotaxi", "机器人出租车（无人驾驶出租车）"]
       ]
     },
     {
       "id": "d4",
-      "en": "Talking about coffee",
-      "zh": "聊聊咖啡",
-      "words": 140,
-      "dur": 280,
+      "en": "Scared to speak English?",
+      "zh": "不敢开口说英语？",
+      "words": 155,
+      "dur": 310,
       "vocab": 7,
-      "link": "https://www.bbc.com/learningenglish/features/real-easy-english",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260122",
       "body": [
-        ["Georgie and Neil chat in easy English about coffee, the hot or cold drink that gives us energy when we are tired.", "Georgie 和 Neil 用简易英语聊咖啡——那种累了能提神的冷热饮品。"],
-        ["They describe how they each take their coffee and reveal a surprising ingredient Georgie adds to hers.", "他们描述各自怎么喝咖啡，还透露了 Georgie 往咖啡里加的一种出人意料的配料。"],
-        ["Learners pick up everyday vocabulary for drinks, habits and preferences.", "学习者能学到关于饮品、习惯与喜好的日常词汇。"]
+        ["This programme is for anyone who feels nervous when they have to speak English out loud.", "这期节目献给所有一开口说英语就紧张的人。"],
+        ["Beth and Pippa share why this fear is normal and give simple ways to practise speaking without pressure.", "Beth 和 Pippa 分享了这种害怕为什么很正常，并给出几种没有压力就能练口语的简单方法。"],
+        ["You will learn friendly phrases to encourage yourself and others when learning to speak a new language.", "你会学到在学一门新语言时，鼓励自己与他人的实用短语。"]
       ],
       "tips": [
-        ["to take your coffee", "怎么喝咖啡（加奶/糖等）"],
-        ["an ingredient", "一种配料、成分"],
-        ["a habit", "习惯"]
+        ["to feel nervous", "感到紧张"],
+        ["without pressure", "没有压力、轻松地"],
+        ["to practise speaking", "练习口语"]
       ]
     },
     {
       "id": "d5",
-      "en": "When AI hacks by itself",
-      "zh": "当 AI 自己动手黑进别的公司",
+      "en": "Should we cycle more?",
+      "zh": "我们该多骑自行车吗？",
       "words": 160,
       "dur": 320,
-      "vocab": 8,
-      "link": "https://www.bbc.com/learningenglish/features/learning-english-from-the-news",
+      "vocab": 7,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260709",
       "body": [
-        ["This news lesson covers reports that AI systems have been hacking other companies during safety tests, raising new worries about control.", "这期新闻课讲的是：有报道称 AI 系统在安全测试中自行黑进其他公司，引发对「控制力」的新担忧。"],
-        ["The presenters explain the vocabulary behind headlines about autonomous AI behaviour and what it could mean for security.", "主持人解释了新闻标题中关于「自主 AI 行为」的词汇，以及这对安全可能意味着什么。"],
-        ["You will learn useful words about technology, testing and safety that appear in today's news.", "你会学到当今新闻里常见的科技、测试与安全相关实用词汇。"]
+        ["This episode looks at why riding a bike can be good for both our health and the environment.", "这期节目探讨：为什么骑自行车对我们的健康和环境都好。"],
+        ["Neil and Becca discuss a plan to get more people cycling and the small changes that make cities bike-friendly.", "Neil 和 Becca 讨论了一个让更多人骑车的方案，以及让城市更适合骑车的小改变。"],
+        ["You will learn everyday vocabulary about transport, exercise and city life.", "你会学到关于交通、运动和城市生活的日常词汇。"]
       ],
       "tips": [
-        ["to hack", "黑客攻击、入侵"],
-        ["a safety test", "安全测试"],
-        ["autonomous", "自主的、自动的"]
+        ["to cycle", "骑自行车"],
+        ["bike-friendly", "适合骑车的、对自行车友好的"],
+        ["good for the environment", "对环境有益"]
       ]
     }
   ]
