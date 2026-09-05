@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-04",
+  "date": "2026-09-05",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Climate change and extreme weather",
-      "zh": "气候变化与极端天气",
-      "words": 165,
-      "dur": 330,
+      "en": "Who does the housework?",
+      "zh": "家务到底谁来做？",
+      "words": 162,
+      "dur": 324,
       "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260903",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260813",
       "body": [
-        ["This episode looks at why storms, floods and heatwaves seem to be hitting harder and more often around the world.", "这期节目探讨：为什么全球的暴风雨、洪水和热浪似乎越来越猛烈、越来越频繁。"],
-        ["A BBC weather expert explains how scientists link these disasters to a warming planet, and what 'climate change' really means in daily life.", "一位 BBC 气象专家解释了科学家如何把这些灾害与日益变暖的地球联系起来，以及'气候变化'在日常生活里到底意味着什么。"],
-        ["You will learn clear vocabulary about weather, risk and the environment that appears in today's news.", "你会学到关于天气、风险和环境的清晰词汇，这些词常出现在今天的新闻里。"]
+        ["In this episode, Pippa and Neil talk about who usually does the cleaning, cooking and washing at home.", "在这期节目里，Pippa 和 Neil 聊了家里谁通常负责打扫、做饭和洗衣。"],
+        ["They look at research showing that women around the world still spend far more time on unpaid housework than men do.", "他们看了一项研究：全球范围内，女性花在家务这种无酬劳动上的时间，仍远多于男性。"],
+        ["You will learn useful words and phrases to describe household chores and the idea of 'pulling your weight'.", "你会学到形容家务、以及'分担责任'这个意思的实用词汇和短语。"]
       ],
       "tips": [
-        ["extreme weather", "极端天气"],
-        ["to link A to B", "把 A 和 B 联系起来"],
-        ["a warming planet", "日益变暖的地球"]
+        ["household chores", "家务"],
+        ["unpaid work", "无酬劳动"],
+        ["to pull your weight", "尽自己的本分、分担责任"]
       ]
     },
     {
       "id": "d2",
-      "en": "How do we describe smells?",
-      "zh": "我们怎么形容气味？",
-      "words": 160,
-      "dur": 320,
+      "en": "How do climate scientists make predictions?",
+      "zh": "气候科学家怎么做预测？",
+      "words": 165,
+      "dur": 330,
       "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260827",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260806",
       "body": [
-        ["This programme asks why English has so few words for smells compared with words for colours or tastes.", "这期节目探讨：为什么英语里形容气味的词，比形容颜色或味道的词少那么多。"],
-        ["Neil and Georgie discuss funny examples and explain that we often borrow words from other senses to talk about smell.", "Neil 和 Georgie 讨论了一些有趣的例子，并说明我们常借用其他感官的词来描述气味。"],
-        ["You will learn useful adjectives and phrases for describing scents in everyday conversation.", "你会学到在日常对话中形容气味的有用形容词和短语。"]
+        ["Phil and Pippa explain how scientists use computer models to picture what Earth's climate may look like in the future.", "Phil 和 Pippa 解释了科学家如何借助计算机模型，描绘地球气候未来的可能面貌。"],
+        ["They compare a 'prediction' with a 'projection', and discuss why clouds can both cool and warm the planet.", "他们比较了'预测'与'推演'的区别，并讨论了云为何既能给地球降温、也能让它升温。"],
+        ["You will learn clear vocabulary about weather, models and the environment that appears in climate news.", "你会学到关于天气、模型和环境、常出现在气候新闻里的清晰词汇。"]
       ],
       "tips": [
-        ["a scent", "气味、香味"],
-        ["to borrow a word", "借用一个词"],
-        ["to describe a smell", "形容一种气味"]
+        ["a climate model", "气候模型"],
+        ["a prediction", "预测"],
+        ["to warm the planet", "使地球变暖"]
       ]
     },
     {
       "id": "d3",
-      "en": "Sharing the road with driverless cars",
-      "zh": "和无人驾驶汽车同路",
-      "words": 165,
-      "dur": 330,
+      "en": "The Enhanced Games",
+      "zh": "“增强运动会”是什么？",
+      "words": 160,
+      "dur": 320,
       "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260820",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260730",
       "body": [
-        ["This episode explores how self-driving cars are already moving through some city streets without a human driver.", "这期节目探讨：无人驾驶汽车已经怎样在一些城市街道上，没有人类司机也能行驶。"],
-        ["Phil and Pippa discuss whether people will trust these 'robotaxis' and how we can safely share the road with them.", "Phil 和 Pippa 讨论了人们是否会信任这些'机器人出租车'，以及我们怎样和它们安全共处。"],
-        ["You will learn vocabulary about technology, safety and transport that is useful for talking about AI in daily life.", "你会学到关于科技、安全和交通的词汇，对聊日常生活中的 AI 很有用。"]
+        ["Pippa and Neil discuss a new kind of sports event where athletes are allowed to use performance-enhancing drugs.", "Pippa 和 Neil 讨论了一种新型体育赛事：运动员被允许使用提升表现的药物。"],
+        ["They ask whether this idea is fairer, safer or simply more honest about what already happens in sport.", "他们探讨这个想法是否更公平、更安全，或只是更坦白地说出了体育界已有的事。"],
+        ["You will learn vocabulary about sport, rules and health that helps you talk about this debate in English.", "你会学到关于体育、规则和健康的词汇，帮你用英语聊这场争论。"]
       ],
       "tips": [
-        ["driverless", "无人驾驶的"],
-        ["to share the road", "共用道路、同路而行"],
-        ["a robotaxi", "机器人出租车（无人驾驶出租车）"]
+        ["performance-enhancing", "提升表现的（药物）"],
+        ["an athlete", "运动员"],
+        ["a debate", "争论、辩论"]
       ]
     },
     {
       "id": "d4",
-      "en": "Scared to speak English?",
-      "zh": "不敢开口说英语？",
-      "words": 155,
-      "dur": 310,
+      "en": "What's in a footballer's brain?",
+      "zh": "足球运动员的大脑里有什么？",
+      "words": 158,
+      "dur": 316,
       "vocab": 7,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260122",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260716",
       "body": [
-        ["This programme is for anyone who feels nervous when they have to speak English out loud.", "这期节目献给所有一开口说英语就紧张的人。"],
-        ["Beth and Pippa share why this fear is normal and give simple ways to practise speaking without pressure.", "Beth 和 Pippa 分享了这种害怕为什么很正常，并给出几种没有压力就能练口语的简单方法。"],
-        ["You will learn friendly phrases to encourage yourself and others when learning to speak a new language.", "你会学到在学一门新语言时，鼓励自己与他人的实用短语。"]
+        ["This episode looks at how footballers stay calm and make quick decisions during high-pressure moments like penalties.", "这期节目探讨：足球运动员在罚点球这类高压时刻，怎样保持冷静、快速做决定。"],
+        ["Phil and Pippa talk with a brain scientist about focus, training and the mental side of the game.", "Phil 和 Pippa 与一位脑科学家聊了专注力、训练，以及这项运动中心理层面的重要性。"],
+        ["You will learn everyday words about sport, the mind and concentration that are useful in many conversations.", "你会学到关于运动、心智和专注力的日常词汇，在很多对话里都用得上。"]
       ],
       "tips": [
-        ["to feel nervous", "感到紧张"],
-        ["without pressure", "没有压力、轻松地"],
-        ["to practise speaking", "练习口语"]
+        ["high pressure", "高压的、压力很大的"],
+        ["to stay calm", "保持冷静"],
+        ["to focus", "专注"]
       ]
     },
     {
       "id": "d5",
-      "en": "Should we cycle more?",
-      "zh": "我们该多骑自行车吗？",
-      "words": 160,
-      "dur": 320,
+      "en": "Rude emails",
+      "zh": "那些没礼貌的邮件",
+      "words": 156,
+      "dur": 312,
       "vocab": 7,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260709",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260702",
       "body": [
-        ["This episode looks at why riding a bike can be good for both our health and the environment.", "这期节目探讨：为什么骑自行车对我们的健康和环境都好。"],
-        ["Neil and Becca discuss a plan to get more people cycling and the small changes that make cities bike-friendly.", "Neil 和 Becca 讨论了一个让更多人骑车的方案，以及让城市更适合骑车的小改变。"],
-        ["You will learn everyday vocabulary about transport, exercise and city life.", "你会学到关于交通、运动和城市生活的日常词汇。"]
+        ["Phil and Becca talk about emails that sound impolite or cold, and why they can upset the people who receive them.", "Phil 和 Becca 聊了那些听起来没礼貌或冷淡的邮件，以及它们为何会让收件人不快。"],
+        ["They share simple ways to write more friendly and clear messages at work or in daily life.", "他们分享了在工作或日常生活中，写出更友好、更清晰信息的简单方法。"],
+        ["You will learn polite phrases and expressions that help you communicate without sounding rude.", "你会学到有礼貌的短语和表达，帮你沟通时不再显得冒犯。"]
       ],
       "tips": [
-        ["to cycle", "骑自行车"],
-        ["bike-friendly", "适合骑车的、对自行车友好的"],
-        ["good for the environment", "对环境有益"]
+        ["rude", "粗鲁的、没礼貌的"],
+        ["impolite", "不礼貌的"],
+        ["to communicate", "沟通、交流"]
       ]
     }
   ]
