@@ -256,6 +256,118 @@
     return n;
   }
 
+  // ---------- 全工作台搜索 ----------
+  // 一个关键词翻遍所有模块记过的内容，不用挨个点进去找
+  const SEARCH_SOURCES = [
+    { store: 'tasks', mod: 'daily', emoji: '📋', name: '每日计划', main: 'text', date: 'date' },
+    { store: 'ideas', mod: 'ideas', emoji: '💡', name: '选题灵感', main: 'text' },
+    { store: 'hot', mod: 'hot', emoji: '🔥', name: '爆款二创', main: 'title' },
+    { store: 'memos', mod: 'memo', emoji: '📝', name: '备忘录', main: 'title' },
+    { store: 'gratitude', mod: 'gratitude', emoji: '🙏', name: '每日感恩', main: 'items', date: 'date' },
+    { store: 'reviews', mod: 'review', emoji: '📊', name: '内容复盘', main: 'title', date: 'date' },
+    { store: 'publish', mod: 'publish', emoji: '📺', name: '发布台账', main: 'title', date: 'date' },
+    { store: 'gzh', mod: 'gzh', emoji: '📝', name: '公众号助手', main: 'title' },
+    { store: 'books', mod: 'books', emoji: '📚', name: '读书书摘', main: 'title' },
+    { store: 'comp', mod: 'comp', emoji: '🕵️', name: '对标拆解', main: 'account' },
+    { store: 'prompts', mod: 'prompts', emoji: '🪄', name: 'Prompt宝盒', main: 'title' },
+    { store: 'links', mod: 'links', emoji: '🔗', name: '常用链接', main: 'name' },
+    { store: 'quotes', mod: 'home', emoji: '💬', name: '收藏句子', main: 'text' },
+    { store: 'goals', mod: 'goals', emoji: '🎯', name: '目标墙', main: 'title' },
+    { store: 'habits', mod: 'habits', emoji: '🔥', name: '习惯墙', main: 'name' },
+    { store: 'period', mod: 'period', emoji: '🩸', name: '经期记录', main: 'note', date: 'start' },
+    { store: 'travel', mod: 'travel', emoji: '🧳', name: '旅游规划', main: 'trip' },
+    { store: 'ledger', mod: 'ledger', emoji: '💰', name: '记账', main: 'catName', date: 'date' },
+  ];
+  // 把一条记录里所有文字拼出来（不用逐个维护字段名，加新模块也能搜到）
+  function recText(rec) {
+    const parts = [];
+    Object.keys(rec || {}).forEach(k => {
+      const v = rec[k];
+      if (typeof v === 'string') parts.push(v);
+      else if (Array.isArray(v)) v.forEach(x => { if (typeof x === 'string') parts.push(x); });
+    });
+    return parts.join(' ');
+  }
+  function recTitle(rec, src) {
+    const v = rec[src.main];
+    if (Array.isArray(v)) return v.join('、');
+    return v == null ? '' : String(v);
+  }
+  function recSnippet(text, q) {
+    const t = String(text || '');
+    const i = t.toLowerCase().indexOf(q);
+    if (i < 0) return t.slice(0, 60);
+    const s = Math.max(0, i - 20);
+    return (s > 0 ? '…' : '') + t.slice(s, s + 90) + (t.length > s + 90 ? '…' : '');
+  }
+  async function globalSearch(kw) {
+    const q = (kw || '').trim().toLowerCase();
+    if (!q) return [];
+    const out = [];
+    for (const src of SEARCH_SOURCES) {
+      let list = [];
+      try { list = (await DB.all(src.store)) || []; } catch (e) { continue; }
+      list.forEach(rec => {
+        const title = recTitle(rec, src);
+        const body = recText(rec);
+        if ((title + ' ' + body).toLowerCase().indexOf(q) < 0) return;
+        out.push({ src: src, title: title, snip: recSnippet(body, q), date: rec[src.date] || '' });
+      });
+    }
+    return out;
+  }
+  function openSearch() {
+    const mask = el('<div class="modal-mask"><div class="modal"><h3></h3></div></div>');
+    mask.querySelector('h3').textContent = '🔍 全工作台搜索';
+    const body = el('<div></div>');
+    body.innerHTML =
+      '<div class="field"><input id="gsInput" type="text" placeholder="搜点什么？选题 / 备忘 / 感恩 / 记账…" autocomplete="off"></div>' +
+      '<div id="gsResult" style="max-height:52vh;overflow-y:auto;margin-top:10px"></div>';
+    mask.querySelector('.modal').append(body);
+    const actions = el('<div class="modal-actions"></div>');
+    const closeBtn = el('<button class="btn ghost grow">关闭</button>');
+    actions.append(closeBtn);
+    mask.querySelector('.modal').append(actions);
+    document.body.append(mask);
+    requestAnimationFrame(() => mask.classList.add('show'));
+    function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+    closeBtn.onclick = close;
+    mask.onclick = (e) => { if (e.target === mask) close(); };
+    const input = body.querySelector('#gsInput');
+    const box = body.querySelector('#gsResult');
+    const hint = '<p class="muted" style="font-size:13px">输入关键词，翻遍所有模块</p>';
+    let timer = null;
+    input.oninput = () => {
+      clearTimeout(timer);
+      timer = setTimeout(async () => {
+        const kw = input.value.trim();
+        if (!kw) { box.innerHTML = hint; return; }
+        box.innerHTML = '<p class="muted" style="font-size:13px">搜索中…</p>';
+        const res = await globalSearch(kw);
+        if (!res.length) { box.innerHTML = '<p class="muted" style="font-size:13px">没找到「' + esc(kw) + '」，换个词试试</p>'; return; }
+        box.innerHTML = '';
+        res.slice(0, 50).forEach(r => {
+          const card = el('<div class="card" style="margin-bottom:8px;cursor:pointer"></div>');
+          card.innerHTML =
+            '<div style="font-size:12px;color:#0E9C8E">' + r.src.emoji + ' ' + esc(r.src.name) + (r.date ? ' · ' + esc(r.date) : '') + '</div>' +
+            '<div style="font-size:14px;font-weight:500;margin-top:4px">' + esc(r.title || '(无标题)') + '</div>' +
+            (r.snip ? '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(r.snip) + '</div>' : '');
+          card.onclick = () => {
+            close();
+            // 藏起来的模块搜到了也进不去，先说清楚原因，别让人以为搜索坏了
+            if (isHidden(r.src.mod)) { toast('「' + r.src.name + '」已隐藏，去侧边栏⚙️里开回来'); return; }
+            go(r.src.mod);
+            toast('已跳到「' + r.src.name + '」');
+          };
+          box.append(card);
+        });
+        if (res.length > 50) box.append(el('<p class="muted" style="font-size:12px">只显示前 50 条，共 ' + res.length + ' 条</p>'));
+      }, 250);
+    };
+    box.innerHTML = hint;
+    setTimeout(() => input.focus(), 300);
+  }
+
   // ---------- 素材库 ----------
   const IDEAS_BANK = [
     '普通人也能上手的3个副业，第三个我做了半年',
@@ -777,6 +889,28 @@
     return seed;
   }
 
+  // 首页小提示：每天自动换一句，不至于同一句话看腻了就当没看见
+  const HOME_TIPS = [
+    '数据只存在这台手机里。想保险一点，去侧边栏点「💾 数据备份」导出一份存着。',
+    '忘了东西记在哪？点右上角 🔍，一个关键词就能翻遍所有模块。',
+    '每天都做的事，在任务上点「＋ 设为每天习惯」，习惯墙就能看到连续多少天，两边自动同步。',
+    '侧边栏最上面的「⭐ 常用」会自己学：你开得越多的模块，排得越靠前。',
+    '侧边栏太长了？点「⚙️ 模块显示」把不用的关掉，数据不会丢，随时能开回来。',
+    '越南语单词点一下就能听标准女声发音，跟着念比光看记得牢。',
+    '选题卡住了就去「选题灵感」摇一摇，里面有现成的选题库给你打底。',
+    '记账别攒到月底，随手记一笔，比晚上回忆一整天准得多。',
+    '用手机浏览器打开后，点分享 → 添加到主屏幕，之后用起来跟 App 一样。',
+    '看到好的句子别让它跑了，随手丢进首页的「收藏句子」。',
+    '目标定完就忘了？「我的目标墙」会给逾期的目标标红提醒你。',
+    '「经期记录」里有日历和未来预测，不用自己掰着手指头数日子。',
+    '每个月最后几天去「月度复盘」看一眼，它会把一堆数据翻译成人话讲给你听。',
+    'Prompt 调好用了就存进「Prompt 宝盒」，下次直接抄，不用重新调一遍。',
+  ];
+  function todayTip() {
+    const n = Math.floor(new Date().getTime() / 86400000);
+    return HOME_TIPS[n % HOME_TIPS.length];
+  }
+
   // ---------- 各模块渲染 ----------
   async function renderHome(view) {
     view.innerHTML = '<div id="backupTip"></div>' +
@@ -1024,7 +1158,7 @@
       '<div class="stat"><b>' + reviews.length + '</b><span>复盘条数</span></div>' +
       '<div class="stat"><b>' + enStreak + '</b><span>英语连续天</span></div>' +
       '<div class="stat"><b>' + distinctDays(en.map(e => e.date)) + '</b><span>英语学习天</span></div>' +
-      '<div class="stat"><b>' + MODULES.length + '</b><span>模块</span></div>' +
+      '<div class="stat"><b>' + visibleCount() + '</b><span>在用模块</span></div>' +
       '<div class="stat"><b>' + pubCount + '</b><span>发布条数</span></div>' +
       '<div class="stat"><b>' + maxHab + '</b><span>习惯最长连续</span></div>' +
       '<div class="stat"><b>' + (netA >= 0 ? '' : '-') + Math.round(Math.abs(netA)).toLocaleString('zh-CN') + '</b><span>净资产</span></div>' +
@@ -1062,8 +1196,14 @@
     view.append(fav);
     paintFavs();
 
-    const tip = el('<div class="card"><div class="card-title">💡 小提示</div><p class="muted" style="margin:0">数据只存在这台手机里。想保险一点，去左上角菜单点「导出备份」，把数据存成文件。</p></div>');
+    const tip = el('<div class="card"><div class="card-title">💡 小提示</div><p class="muted" style="margin:0">' + todayTip() + '</p>' +
+      '<button id="nextTip" class="btn ghost sm" style="margin-top:10px">换一条 🔄</button></div>');
     view.append(tip);
+    let tipIdx = Math.floor(new Date().getTime() / 86400000) % HOME_TIPS.length;
+    $('#nextTip').onclick = () => {
+      tipIdx = (tipIdx + 1) % HOME_TIPS.length;
+      tip.querySelector('p').textContent = HOME_TIPS[tipIdx];
+    };
   }
 
   // 1. 每日计划 — 分组卡片式（参考胡楚靓工作台）
@@ -4057,6 +4197,223 @@
     { key: 'gzh', emoji: '📝', title: '公众号助手', render: renderGzh },
   ];
 
+  // ---------- 模块显隐：不用的模块可以藏起来，侧边栏不再拖得老长 ----------
+  const HIDE_KEY = 'ytHiddenMods';
+  function hiddenMods() {
+    try { const a = JSON.parse(localStorage.getItem(HIDE_KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+  }
+  function isHidden(key) { return key !== 'home' && hiddenMods().indexOf(key) >= 0; }
+  function saveHidden(arr) { try { localStorage.setItem(HIDE_KEY, JSON.stringify(arr)); } catch (e) {} }
+  function visibleCount() { return MODULES.filter(m => !isHidden(m.key)).length; }
+
+  // 模块显示设置：关掉的只从侧边栏消失，数据一条不少，随时能开回来
+  function openModSettings(onChange) {
+    const mask = el('<div class="modal-mask"><div class="modal"><h3>⚙️ 模块显示</h3></div></div>');
+    const body = el('<div></div>');
+    body.innerHTML = '<p class="muted" style="font-size:13px;margin:0 0 10px">关掉的模块只是从侧边栏藏起来，<b>数据不会丢</b>，想用的时候开回来就行。</p>';
+    const list = el('<div style="max-height:54vh;overflow-y:auto"></div>');
+    MODULES.forEach(m => {
+      const row = el('<div class="mod-set-row"></div>');
+      const btn = el('<button type="button" class="mod-set-btn"></button>');
+      const on = !isHidden(m.key);
+      btn.classList.toggle('on', on);
+      if (m.key === 'home') { btn.textContent = '固定'; btn.disabled = true; btn.classList.add('locked'); }
+      else { btn.textContent = on ? '显示' : '隐藏'; }
+      row.innerHTML = '<span class="emoji">' + m.emoji + '</span><span class="mod-set-name">' + m.title + '</span>';
+      row.append(btn);
+      btn.onclick = () => {
+        const h = hiddenMods();
+        const i = h.indexOf(m.key);
+        if (i >= 0) h.splice(i, 1); else h.push(m.key);
+        saveHidden(h);
+        const nowOn = i >= 0;
+        btn.classList.toggle('on', nowOn);
+        btn.textContent = nowOn ? '显示' : '隐藏';
+        if (onChange) onChange();
+      };
+      list.append(row);
+    });
+    body.append(list);
+    mask.querySelector('.modal').append(body);
+    const actions = el('<div class="modal-actions"></div>');
+    const doneBtn = el('<button class="btn green grow">完成</button>');
+    actions.append(doneBtn);
+    mask.querySelector('.modal').append(actions);
+    document.body.append(mask);
+    requestAnimationFrame(() => mask.classList.add('show'));
+    function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+    doneBtn.onclick = close;
+    mask.onclick = (e) => { if (e.target === mask) close(); };
+  }
+
+  // ---------- 隐私上锁：经期/存款这类不给外人看的，进之前要输 4 位码 ----------
+  const PIN_KEY = 'ytLockPin';
+  const LOCKED_KEY = 'ytLockedMods';
+  const LOCK_SUGGEST = ['period', 'assets', 'ledger'];  // 首次打开时替你预选这几个
+  let unlockedNow = {};   // 本次打开期间输对过就不再问；关掉浏览器重开才重新问
+
+  // 只是做个混淆，让人打开 localStorage 不能一眼看见明文；不是真加密
+  function hashPin(pin) {
+    let h = 0; const s = 'happy-lai-' + pin;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    return 'p' + h;
+  }
+  function hasPin() { try { return !!localStorage.getItem(PIN_KEY); } catch (e) { return false; } }
+  function checkPin(pin) { try { return localStorage.getItem(PIN_KEY) === hashPin(String(pin || '').trim()); } catch (e) { return false; } }
+  function setPin(pin) { try { localStorage.setItem(PIN_KEY, hashPin(String(pin || '').trim())); } catch (e) {} }
+  function clearPin() { try { localStorage.removeItem(PIN_KEY); } catch (e) {} }
+  function lockedMods() {
+    try {
+      const a = JSON.parse(localStorage.getItem(LOCKED_KEY));
+      if (Array.isArray(a)) return a;
+      saveLocked(LOCK_SUGGEST.slice());
+      return LOCK_SUGGEST.slice();
+    } catch (e) { return LOCK_SUGGEST.slice(); }
+  }
+  function saveLocked(arr) { try { localStorage.setItem(LOCKED_KEY, JSON.stringify(arr)); } catch (e) {} }
+  // 没设密码时不生效，免得把自己也锁在门外
+  function isLocked(key) { return hasPin() && lockedMods().indexOf(key) >= 0; }
+  function lockedCount() { return hasPin() ? lockedMods().filter(isVisibleKey).length : 0; }
+  function isVisibleKey(k) { return !isHidden(k); }
+
+  // 通用：弹一个 4 位码输入框。onOk 返回 false 表示「不对，别关」
+  function inputPin(opt) {
+    const mask = el('<div class="modal-mask"><div class="modal"><h3></h3></div></div>');
+    mask.querySelector('h3').textContent = opt.title;
+    const body = el('<div></div>');
+    body.innerHTML =
+      '<p class="muted" style="font-size:13px;margin:0 0 12px">' + esc(opt.hint || '') + '</p>' +
+      '<input id="pinInput" class="pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off">';
+    mask.querySelector('.modal').append(body);
+    const actions = el('<div class="modal-actions"></div>');
+    const cancel = el('<button class="btn ghost grow">取消</button>');
+    const ok = el('<button class="btn green grow">' + esc(opt.okText || '确定') + '</button>');
+    actions.append(cancel, ok);
+    mask.querySelector('.modal').append(actions);
+    document.body.append(mask);
+    requestAnimationFrame(() => mask.classList.add('show'));
+    function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+    cancel.onclick = () => { close(); if (opt.onCancel) opt.onCancel(); };
+    const input = body.querySelector('#pinInput');
+    function submit() {
+      const v = input.value.trim();
+      if (!/^\d{4}$/.test(v)) { toast('请输入 4 位数字'); input.focus(); return; }
+      if (opt.onOk && opt.onOk(v) === false) { input.value = ''; input.focus(); return; }
+      close();
+    }
+    ok.onclick = submit;
+    input.onkeydown = e => { if (e.key === 'Enter') submit(); };
+    setTimeout(() => input.focus(), 300);
+  }
+
+  // 隐私上锁设置：设/改密码 + 挑哪些模块要锁
+  function openLockSettings(onChange) {
+    const mask = el('<div class="modal-mask"><div class="modal"><h3>🔒 隐私上锁</h3></div></div>');
+    const body = el('<div></div>');
+    body.innerHTML = '<p class="muted" style="font-size:13px;margin:0 0 12px">上锁的模块，点进去要先输 4 位密码。适合放经期、存款这类不想被人一眼看到的内容。<b>它防的是顺手翻你手机的人，防不了专业破解</b>，所以别用银行卡密码。</p>';
+
+    // --- 密码区 ---
+    const pinCard = el('<div class="card" style="margin-bottom:12px"></div>');
+    pinCard.innerHTML = '<div class="card-title">4 位密码</div><div id="pinBody"></div>';
+    body.append(pinCard);
+    function paintPin() {
+      const box = pinCard.querySelector('#pinBody');
+      box.innerHTML = '';
+      if (hasPin()) {
+        box.innerHTML = '<p class="muted" style="margin:0 0 8px">当前状态：<b style="color:var(--primary-d)">已设置 ••••</b></p>';
+        const row = el('<div class="row" style="gap:8px;flex-wrap:wrap"></div>');
+        const changeBtn = el('<button type="button" class="btn ghost sm">重设密码</button>');
+        const delBtn = el('<button type="button" class="btn ghost sm" style="color:var(--danger)">取消密码</button>');
+        changeBtn.onclick = () => inputPin({
+          title: '先输旧密码', hint: '防止别人直接改掉你的密码。', okText: '下一步',
+          onOk: (v) => {
+            if (!checkPin(v)) { toast('密码不对'); return false; }
+            setTimeout(() => inputPin({
+              title: '设置新密码', hint: '想 4 位数字，别用生日或银行卡密码。', okText: '保存',
+              onOk: (nv) => { setPin(nv); paintPin(); toast('密码已更新 🔒'); }
+            }), 300);
+          }
+        });
+        delBtn.onclick = () => inputPin({
+          title: '取消密码', hint: '输当前密码确认。取消后所有模块都不再上锁。', okText: '确认取消',
+          onOk: (v) => {
+            if (!checkPin(v)) { toast('密码不对'); return false; }
+            clearPin(); unlockedNow = {}; paintPin(); repaintList();
+            if (onChange) onChange(); toast('已取消密码');
+          }
+        });
+        row.append(changeBtn, delBtn);
+        box.append(row);
+      } else {
+        box.innerHTML = '<p class="muted" style="margin:0 0 8px">还没设密码，下面挑好模块后点这里设置。</p>';
+        const setBtn = el('<button type="button" class="btn green sm">设置 4 位密码</button>');
+        setBtn.onclick = () => inputPin({
+          title: '设置密码', hint: '想 4 位数字。忘了只能清掉浏览器数据重来，所以记牢。', okText: '保存',
+          onOk: (v) => {
+            setTimeout(() => inputPin({
+              title: '再输一次', hint: '确认一遍，免得记错。', okText: '确定',
+              onOk: (v2) => {
+                if (v2 !== v) { toast('两次不一样，重来一次'); return false; }
+                setPin(v); paintPin(); repaintList();
+                if (onChange) onChange(); toast('密码已设置 🔒');
+              }
+            }), 300);
+          }
+        });
+        box.append(setBtn);
+      }
+    }
+
+    // --- 模块列表 ---
+    const listBox = el('<div></div>');
+    body.append(listBox);
+    function repaintList() {
+      listBox.innerHTML = '';
+      const tip = el('<p class="muted" style="font-size:13px;margin:0 0 8px">' +
+        (hasPin() ? '勾掉的模块打开时要输密码：' : '<b>先设置密码</b>，下面这些才会真的生效：') + '</p>');
+      listBox.append(tip);
+      const list = el('<div style="max-height:42vh;overflow-y:auto"></div>');
+      MODULES.forEach(m => {
+        if (m.key === 'home') return;
+        const row = el('<div class="mod-set-row"></div>');
+        const btn = el('<button type="button" class="mod-set-btn"></button>');
+        const on = lockedMods().indexOf(m.key) >= 0;
+        btn.classList.add('lock-btn');
+        btn.classList.toggle('on', on);
+        btn.textContent = on ? '已上锁' : '未上锁';
+        const suggest = LOCK_SUGGEST.indexOf(m.key) >= 0
+          ? ' <span class="chip" style="font-size:11px;background:#FFF3E0;color:#B45309;padding:1px 6px;border-radius:999px">建议</span>' : '';
+        row.innerHTML = '<span class="emoji">' + m.emoji + '</span><span class="mod-set-name">' + m.title + suggest + '</span>';
+        row.append(btn);
+        btn.onclick = () => {
+          const a = lockedMods();
+          const i = a.indexOf(m.key);
+          if (i >= 0) a.splice(i, 1); else a.push(m.key);
+          saveLocked(a);
+          btn.classList.toggle('on', i >= 0);
+          btn.textContent = i >= 0 ? '已上锁' : '未上锁';
+          if (i < 0) unlockedNow[m.key] = false;   // 解锁了就不用再拦
+          if (onChange) onChange();
+        };
+        list.append(row);
+      });
+      listBox.append(list);
+    }
+    paintPin();
+    repaintList();
+
+    mask.querySelector('.modal').append(body);
+    const actions = el('<div class="modal-actions"></div>');
+    const doneBtn = el('<button class="btn green grow">完成</button>');
+    actions.append(doneBtn);
+    mask.querySelector('.modal').append(actions);
+    document.body.append(mask);
+    requestAnimationFrame(() => mask.classList.add('show'));
+    function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+    doneBtn.onclick = close;
+    mask.onclick = (e) => { if (e.target === mask) close(); };
+  }
+
   function go(key) { if (location.hash !== '#/' + key) location.hash = '#/' + key; else route(); }
   // 侧边栏分组：25 个模块按用途归类，不再一条条平铺
   const MOD_GROUP = {
@@ -4080,6 +4437,27 @@
   function route() {
     const key = (location.hash.replace('#/', '') || 'home');
     const m = MODULES.find(x => x.key === key) || MODULES[0];
+    // 被隐藏的模块：哪怕直接输地址或从搜索点进来，也挡回首页并说明原因
+    if (isHidden(m.key)) {
+      toast('「' + m.title + '」已隐藏，可在侧边栏⚙️里开回来');
+      if (location.hash !== '#/home') { location.hash = '#/home'; return; }
+      return;
+    }
+    // 上锁的模块：进之前先输密码，输对一次本次就不用再输
+    if (isLocked(m.key) && !unlockedNow[m.key]) {
+      inputPin({
+        title: '🔒 ' + m.title,
+        hint: '这个模块你上锁了，输 4 位密码才能进。',
+        okText: '解锁',
+        onOk: (v) => {
+          if (!checkPin(v)) { toast('密码不对，再试试'); return false; }
+          unlockedNow[m.key] = true;
+          route();
+        },
+        onCancel: () => { if (location.hash !== '#/home') go('home'); }
+      });
+      return;
+    }
     bumpVisit(m.key);
     $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.key === m.key));
     $('#pageTitle').textContent = m.title;
@@ -6622,23 +7000,52 @@
     function navTitle(text) { const t = el('<div class="nav-group"></div>'); t.textContent = text; return t; }
     function navItem(m) {
       const icon = m.flag ? vnFlag('vn-flag nav-flag') : '<span class="emoji">' + m.emoji + '</span>';
-      const it = el('<div class="nav-item" data-key="' + m.key + '">' + icon + '<span>' + m.title + '</span></div>');
+      const lock = isLocked(m.key) ? '<span class="nav-lock" title="已上锁">🔒</span>' : '';
+      const it = el('<div class="nav-item" data-key="' + m.key + '">' + icon + '<span>' + m.title + '</span>' + lock + '</div>');
       it.onclick = () => go(m.key);
       return it;
     }
-    const tops = topVisited(5);
-    if (tops.length) {
-      nav.append(navTitle('⭐ 常用'));
-      tops.forEach(k => { const m = MODULES.find(x => x.key === k); if (m) nav.append(navItem(m)); });
+    // 只列没被隐藏的模块；改了设置后重新调一次就能立刻生效
+    function buildNav() {
+      nav.innerHTML = '';
+      const tops = topVisited(5).filter(k => !isHidden(k));
+      if (tops.length) {
+        nav.append(navTitle('⭐ 常用'));
+        tops.forEach(k => { const m = MODULES.find(x => x.key === k); if (m) nav.append(navItem(m)); });
+      }
+      GROUP_ORDER.forEach(g => {
+        const ms = MODULES.filter(m => MOD_GROUP[m.key] === g && !isHidden(m.key));
+        if (!ms.length) return;
+        nav.append(navTitle(g));
+        ms.forEach(m => nav.append(navItem(m)));
+      });
+      const rest = MODULES.filter(m => !MOD_GROUP[m.key] && !isHidden(m.key));
+      if (rest.length) { nav.append(navTitle('其他')); rest.forEach(m => nav.append(navItem(m))); }
+      // 当前页高亮（重建后要补回来）
+      const cur = (location.hash.replace('#/', '') || 'home');
+      $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.key === cur));
     }
-    GROUP_ORDER.forEach(g => {
-      const ms = MODULES.filter(m => MOD_GROUP[m.key] === g);
-      if (!ms.length) return;
-      nav.append(navTitle(g));
-      ms.forEach(m => nav.append(navItem(m)));
+    buildNav();
+
+    // 模块显示设置入口（紧挨着备份，收在侧边栏最下面）
+    const modSetBtn = el('<button id="modSetBtn" class="backup-toggle" type="button">⚙️ 模块显示（' + visibleCount() + '/' + MODULES.length + '）</button>');
+    modSetBtn.onclick = () => openModSettings(() => {
+      buildNav();
+      modSetBtn.textContent = '⚙️ 模块显示（' + visibleCount() + '/' + MODULES.length + '）';
+      paintLockBtn();   // 藏起来的模块不计入已锁数量
+      const cur = (location.hash.replace('#/', '') || 'home');
+      if (isHidden(cur)) go('home');
     });
-    const rest = MODULES.filter(m => !MOD_GROUP[m.key]);
-    if (rest.length) { nav.append(navTitle('其他')); rest.forEach(m => nav.append(navItem(m))); }
+
+    // 隐私上锁入口
+    const lockBtn = el('<button id="lockSetBtn" class="backup-toggle" type="button"></button>');
+    function paintLockBtn() {
+      if (hasPin()) lockBtn.textContent = '🔒 隐私上锁（' + lockedCount() + ' 个已锁）';
+      else lockBtn.textContent = '🔒 隐私上锁（未设置）';
+    }
+    paintLockBtn();
+    lockBtn.onclick = () => openLockSettings(() => { buildNav(); paintLockBtn(); });
+
     // 数据备份：默认收起，点「💾 数据备份」才展开导出/导入
     const backupBox = el('<div class="backup-box"></div>');
     backupBox.innerHTML =
@@ -6650,7 +7057,7 @@
     const fileInput = el('<input type="file" accept="application/json" style="display:none">');
     fileInput.onchange = () => { if (fileInput.files && fileInput.files[0]) importAll(fileInput.files[0]); fileInput.value = ''; };
     const sn = $('#storageNote');
-    sn.before(backupBox); sn.before(fileInput);
+    sn.before(backupBox); sn.before(modSetBtn); sn.before(lockBtn); sn.before(fileInput);
     $('#backupToggle').onclick = () => {
       const box = $('#backupActions');
       box.style.display = box.style.display === 'none' ? 'flex' : 'none';
@@ -6660,6 +7067,7 @@
 
     $('#menuBtn').onclick = openDrawer;
     $('#homeBtn').onclick = () => go('home');
+    const sb = $('#searchBtn'); if (sb) sb.onclick = openSearch;
     $('#backdrop').onclick = closeDrawer;
     const dl = $('#dateLabel'); if (dl) dl.textContent = topDate();
     window.addEventListener('hashchange', route);

@@ -84,6 +84,35 @@ body {
 .backup-toggle { width: 100%; text-align: left; background: transparent; border: none; color: var(--muted); font-size: 13px; padding: 10px 10px; border-radius: var(--radius-s); cursor: pointer; }
 .backup-toggle:active { background: var(--surface-2); }
 .backup-actions { flex-direction: column; gap: 8px; margin-top: 6px; }
+
+/* 模块显示设置：一行一个模块，右侧是显示/隐藏开关 */
+.mod-set-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 4px; border-bottom: 1px solid var(--line); font-size: 15px;
+}
+.mod-set-row:last-child { border-bottom: none; }
+.mod-set-name { flex: 1; }
+.mod-set-btn {
+  min-width: 60px; min-height: 40px; padding: 6px 14px;
+  border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--muted);
+  font-size: 13px; font-family: inherit; cursor: pointer;
+}
+.mod-set-btn.on { background: #E1F5EE; border-color: var(--primary); color: var(--primary-d); font-weight: 600; }
+.mod-set-btn.locked { opacity: .55; cursor: default; }
+
+/* 侧边栏里上锁模块的小锁标记 */
+.nav-lock { margin-left: auto; font-size: 13px; opacity: .8; }
+
+/* 4 位密码输入：数字放大，手机上好点；text-indent 抵消字间距造成的偏移 */
+.pin-input {
+  width: 100%; font-size: 26px; text-align: center;
+  letter-spacing: 20px; text-indent: 20px;
+  padding: 12px 10px; border: 1px solid var(--line);
+  border-radius: var(--radius-s); background: var(--surface-2);
+  color: var(--text); font-family: inherit;
+}
+.pin-input:focus { outline: none; border-color: var(--primary); background: var(--surface); }
 .vn-ex { margin-top: 10px; padding: 10px 12px; background: var(--surface-2); border-radius: var(--radius-s); font-size: 14px; line-height: 1.6; text-align: left; }
 .vn-ex b { color: var(--primary); }
 
