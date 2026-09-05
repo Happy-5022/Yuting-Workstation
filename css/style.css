@@ -757,3 +757,13 @@ a.link { color: var(--primary-d); text-decoration: underline; word-break: break-
 @keyframes memoPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(229,72,77,.45); } 50% { box-shadow: 0 0 0 6px rgba(229,72,77,0); } }
 .memo-export { display: flex; align-items: center; gap: 10px; margin: 10px 0; padding: 10px 12px; background: #EAF6F1; border: 1px solid var(--line); border-radius: var(--radius); }
 .memo-export .muted { color: var(--muted); font-size: 13px; }
+
+/* ===== 公众号助手：5 标签栏（可横向滚动）===== */
+.gzh-tabs { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.gzh-tabs::-webkit-scrollbar { display: none; }
+.gzh-tab { flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.gzh-tab.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+/* ===== 公众号助手：风格/素材条目 ===== */
+.style-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; margin-bottom: 6px; background: var(--surface-2); border-radius: var(--radius-s); }
+.style-text { flex: 1; font-size: 13px; line-height: 1.6; color: var(--text); word-break: break-word; }
+.style-item .del { flex: 0 0 auto; }

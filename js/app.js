@@ -6673,6 +6673,41 @@
       '答疑体': '# 读者问：xxx\n> 这个问题我也纠结过\n\n## 我的答案\n——\n\n## 补充一个小技巧\n**重点**标出来。',
       '空白': ''
     };
+    // ===== ② 一键拼提示词：可选的写作结构 =====
+    const STRUCTS = {
+      '干货长文': ['开头先说一个具体的痛点场景，让目标读者一眼对号入座', '中间讲清楚怎么做，步骤要能照着一步步做，每步配一句大白话解释', '单独写一段「我踩过的坑」，至少 1 个真实的', '结尾用一句金句收，不要喊口号'],
+      '清单体': ['开头一句话说清这份清单解决什么问题、适合谁收藏', '列 N 条（5-8 条），每条：一句讲清是什么 + 一句我的真实体会', '结尾抛个问题引导评论'],
+      '故事体': ['开头直接进一个具体场景（时间、地点、我在干什么）', '中间讲发生了什么、我当时怎么想的', '写我后来想明白了什么', '结尾一句金句，留点余味'],
+      '答疑体': ['开头复述一遍读者的问题，说「这个我也纠结过」', '直接给答案，不绕弯', '再补一个相关的小技巧', '结尾一句收束'],
+    };
+    // ===== ⑤ 发布自检：身份红线词（可自己增删）=====
+    const DEFAULT_RED = ['老师', '教师', '教书', '教课', '上课', '学校', '高职', '大专', '班主任', '学生', '破产', '失业', '下岗', '离职', '被裁', '岁那年', '我今年', '工资', '同事', '校长', '教案', '课件'];
+    async function getRedWords() {
+      const m = await DB.get('meta', 'gzhRedWords');
+      if (m && Array.isArray(m.value)) return m.value;
+      return DEFAULT_RED.slice();
+    }
+    // ===== ① 风格 DNA 分区 =====
+    const STYLE_SLOTS = [
+      { k: 'persona', e: '🎭', n: '我是谁', tip: '一句话人设。每次拼提示词都会放在最前面，AI 靠它认得你。', one: true },
+      { k: 'catchphrase', e: '💬', n: '我的口头禅', tip: '你说话常带的词儿、口头禅，比如「说真的」「我当时就懵了」。' },
+      { k: 'opening', e: '🎣', n: '开头套路', tip: '你常用的开场方式，攒下来 AI 就能照着写。' },
+      { k: 'ending', e: '🎬', n: '结尾套路', tip: '你怎么收尾、怎么引导关注。' },
+      { k: 'golden', e: '✨', n: '我的金句', tip: '自己写过、觉得得意的话，AI 会学着这个调子写。' },
+      { k: 'story', e: '📖', n: '我的真实经历', tip: '做过的小东西、踩过的坑。**写进来的一律按已脱敏处理**，别写能反查到真名的细节。' },
+    ];
+    const STYLE_SEED = {
+      persona: 'Happy赖，纯小白自学 AI 的普通人，随手分享自己学到的和做出来的东西。外表板正清秀，内心疯癫幽默（外正内疯）。不露脸，只以卡通身份出现。',
+      ending: '如果这篇对你有用，微信搜「Happy赖」关注我～',
+    };
+    // ===== ④ 素材抽屉分类 =====
+    const MAT_CATS = [
+      { v: 'made', e: '🛠', n: '我做过的小东西' },
+      { v: 'pit', e: '🕳', n: '踩过的坑' },
+      { v: 'ask', e: '🙋', n: '读者问过的问题' },
+      { v: 'idea', e: '💡', n: '随手记的灵感' },
+      { v: 'num', e: '📈', n: '数据成绩' },
+    ];
     function mdToHtml(src, fmt) {
       const accent = fmt.accent || '#0E9C8E';
       const size = fmt.size || 16;
@@ -6712,29 +6747,31 @@
     let lastHtml = '', lastPlain = '';
     view.innerHTML =
       '<div class="card" style="margin-bottom:12px"><div class="card-title">📝 公众号助手</div>' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">专门帮你搞定两件事：<b>每天写什么</b>（选题池 + 智能推荐）和<b>写完调格式</b>（模板 + 一键复制带排版，再也不用手动调）。</p>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">一条龙管到底：<b>攒风格</b>（我的风格）→ <b>拼提示词丢给 AI</b>（写文章）→ <b>粘回来排版</b> → <b>查红线</b> → <b>记数据</b>（复盘）。</p>' +
       '<div id="gzhTop" style="margin-top:10px"></div></div>' +
-      '<div class="row" style="gap:8px;margin-bottom:12px">' +
-      '<button id="tabPool" class="btn sm" style="flex:1">📋 选题池</button>' +
-      '<button id="tabCompose" class="btn sm ghost" style="flex:1">✍️ 写文章</button>' +
-      '<button id="tabSet" class="btn sm ghost" style="flex:1">⚙ 设置</button></div>' +
-      '<div id="gzhPool"></div><div id="gzhCompose" style="display:none"></div><div id="gzhSet" style="display:none"></div>';
+      '<div id="gzhTabs" class="gzh-tabs">' +
+      '<button class="gzh-tab" data-t="pool" type="button">📋 选题池</button>' +
+      '<button class="gzh-tab" data-t="compose" type="button">✍️ 写文章</button>' +
+      '<button class="gzh-tab" data-t="style" type="button">🧬 我的风格</button>' +
+      '<button class="gzh-tab" data-t="bank" type="button">🏷 标题·素材</button>' +
+      '<button class="gzh-tab" data-t="set" type="button">⚙ 设置</button>' +
+      '</div>' +
+      '<div id="gzhPool"></div><div id="gzhCompose" style="display:none"></div>' +
+      '<div id="gzhStyle" style="display:none"></div><div id="gzhBank" style="display:none"></div>' +
+      '<div id="gzhSet" style="display:none"></div>';
 
+    const TAB_BOX = { pool: 'gzhPool', compose: 'gzhCompose', style: 'gzhStyle', bank: 'gzhBank', set: 'gzhSet' };
     function switchTab(t) {
       tab = t;
-      $('#tabPool').className = 'btn sm' + (t === 'pool' ? '' : ' ghost');
-      $('#tabCompose').className = 'btn sm' + (t === 'compose' ? '' : ' ghost');
-      $('#tabSet').className = 'btn sm' + (t === 'set' ? '' : ' ghost');
-      $('#gzhPool').style.display = t === 'pool' ? '' : 'none';
-      $('#gzhCompose').style.display = t === 'compose' ? '' : 'none';
-      $('#gzhSet').style.display = t === 'set' ? '' : 'none';
+      $$('#gzhTabs .gzh-tab').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+      Object.keys(TAB_BOX).forEach(k => { const b = $('#' + TAB_BOX[k]); if (b) b.style.display = k === t ? '' : 'none'; });
       if (t === 'pool') paintPool();
       if (t === 'compose') paintCompose();
+      if (t === 'style') paintStyle();
+      if (t === 'bank') paintBank();
       if (t === 'set') paintSet();
     }
-    $('#tabPool').onclick = () => switchTab('pool');
-    $('#tabCompose').onclick = () => switchTab('compose');
-    $('#tabSet').onclick = () => switchTab('set');
+    $$('#gzhTabs .gzh-tab').forEach(b => { b.onclick = () => switchTab(b.dataset.t); });
 
     // ===== 顶部：今天写啥 + 统计 =====
     async function paintTop() {
@@ -6841,7 +6878,8 @@
       const box = $('#gzhCompose');
       box.innerHTML =
         '<div class="card" style="margin-bottom:12px"><div class="card-title">✍️ 写文章</div>' +
-        '<p class="muted" style="margin:6px 0 0;font-size:13px">选个模板就有骨架，写完点「复制带格式」直接粘进公众号后台，排版自动套好。</p>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">不会写？先点「⚡一键拼提示词」生成指令丢给 AI，把结果粘回来；写完点「复制带格式」直接进公众号后台。</p>' +
+        '<button id="gzhPrompt" class="btn green block" style="margin-top:10px">⚡ 一键拼提示词（把活儿丢给 AI）</button>' +
         '<div class="row" style="margin-top:10px;gap:8px"><input id="gzhTitle" class="input" style="flex:2" placeholder="文章标题">' +
         '<select id="gzhPillar" class="input" style="flex:1">' + pillars.map(p => '<option value="' + esc(p) + '">' + esc(p) + '</option>').join('') + '</select></div>' +
         '<div class="row" style="margin-top:8px;gap:8px"><select id="gzhTpl" class="input" style="flex:1">' + Object.keys(TEMPLATES).map(t => '<option value="' + t + '">' + t + '</option>').join('') + '</select>' +
@@ -6850,8 +6888,11 @@
         '<div class="row" style="margin-top:8px;gap:8px;flex-wrap:wrap">' +
         '<button id="gzhCopy" class="btn green" style="flex:1">📋 复制带格式</button>' +
         '<button id="gzhCopyTxt" class="btn ghost" style="flex:1">📋 复制纯文本</button>' +
-        '<button id="gzhSave" class="btn ghost" style="flex:1">💾 存草稿</button></div>' +
-        '<div id="gzhCopyTip" class="muted" style="font-size:12px;margin-top:6px;min-height:16px"></div></div>' +
+        '<button id="gzhSave" class="btn ghost" style="flex:1">💾 存草稿</button>' +
+        '<button id="gzhCheck" class="btn ghost" style="flex:1">✅ 发布自检</button>' +
+        '<button id="gzhPost" class="btn ghost" style="flex:1">📊 记数据</button></div>' +
+        '<div id="gzhCopyTip" class="muted" style="font-size:12px;margin-top:6px;min-height:16px"></div>' +
+        '<div id="gzhCheckBox"></div></div>' +
         '<div class="card"><div class="card-title">👀 实时预览（就是读者看到的样子）</div><div id="gzhPreview" style="padding:8px 0;max-height:420px;overflow:auto"></div></div>' +
         '<div id="gzhDrafts" style="margin-top:12px"></div>';
       if (curDraft) {
@@ -6870,6 +6911,9 @@
       $('#gzhCopy').onclick = async () => { await doCopy(true); };
       $('#gzhCopyTxt').onclick = async () => { await doCopy(false); };
       $('#gzhSave').onclick = async () => { await saveDraft(); };
+      $('#gzhPrompt').onclick = () => openPromptBuilder();
+      $('#gzhCheck').onclick = () => runCheck();
+      $('#gzhPost').onclick = () => addPost();
       await renderPreview();
       paintDrafts();
     }
@@ -6922,14 +6966,7 @@
     }
     async function openCompose(idea) {
       curDraft = null;
-      await paintCompose();
-      tab = 'compose';
-      $('#tabPool').className = 'btn sm ghost';
-      $('#tabCompose').className = 'btn sm';
-      $('#tabSet').className = 'btn sm ghost';
-      $('#gzhPool').style.display = 'none';
-      $('#gzhCompose').style.display = '';
-      $('#gzhSet').style.display = 'none';
+      switchTab('compose');   // 内部会调 paintCompose()，所以下面能直接改输入框
       $('#gzhTitle').value = idea.title || '';
       if (idea.pillar && [...$('#gzhPillar').options].some(o => o.value === idea.pillar)) $('#gzhPillar').value = idea.pillar;
       $('#gzhBody').value = TEMPLATES['干货长文'] || '';
@@ -6937,10 +6974,446 @@
       renderPreview();
     }
 
+    // ===== ① 我的风格 DNA =====
+    async function styleList() { return ((await DB.all('gzh')) || []).filter(r => r.kind === 'style'); }
+    async function addStyle(slot, text) {
+      if (!text) return;
+      await DB.put('gzh', { kind: 'style', slot: slot, text: text, created: Date.now() });
+    }
+    async function paintStyle() {
+      const box = $('#gzhStyle');
+      if (!box) return;
+      let all = await styleList();
+      // 第一次进来先垫两条有依据的底子，免得首次拼出来的提示词是空的
+      let seeded = false;
+      for (const k of Object.keys(STYLE_SEED)) {
+        if (!all.some(r => r.slot === k)) { await addStyle(k, STYLE_SEED[k]); seeded = true; }
+      }
+      if (seeded) all = await styleList();
+
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:12px"><div class="card-title">🧬 我的风格 DNA</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">这里存的是<b>「你是谁」</b>。攒得越满，AI 写出来的越像你。' +
+        '下次点「⚡ 一键拼提示词」，这些会自动塞进去，你不用再一遍遍跟 AI 交代人设。</p></div>';
+      STYLE_SLOTS.forEach(s => {
+        const items = all.filter(r => r.slot === s.k);
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML =
+          '<div class="card-title">' + s.e + ' ' + s.n + '</div>' +
+          '<p class="muted" style="margin:4px 0 8px;font-size:12px">' + esc(s.tip) + '</p>';
+        if (!items.length) card.append(el('<p class="muted" style="font-size:13px;margin:0 0 8px">还没填，点下面加第一条。</p>'));
+        items.forEach(it => {
+          const row = el('<div class="style-item"></div>');
+          row.innerHTML = '<div class="style-text">' + esc(it.text) + '</div><button class="del" title="删除">🗑</button>';
+          row.querySelector('.del').onclick = async () => {
+            if (await confirmDel('删掉这条？')) { await DB.del('gzh', it.id); paintStyle(); }
+          };
+          card.append(row);
+        });
+        const btn = el('<button class="btn sm ghost" type="button">＋ ' + (s.one ? (items.length ? '修改' : '填写') : '加一条') + '</button>');
+        btn.onclick = async () => {
+          const f = await promptForm(s.n, [{
+            name: 'text', label: s.one ? '内容' : '一条', type: 'textarea',
+            value: s.one && items.length ? items[items.length - 1].text : '',
+            placeholder: s.tip
+          }]);
+          if (!f || !f.text) return;
+          if (s.one) for (const old of items) await DB.del('gzh', old.id);
+          await addStyle(s.k, f.text);
+          toast('已保存 ✅'); paintStyle();
+        };
+        card.append(btn);
+        box.append(card);
+      });
+      const cnt = all.length;
+      box.append(el('<p class="muted" style="font-size:12px;text-align:center;margin:4px 0 0">已攒 ' + cnt + ' 条风格素材</p>'));
+    }
+
+    // ===== ② 一键拼提示词（这套系统的核心）=====
+    async function buildPrompt(opt) {
+      const st = await styleList();
+      const pick = (slot, n) => st.filter(r => r.slot === slot).slice(-n).map(r => r.text);
+      const persona = pick('persona', 1)[0] || 'Happy赖，纯小白自学 AI 的普通人。';
+      const red = await getRedWords();
+      const mats = ((await DB.all('gzh')) || []).filter(r => r.kind === 'mat');
+      // 从素材抽屉里按关键词捞相关的，最多带 5 条
+      const kws = String(opt.title || '').split(/[\s，,。、！？!?]+/).filter(w => w.length >= 2);
+      const rel = mats.filter(m => {
+        const t = String(m.text || '');
+        const g = String(m.tags || '');
+        return kws.some(k => t.indexOf(k) >= 0 || g.indexOf(k) >= 0);
+      }).slice(0, 5);
+
+      const L = [];
+      L.push('# 角色');
+      L.push('你是「Happy赖」——' + persona);
+      L.push('');
+      L.push('# 本次任务');
+      L.push('选题：' + (opt.title || '（还没填）'));
+      L.push('内容支柱：' + (opt.pillar || '未指定'));
+      if (opt.audience) L.push('目标读者：' + opt.audience);
+      L.push('字数：' + (opt.words || 1200) + ' 字左右');
+      L.push('');
+      L.push('# 写作结构');
+      (STRUCTS[opt.struct] || STRUCTS['干货长文']).forEach((s, i) => L.push((i + 1) + '. ' + s));
+      L.push('');
+      const sample = [];
+      ['catchphrase', 'opening', 'ending', 'golden', 'story'].forEach(k => {
+        const arr = pick(k, 3);
+        if (arr.length) {
+          const s = STYLE_SLOTS.find(x => x.k === k);
+          sample.push('【' + s.n + '】\n' + arr.map(t => '- ' + t).join('\n'));
+        }
+      });
+      if (sample.length) { L.push('# 我的风格（务必照这个味儿写）'); L.push(sample.join('\n')); L.push(''); }
+      if (rel.length) { L.push('# 可以用的真素材'); rel.forEach(m => L.push('- ' + m.text)); L.push(''); }
+      L.push('# 身份红线（违反即作废）');
+      L.push('- 不提年龄、不提失业、不提学校 / 教师 / 教书经历');
+      L.push('- 不提任何能反查到我真实身份的履历');
+      L.push('- 只以「Happy赖」这个卡通匿名身份出现');
+      L.push('- 下面这些词，一个都不许出现：' + red.join('、'));
+      L.push('');
+      L.push('# 禁止');
+      L.push('- 不要教程腔、说明书腔，不要「首先 / 其次 / 最后」的八股');
+      L.push('- 不要用「赋能 / 抓手 / 闭环 / 打通」这类黑话');
+      L.push('- 不要空洞的鼓励和正确的废话');
+      L.push('- 不要编造我没做过的事、没用过的功能');
+      L.push('');
+      L.push('# 输出格式');
+      L.push('直接给正文，用 Markdown：## 小标题、**加粗重点**、> 金句单独引用。');
+      L.push('不要写「以下是我为你写的…」这种开场白，第一段直接进正文。');
+      return L.join('\n');
+    }
+    async function openPromptBuilder() {
+      const pillars = await getPillars();
+      const curTitle = ($('#gzhTitle') && $('#gzhTitle').value) || '';
+      const curPillar = ($('#gzhPillar') && $('#gzhPillar').value) || (pillars[0] || '');
+      const mask = el('<div class="modal-mask"><div class="modal"><h3>⚡ 一键拼提示词</h3></div></div>');
+      const body = el('<div></div>');
+      body.innerHTML =
+        '<p class="muted" style="font-size:13px;margin:0 0 10px">填几个空，自动生成一段完整的写作指令。复制后粘给 AI，出来的东西就是你的味儿。</p>' +
+        '<div class="field"><label class="fl">选题</label><input id="pbTitle" class="input" value="' + esc(curTitle) + '"></div>' +
+        '<div class="field"><label class="fl">目标读者（可不填）</label><input id="pbAud" class="input" placeholder="如：同样想做公众号但不会排版的普通人"></div>' +
+        '<div class="row" style="gap:8px">' +
+        '<div class="field" style="flex:1"><label class="fl">支柱</label><select id="pbPillar" class="input">' + pillars.map(p => '<option value="' + esc(p) + '"' + (p === curPillar ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></div>' +
+        '<div class="field" style="flex:1"><label class="fl">字数</label><select id="pbWords" class="input"><option>800</option><option selected>1200</option><option>1500</option><option>2000</option></select></div>' +
+        '<div class="field" style="flex:1"><label class="fl">结构</label><select id="pbStruct" class="input">' + Object.keys(STRUCTS).map(s => '<option>' + s + '</option>').join('') + '</select></div>' +
+        '</div>' +
+        '<button id="pbGen" class="btn green block" style="margin-top:4px">⚡ 生成提示词</button>' +
+        '<textarea id="pbOut" class="input" style="width:100%;min-height:200px;margin-top:10px;font-family:monospace;font-size:12px;line-height:1.5" placeholder="点上面生成，结果会出在这里，可以自己改"></textarea>';
+      mask.querySelector('.modal').append(body);
+      const actions = el('<div class="modal-actions"></div>');
+      const copyBtn = el('<button class="btn green grow">📋 复制</button>');
+      const closeBtn = el('<button class="btn ghost grow">关闭</button>');
+      actions.append(copyBtn, closeBtn);
+      mask.querySelector('.modal').append(actions);
+      document.body.append(mask);
+      requestAnimationFrame(() => mask.classList.add('show'));
+      function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+      closeBtn.onclick = close;
+      mask.onclick = (e) => { if (e.target === mask) close(); };
+      body.querySelector('#pbGen').onclick = async () => {
+        const out = await buildPrompt({
+          title: body.querySelector('#pbTitle').value.trim(),
+          pillar: body.querySelector('#pbPillar').value,
+          audience: body.querySelector('#pbAud').value.trim(),
+          words: body.querySelector('#pbWords').value,
+          struct: body.querySelector('#pbStruct').value,
+        });
+        body.querySelector('#pbOut').value = out;
+        toast('已生成，检查一下就能复制 ✨');
+      };
+      copyBtn.onclick = async () => {
+        const v = body.querySelector('#pbOut').value;
+        if (!v) { toast('先点「生成提示词」'); return; }
+        let ok = false;
+        try { await navigator.clipboard.writeText(v); ok = true; } catch (e) {
+          const ta = document.createElement('textarea'); ta.value = v; document.body.append(ta); ta.select();
+          try { ok = document.execCommand('copy'); } catch (_) {} ta.remove();
+        }
+        toast(ok ? '已复制，去粘给 AI 吧 📋' : '复制失败，请长按手动复制');
+      };
+    }
+
+    // ===== ③④⑥ 标题工厂 / 素材抽屉 / 复盘（共用一个标签页，内部再分三栏）=====
+    let bankTab = 'title';
+    async function paintBank() {
+      const box = $('#gzhBank');
+      if (!box) return;
+      box.innerHTML =
+        '<div class="gzh-tabs" style="margin-bottom:10px">' +
+        '<button class="gzh-tab" data-b="title" type="button">🏷 标题工厂</button>' +
+        '<button class="gzh-tab" data-b="mat" type="button">📦 素材抽屉</button>' +
+        '<button class="gzh-tab" data-b="post" type="button">📊 复盘</button></div>' +
+        '<div id="bankTitle"></div><div id="bankMat" style="display:none"></div><div id="bankPost" style="display:none"></div>';
+      $$('#gzhBank .gzh-tab').forEach(b => {
+        b.classList.toggle('on', b.dataset.b === bankTab);
+        b.onclick = () => { bankTab = b.dataset.b; paintBank(); };
+      });
+      if (bankTab === 'title') await paintTitles();
+      if (bankTab === 'mat') await paintMats();
+      if (bankTab === 'post') await paintPosts();
+    }
+
+    // ===== ③ 标题工厂 =====
+    async function addTitle(p) {
+      const f = await promptForm(p ? '编辑标题' : '加个标题', [
+        { name: 'text', label: '标题', type: 'text', value: p ? p.text : '' },
+        { name: 'topic', label: '属于哪个选题（可选）', type: 'text', value: p ? (p.topic || '') : (($('#gzhTitle') && $('#gzhTitle').value) || '') },
+      ]);
+      if (!f || !f.text) return;
+      const rec = { kind: 'title', text: f.text, topic: f.topic || '', score: p ? (p.score || 0) : 0, used: p ? !!p.used : false };
+      if (p && p.id) { rec.id = p.id; rec.created = p.created; } else rec.created = Date.now();
+      await DB.put('gzh', rec);
+      toast('已存 🏷'); paintTitles();
+    }
+    async function paintTitles() {
+      const box = $('#bankTitle');
+      if (!box) return;
+      const all = ((await DB.all('gzh')) || []).filter(r => r.kind === 'title')
+        .sort((a, b) => (b.score || 0) - (a.score || 0) || (b.created || 0) - (a.created || 0));
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:10px"><div class="card-title">🏷 标题工厂</div>' +
+        '<p class="muted" style="margin:6px 0 8px;font-size:13px">好标题是试出来的。让 AI 一次出 20 个，粘回来挑，攒久了就有自己的爆款标题库。</p>' +
+        '<button id="tFlow" class="btn green block" style="margin-bottom:8px">⚡ 生成指令 + 批量导入</button>' +
+        '<button id="tAdd" class="btn ghost block">＋ 手动加标题</button></div>' +
+        '<div id="titleList"></div>';
+      $('#tFlow').onclick = () => openTitleFlow();
+      $('#tAdd').onclick = () => addTitle();
+      const lb = $('#titleList');
+      if (!all.length) { lb.innerHTML = emptyTip('🏷', '还没有标题，点上面生成一批'); return; }
+      all.forEach(t => {
+        const sc = t.score || 0;
+        const card = el('<div class="card" style="margin-bottom:8px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div style="flex:1;font-size:14px;line-height:1.5">' + esc(t.text) + '</div><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="row" style="margin-top:6px;gap:6px;align-items:center;flex-wrap:wrap">' +
+          (t.topic ? '<span class="chip" style="background:#eef4f7">' + esc(t.topic) + '</span>' : '') +
+          '<button class="btn sm ghost" data-act="score" title="点一下加一分">' + '★'.repeat(sc) + '☆'.repeat(5 - sc) + '</button>' +
+          (t.used ? '<span class="chip" style="background:#EAF3DE;color:#3B6D11">已用过</span>' : '<button class="btn sm ghost" data-act="used">标为用过</button>') +
+          '<button class="btn sm ghost" data-act="copy">📋 复制</button>' +
+          '<button class="btn sm ghost" data-act="write">✍ 用它写</button></div>';
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删掉这个标题？')) { await DB.del('gzh', t.id); paintTitles(); } };
+        card.querySelector('[data-act="score"]').onclick = async () => { t.score = (sc + 1) % 6; await DB.put('gzh', t); paintTitles(); };
+        const ub = card.querySelector('[data-act="used"]'); if (ub) ub.onclick = async () => { t.used = true; await DB.put('gzh', t); paintTitles(); };
+        card.querySelector('[data-act="copy"]').onclick = async () => {
+          try { await navigator.clipboard.writeText(t.text); toast('已复制 📋'); } catch (e) { toast('复制失败，长按手动复制'); }
+        };
+        card.querySelector('[data-act="write"]').onclick = () => {
+          switchTab('compose');
+          const ti = $('#gzhTitle'); if (ti) { ti.value = t.text; renderPreview(); }
+        };
+        lb.append(card);
+      });
+    }
+    // 闭环：生成指令 → 复制给 AI → 把 AI 给的标题粘回来批量导入
+    async function openTitleFlow() {
+      const f = await promptForm('生成「出标题」指令', [
+        { name: 'topic', label: '文章主题', type: 'text', value: ($('#gzhTitle') && $('#gzhTitle').value) || '', placeholder: '如：用AI给公众号排版' },
+        { name: 'aud', label: '写给谁看（可选）', type: 'text', placeholder: '如：想做公众号的普通人' },
+        { name: 'n', label: '要几个', type: 'select', options: [{ value: '10', label: '10 个' }, { value: '20', label: '20 个' }, { value: '30', label: '30 个' }], value: '20' },
+      ]);
+      if (!f || !f.topic) return;
+      const st = await styleList();
+      const persona = (st.filter(r => r.slot === 'persona').slice(-1)[0] || {}).text || 'Happy赖，纯小白自学 AI 的普通人。';
+      const red = await getRedWords();
+      const golden = st.filter(r => r.slot === 'golden').slice(-3).map(r => '- ' + r.text).join('\n');
+      const cmd =
+        '你是「Happy赖」——' + persona + '\n\n' +
+        '请围绕这个主题，给我 ' + f.n + ' 个公众号标题：\n' +
+        '主题：' + f.topic + '\n' + (f.aud ? '读者：' + f.aud + '\n' : '') + '\n' +
+        '要求：\n' +
+        '1. 覆盖这 5 种风格，每种都要有：直给干货型、反差悬念型、数字清单型、痛点扎心型、自嘲故事型\n' +
+        '2. 口语化，像普通人说话，别标题党到离谱\n' +
+        '3. 这些词一个都不许出现：' + red.join('、') + '\n' +
+        '4. 每行一个，只给标题，不要编号、不要引号、不要解释' +
+        (golden ? '\n\n我的金句风格参考：\n' + golden : '');
+      const mask = el('<div class="modal-mask"><div class="modal"><h3>🏷 标题工厂</h3></div></div>');
+      const body = el('<div></div>');
+      body.innerHTML =
+        '<p class="muted" style="font-size:13px;margin:0 0 8px">① 复制下面这段丢给 AI → ② 把 AI 给的标题粘到下边 → ③ 点批量导入</p>' +
+        '<textarea id="tfCmd" class="input" style="width:100%;min-height:150px;font-family:monospace;font-size:12px" readonly></textarea>' +
+        '<button id="tfCopy" class="btn ghost block" style="margin-top:8px">📋 复制指令</button>' +
+        '<div class="field" style="margin-top:12px"><label class="fl">把 AI 给的标题粘这里（一行一个）</label>' +
+        '<textarea id="tfIn" class="input" style="width:100%;min-height:120px;font-size:13px" placeholder="一行一个标题"></textarea></div>' +
+        '<button id="tfImp" class="btn green block" style="margin-top:8px">⬇ 批量导入</button>';
+      body.querySelector('#tfCmd').value = cmd;
+      mask.querySelector('.modal').append(body);
+      const actions = el('<div class="modal-actions"></div>');
+      const closeBtn = el('<button class="btn ghost grow">关闭</button>');
+      actions.append(closeBtn);
+      mask.querySelector('.modal').append(actions);
+      document.body.append(mask);
+      requestAnimationFrame(() => mask.classList.add('show'));
+      function close() { mask.classList.remove('show'); setTimeout(() => mask.remove(), 250); }
+      closeBtn.onclick = close;
+      mask.onclick = (e) => { if (e.target === mask) close(); };
+      body.querySelector('#tfCopy').onclick = async () => {
+        let ok = false;
+        try { await navigator.clipboard.writeText(cmd); ok = true; } catch (e) {
+          const ta = document.createElement('textarea'); ta.value = cmd; document.body.append(ta); ta.select();
+          try { ok = document.execCommand('copy'); } catch (_) {} ta.remove();
+        }
+        toast(ok ? '已复制，去粘给 AI 📋' : '复制失败，请长按手动复制');
+      };
+      body.querySelector('#tfImp').onclick = async () => {
+        const lines = body.querySelector('#tfIn').value.split('\n')
+          .map(s => s.replace(/^\s*\d+[.、)]\s*/, '').replace(/^["'「」【】\s]+/, '').replace(/["'「」【】\s]+$/, '').trim())
+          .filter(Boolean);
+        if (!lines.length) { toast('没读到标题，检查一下'); return; }
+        for (const t of lines) await DB.put('gzh', { kind: 'title', text: t, topic: f.topic, score: 0, used: false, created: Date.now() });
+        toast('导入 ' + lines.length + ' 个标题 🏷');
+        close(); paintTitles();
+      };
+    }
+
+    // ===== ④ 素材抽屉 =====
+    async function addMat(p) {
+      const f = await promptForm(p ? '编辑素材' : '加条素材', [
+        { name: 'text', label: '内容', type: 'textarea', value: p ? p.text : '', placeholder: '一句话说清：什么事、结果怎么样' },
+        { name: 'cat', label: '分类', type: 'select', options: MAT_CATS.map(c => ({ value: c.v, label: c.e + ' ' + c.n })), value: p ? p.cat : 'made' },
+        { name: 'tags', label: '标签（空格分开，方便自动匹配）', type: 'text', value: p ? (p.tags || '') : '', placeholder: '如：AI 排版 公众号' },
+      ]);
+      if (!f || !f.text) return;
+      const rec = { kind: 'mat', text: f.text, cat: f.cat || 'made', tags: f.tags || '' };
+      if (p && p.id) { rec.id = p.id; rec.created = p.created; } else rec.created = Date.now();
+      await DB.put('gzh', rec);
+      toast('已存 📦'); paintMats();
+    }
+    async function paintMats() {
+      const box = $('#bankMat');
+      if (!box) return;
+      const all = ((await DB.all('gzh')) || []).filter(r => r.kind === 'mat').sort((a, b) => (b.created || 0) - (a.created || 0));
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:10px"><div class="card-title">📦 素材抽屉</div>' +
+        '<p class="muted" style="margin:6px 0 8px;font-size:13px">写文章最缺的是「我自己的事儿」。平时随手往里丢，拼提示词时会自动挑相关的带上。<b>别写能反查到真名的细节。</b></p>' +
+        '<button id="matAdd" class="btn green block">＋ 加条素材</button></div>' +
+        '<div id="matList"></div>';
+      $('#matAdd').onclick = () => addMat();
+      const lb = $('#matList');
+      if (!all.length) { lb.innerHTML = emptyTip('📦', '还没有素材，先丢一条进去'); return; }
+      MAT_CATS.forEach(c => {
+        const items = all.filter(r => r.cat === c.v);
+        if (!items.length) return;
+        const card = el('<div class="card" style="margin-bottom:10px"></div>');
+        card.innerHTML = '<div class="card-title">' + c.e + ' ' + c.n + '（' + items.length + '）</div>';
+        items.forEach(it => {
+          const tags = it.tags ? '<div style="margin-top:4px">' + String(it.tags).split(/\s+/).filter(Boolean)
+            .map(t => '<span class="chip" style="background:#eef4f7;font-size:11px">' + esc(t) + '</span>').join(' ') + '</div>' : '';
+          const row = el('<div class="style-item"></div>');
+          row.innerHTML = '<div class="style-text">' + esc(it.text) + tags + '</div><button class="del">🗑</button>';
+          row.querySelector('.del').onclick = async () => { if (await confirmDel('删掉这条素材？')) { await DB.del('gzh', it.id); paintMats(); } };
+          card.append(row);
+        });
+        lb.append(card);
+      });
+    }
+
+    // ===== ⑤ 发布自检 =====
+    async function runCheck() {
+      const box = $('#gzhCheckBox');
+      if (!box) return;
+      const src = ($('#gzhBody') && $('#gzhBody').value) || '';
+      const title = ($('#gzhTitle') && $('#gzhTitle').value) || '';
+      if (!src.trim() && !title.trim()) { box.innerHTML = '<p class="muted" style="font-size:13px;margin-top:8px">还是空的，先写点东西再自检。</p>'; return; }
+      const full = title + '\n' + src;
+      const red = await getRedWords();
+      const hits = red.filter(w => full.indexOf(w) >= 0);
+      const chars = src.replace(/[#>*\-\s]/g, '').length;
+      const paras = src.split('\n').filter(l => l.trim() && !/^[#>*-]/.test(l.trim()));
+      const longP = paras.filter(p => p.replace(/\s/g, '').length > 150).length;
+      const hasH2 = /^##\s+/m.test(src);
+      const fmt = await getFmt();
+      let html = '<div class="card" style="margin-top:10px"><div class="card-title">✅ 发布自检</div>';
+      if (hits.length) {
+        html += '<div style="background:#FCEBEB;border-left:3px solid #A32D2D;padding:8px 10px;border-radius:6px;margin-top:8px">' +
+          '<b style="color:#A32D2D;font-size:13px">🚨 身份红线：命中 ' + hits.length + ' 个词</b>' +
+          '<p style="margin:4px 0 0;font-size:12px;color:#791F1F;line-height:1.6">出现了：' + hits.map(esc).join('、') +
+          '<br>发布前改掉，别让人顺着这些词反查到你。</p></div>';
+      } else {
+        html += '<div style="background:#EAF3DE;border-left:3px solid #3B6D11;padding:8px 10px;border-radius:6px;margin-top:8px">' +
+          '<b style="color:#3B6D11;font-size:13px">🛡 身份红线：一个没踩</b></div>';
+      }
+      const items = [
+        { ok: chars >= 600, t: '字数 ' + chars + ' 字' + (chars < 600 ? '（偏少，读者容易觉得没干货）' : '') },
+        { ok: hasH2, t: hasH2 ? '有小标题，手机上好读' : '一个小标题都没有，建议用 ## 分段' },
+        { ok: longP === 0, t: longP ? longP + ' 段超过 150 字没分段，手机上看着累' : '段落长度合适' },
+        { ok: !!fmt.ending, t: fmt.ending ? '结尾引导语已自动带上' : '没设结尾引导语，去⚙设置里加一句' },
+      ];
+      html += '<div style="margin-top:10px">' + items.map(i =>
+        '<div style="font-size:13px;padding:3px 0"><span style="color:' + (i.ok ? '#3B6D11' : '#BA7517') + ';font-weight:600">' +
+        (i.ok ? '✓' : '!') + '</span> ' + esc(i.t) + '</div>').join('') + '</div></div>';
+      box.innerHTML = html;
+    }
+
+    // ===== ⑥ 文章复盘 =====
+    async function addPost(p) {
+      const f = await promptForm(p ? '编辑数据' : '记一篇发布数据', [
+        { name: 'title', label: '文章标题', type: 'text', value: p ? p.title : (($('#gzhTitle') && $('#gzhTitle').value) || '') },
+        { name: 'date', label: '发布日期', type: 'date', value: p ? (p.date || todayStr()) : todayStr() },
+        { name: 'views', label: '阅读量', type: 'number', value: p ? String(p.views || '') : '' },
+        { name: 'likes', label: '在看 / 点赞', type: 'number', value: p ? String(p.likes || '') : '' },
+        { name: 'follows', label: '涨粉', type: 'number', value: p ? String(p.follows || '') : '' },
+        { name: 'note', label: '备注（为什么好 / 差）', type: 'textarea', value: p ? (p.note || '') : '' },
+      ]);
+      if (!f || !f.title) return;
+      const rec = {
+        kind: 'post', title: f.title, date: f.date || todayStr(),
+        views: Number(f.views) || 0, likes: Number(f.likes) || 0, follows: Number(f.follows) || 0, note: f.note || ''
+      };
+      if (p && p.id) { rec.id = p.id; rec.created = p.created; } else rec.created = Date.now();
+      await DB.put('gzh', rec);
+      toast('已记录 📊');
+      if (bankTab === 'post') paintPosts();
+    }
+    async function paintPosts() {
+      const box = $('#bankPost');
+      if (!box) return;
+      const all = ((await DB.all('gzh')) || []).filter(r => r.kind === 'post')
+        .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      box.innerHTML =
+        '<div class="card" style="margin-bottom:10px"><div class="card-title">📊 文章复盘</div>' +
+        '<p class="muted" style="margin:6px 0 8px;font-size:13px">发完顺手记一笔。攒够十几篇，就能看出哪类标题、哪个方向更对路。</p>' +
+        '<button id="postAdd" class="btn green block">＋ 记一篇</button></div>' +
+        '<div id="postStat"></div><div id="postList"></div>';
+      $('#postAdd').onclick = () => addPost();
+      const withV = all.filter(r => r.views > 0);
+      if (withV.length) {
+        const avg = Math.round(withV.reduce((s, r) => s + r.views, 0) / withV.length);
+        const best = withV.slice().sort((a, b) => b.views - a.views)[0];
+        const fans = all.reduce((s, r) => s + (r.follows || 0), 0);
+        $('#postStat').innerHTML = '<div class="card" style="margin-bottom:10px"><div class="stat-grid">' +
+          '<div class="stat"><b>' + all.length + '</b><span>已记篇数</span></div>' +
+          '<div class="stat"><b>' + avg.toLocaleString('zh-CN') + '</b><span>平均阅读</span></div>' +
+          '<div class="stat"><b>' + best.views.toLocaleString('zh-CN') + '</b><span>最高阅读</span></div>' +
+          '<div class="stat"><b>' + fans + '</b><span>累计涨粉</span></div></div></div>';
+      }
+      const lb = $('#postList');
+      if (!all.length) { lb.innerHTML = emptyTip('📊', '还没记过数据，发完一篇就来记一笔'); return; }
+      all.forEach(p => {
+        const card = el('<div class="card" style="margin-bottom:8px"></div>');
+        card.innerHTML =
+          '<div class="row spread"><div style="flex:1;font-size:14px"><b>' + esc(p.title) + '</b></div><button class="del" data-act="del">🗑</button></div>' +
+          '<div class="muted" style="font-size:12px;margin-top:2px">' + esc(p.date || '') +
+          ' · 阅读 ' + (p.views || 0) + ' · 在看 ' + (p.likes || 0) + ' · 涨粉 ' + (p.follows || 0) + '</div>' +
+          (p.note ? '<p class="muted" style="margin:6px 0 0;font-size:13px">' + esc(p.note) + '</p>' : '') +
+          '<div class="row" style="margin-top:6px;gap:6px"><button class="btn sm ghost" data-act="edit">✏ 编辑</button>' +
+          '<button class="btn sm ghost" data-act="sync">↗ 同步到发布台账</button></div>';
+        card.querySelector('[data-act="del"]').onclick = async () => { if (await confirmDel('删掉这条记录？')) { await DB.del('gzh', p.id); paintPosts(); } };
+        card.querySelector('[data-act="edit"]').onclick = () => addPost(p);
+        card.querySelector('[data-act="sync"]').onclick = async () => {
+          await DB.put('publish', { title: p.title, date: p.date || todayStr(), platform: '公众号', views: p.views || 0, fans: p.follows || 0, created: Date.now() });
+          toast('已同步到发布台账 ↗');
+        };
+        lb.append(card);
+      });
+    }
+
     // ===== 设置 =====
     async function paintSet() {
       const fmt = await getFmt();
       const pillars = await getPillars();
+      const reds = await getRedWords();
       const box = $('#gzhSet');
       box.innerHTML =
         '<div class="card" style="margin-bottom:12px"><div class="card-title">⚙ 格式预设</div>' +
@@ -6953,7 +7426,26 @@
         '<div class="card"><div class="card-title">🏷 内容支柱</div>' +
         '<p class="muted" style="margin:6px 0 0;font-size:13px">你公众号主要写哪几类？智能推荐会按这个轮着给你出主意。</p>' +
         '<div class="muted" style="font-size:12px;margin-top:6px">当前：' + pillars.map(p => '<span class="chip" style="background:#eef4f7">' + esc(p) + '</span>').join(' ') + '</div>' +
-        '<button id="pillarEdit" class="btn ghost block" style="margin-top:10px">✏ 修改内容支柱</button></div>';
+        '<button id="pillarEdit" class="btn ghost block" style="margin-top:10px">✏ 修改内容支柱</button></div>' +
+        '<div class="card" style="margin-top:12px"><div class="card-title">🚨 身份红线词</div>' +
+        '<p class="muted" style="margin:6px 0 0;font-size:13px">「✅ 发布自检」会拿这张表扫你的文章，命中就报警，防止手滑暴露真实身份。可以自己加减。</p>' +
+        '<div style="font-size:12px;margin-top:8px">' + reds.map(w => '<span class="chip" style="background:#FCEBEB;color:#A32D2D;margin:0 4px 4px 0">' + esc(w) + '</span>').join('') + '</div>' +
+        '<button id="redEdit" class="btn ghost block" style="margin-top:10px">✏ 修改红线词</button>' +
+        '<button id="redReset" class="btn ghost block" style="margin-top:8px">↺ 恢复默认词表</button></div>';
+      $('#redEdit').onclick = async () => {
+        const f = await promptForm('身份红线词', [
+          { name: 'words', label: '用逗号分隔', type: 'textarea', value: reds.join('，'), placeholder: '老师，学校，失业' },
+        ]);
+        if (!f) return;
+        const arr = f.words.split(/[，,、\s]/).map(s => s.trim()).filter(Boolean);
+        await DB.put('meta', { id: 'gzhRedWords', value: arr });
+        toast('红线词已更新 🚨'); paintSet();
+      };
+      $('#redReset').onclick = async () => {
+        if (!(await confirmDel('恢复成默认的红线词表？你自己加的词会丢。'))) return;
+        await DB.put('meta', { id: 'gzhRedWords', value: DEFAULT_RED.slice() });
+        toast('已恢复默认 ↺'); paintSet();
+      };
       $('#fmtEdit').onclick = async () => {
         const f = await promptForm('格式预设', [
           { name: 'accent', label: '强调色', type: 'select', options: [{ value: '#0E9C8E', label: '青绿（默认）' }, { value: '#e2574c', label: '红' }, { value: '#f0a830', label: '橙' }, { value: '#378ADD', label: '蓝' }, { value: '#7F77DD', label: '紫' }, { value: '#2e9e5b', label: '绿' }], value: fmt.accent },
