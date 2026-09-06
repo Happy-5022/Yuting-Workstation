@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-05",
+  "date": "2026-09-06",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Who does the housework?",
-      "zh": "家务到底谁来做？",
-      "words": 162,
-      "dur": 324,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260813",
+      "en": "How do we describe smells?",
+      "zh": "我们怎么形容气味？",
+      "words": 78,
+      "dur": 90,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["In this episode, Pippa and Neil talk about who usually does the cleaning, cooking and washing at home.", "在这期节目里，Pippa 和 Neil 聊了家里谁通常负责打扫、做饭和洗衣。"],
-        ["They look at research showing that women around the world still spend far more time on unpaid housework than men do.", "他们看了一项研究：全球范围内，女性花在家务这种无酬劳动上的时间，仍远多于男性。"],
-        ["You will learn useful words and phrases to describe household chores and the idea of 'pulling your weight'.", "你会学到形容家务、以及'分担责任'这个意思的实用词汇和短语。"]
+        ["We use everyday words like sweet, sour, or fresh to talk about smells, but scientists say human language for odour is surprisingly limited.", "我们用甜、酸、清新这类日常词来描述气味，但科学家说人类形容气味的语言其实少得惊人。"],
+        ["In the BBC discussion, the hosts explore why smell is hard to name and how writers borrow flavour words such as 'woody' or 'citrus' to fill the gap.", "在BBC这期讨论里，主持人探讨了为什么气味很难命名，以及写作者如何借用'木质感''柑橘调'这类味道词来弥补空缺。"],
+        ["They also mention that a strong scent can bring back a memory faster than a picture, which is why smell feels so personal.", "他们还提到，强烈的气味比一张照片更能迅速唤起记忆，这也解释了为什么气味让人感觉如此私密。"]
       ],
       "tips": [
-        ["household chores", "家务"],
-        ["unpaid work", "无酬劳动"],
-        ["to pull your weight", "尽自己的本分、分担责任"]
+        ["odour", "气味"],
+        ["citrus", "柑橘"],
+        ["scent", "香味；气味"]
       ]
     },
     {
       "id": "d2",
-      "en": "How do climate scientists make predictions?",
-      "zh": "气候科学家怎么做预测？",
-      "words": 165,
-      "dur": 330,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260806",
+      "en": "Sharing the road with driverless cars",
+      "zh": "和无人驾驶汽车共用道路",
+      "words": 82,
+      "dur": 95,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Phil and Pippa explain how scientists use computer models to picture what Earth's climate may look like in the future.", "Phil 和 Pippa 解释了科学家如何借助计算机模型，描绘地球气候未来的可能面貌。"],
-        ["They compare a 'prediction' with a 'projection', and discuss why clouds can both cool and warm the planet.", "他们比较了'预测'与'推演'的区别，并讨论了云为何既能给地球降温、也能让它升温。"],
-        ["You will learn clear vocabulary about weather, models and the environment that appears in climate news.", "你会学到关于天气、模型和环境、常出现在气候新闻里的清晰词汇。"]
+        ["Self-driving cars are already being tested on real streets, yet many people still feel uneasy about sharing the road with a vehicle that has no human driver.", "自动驾驶汽车已经在真实街道上测试，但许多人仍对和没有人类司机的车共用道路感到不安。"],
+        ["The programme looks at how these cars use sensors and maps to 'see' the world, and why trust is the biggest challenge for the technology.", "节目探讨了这些车如何用传感器和地图来'看见'世界，以及为什么信任才是这项技术最大的挑战。"],
+        ["Some experts believe driverless cars could reduce accidents caused by tiredness, while others worry about who is responsible when something goes wrong.", "一些专家认为自动驾驶能减少因疲劳导致的事故，也有人担心出事时该由谁负责。"]
       ],
       "tips": [
-        ["a climate model", "气候模型"],
-        ["a prediction", "预测"],
-        ["to warm the planet", "使地球变暖"]
+        ["sensor", "传感器"],
+        ["trust", "信任"],
+        ["responsible", "负责任的"]
       ]
     },
     {
       "id": "d3",
-      "en": "The Enhanced Games",
-      "zh": "“增强运动会”是什么？",
-      "words": 160,
-      "dur": 320,
-      "vocab": 8,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260730",
+      "en": "Scared to speak English?",
+      "zh": "不敢开口说英语？",
+      "words": 76,
+      "dur": 88,
+      "vocab": 5,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Pippa and Neil discuss a new kind of sports event where athletes are allowed to use performance-enhancing drugs.", "Pippa 和 Neil 讨论了一种新型体育赛事：运动员被允许使用提升表现的药物。"],
-        ["They ask whether this idea is fairer, safer or simply more honest about what already happens in sport.", "他们探讨这个想法是否更公平、更安全，或只是更坦白地说出了体育界已有的事。"],
-        ["You will learn vocabulary about sport, rules and health that helps you talk about this debate in English.", "你会学到关于体育、规则和健康的词汇，帮你用英语聊这场争论。"]
+        ["Many learners know a lot of words but freeze the moment they have to speak, especially with a native speaker.", "许多学习者认识很多单词，可一旦要开口——尤其面对母语者——就会卡住。"],
+        ["The BBC hosts share simple tricks such as practising with a voice memo, accepting small mistakes, and treating every chat as training, not a test.", "BBC主持人分享了几个简单技巧：用语音备忘录练习、接受小错误、把每次对话当成训练而非考试。"],
+        ["The key message is that fluency grows from trying, not from waiting until you feel 'ready'.", "核心结论是：流利来自不断尝试，而不是等到自己'准备好了'才开始。"]
       ],
       "tips": [
-        ["performance-enhancing", "提升表现的（药物）"],
-        ["an athlete", "运动员"],
-        ["a debate", "争论、辩论"]
+        ["fluent", "流利的"],
+        ["freeze", "僵住；卡住"],
+        ["trick", "小技巧"]
       ]
     },
     {
       "id": "d4",
-      "en": "What's in a footballer's brain?",
-      "zh": "足球运动员的大脑里有什么？",
-      "words": 158,
-      "dur": 316,
-      "vocab": 7,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260716",
+      "en": "Are saunas good for you?",
+      "zh": "桑拿对身体好吗？",
+      "words": 80,
+      "dur": 92,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["This episode looks at how footballers stay calm and make quick decisions during high-pressure moments like penalties.", "这期节目探讨：足球运动员在罚点球这类高压时刻，怎样保持冷静、快速做决定。"],
-        ["Phil and Pippa talk with a brain scientist about focus, training and the mental side of the game.", "Phil 和 Pippa 与一位脑科学家聊了专注力、训练，以及这项运动中心理层面的重要性。"],
-        ["You will learn everyday words about sport, the mind and concentration that are useful in many conversations.", "你会学到关于运动、心智和专注力的日常词汇，在很多对话里都用得上。"]
+        ["A sauna is a small hot room that makes you sweat, and it has been part of daily life in places like Finland for centuries.", "桑拿是一间让你出汗的小热屋，在芬兰等地几个世纪以来都是日常生活的一部分。"],
+        ["The discussion reviews studies suggesting regular sauna use may help the heart and lower stress, though it is not a replacement for exercise.", "这期讨论回顾了研究：规律桑拿可能有益心脏、缓解压力，但它不能替代运动。"],
+        ["The hosts also warn that people with certain health conditions should check with a doctor before sitting in high heat for long.", "主持人也提醒，有特定健康问题的人，在长时间待在高温里之前应先咨询医生。"]
       ],
       "tips": [
-        ["high pressure", "高压的、压力很大的"],
-        ["to stay calm", "保持冷静"],
-        ["to focus", "专注"]
+        ["sweat", "出汗"],
+        ["stress", "压力"],
+        ["condition", "身体状况；疾病"]
       ]
     },
     {
       "id": "d5",
-      "en": "Rude emails",
-      "zh": "那些没礼貌的邮件",
-      "words": 156,
-      "dur": 312,
-      "vocab": 7,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260702",
+      "en": "The power of poetry",
+      "zh": "诗歌的力量",
+      "words": 75,
+      "dur": 86,
+      "vocab": 5,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Phil and Becca talk about emails that sound impolite or cold, and why they can upset the people who receive them.", "Phil 和 Becca 聊了那些听起来没礼貌或冷淡的邮件，以及它们为何会让收件人不快。"],
-        ["They share simple ways to write more friendly and clear messages at work or in daily life.", "他们分享了在工作或日常生活中，写出更友好、更清晰信息的简单方法。"],
-        ["You will learn polite phrases and expressions that help you communicate without sounding rude.", "你会学到有礼貌的短语和表达，帮你沟通时不再显得冒犯。"]
+        ["Poetry is often seen as difficult, yet a single short poem can say more than a whole page of plain text.", "诗歌常被认为很难懂，可短短一首诗有时比满满一页大白话表达得更多。"],
+        ["The programme explores how rhythm and rhyme help us remember lines, and why reading poems aloud can lift a bad mood.", "节目探讨了节奏和押韵如何帮我们记住诗句，以及为什么大声读诗能改善坏心情。"],
+        ["The guests suggest that you do not need to analyse every word; simply enjoying the sound is a good start.", "嘉宾建议，不必逐字分析，光是享受声音本身就是个不错的开始。"]
       ],
       "tips": [
-        ["rude", "粗鲁的、没礼貌的"],
-        ["impolite", "不礼貌的"],
-        ["to communicate", "沟通、交流"]
+        ["rhythm", "节奏"],
+        ["rhyme", "押韵"],
+        ["mood", "心情；情绪"]
       ]
     }
   ]
