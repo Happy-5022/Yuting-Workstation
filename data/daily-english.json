@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-07",
+  "date": "2026-09-08",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Should we cycle more?",
-      "zh": "我们该多骑车吗？",
-      "words": 180,
-      "dur": 360,
-      "vocab": 12,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260709",
+      "en": "Making cities feel quieter",
+      "zh": "让城市安静下来",
+      "words": 170,
+      "dur": 340,
+      "vocab": 20,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Cycling is one of the cheapest and cleanest ways to travel, yet many people choose cars for short trips.", "骑自行车是最便宜、最干净的出行方式之一，但很多人短途也开车。"],
-        ["This episode looks at how cities are building bike lanes and what stops beginners from getting on a saddle.", "这一期探讨了城市如何修建自行车道，以及新手不敢骑车的顾虑。"],
-        ["The hosts agree that a short daily ride can improve health and cut pollution without costing much.", "主持人一致认为，每天短途骑行能改善健康、减少污染，而且花费很少。"]
+        ["City noise from traffic and building works can raise stress and harm our sleep.", "交通和施工的噪音会让人更紧张，还会影响睡眠。"],
+        ["Some cities now use quieter road surfaces and noise-reducing windows to cut sound.", "一些城市开始用更安静的路面、隔音窗来降低声音。"],
+        ["The BBC discussion asks whether a calmer soundscape can make people happier.", "BBC这期讨论：更安静的声音环境，会不会让人更幸福。"]
       ],
       "tips": [
-        ["carbon footprint", "碳足迹（指个人造成的碳排放）"],
-        ["cycle lane", "自行车道"],
-        ["get on a saddle", "骑上自行车（开始骑车）"]
+        ["noise pollution", "噪音污染"],
+        ["soundscape", "声景；声音环境"],
+        ["reduce", "减少；降低"]
       ]
     },
     {
       "id": "d2",
-      "en": "How advertisers make us spend money",
-      "zh": "广告是怎么让我们掏钱的",
-      "words": 190,
-      "dur": 380,
-      "vocab": 13,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260611",
+      "en": "Should we eat ultra-processed food?",
+      "zh": "该不该吃超加工食品",
+      "words": 175,
+      "dur": 350,
+      "vocab": 21,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Advertisers use colour, music and limited-time offers to push us toward buying things we don't really need.", "广告商利用颜色、音乐和限时优惠，推动我们买下其实并不需要的东西。"],
-        ["The programme explains tricks like 'buy one get one free' and how shops place items at eye level to attract us.", "节目解释了'买一送一'之类的套路，以及商家如何把商品摆在视线高度来吸引我们。"],
-        ["Understanding these methods can help listeners become smarter shoppers and save more each month.", "了解这些手法，能帮听众变成更聪明的消费者，每月多存一点钱。"]
+        ["Ultra-processed food is made with industrial ingredients and often contains added sugar and fat.", "超加工食品用工业原料做成，常含额外糖分和脂肪。"],
+        ["Studies link eating a lot of it with health problems like heart disease and weight gain.", "研究显示，吃太多这类食品与心脏病、长胖等健康问题有关。"],
+        ["The programme suggests cooking simple meals at home as an easy way to eat less of it.", "节目建议：在家做简单饭菜，是少吃超加工食品的轻松办法。"]
       ],
       "tips": [
-        ["limited-time offer", "限时优惠"],
-        ["eye level", "视线高度（商品摆放的黄金位置）"],
-        ["smart shopper", "精明的消费者"]
+        ["ultra-processed", "超加工的"],
+        ["ingredient", "原料；成分"],
+        ["balanced diet", "均衡饮食"]
       ]
     },
     {
       "id": "d3",
-      "en": "Living with debt",
-      "zh": "和债务一起生活",
-      "words": 185,
-      "dur": 370,
-      "vocab": 12,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260528",
+      "en": "Love the foods you hate",
+      "zh": "爱上你讨厌的食物",
+      "words": 165,
+      "dur": 330,
+      "vocab": 19,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Many people around the world live with loans, credit cards and mortgages that feel impossible to clear.", "世界各地有很多人背着贷款、信用卡和房贷，感觉永远还不清。"],
-        ["The discussion shares why talking about money openly can reduce shame and help people find better solutions.", "讨论分享了为什么大方谈钱能减轻羞耻感，并帮人找到更好的办法。"],
-        ["Small steps like tracking spending and setting a monthly saving goal are offered as practical starting points.", "节目给出从小处着手的建议：记录开销、设定每月存钱目标。"]
+        ["Many people dislike certain foods, but taste can change as we grow older.", "很多人讨厌某些食物，但随着年龄增长，口味会改变。"],
+        ["BBC speakers share how they learned to enjoy foods they once hated, like olives or cheese.", "BBC嘉宾分享：他们如何慢慢爱上曾经讨厌的食物，比如橄榄或奶酪。"],
+        ["Trying a food many times in different ways can turn dislike into a new favourite.", "用不同做法多试几次，讨厌的食物也可能变成新宠。"]
       ],
       "tips": [
-        ["mortgage", "房贷"],
-        ["clear a debt", "还清债务"],
-        ["track spending", "记录开销"]
+        ["taste", "口味；味道"],
+        ["dislike", "不喜欢；讨厌"],
+        ["get used to", "习惯于；适应"]
       ]
     },
     {
       "id": "d4",
-      "en": "How reading shapes your brain",
-      "zh": "阅读如何重塑我们的大脑",
-      "words": 180,
-      "dur": 360,
-      "vocab": 11,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260514",
+      "en": "Searching for life on another planet",
+      "zh": "在别的星球寻找生命",
+      "words": 185,
+      "dur": 370,
+      "vocab": 23,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Reading is not just a hobby; it physically changes the way our brain processes language and imagination.", "阅读不只是爱好，它会在生理上改变大脑处理语言和想象的方式。"],
-        ["The episode compares reading a novel with scrolling short videos, noting deeper focus comes from longer texts.", "这一期把读小说和刷短视频作对比，指出长文能带来更深的专注。"],
-        ["Even ten pages a day can build a reading habit that strengthens memory and calm over time.", "哪怕每天十页，也能养成阅读习惯，长期增强记忆与平和心态。"]
+        ["Scientists look for signs of life on planets far away, such as unusual gases in the air.", "科学家在遥远的星球上寻找生命迹象，比如空气中不寻常的气体。"],
+        ["Special telescopes study light from these planets to learn what they are made of.", "特殊望远镜研究这些星球发出的光，判断它们由什么构成。"],
+        ["The BBC programme explores whether we might one day find tiny life beyond Earth.", "BBC节目探讨：未来我们是否会在地球之外发现微小生命。"]
       ],
       "tips": [
-        ["process information", "处理信息"],
-        ["build a habit", "养成习惯"],
-        ["over time", "久而久之／长期下来"]
+        ["planet", "行星"],
+        ["sign of life", "生命迹象"],
+        ["telescope", "望远镜"]
       ]
     },
     {
       "id": "d5",
-      "en": "Why are we all so stressed?",
-      "zh": "我们为什么都这么焦虑",
-      "words": 175,
-      "dur": 350,
-      "vocab": 11,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260423",
+      "en": "The future of food",
+      "zh": "食物的未来",
+      "words": 180,
+      "dur": 360,
+      "vocab": 22,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Modern life fills our days with notifications, deadlines and the pressure to always be productive.", "现代生活被通知、截止日期和'必须高效'的压力填满。"],
-        ["The hosts discuss how constant comparison on social media adds to everyday worry and poor sleep.", "主持人讨论了社交媒体上无休止的攀比如何加重日常焦虑、影响睡眠。"],
-        ["They suggest small breaks without screens and naming your feelings as easy first steps to feel better.", "他们建议：离开屏幕休息片刻、给情绪起个名字，这些简单动作就是好转的第一步。"]
+        ["Where our food comes from is changing, with labs growing meat and farms using smart sensors.", "食物的来源正在改变：实验室培育肉、农场用上智能传感器。"],
+        ["The episode discusses whether these new methods can feed more people with less harm to the planet.", "这一期讨论：这些新方法能否用更少的地球伤害养活更多人。"],
+        ["Listeners hear both hope and doubt about what our dinner plates will look like in 20 years.", "听众听到对20年后餐桌模样的期待，也有疑虑。"]
       ],
       "tips": [
-        ["deadline", "截止日期／最后期限"],
-        ["constant comparison", "持续攀比"],
-        ["name your feelings", "给情绪命名（识别并说出感受）"]
+        ["lab-grown", "实验室培育的"],
+        ["sensor", "传感器"],
+        ["feed the world", "养活全世界"]
       ]
     }
   ]
