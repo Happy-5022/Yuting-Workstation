@@ -1,100 +1,100 @@
 {
-  "date": "2026-09-08",
+  "date": "2026-09-09",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Making cities feel quieter",
-      "zh": "让城市安静下来",
+      "en": "Children growing up in war zones",
+      "zh": "在战区中长大的孩子",
       "words": 170,
       "dur": 340,
       "vocab": 20,
       "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["City noise from traffic and building works can raise stress and harm our sleep.", "交通和施工的噪音会让人更紧张，还会影响睡眠。"],
-        ["Some cities now use quieter road surfaces and noise-reducing windows to cut sound.", "一些城市开始用更安静的路面、隔音窗来降低声音。"],
-        ["The BBC discussion asks whether a calmer soundscape can make people happier.", "BBC这期讨论：更安静的声音环境，会不会让人更幸福。"]
+        ["Around the world, about one in five children now lives in an area affected by armed conflict.", "全球约五分之一的孩子，如今生活在受武装冲突影响的地区。"],
+        ["War can interrupt their schooling, separate families, and leave deep emotional marks that last for years.", "战争会打断他们的学业、拆散家庭，并留下持续多年的心理创伤。"],
+        ["The BBC discussion asks how ordinary people and communities can better protect and support these young lives.", "BBC 这期讨论：普通人和社区可以怎样更好地保护与支持这些年幼的生命。"]
       ],
       "tips": [
-        ["noise pollution", "噪音污染"],
-        ["soundscape", "声景；声音环境"],
-        ["reduce", "减少；降低"]
+        ["armed conflict", "武装冲突"],
+        ["emotional marks", "心理创伤；情绪印记"],
+        ["affected area", "受影响地区"]
       ]
     },
     {
       "id": "d2",
-      "en": "Should we eat ultra-processed food?",
-      "zh": "该不该吃超加工食品",
+      "en": "Should we limit children's screen time?",
+      "zh": "该不该限制孩子的屏幕时间",
       "words": 175,
       "dur": 350,
       "vocab": 21,
       "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
       "body": [
-        ["Ultra-processed food is made with industrial ingredients and often contains added sugar and fat.", "超加工食品用工业原料做成，常含额外糖分和脂肪。"],
-        ["Studies link eating a lot of it with health problems like heart disease and weight gain.", "研究显示，吃太多这类食品与心脏病、长胖等健康问题有关。"],
-        ["The programme suggests cooking simple meals at home as an easy way to eat less of it.", "节目建议：在家做简单饭菜，是少吃超加工食品的轻松办法。"]
+        ["Many parents worry that phones and tablets take up too much of their children's day.", "许多家长担心，手机和平板占掉了孩子太多时间。"],
+        ["Some countries have introduced rules to help families manage how long kids spend online.", "一些国家已出台规定，帮助家庭管控孩子上网的时长。"],
+        ["The programme explores simple habits, like device-free meals, that may help without big fights at home.", "节目探讨一些简单的习惯，比如吃饭时不碰设备，或许能减少家里的争吵。"]
       ],
       "tips": [
-        ["ultra-processed", "超加工的"],
-        ["ingredient", "原料；成分"],
-        ["balanced diet", "均衡饮食"]
+        ["screen time", "屏幕时间；用眼时长"],
+        ["manage", "管理；管控"],
+        ["device-free", "不用电子设备的；无设备的"]
       ]
     },
     {
       "id": "d3",
-      "en": "Love the foods you hate",
-      "zh": "爱上你讨厌的食物",
+      "en": "Coping with disappointment",
+      "zh": "怎么面对失望",
       "words": 165,
       "dur": 330,
       "vocab": 19,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/take-away-english",
       "body": [
-        ["Many people dislike certain foods, but taste can change as we grow older.", "很多人讨厌某些食物，但随着年龄增长，口味会改变。"],
-        ["BBC speakers share how they learned to enjoy foods they once hated, like olives or cheese.", "BBC嘉宾分享：他们如何慢慢爱上曾经讨厌的食物，比如橄榄或奶酪。"],
-        ["Trying a food many times in different ways can turn dislike into a new favourite.", "用不同做法多试几次，讨厌的食物也可能变成新宠。"]
+        ["Disappointment shows up when things we hoped for do not turn out the way we expected.", "当我们盼望的事没有按预期发生，失望就来了。"],
+        ["The BBC article shares small steps, such as naming the feeling and giving yourself time, to feel better.", "BBC 文章分享了一些小方法，比如先说出这种感受、给自己一点时间，会好受些。"],
+        ["It also reminds us that setbacks can teach lessons we would never learn from easy wins.", "它还提醒我们：挫折能教给我们一些顺境里学不到的东西。"]
       ],
       "tips": [
-        ["taste", "口味；味道"],
-        ["dislike", "不喜欢；讨厌"],
-        ["get used to", "习惯于；适应"]
+        ["cope with", "应对；处理"],
+        ["setback", "挫折；失利"],
+        ["turn out", "结果是；最后是"]
       ]
     },
     {
       "id": "d4",
-      "en": "Searching for life on another planet",
-      "zh": "在别的星球寻找生命",
-      "words": 185,
-      "dur": 370,
-      "vocab": 23,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Why young people love the past",
+      "zh": "年轻人为什么爱怀旧",
+      "words": 170,
+      "dur": 340,
+      "vocab": 20,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/take-away-english",
       "body": [
-        ["Scientists look for signs of life on planets far away, such as unusual gases in the air.", "科学家在遥远的星球上寻找生命迹象，比如空气中不寻常的气体。"],
-        ["Special telescopes study light from these planets to learn what they are made of.", "特殊望远镜研究这些星球发出的光，判断它们由什么构成。"],
-        ["The BBC programme explores whether we might one day find tiny life beyond Earth.", "BBC节目探讨：未来我们是否会在地球之外发现微小生命。"]
+        ["A growing number of young people are looking back at older music, fashion and films for comfort.", "越来越多年轻人回头听老歌、穿老式衣服、看老电影，从中寻找安慰。"],
+        ["Experts say nostalgia can steady us when today feels fast, uncertain or overwhelming.", "专家说，当现在让人觉得太快、太不确定、太累时，怀旧能让我们安心。"],
+        ["The BBC piece looks at why 'the good old days' feel safer than an unpredictable future.", "BBC 这篇文章探讨了：为什么'过去的美好'比无法预测的未来更让人有安全感。"]
       ],
       "tips": [
-        ["planet", "行星"],
-        ["sign of life", "生命迹象"],
-        ["telescope", "望远镜"]
+        ["nostalgia", "怀旧；念旧"],
+        ["overwhelming", "令人不知所措的；压倒性的"],
+        ["unpredictable", "不可预测的"]
       ]
     },
     {
       "id": "d5",
-      "en": "The future of food",
-      "zh": "食物的未来",
-      "words": 180,
-      "dur": 360,
+      "en": "Beating the fear of speaking English",
+      "zh": "克服开口说英语的害怕",
+      "words": 175,
+      "dur": 350,
       "vocab": 22,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "link": "https://www.bbc.co.uk/learningenglish/english/features",
       "body": [
-        ["Where our food comes from is changing, with labs growing meat and farms using smart sensors.", "食物的来源正在改变：实验室培育肉、农场用上智能传感器。"],
-        ["The episode discusses whether these new methods can feed more people with less harm to the planet.", "这一期讨论：这些新方法能否用更少的地球伤害养活更多人。"],
-        ["Listeners hear both hope and doubt about what our dinner plates will look like in 20 years.", "听众听到对20年后餐桌模样的期待，也有疑虑。"]
+        ["Many learners feel clever and funny in their own language but quiet and boring when they speak English.", "许多学习者用自己的母语时又机灵又幽默，一说英语就变得安静、无趣。"],
+        ["BBC teachers suggest starting with short, low-pressure chats instead of perfect grammar or big speeches.", "BBC 老师建议：先从简短、没压力的闲聊开始，别一上来就追求语法完美或长篇大论。"],
+        ["With small daily tries, the awkward feeling fades and confidence slowly grows.", "每天小试一下，那种尴尬感会慢慢消失，信心也一点点长出来。"]
       ],
       "tips": [
-        ["lab-grown", "实验室培育的"],
-        ["sensor", "传感器"],
-        ["feed the world", "养活全世界"]
+        ["speaking anxiety", "开口焦虑；表达恐惧"],
+        ["low-pressure", "低压力的；轻松的"],
+        ["confidence", "信心；自信"]
       ]
     }
   ]
