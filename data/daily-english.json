@@ -1,100 +1,145 @@
 {
-  "date": "2026-09-09",
+  "date": "2026-11-24",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Children growing up in war zones",
-      "zh": "在战区中长大的孩子",
-      "words": 170,
-      "dur": 340,
-      "vocab": 20,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Are microplastics harming us?",
+      "zh": "微塑料正在伤害我们吗？",
+      "words": 78,
+      "dur": 36,
+      "vocab": 14,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261119",
       "body": [
-        ["Around the world, about one in five children now lives in an area affected by armed conflict.", "全球约五分之一的孩子，如今生活在受武装冲突影响的地区。"],
-        ["War can interrupt their schooling, separate families, and leave deep emotional marks that last for years.", "战争会打断他们的学业、拆散家庭，并留下持续多年的心理创伤。"],
-        ["The BBC discussion asks how ordinary people and communities can better protect and support these young lives.", "BBC 这期讨论：普通人和社区可以怎样更好地保护与支持这些年幼的生命。"]
+        [
+          "Scientists are finding tiny pieces of plastic, called microplastics, in seafood and even inside our bodies.",
+          "科学家们在海鲜甚至我们的身体里，都发现了被称为“微塑料”的微小塑料颗粒。"
+        ],
+        [
+          "A professor explained that new evidence shows a link between plastic particles and animal tissue, though the long-term effects on human health are still unclear.",
+          "一位教授解释说，新证据显示塑料颗粒与动物组织之间存在关联，不过对人体健康的长期影响仍不明确。"
+        ],
+        [
+          "The good news: the famous 'credit card of plastic a week' claim is a myth — it would actually take thousands of years to eat that much.",
+          "好消息是：流传很广的“每周吃下一张信用卡大小的塑料”其实是谣传——真要吃到那个量，得花上千年。"
+        ]
       ],
       "tips": [
-        ["armed conflict", "武装冲突"],
-        ["emotional marks", "心理创伤；情绪印记"],
-        ["affected area", "受影响地区"]
+        ["microplastics", "微塑料，肉眼看不见的小塑料颗粒"],
+        ["emerging evidence", "新出现的证据"],
+        ["correlation", "关联性，两个事物之间的联系"]
       ]
     },
     {
       "id": "d2",
-      "en": "Should we limit children's screen time?",
-      "zh": "该不该限制孩子的屏幕时间",
-      "words": 175,
-      "dur": 350,
-      "vocab": 21,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "en": "Learning from different generations",
+      "zh": "向不同年龄段的人学习",
+      "words": 72,
+      "dur": 33,
+      "vocab": 13,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261112",
       "body": [
-        ["Many parents worry that phones and tablets take up too much of their children's day.", "许多家长担心，手机和平板占掉了孩子太多时间。"],
-        ["Some countries have introduced rules to help families manage how long kids spend online.", "一些国家已出台规定，帮助家庭管控孩子上网的时长。"],
-        ["The programme explores simple habits, like device-free meals, that may help without big fights at home.", "节目探讨一些简单的习惯，比如吃饭时不碰设备，或许能减少家里的争吵。"]
+        [
+          "Could spending time with people from other age groups make us healthier? Some projects now pair nurseries with retirement homes.",
+          "和其他年龄段的人相处，能让我们更健康吗？现在有一些项目把幼儿园和养老院结对。"
+        ],
+        [
+          "Research suggests these mixed-age meet-ups can reduce loneliness for older people and build confidence in young children.",
+          "研究表明，这种跨代相处既能减少老人的孤独感，也能让小孩子更有自信。"
+        ],
+        [
+          "You do not need a special project to try this: a call to a grandparent counts too.",
+          "不需要专门的项目也能试一试：给家里长辈打个电话，也算数。"
+        ]
       ],
       "tips": [
-        ["screen time", "屏幕时间；用眼时长"],
-        ["manage", "管理；管控"],
-        ["device-free", "不用电子设备的；无设备的"]
+        ["mixed-age", "跨年龄段的、不同年龄混合的"],
+        ["loneliness", "孤独感"],
+        ["bond", "纽带，人与人之间的亲密联系"]
       ]
     },
     {
       "id": "d3",
-      "en": "Coping with disappointment",
-      "zh": "怎么面对失望",
-      "words": 165,
-      "dur": 330,
-      "vocab": 19,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/take-away-english",
+      "en": "Could vaccines cure cancer?",
+      "zh": "疫苗能治愈癌症吗？",
+      "words": 74,
+      "dur": 34,
+      "vocab": 15,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261105",
       "body": [
-        ["Disappointment shows up when things we hoped for do not turn out the way we expected.", "当我们盼望的事没有按预期发生，失望就来了。"],
-        ["The BBC article shares small steps, such as naming the feeling and giving yourself time, to feel better.", "BBC 文章分享了一些小方法，比如先说出这种感受、给自己一点时间，会好受些。"],
-        ["It also reminds us that setbacks can teach lessons we would never learn from easy wins.", "它还提醒我们：挫折能教给我们一些顺境里学不到的东西。"]
+        [
+          "Vaccines are not only for travel and childhood illnesses any more. Scientists are designing personalised vaccines that train the immune system to fight certain cancers.",
+          "疫苗不再只用于出国旅行和儿童疾病。科学家正在设计“个性化疫苗”，训练免疫系统去对抗某些癌症。"
+        ],
+        [
+          "The idea is simple: teach the body to recognise cancer cells early, before a tumour can grow.",
+          "思路很简单：在肿瘤长大之前，先教会身体尽早识别癌细胞。"
+        ],
+        [
+          "The research is still new, but it shows how fast medicine is moving when it teams up with AI-style data analysis.",
+          "这项研究还很新，但它让我们看到：医学一旦和AI式的数据分析联手，前进速度有多惊人。"
+        ]
       ],
       "tips": [
-        ["cope with", "应对；处理"],
-        ["setback", "挫折；失利"],
-        ["turn out", "结果是；最后是"]
+        ["immune system", "免疫系统"],
+        ["personalised", "个性化的、定制的"],
+        ["tumour", "肿瘤"]
       ]
     },
     {
       "id": "d4",
-      "en": "Why young people love the past",
-      "zh": "年轻人为什么爱怀旧",
-      "words": 170,
-      "dur": 340,
-      "vocab": 20,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/take-away-english",
+      "en": "What should you eat for a better night's sleep?",
+      "zh": "晚餐吃什么，才能睡个好觉？",
+      "words": 76,
+      "dur": 35,
+      "vocab": 13,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261022",
       "body": [
-        ["A growing number of young people are looking back at older music, fashion and films for comfort.", "越来越多年轻人回头听老歌、穿老式衣服、看老电影，从中寻找安慰。"],
-        ["Experts say nostalgia can steady us when today feels fast, uncertain or overwhelming.", "专家说，当现在让人觉得太快、太不确定、太累时，怀旧能让我们安心。"],
-        ["The BBC piece looks at why 'the good old days' feel safer than an unpredictable future.", "BBC 这篇文章探讨了：为什么'过去的美好'比无法预测的未来更让人有安全感。"]
+        [
+          "What you eat in the evening may decide how well you sleep. Heavy, sugary meals late at night can break your sleep into small pieces.",
+          "晚上吃什么，可能决定你睡得好不好。深夜吃太多高糖重口的食物，会把睡眠切得七零八落。"
+        ],
+        [
+          "Foods with magnesium and tryptophan, like nuts, milk and bananas, may help the body relax before bed.",
+          "含镁和色氨酸的食物，比如坚果、牛奶和香蕉，可能帮助身体在睡前放松下来。"
+        ],
+        [
+          "The best habit costs nothing: finish big meals two to three hours before bed.",
+          "最好的习惯一分钱不花：大餐要在睡前两三个小时吃完。"
+        ]
       ],
       "tips": [
-        ["nostalgia", "怀旧；念旧"],
-        ["overwhelming", "令人不知所措的；压倒性的"],
-        ["unpredictable", "不可预测的"]
+        ["magnesium", "镁，一种帮助放松的矿物质"],
+        ["tryptophan", "色氨酸，和睡眠相关的氨基酸"],
+        ["wind down", "放松下来，让身体进入睡前状态"]
       ]
     },
     {
       "id": "d5",
-      "en": "Beating the fear of speaking English",
-      "zh": "克服开口说英语的害怕",
-      "words": 175,
-      "dur": 350,
-      "vocab": 22,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features",
+      "en": "Why do people buy gold?",
+      "zh": "人们为什么买黄金？",
+      "words": 73,
+      "dur": 34,
+      "vocab": 14,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261015",
       "body": [
-        ["Many learners feel clever and funny in their own language but quiet and boring when they speak English.", "许多学习者用自己的母语时又机灵又幽默，一说英语就变得安静、无趣。"],
-        ["BBC teachers suggest starting with short, low-pressure chats instead of perfect grammar or big speeches.", "BBC 老师建议：先从简短、没压力的闲聊开始，别一上来就追求语法完美或长篇大论。"],
-        ["With small daily tries, the awkward feeling fades and confidence slowly grows.", "每天小试一下，那种尴尬感会慢慢消失，信心也一点点长出来。"]
+        [
+          "Gold has reached very high prices, and many people now ask whether they should buy some too.",
+          "金价已经涨到很高的位置，很多人开始问：自己是不是也该买点黄金。"
+        ],
+        [
+          "Fans of gold say it keeps its value when money loses power; others warn that buying at a peak can be risky.",
+          "支持者说，货币贬值时黄金能保值；也有人提醒，在最高点买入风险很大。"
+        ],
+        [
+          "The lesson from history: gold is a long-term store of value, not a way to get rich quickly.",
+          "历史的教训是：黄金是长期的价值储藏工具，不是快速致富的捷径。"
+        ]
       ],
       "tips": [
-        ["speaking anxiety", "开口焦虑；表达恐惧"],
-        ["low-pressure", "低压力的；轻松的"],
-        ["confidence", "信心；自信"]
+        ["store of value", "价值储藏，把钱放进不容易贬值的资产"],
+        ["at a peak", "在最高点、巅峰时刻"],
+        ["volatile", "波动大的、价格忽上忽下的"]
       ]
     }
   ]
