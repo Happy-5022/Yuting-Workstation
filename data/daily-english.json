@@ -1,145 +1,145 @@
 {
-  "date": "2026-11-24",
+  "date": "2026-11-25",
   "source": "每日9点·BBC热点选题灵感",
   "articles": [
     {
       "id": "d1",
-      "en": "Are microplastics harming us?",
-      "zh": "微塑料正在伤害我们吗？",
-      "words": 78,
-      "dur": 36,
-      "vocab": 14,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261119",
+      "en": "Can apps teach you a language?",
+      "zh": "手机App能教会你一门外语吗？",
+      "words": 158,
+      "dur": 95,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260910",
       "body": [
         [
-          "Scientists are finding tiny pieces of plastic, called microplastics, in seafood and even inside our bodies.",
-          "科学家们在海鲜甚至我们的身体里，都发现了被称为“微塑料”的微小塑料颗粒。"
+          "Millions of people try to learn a new language with a phone app, studying on the bus or for a few minutes before bed.",
+          "数百万人在公交车上或睡前几分钟，用手机App学一门新语言。"
         ],
         [
-          "A professor explained that new evidence shows a link between plastic particles and animal tissue, though the long-term effects on human health are still unclear.",
-          "一位教授解释说，新证据显示塑料颗粒与动物组织之间存在关联，不过对人体健康的长期影响仍不明确。"
+          "Apps are cheap, fun and always available, but research suggests they work best as a helper, not as a full replacement for a teacher.",
+          "App便宜、有趣、随时能用，但研究表明它们最适合当帮手，而不是完全替代老师。"
         ],
         [
-          "The good news: the famous 'credit card of plastic a week' claim is a myth — it would actually take thousands of years to eat that much.",
-          "好消息是：流传很广的“每周吃下一张信用卡大小的塑料”其实是谣传——真要吃到那个量，得花上千年。"
+          "Speaking with real people still builds fluency faster, so the best plan is to combine an app with real conversation practice.",
+          "和真人对话仍然能更快练出流利度，所以最好的方案是App加真实对话练习两条腿走路。"
         ]
       ],
       "tips": [
-        ["microplastics", "微塑料，肉眼看不见的小塑料颗粒"],
-        ["emerging evidence", "新出现的证据"],
-        ["correlation", "关联性，两个事物之间的联系"]
+        ["at your own pace", "按自己的节奏"],
+        ["a game changer", "改变局面的事物／大有帮助"],
+        ["stick with it", "坚持下去"]
       ]
     },
     {
       "id": "d2",
-      "en": "Learning from different generations",
-      "zh": "向不同年龄段的人学习",
-      "words": 72,
-      "dur": 33,
-      "vocab": 13,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261112",
+      "en": "Why does heartbreak hurt so much?",
+      "zh": "为什么心碎这么痛？",
+      "words": 165,
+      "dur": 100,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261001",
       "body": [
         [
-          "Could spending time with people from other age groups make us healthier? Some projects now pair nurseries with retirement homes.",
-          "和其他年龄段的人相处，能让我们更健康吗？现在有一些项目把幼儿园和养老院结对。"
+          "When a relationship ends, many people feel real pain in their body, not just sadness in their mind.",
+          "当一段感情结束时，很多人感受到的是身体上真实的疼，而不只是心里的难过。"
         ],
         [
-          "Research suggests these mixed-age meet-ups can reduce loneliness for older people and build confidence in young children.",
-          "研究表明，这种跨代相处既能减少老人的孤独感，也能让小孩子更有自信。"
+          "Scientists say heartbreak activates the same brain areas as physical pain, which is why breakups and loss hurt so much.",
+          "科学家说，心碎会激活和身体疼痛相同的脑区，这就是分手和失去那么痛的原因。"
         ],
         [
-          "You do not need a special project to try this: a call to a grandparent counts too.",
-          "不需要专门的项目也能试一试：给家里长辈打个电话，也算数。"
+          "Time, support from friends and building new routines can help the brain slowly recover from a broken heart.",
+          "时间、朋友的支持和建立新的生活习惯，能帮助大脑慢慢从心碎中恢复过来。"
         ]
       ],
       "tips": [
-        ["mixed-age", "跨年龄段的、不同年龄混合的"],
-        ["loneliness", "孤独感"],
-        ["bond", "纽带，人与人之间的亲密联系"]
+        ["heartbreak", "心碎／失恋之痛"],
+        ["go through a rough patch", "经历一段艰难时期"],
+        ["move on", "走出来／向前看"]
       ]
     },
     {
       "id": "d3",
-      "en": "Could vaccines cure cancer?",
-      "zh": "疫苗能治愈癌症吗？",
-      "words": 74,
-      "dur": 34,
-      "vocab": 15,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261105",
+      "en": "Is rejection good for us?",
+      "zh": "被拒绝，其实对我们有好处？",
+      "words": 170,
+      "dur": 105,
+      "vocab": 7,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-260917",
       "body": [
         [
-          "Vaccines are not only for travel and childhood illnesses any more. Scientists are designing personalised vaccines that train the immune system to fight certain cancers.",
-          "疫苗不再只用于出国旅行和儿童疾病。科学家正在设计“个性化疫苗”，训练免疫系统去对抗某些癌症。"
+          "Asking a stranger for a small favour feels scary, but researchers found that rejection hurts far less than we expect.",
+          "向陌生人寻求小帮助听起来很可怕，但研究者发现，被拒绝带来的痛远比我们想象的轻。"
         ],
         [
-          "The idea is simple: teach the body to recognise cancer cells early, before a tumour can grow.",
-          "思路很简单：在肿瘤长大之前，先教会身体尽早识别癌细胞。"
+          "In one experiment, people asked strangers for favours all day, and most of the requests were accepted, not refused.",
+          "在一个实验里，参与者整天向陌生人求助，结果大多数请求都被答应了，而不是被拒绝。"
         ],
         [
-          "The research is still new, but it shows how fast medicine is moving when it teams up with AI-style data analysis.",
-          "这项研究还很新，但它让我们看到：医学一旦和AI式的数据分析联手，前进速度有多惊人。"
+          "The lesson for work and life is clear: fear of rejection stops us more often than rejection itself, so it is worth asking.",
+          "对工作和生活的启发很明确：对被拒绝的恐惧，比拒绝本身更常拦住我们，所以开口值得一试。"
         ]
       ],
       "tips": [
-        ["immune system", "免疫系统"],
-        ["personalised", "个性化的、定制的"],
-        ["tumour", "肿瘤"]
+        ["ask for a favour", "请求帮忙"],
+        ["worst-case scenario", "最坏的情况"],
+        ["put yourself out there", "大胆去尝试／把自己推向机会"]
       ]
     },
     {
       "id": "d4",
-      "en": "What should you eat for a better night's sleep?",
-      "zh": "晚餐吃什么，才能睡个好觉？",
-      "words": 76,
-      "dur": 35,
-      "vocab": 13,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261022",
+      "en": "Is aircon the answer to a heating world?",
+      "zh": "空调是变热世界的答案吗？",
+      "words": 155,
+      "dur": 95,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261029",
       "body": [
         [
-          "What you eat in the evening may decide how well you sleep. Heavy, sugary meals late at night can break your sleep into small pieces.",
-          "晚上吃什么，可能决定你睡得好不好。深夜吃太多高糖重口的食物，会把睡眠切得七零八落。"
+          "As the world gets hotter, more and more people are installing air conditioning in their homes.",
+          "随着世界越来越热，越来越多人在家里安装空调。"
         ],
         [
-          "Foods with magnesium and tryptophan, like nuts, milk and bananas, may help the body relax before bed.",
-          "含镁和色氨酸的食物，比如坚果、牛奶和香蕉，可能帮助身体在睡前放松下来。"
+          "Aircon keeps rooms cool, but it uses a lot of electricity and can make climate change worse in the long run.",
+          "空调能让房间凉快，但它耗电量大，长远来看还会加剧气候变化。"
         ],
         [
-          "The best habit costs nothing: finish big meals two to three hours before bed.",
-          "最好的习惯一分钱不花：大餐要在睡前两三个小时吃完。"
+          "Some cities are trying greener answers, such as planting more trees, cool roofs and smarter building design.",
+          "一些城市正在尝试更环保的办法，比如多种树、屋顶降温材料以及更聪明的建筑设计。"
         ]
       ],
       "tips": [
-        ["magnesium", "镁，一种帮助放松的矿物质"],
-        ["tryptophan", "色氨酸，和睡眠相关的氨基酸"],
-        ["wind down", "放松下来，让身体进入睡前状态"]
+        ["a double-edged sword", "双刃剑"],
+        ["carbon footprint", "碳足迹"],
+        ["in the long run", "长远来看"]
       ]
     },
     {
       "id": "d5",
-      "en": "Why do people buy gold?",
-      "zh": "人们为什么买黄金？",
-      "words": 73,
-      "dur": 34,
-      "vocab": 14,
-      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261015",
+      "en": "Are people drinking less alcohol?",
+      "zh": "喝酒的人变少了吗？",
+      "words": 150,
+      "dur": 90,
+      "vocab": 6,
+      "link": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2026/ep-261008",
       "body": [
         [
-          "Gold has reached very high prices, and many people now ask whether they should buy some too.",
-          "金价已经涨到很高的位置，很多人开始问：自己是不是也该买点黄金。"
+          "Young people in many countries are drinking less alcohol than their parents did at the same age.",
+          "很多国家的年轻人，喝酒比他们父母在同一年龄段时喝得少。"
         ],
         [
-          "Fans of gold say it keeps its value when money loses power; others warn that buying at a peak can be risky.",
-          "支持者说，货币贬值时黄金能保值；也有人提醒，在最高点买入风险很大。"
+          "Health campaigns, higher prices and the rise of alcohol-free drinks are quietly changing drinking habits.",
+          "健康宣传、更高的价格，以及无酒精饮料的兴起，正在悄悄改变人们的饮酒习惯。"
         ],
         [
-          "The lesson from history: gold is a long-term store of value, not a way to get rich quickly.",
-          "历史的教训是：黄金是长期的价值储藏工具，不是快速致富的捷径。"
+          "Bars and supermarkets now sell more non-alcoholic beer and mocktails than ever before.",
+          "酒吧和超市现在卖出的无酒精啤酒和无酒精鸡尾酒，比以往任何时候都多。"
         ]
       ],
       "tips": [
-        ["store of value", "价值储藏，把钱放进不容易贬值的资产"],
-        ["at a peak", "在最高点、巅峰时刻"],
-        ["volatile", "波动大的、价格忽上忽下的"]
+        ["sober curious", "对少酒／戒酒生活方式感兴趣"],
+        ["alcohol-free", "无酒精的"],
+        ["social norm", "社会惯例／普遍风气"]
       ]
     }
   ]
